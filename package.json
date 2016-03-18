@@ -1,6 +1,6 @@
 {
   "name": "@caplin/patch-loader",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "A js module patch loader for webpack",
   "main": "index.js",
   "scripts": {
@@ -15,5 +15,8 @@
   "bugs": {
     "url": "https://github.com/caplin/patch-loader/issues"
   },
-  "homepage": "https://github.com/caplin/patch-loader#readme"
+  "homepage": "https://github.com/caplin/patch-loader#readme",
+  "dependencies": {
+    "glob": "^7.0.3"
+  }
 }
