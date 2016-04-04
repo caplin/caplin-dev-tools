@@ -7,7 +7,7 @@ const join = require('path').join;
 const sync = require('glob').sync;
 
 const GLOB_OPTIONS = {
-	cwd: join(__dirname, '..', '..', '..', '..', 'brjs-app', 'js-patches')
+	cwd: join(__dirname, '..', '..', '..', '..', '..', 'brjs-app', 'js-patches')
 };
 const patches = new Map();
 
