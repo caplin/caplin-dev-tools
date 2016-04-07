@@ -21,7 +21,7 @@ module.exports.appendModulePatch = function appendModulePatch(options) {
 		// node glob returns paths with unix backslashes even in windows so we convert the slashes to
 		// the separator of the env to allow successful matching in `appendPatchToPatchedModules`
 		// see https://github.com/isaacs/node-glob/issues/173
-		const convertedPatchFileName = patchFileName.replace('/', sep);
+		const convertedPatchFileName = patchFileName.replace(/\//g, sep);
 		const patchFile = readFileSync(join(patchesOptions.cwd, patchFileName), 'utf8');
 
 		patches.set(convertedPatchFileName, patchFile);
