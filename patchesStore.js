@@ -3,6 +3,7 @@
 
 const readFileSync = require('fs').readFileSync;
 const join = require('path').join;
+const sep = require('path').sep;
 
 const sync = require('glob').sync;
 
@@ -17,9 +18,13 @@ module.exports.appendModulePatch = function appendModulePatch(options) {
 
 	patches.clear();
 	patchFiles.forEach((patchFileName) => {
+		// node glob returns paths with unix backslashes even in windows so we convert the slashes to
+		// the separator of the env to allow successful matching in `appendPatchToPatchedModules`
+		// see https://github.com/isaacs/node-glob/issues/173
+		const convertedPatchFileName = patchFileName.replace('/', sep);
 		const patchFile = readFileSync(join(patchesOptions.cwd, patchFileName), 'utf8');
 
-		patches.set(patchFileName, patchFile);
+		patches.set(convertedPatchFileName, patchFile);
 	});
 
 	return appendPatchToPatchedModules;
@@ -27,9 +32,9 @@ module.exports.appendModulePatch = function appendModulePatch(options) {
 
 function appendPatchToPatchedModules(loaderAPI, moduleSource) {
 	for (const arr of patches.entries()) {
-		const patchFileName = arr[0];
+		const convertedPatchFileName = arr[0];
 
-		if (loaderAPI.resourcePath.endsWith(patchFileName)) {
+		if (loaderAPI.resourcePath.endsWith(convertedPatchFileName)) {
 			return moduleSource + arr[1];
 		}
 	}
