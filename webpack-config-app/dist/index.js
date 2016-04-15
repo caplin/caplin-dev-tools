@@ -1,9 +1,5 @@
 'use strict';
 
-Object.defineProperty(exports, "__esModule", {
-	value: true
-});
-
 var _fs = require('fs');
 
 var _path = require('path');
@@ -41,121 +37,125 @@ function moduleCannotHaveRequire(absolutePath) {
 	return absolutePath.match(/sinon/);
 }
 
-var packageRoots = [];
-var babelLoaderExclude = [];
+var webpackConfigGenerator = function webpackConfigGenerator(argsMap) {
+	var packageRoots = [];
+	var babelLoaderExclude = [];
+	var basePath = argsMap.basePath;
 
-var _iteratorNormalCompletion = true;
-var _didIteratorError = false;
-var _iteratorError = undefined;
+	var _iteratorNormalCompletion = true;
+	var _didIteratorError = false;
+	var _iteratorError = undefined;
 
-try {
-	for (var _iterator = (0, _fs.readdirSync)((0, _path.join)('../../packages'))[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
-		var packageDir = _step.value;
-
-		packageRoots.push((0, _path.join)(__dirname, 'node_modules/' + packageDir + '/src'));
-
-		try {
-			(0, _fs.accessSync)((0, _path.join)(__dirname, 'node_modules/' + packageDir + '/compiler.json'), _fs.F_OK);
-		} catch (e) {
-			babelLoaderExclude.push((0, _path.join)(__dirname, 'node_modules/' + packageDir + '/'));
-		}
-	}
-} catch (err) {
-	_didIteratorError = true;
-	_iteratorError = err;
-} finally {
 	try {
-		if (!_iteratorNormalCompletion && _iterator.return) {
-			_iterator.return();
+		for (var _iterator = (0, _fs.readdirSync)((0, _path.join)('../../packages'))[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+			var packageDir = _step.value;
+
+			packageRoots.push((0, _path.join)(basePath, 'node_modules/' + packageDir + '/src'));
+			try {
+				(0, _fs.accessSync)((0, _path.join)(basePath, 'node_modules/' + packageDir + '/compiler.json'), _fs.F_OK);
+			} catch (e) {
+				babelLoaderExclude.push((0, _path.join)(basePath, 'node_modules/' + packageDir + '/'));
+			}
 		}
+	} catch (err) {
+		_didIteratorError = true;
+		_iteratorError = err;
 	} finally {
-		if (_didIteratorError) {
-			throw _iteratorError;
+		try {
+			if (!_iteratorNormalCompletion && _iterator.return) {
+				_iterator.return();
+			}
+		} finally {
+			if (_didIteratorError) {
+				throw _iteratorError;
+			}
 		}
 	}
-}
 
-var variant = (0, _minimist2.default)(process.argv.slice(2)).variant || 'caplin';
-var appEntryPoint = (0, _path.join)(__dirname, 'entry-' + variant + '.js');
-var buildOutputDir = (0, _path.join)(__dirname, 'dist', 'public');
-var isBuild = process.env.npm_lifecycle_event === 'build'; // eslint-disable-line
-var bundleName = isBuild ? 'bundle-' + process.env.npm_package_version + '.js' : 'bundle.js'; // eslint-disable-line
-var publicPath = isBuild ? 'public/' : '/public/';
-var webpackConfig = {
-	entry: appEntryPoint,
-	output: {
-		path: buildOutputDir,
-		filename: bundleName,
-		publicPath: publicPath
-	},
-	module: {
-		loaders: [{
-			test: /\.html$/,
-			loaders: ['dom-loader', 'html-loader']
-		}, {
-			test: /\.(jpg|png|svg|woff)$/,
-			loader: 'file-loader'
-		}, {
-			test: /\.js$/,
-			loaders: ['babel-loader?cacheDirectory'],
-			exclude: babelLoaderExclude
-		}, {
-			test: /\.js$/,
-			loaders: ['@caplin/patch-loader']
-		}, {
-			test: /\.properties$/,
-			loader: 'i18n-loader'
-		}, {
-			test: /\.scss$/,
-			loaders: ['style-loader', 'css-loader', 'sass-loader']
-		}, {
-			test: moduleUsesGlobal,
-			loader: 'imports-loader?this=>window'
-		}, {
-			test: moduleCannotBelieveItsACJSModule,
-			loader: 'imports-loader?module=>undefined'
-		}, {
-			test: moduleCannotHaveRequire,
-			loader: 'imports-loader?require=>undefined'
-		}]
-	},
-	patchLoader: (0, _patchesStore.appendModulePatch)(),
-	sassLoader: {
-		includePaths: _bourbon.includePaths
-	},
-	resolve: {
-		alias: {
-			// `alias!$aliases-data` required in `AliasRegistry`, loaded with `alias-loader`.
-			'$aliases-data$': (0, _path.join)(__dirname, 'aliases.js'),
-			// `app-meta!$app-metadata` required in `BRAppMetaService`, loaded with `app-meta-loader`.
-			'$app-metadata$': (0, _path.join)(__dirname, 'metadata.js'),
-			// Application aliases, loaded with `alias-loader`.
-			'caplin.fx.tenor.currency-tenors$': 'caplin-fx-aliases/caplin.fx.tenor.currency-tenors',
-			// Application services, loaded with `service-loader`.
-			'br.app-meta-service$': 'brjs-services/br.app-meta-service',
-			'caplin.permission-service$': 'caplin-services/caplin.permission-service',
-			'caplin.fx.business-date-service$': 'caplin-fx-services/caplin.fx.business-date-service',
-			'caplin.fx.permission-service$': 'caplin-fx-services/caplin.fx.permission-service',
-			'caplin.preference-service$': 'caplin-services/caplin.preference-service',
-			'caplin.message-service$': 'caplin-services/caplin.message-service',
-			'caplin.trade-service$': 'caplin-services/caplin.trade-service',
-			'caplin.trade-message-service$': 'caplin-services/caplin.trade-message-service',
-			jasmine: 'jstestdriver-functions'
+	var variant = (0, _minimist2.default)(process.argv.slice(2)).variant || 'caplin';
+	var appEntryPoint = (0, _path.join)(basePath, 'entry-' + variant + '.js');
+	var buildOutputDir = (0, _path.join)(basePath, 'dist', 'public');
+	var isBuild = process.env.npm_lifecycle_event === 'build'; // eslint-disable-line
+	var bundleName = isBuild ? 'bundle-' + process.env.npm_package_version + '.js' : 'bundle.js'; // eslint-disable-line
+	var publicPath = isBuild ? 'public/' : '/public/';
+	var webpackConfig = {
+		entry: appEntryPoint,
+		output: {
+			path: buildOutputDir,
+			filename: bundleName,
+			publicPath: publicPath
 		},
-		root: [(0, _path.resolve)('node_modules')].concat(packageRoots)
-	},
-	resolveLoader: {
-		root: [(0, _path.resolve)('node_modules')]
-	},
-	plugins: []
+		module: {
+			loaders: [{
+				test: /\.html$/,
+				loaders: ['dom-loader', 'html-loader']
+			}, {
+				test: /\.(jpg|png|svg|woff)$/,
+				loader: 'file-loader'
+			}, {
+				test: /\.js$/,
+				loaders: ['babel-loader?cacheDirectory'],
+				exclude: babelLoaderExclude
+			}, {
+				test: /\.js$/,
+				loaders: ['@caplin/patch-loader']
+			}, {
+				test: /\.properties$/,
+				loader: 'i18n-loader'
+			}, {
+				test: /\.scss$/,
+				loaders: ['style-loader', 'css-loader', 'sass-loader']
+			}, {
+				test: moduleUsesGlobal,
+				loader: 'imports-loader?this=>window'
+			}, {
+				test: moduleCannotBelieveItsACJSModule,
+				loader: 'imports-loader?module=>undefined'
+			}, {
+				test: moduleCannotHaveRequire,
+				loader: 'imports-loader?require=>undefined'
+			}]
+		},
+		patchLoader: (0, _patchesStore.appendModulePatch)(),
+		sassLoader: {
+			includePaths: _bourbon.includePaths
+		},
+		resolve: {
+			alias: {
+				// `alias!$aliases-data` required in `AliasRegistry`, loaded with `alias-loader`.
+				'$aliases-data$': (0, _path.join)(basePath, 'aliases.js'),
+				// `app-meta!$app-metadata` required in `BRAppMetaService`, loaded with `app-meta-loader`.
+				'$app-metadata$': (0, _path.join)(basePath, 'metadata.js'),
+				// Application aliases, loaded with `alias-loader`.
+				'caplin.fx.tenor.currency-tenors$': 'caplin-fx-aliases/caplin.fx.tenor.currency-tenors',
+				// Application services, loaded with `service-loader`.
+				'br.app-meta-service$': 'brjs-services/br.app-meta-service',
+				'caplin.permission-service$': 'caplin-services/caplin.permission-service',
+				'caplin.fx.business-date-service$': 'caplin-fx-services/caplin.fx.business-date-service',
+				'caplin.fx.permission-service$': 'caplin-fx-services/caplin.fx.permission-service',
+				'caplin.preference-service$': 'caplin-services/caplin.preference-service',
+				'caplin.message-service$': 'caplin-services/caplin.message-service',
+				'caplin.trade-service$': 'caplin-services/caplin.trade-service',
+				'caplin.trade-message-service$': 'caplin-services/caplin.trade-message-service',
+				jasmine: 'jstestdriver-functions'
+			},
+			root: [(0, _path.resolve)('node_modules')].concat(packageRoots)
+		},
+		resolveLoader: {
+			root: [(0, _path.resolve)('node_modules')]
+		},
+		plugins: []
+	};
+
+	if (isBuild) {
+		webpackConfig.plugins.push(new _appcacheWebpackPlugin2.default({
+			comment: 'version ' + process.env.npm_package_version, // eslint-disable-line
+			output: '../manifest.appcache'
+		}));
+	}
+
+	return webpackConfig;
 };
 
-if (isBuild) {
-	webpackConfig.plugins.push(new _appcacheWebpackPlugin2.default({
-		comment: 'version ' + process.env.npm_package_version, // eslint-disable-line
-		output: '../manifest.appcache'
-	}));
-}
-
-exports.default = webpackConfig;
+module.exports = { webpackConfigGenerator: webpackConfigGenerator };
 
