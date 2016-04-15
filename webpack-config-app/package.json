@@ -1,8 +1,8 @@
 {
   "name": "@caplin/webpack-config-app",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "",
-  "main": "index.js",
+  "main": "dist/index.js",
   "scripts": {
     "build": "babel src/index.js > dist/index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
