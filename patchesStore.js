@@ -4,7 +4,7 @@
 const readFileSync = require('fs').readFileSync;
 const join = require('path').join;
 const sep = require('path').sep;
-
+const basename = require('path').basename;
 const sync = require('glob').sync;
 
 const GLOB_OPTIONS = {
@@ -24,19 +24,18 @@ module.exports.appendModulePatch = function appendModulePatch(options) {
 		const convertedPatchFileName = patchFileName.replace(/\//g, sep);
 		const patchFile = readFileSync(join(patchesOptions.cwd, patchFileName), 'utf8');
 
-		patches.set(convertedPatchFileName, patchFile);
+		patches.set(basename(convertedPatchFileName), patchFile);
 	});
 
 	return appendPatchToPatchedModules;
 };
 
+// TODO this has be refactored to do O(1) lookups using a map rather than O(n) lookups for patches
 function appendPatchToPatchedModules(loaderAPI, moduleSource) {
-	for (const arr of patches.entries()) {
-		const convertedPatchFileName = arr[0];
+	const patchEntry = patches.get(basename(loaderAPI.resourcePath));
 
-		if (loaderAPI.resourcePath.endsWith(convertedPatchFileName)) {
-			return moduleSource + arr[1];
-		}
+	if (patchEntry) {
+		return moduleSource + patchEntry;
 	}
 
 	return moduleSource;
