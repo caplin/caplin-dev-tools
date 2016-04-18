@@ -70,8 +70,9 @@ var webpackConfigGenerator = function webpackConfigGenerator(argsMap) {
 		}
 	}
 
-	var variant = (0, _minimist2.default)(process.argv.slice(2)).variant || 'caplin';
-	var appEntryPoint = (0, _path.join)(basePath, 'entry-' + variant + '.js');
+	var variant = (0, _minimist2.default)(process.argv.slice(2)).variant;
+	var entryFile = variant ? 'entry-' + variant + '.js' : 'entry.js';
+	var appEntryPoint = (0, _path.join)(basePath, entryFile);
 	var buildOutputDir = (0, _path.join)(basePath, 'dist', 'public');
 	var isBuild = process.env.npm_lifecycle_event === 'build'; // eslint-disable-line
 	var bundleName = isBuild ? 'bundle-' + process.env.npm_package_version + '.js' : 'bundle.js'; // eslint-disable-line
