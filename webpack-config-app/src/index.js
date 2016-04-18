@@ -27,12 +27,10 @@ function moduleCannotHaveRequire(absolutePath) {
 }
 
 const webpackConfigGenerator = function(argsMap) {
-	const packageRoots = [];
 	const babelLoaderExclude = [];
 	const basePath = argsMap.basePath;
 
 	for (const packageDir of readdirSync(join('../../packages'))) {
-		packageRoots.push(join(basePath, `node_modules/${packageDir}/src`));
 		try {
 			accessSync(join(basePath, `node_modules/${packageDir}/compiler.json`), F_OK);
 		} catch (e) {
@@ -47,6 +45,7 @@ const webpackConfigGenerator = function(argsMap) {
 	const bundleName = isBuild ? `bundle-${process.env.npm_package_version}.js` : 'bundle.js'; // eslint-disable-line
 	const publicPath = isBuild ? 'public/' : '/public/';
 	const webpackConfig = {
+		cache: true,
 		entry: appEntryPoint,
 		output: {
 			path: buildOutputDir,
@@ -107,15 +106,17 @@ const webpackConfigGenerator = function(argsMap) {
 				'caplin.trade-message-service$': 'caplin-services/caplin.trade-message-service',
 				jasmine: 'jstestdriver-functions'
 			},
+			// Needed for tests?
 			root: [
-				resolve('node_modules')
-			].concat(packageRoots)
-		},
-		resolveLoader: {
-			root: [
-				resolve('node_modules')
+				// resolve('node_modules')
 			]
 		},
+		// Needed for tests?
+		//resolveLoader: {
+		//	root: [
+		//		resolve('node_modules')
+		//	]
+		//},
 		plugins: []
 	};
 
