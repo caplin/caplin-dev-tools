@@ -38,7 +38,6 @@ function moduleCannotHaveRequire(absolutePath) {
 }
 
 var webpackConfigGenerator = function webpackConfigGenerator(argsMap) {
-	var packageRoots = [];
 	var babelLoaderExclude = [];
 	var basePath = argsMap.basePath;
 
@@ -50,7 +49,6 @@ var webpackConfigGenerator = function webpackConfigGenerator(argsMap) {
 		for (var _iterator = (0, _fs.readdirSync)((0, _path.join)('../../packages'))[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
 			var packageDir = _step.value;
 
-			packageRoots.push((0, _path.join)(basePath, 'node_modules/' + packageDir + '/src'));
 			try {
 				(0, _fs.accessSync)((0, _path.join)(basePath, 'node_modules/' + packageDir + '/compiler.json'), _fs.F_OK);
 			} catch (e) {
@@ -79,6 +77,7 @@ var webpackConfigGenerator = function webpackConfigGenerator(argsMap) {
 	var bundleName = isBuild ? 'bundle-' + process.env.npm_package_version + '.js' : 'bundle.js'; // eslint-disable-line
 	var publicPath = isBuild ? 'public/' : '/public/';
 	var webpackConfig = {
+		cache: true,
 		entry: appEntryPoint,
 		output: {
 			path: buildOutputDir,
@@ -139,11 +138,17 @@ var webpackConfigGenerator = function webpackConfigGenerator(argsMap) {
 				'caplin.trade-message-service$': 'caplin-services/caplin.trade-message-service',
 				jasmine: 'jstestdriver-functions'
 			},
-			root: [(0, _path.resolve)('node_modules')].concat(packageRoots)
+			// Needed for tests?
+			root: [
+				// resolve('node_modules')
+			]
 		},
-		resolveLoader: {
-			root: [(0, _path.resolve)('node_modules')]
-		},
+		// Needed for tests?
+		//resolveLoader: {
+		//	root: [
+		//		resolve('node_modules')
+		//	]
+		//},
 		plugins: []
 	};
 
