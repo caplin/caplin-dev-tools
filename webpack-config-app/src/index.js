@@ -40,8 +40,9 @@ const webpackConfigGenerator = function(argsMap) {
 		}
 	}
 
-	const variant = parseArgs(process.argv.slice(2)).variant || 'caplin';
-	const appEntryPoint = join(basePath, `entry-${variant}.js`);
+	const variant = parseArgs(process.argv.slice(2)).variant;
+	const entryFile = variant ? 'entry-' + variant + '.js': 'entry.js';
+	const appEntryPoint = join(basePath, entryFile);
 	const buildOutputDir = join(basePath, 'dist', 'public');
 	const isBuild = process.env.npm_lifecycle_event === 'build'; // eslint-disable-line
 	const bundleName = isBuild ? `bundle-${process.env.npm_package_version}.js` : 'bundle.js'; // eslint-disable-line
