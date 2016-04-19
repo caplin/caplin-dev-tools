@@ -36,10 +36,6 @@ function setUpApplicationFiles(convertedAppDir, conversionMetadata, defaulAspect
 		join(convertedAppDir, 'node_modules', 'caplin-services')
 	);
 	copySync(join(templateDir, 'config'), join(convertedAppDir, 'config'));
-	copySync(
-		join(templateDir, 'ConfigurableHTMLResourceService.js'),
-		join(convertedAppDir, 'ConfigurableHTMLResourceService.js')
-	);
 	copySync(join(templateDir, 'entry-caplin.js'), join(convertedAppDir, 'entry-caplin.js'));
 	copySync(join(templateDir, 'entry-common.js'), join(convertedAppDir, 'entry-common.js'));
 	copySync(join(templateDir, 'html-templates.js'), join(convertedAppDir, 'html-templates.js'));
