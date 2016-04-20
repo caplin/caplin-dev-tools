@@ -7,7 +7,7 @@
     "serve": "babel-node server/server.js",
     "serve:debug": "babel-node --debug-brk server/server.js",
     "test": "babel-node config/tests.js",
-    "test:serve": "karma start"
+    "test:serve": "babel-node config/tests.js --dev"
   },
   "devDependencies": {
     "@caplin/build-tasks": "^1.0.0",

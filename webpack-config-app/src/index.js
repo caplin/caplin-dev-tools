@@ -39,7 +39,7 @@ const webpackConfigGenerator = function(argsMap) {
 	}
 
 	const variant = parseArgs(process.argv.slice(2)).variant;
-	const entryFile = variant ? 'entry-' + variant + '.js': 'entry.js';
+	const entryFile = variant ? 'index-' + variant + '.js': 'index.js';
 	const appEntryPoint = join(basePath, entryFile);
 	const buildOutputDir = join(basePath, 'dist', 'public');
 	const isBuild = process.env.npm_lifecycle_event === 'build'; // eslint-disable-line

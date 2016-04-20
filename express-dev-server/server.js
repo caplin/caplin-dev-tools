@@ -10,6 +10,10 @@ var _express = require('express');
 
 var _express2 = _interopRequireDefault(_express);
 
+var _poll = require('./poll');
+
+var _poll2 = _interopRequireDefault(_poll);
+
 var _webpack = require('./webpack');
 
 var _webpack2 = _interopRequireDefault(_webpack);
@@ -26,6 +30,7 @@ exports.default = function (_ref) {
 	// Serve static files (HTML, XML, CSS), contained in application directory.
 	app.use(_express2.default.static(appRoot));
 
+	(0, _poll2.default)(app);
 	// Handlers/middleware for webpack.
 	(0, _webpack2.default)(app, webpackConfig);
 
