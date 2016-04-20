@@ -10,8 +10,6 @@ import 'tokenpanel/resources/en.properties';
 import 'watchlist/resources/en.properties';
 import App from 'mobile/App';
 
-import './html-templates';
-
 const JNDITokenMap = {
 	'LIBERATOR.PRIMARY.ADDRESS': '172.20.0.82',
 	'LIBERATOR.PRIMARY.PORT': '18080',
