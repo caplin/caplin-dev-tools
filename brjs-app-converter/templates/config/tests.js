@@ -7,6 +7,19 @@ import webpackConfig from '../webpack.config';
 
 const testEntry = resolve(__dirname, 'test-entry.js');
 
+let module = null;
+let devMode = false;
+const args = process.argv.slice(2);
+
+args.forEach(arg => {
+	if (arg === '--dev') {
+	console.log('Running test runner in dev mode');
+	devMode = true;
+} else {
+	module = arg;
+}
+});
+
 webpackConfig.entry = testEntry;
 webpackConfig.resolve.alias['$aliases-data$'] = join(__dirname, '../test-aliases.js');
 
@@ -17,7 +30,14 @@ const baseKarmaConfig = {
 	preprocessors: {
 		[testEntry]: ['webpack']
 	},
-	singleRun: true
+	singleRun: !devMode,
+	webpackMiddleware: {
+		stats: {
+			assets: false,
+			colors: true,
+			chunks: false
+		}
+	}
 };
 
 const packagesToTest = [
@@ -39,7 +59,7 @@ const packagesToTest = [
 	{
 		packageName: 'icons',
 		filesToServe: {
-			pattern: 'icons/test-unit/resources/*.svg',
+			pattern: 'icons/_resources-test-ut/*.svg',
 			watched: false,
 			included: false
 		}
@@ -83,38 +103,55 @@ function createPackageKarmaConfig(packageInfo) {
 		new DefinePlugin({PACKAGE: `"${packageName}"`})
 	];
 	const packageWebpackConfig = {
-		...webpackConfig,
+			...webpackConfig,
 		plugins
-	};
+};
 	const packageKarmaConfig = {
-		...baseKarmaConfig,
+			...baseKarmaConfig,
 		files,
 		webpack: packageWebpackConfig
-	};
+};
 
 	return packageKarmaConfig;
 }
 
-const packageKarmaConfigs = packagesToTest.map(createPackageKarmaConfig);
+const packageKarmaConfigs = packagesToTest.map(packageInfo => {
+		if (module !== null) {
+	if (module === packageInfo) {
+		console.log(`Running tests for "${ packageInfo }" only`);
+		return createPackageKarmaConfig(packageInfo)
+	}
+} else {
+	console.log(`Running tests for "${ packageInfo }"`);
+	return createPackageKarmaConfig(packageInfo)
+}
+return null;
+});
 
 function runPackageTests(packageKarmaConfig, resolve) {
 	const server = new Server(packageKarmaConfig, (code) => {
-		if (code === 0) {
-			resolve();
-		} else {
+			if (code === 0) {
+		resolve();
+	} else {
+		if (!devMode) {
 			process.exit(code);
 		}
-	});
+	}
+});
 
 	server.start();
 }
 
 async function runPackagesTests() {
 	for (const packageKarmaConfig of packageKarmaConfigs) {
-		await new Promise((resolve) => runPackageTests(packageKarmaConfig, resolve));
+		if (packageKarmaConfig) {
+			await new Promise((resolve) => runPackageTests(packageKarmaConfig, resolve));
+		}
 	}
 
-	process.exit(0);
+	if (!devMode) {
+		process.exit(0);
+	}
 }
 
 runPackagesTests();
