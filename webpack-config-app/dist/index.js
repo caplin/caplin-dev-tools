@@ -71,7 +71,7 @@ var webpackConfigGenerator = function webpackConfigGenerator(argsMap) {
 	}
 
 	var variant = (0, _minimist2.default)(process.argv.slice(2)).variant;
-	var entryFile = variant ? 'entry-' + variant + '.js' : 'entry.js';
+	var entryFile = variant ? 'index-' + variant + '.js' : 'index.js';
 	var appEntryPoint = (0, _path.join)(basePath, entryFile);
 	var buildOutputDir = (0, _path.join)(basePath, 'dist', 'public');
 	var isBuild = process.env.npm_lifecycle_event === 'build'; // eslint-disable-line
@@ -94,17 +94,20 @@ var webpackConfigGenerator = function webpackConfigGenerator(argsMap) {
 				loader: 'file-loader'
 			}, {
 				test: /\.js$/,
-				loaders: ['babel-loader?cacheDirectory'],
+				loader: 'babel-loader?cacheDirectory',
 				exclude: babelLoaderExclude
 			}, {
 				test: /\.js$/,
-				loaders: ['@caplin/patch-loader']
+				loader: '@caplin/patch-loader'
 			}, {
 				test: /\.properties$/,
 				loader: 'i18n-loader'
 			}, {
 				test: /\.scss$/,
 				loaders: ['style-loader', 'css-loader', 'sass-loader']
+			}, {
+				test: /\.xml$/,
+				loader: '@caplin/xml-loader'
 			}, {
 				test: moduleUsesGlobal,
 				loader: 'imports-loader?this=>window'
