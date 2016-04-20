@@ -7,7 +7,7 @@
    "brjs-app-converter": "./brjs-app-converter/src/cli.js"
   },
   "scripts": {
-    "install": "cd ./brjs-app-converter; npm i"
+    "install": "cd brjs-app-converter && npm i"
   },
   "repository": {
     "type": "git",
