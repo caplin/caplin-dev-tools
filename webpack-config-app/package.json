@@ -21,6 +21,7 @@
   },
   "dependencies": {
     "@caplin/patch-loader": "^2.0.2",
+    "@caplin/xml-loader": "^1.0.0",
     "appcache-webpack-plugin": "^1.2.1",
     "bourbon": "^4.2.6",
     "minimist": "^1.2.0"

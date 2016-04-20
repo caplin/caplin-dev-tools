@@ -74,6 +74,9 @@ const webpackConfigGenerator = function(argsMap) {
 				test: /\.scss$/,
 				loaders: ['style-loader', 'css-loader', 'sass-loader']
 			}, {
+				test: /\.xml$/,
+				loader: '@caplin/xml-loader'
+			}, {
 				test: moduleUsesGlobal,
 				loader: 'imports-loader?this=>window'
 			}, {
