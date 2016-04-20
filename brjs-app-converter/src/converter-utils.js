@@ -74,7 +74,6 @@ function useConversionDataDirectoryFilesIfPresent(backupDir, entryModuleID, pack
 	return {
 		aliasesFileLocation: getBoilerplateFileLocationPartial('aliases.js'),
 		authenticationFileLocation: getBoilerplateFileLocationPartial('authentication.js'),
-		indexHTMLFileLocation: getBoilerplateFileLocationPartial('index.html'),
 		metadataFileLocation: getBoilerplateFileLocationPartial('metadata.js'),
 		privateKeyFileLocation,
 		sdkJSLibrariesDir,
@@ -104,7 +103,6 @@ export function createConversionMetadataDataType(applicationName, applicationVar
 		backupDir,
 		brjsApplicationDir,
 		entryModule: conversionData.entryModule,
-		indexHTMLFileLocation: conversionData.indexHTMLFileLocation,
 		metadataFileLocation: conversionData.metadataFileLocation,
 		// string: Packages directory, where all `libs`, `blades` etc are moved to.
 		packagesDir: join(packagesDirName),

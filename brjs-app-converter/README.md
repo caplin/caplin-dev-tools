@@ -19,7 +19,7 @@ a user to access the old application files.
 4. It then creates another top level directory called `apps`.
 5. Within this directory it creates a directory for the restructured application.
 	* For an app named `mobile` it creates `apps/mobile` and populates it with a few boilerplate application files e.g.
-	`package.json`, `index.html`, `webpack.config.js`.
+	`package.json`, `webpack.config.js`.
 
 This leaves the project with three top level directories, `apps`, `packages`, and `brjs-app` (which can be
 deleted once the user is satisfied they don't need the old files).
@@ -42,7 +42,7 @@ The conversion tool has its own boilerplate application files but the user can p
 `conversion-data` directory next to the BRJS project directory.
 
 The files that can be placed there are the `aliases.js` module, `sdk` directory, `conf` directory (which would contain the `privatekey.pem` file), `entry.js` module, `metadata.js`
-module, `index.html` entry webpage and the `webpack.config.js` module. Any or none of these files can be overridden.
+module and the `webpack.config.js` module. Any or none of these files can be overridden.
 
 Then you must navigate into the BRJS project directory (e.g. C/dev/someApp, not C/dev/someApp/apps/someApp) and run the tool.
 

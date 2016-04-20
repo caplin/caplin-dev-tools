@@ -10,6 +10,8 @@
     "test:serve": "karma start"
   },
   "devDependencies": {
+    "@caplin/build-tasks": "^1.0.0",
+    "@caplin/express-dev-server": "^1.0.0",
     "appcache-webpack-plugin": "^1.2.1",
     "babel-cli": "^6.7.5",
     "babel-code-frame": "^6.7.5",
