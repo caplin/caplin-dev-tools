@@ -50,7 +50,7 @@ const packagesToTest = [
 	{
 		packageName: 'loading',
 		filesToServe: {
-			pattern: 'loading/test-unit/tests/*.*',
+			pattern: 'loading/_test-ut/*.*',
 			watched: false,
 			included: false
 		}
