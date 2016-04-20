@@ -2,6 +2,7 @@ import {join} from 'path';
 
 import express from 'express';
 
+import poll from './poll';
 import webpackMiddleware from './webpack';
 
 export default ({webpackConfig}) => {
@@ -12,6 +13,7 @@ export default ({webpackConfig}) => {
 	// Serve static files (HTML, XML, CSS), contained in application directory.
 	app.use(express.static(appRoot));
 
+	poll(app);
 	// Handlers/middleware for webpack.
 	webpackMiddleware(app, webpackConfig);
 
