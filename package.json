@@ -1,0 +1,23 @@
+{
+  "name": "caplin-dev-tools",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "bin": {
+   "brjs-app-converter": "./brjs-app-converter/src/cli.js"
+  },
+  "scripts": {
+    "install": "cd brjs-app-converter; npm i"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/caplin/caplin-dev-tools.git"
+  },
+  "keywords": [],
+  "author": "Brian Di Palma <offler@gmail.com> (https://github.com/briandipalma)",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/caplin/caplin-dev-tools/issues"
+  },
+  "homepage": "https://github.com/caplin/caplin-dev-tools#readme"
+}
