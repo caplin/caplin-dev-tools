@@ -1,5 +1,5 @@
 {
-  "name": "brjs-app-converter",
+  "name": "@caplin/brjs-app-converter",
   "version": "1.0.0",
   "description": "Tool to convert BRJS apps",
   "main": "index.js",
