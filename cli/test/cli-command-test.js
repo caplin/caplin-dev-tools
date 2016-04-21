@@ -84,7 +84,7 @@ describe('create-app', function () {
             stdOutput += data;
 
             if(stdOutput.indexOf('Created') > -1) {
-                assert.file('apps/newapp/entry.js');
+                assert.file('apps/newapp/index.js');
                 assert.file('apps/newapp/index.html');
                 assert.file('apps/newapp/package.json');
                 assert.file('apps/newapp/webpack.config.js');
@@ -137,7 +137,7 @@ describe('create-component', function () {
 describe('init', function () {
     it('should display an error when running in non empty directory', function (isDisplayed) {
         var cp = execFile('node', ['./index.js', 'init']);
-        var expected = "init needs to be run in an empty directory";
+        var expected = "needs to be run in an empty directory";
 
         cp.stdout.on('data', function (data) {
             if(data.indexOf(expected) > -1) {
