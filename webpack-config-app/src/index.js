@@ -30,7 +30,7 @@ const webpackConfigGenerator = function(argsMap) {
 	const babelLoaderExclude = [];
 	const basePath = argsMap.basePath;
 
-	for (const packageDir of readdirSync(join('../../packages'))) {
+	for (const packageDir of readdirSync(join(basePath, '../../packages'))) {
 		try {
 			accessSync(join(basePath, `node_modules/${packageDir}/compiler.json`), F_OK);
 		} catch (e) {

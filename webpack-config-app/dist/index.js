@@ -46,7 +46,7 @@ var webpackConfigGenerator = function webpackConfigGenerator(argsMap) {
 	var _iteratorError = undefined;
 
 	try {
-		for (var _iterator = (0, _fs.readdirSync)((0, _path.join)('../../packages'))[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+		for (var _iterator = (0, _fs.readdirSync)((0, _path.join)(basePath, '../../packages'))[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
 			var packageDir = _step.value;
 
 			try {
