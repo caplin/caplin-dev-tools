@@ -126,7 +126,7 @@ var webpackConfigGenerator = function webpackConfigGenerator(argsMap) {
 		resolve: {
 			alias: {
 				// `alias!$aliases-data` required in `AliasRegistry`, loaded with `alias-loader`.
-				'$aliases-data$': (0, _path.join)(basePath, 'aliases.js'),
+				'$aliases-data$': (0, _path.join)(basePath, 'config', 'aliases.js'),
 				// `app-meta!$app-metadata` required in `BRAppMetaService`, loaded with `app-meta-loader`.
 				'$app-metadata$': (0, _path.join)(basePath, 'metadata.js'),
 				// Application aliases, loaded with `alias-loader`.
