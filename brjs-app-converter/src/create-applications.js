@@ -51,7 +51,6 @@ function setUpApplicationFiles(convertedAppDir, conversionMetadata, defaulAspect
 		join(convertedAppDir, 'server', 'privatekey.pem')
 	);
 	copySync(join(templateDir, 'service-loader'), join(convertedAppDir, 'node_modules', 'service-loader'));
-	copySync(join(templateDir, 'test-index.js'), join(convertedAppDir, 'test-index.js'));
 	copySync(
 		join(defaulAspectDir, 'unbundled-resources'),
 		join(convertedAppDir, 'v/dev/unbundled-resources')
