@@ -1,17 +1,11 @@
-import {join} from 'path';
-import express from 'express';
-import webpackMiddleware from './webpack';
+import notFound from '@caplin/express-dev-server/not-found';
+import resources from '@caplin/express-dev-server/resources';
+import server from '@caplin/express-dev-server/server';
+import webpackConfig from '../webpack.config';
 
-const app = express();
-const APP_PORT = 8080;
-const appRoot = join(__dirname, '..');
+const app = server({webpackConfig});
+const appRoot = process.cwd();
 const applicationPath = '/{{appName}}';
 
-// Serve static files (HTML, XML, CSS), contained in application directory.
-app.use(express.static(appRoot));
-
-// Handlers/middleware for webpack.
-webpackMiddleware(app);
-
-// Don't bind to `localhost` as that will mean the server won't be accessible by other machines on the LAN.
-app.listen(APP_PORT, (err) => console.log(err || `Listening on port ${APP_PORT}`)); // eslint-disable-line
+resources(applicationPath, app, appRoot);
+notFound(app);
