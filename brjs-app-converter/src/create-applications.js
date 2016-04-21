@@ -64,6 +64,7 @@ function setUpApplicationFiles(convertedAppDir, conversionMetadata, defaulAspect
 	);
 	copySync(join(conversionMetadata.brjsApplicationDir, 'WEB-INF'), join(convertedAppDir, 'config', 'WEB-INF'));
 	writeFileSync(join(convertedAppDir, 'webpack.config.js'), conversionMetadata.webpackConfig);
+	copySync(join(templateDir, 'xml-documents.js'), join(convertedAppDir, 'xml-documents.js'));
 }
 
 // Given an application populate its `package.json` with all the newly created packages as dependencies.

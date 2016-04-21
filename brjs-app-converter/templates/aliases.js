@@ -138,7 +138,11 @@ module.exports = {
 		'className':'br.services.xml.BRXmlResourceService',
 
 		get classRef() {
-			return require("br/services/xml/BRXmlResourceService");
+			const ConfigurableXMLResourceService = require("ct-services/xml/ConfigurableXMLResourceService").default;
+
+			require('./xml-documents');
+
+			return ConfigurableXMLResourceService;
 		}
 	},
 		'mobile.blotter.orders.bulk-order-state-manager':{
