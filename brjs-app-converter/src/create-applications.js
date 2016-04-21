@@ -43,7 +43,6 @@ function setUpApplicationFiles(convertedAppDir, conversionMetadata, defaulAspect
 		join(templateDir, 'jstestdriver-functions'),
 		join(convertedAppDir, 'node_modules', 'jstestdriver-functions')
 	);
-	copySync(join(templateDir, 'karma.conf.js'), join(convertedAppDir, 'karma.conf.js'));
 	copySync(conversionMetadata.metadataFileLocation, join(convertedAppDir, 'config', 'metadata.js'));
 	copySync(join(templateDir, 'server'), join(convertedAppDir, 'server'));
 	copySync(conversionMetadata.authenticationFileLocation, join(convertedAppDir, 'server', 'authentication.js'));
