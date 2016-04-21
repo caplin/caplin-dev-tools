@@ -4,10 +4,11 @@
   "description": "",
   "main": "index.js",
   "bin": {
-   "brjs-app-converter": "./brjs-app-converter/src/cli.js"
+   "brjs-app-converter": "./brjs-app-converter/src/cli.js",
+   "caplin-cli": "./cli/index.js"
   },
   "scripts": {
-    "install": "cd brjs-app-converter && npm i"
+    "install": "cd brjs-app-converter && npm i && cd ../cli && npm i"
   },
   "repository": {
     "type": "git",
