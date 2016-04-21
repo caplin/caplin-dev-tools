@@ -16,12 +16,6 @@ import {
 function setUpApplicationFiles(convertedAppDir, conversionMetadata, defaulAspectDir) {
 	copySync(join(templateDir, '.babelrc'), join(convertedAppDir, '.babelrc'));
 	copySync(conversionMetadata.authenticationFileLocation, join(convertedAppDir, 'server', 'authentication.js'));
-	copySync(join(templateDir, 'alias-loader'), join(convertedAppDir, 'node_modules', 'alias-loader'));
-	copySync(join(templateDir, 'app-meta-loader'), join(convertedAppDir, 'node_modules', 'app-meta-loader'));
-	copySync(
-		join(templateDir, 'brjs-services'),
-		join(convertedAppDir, 'node_modules', 'brjs-services')
-	);
 	copySync(
 		join(templateDir, 'caplin-fx-aliases'),
 		join(convertedAppDir, 'node_modules', 'caplin-fx-aliases')
@@ -37,11 +31,6 @@ function setUpApplicationFiles(convertedAppDir, conversionMetadata, defaulAspect
 	copySync(join(templateDir, 'config'), join(convertedAppDir, 'config'));
 	copySync(conversionMetadata.aliasesFileLocation, join(convertedAppDir, 'config', 'aliases.js'));
 	copySync(join(templateDir, 'index.js'), join(convertedAppDir, 'index.js'));
-	copySync(join(templateDir, 'i18n-loader'), join(convertedAppDir, 'node_modules', 'i18n-loader'));
-	copySync(
-		join(templateDir, 'jstestdriver-functions'),
-		join(convertedAppDir, 'node_modules', 'jstestdriver-functions')
-	);
 	copySync(conversionMetadata.metadataFileLocation, join(convertedAppDir, 'config', 'metadata.js'));
 	copySync(join(templateDir, 'server'), join(convertedAppDir, 'server'));
 	copySync(conversionMetadata.authenticationFileLocation, join(convertedAppDir, 'server', 'authentication.js'));
@@ -49,7 +38,6 @@ function setUpApplicationFiles(convertedAppDir, conversionMetadata, defaulAspect
 		conversionMetadata.privateKeyFileLocation,
 		join(convertedAppDir, 'server', 'privatekey.pem')
 	);
-	copySync(join(templateDir, 'service-loader'), join(convertedAppDir, 'node_modules', 'service-loader'));
 	copySync(
 		join(defaulAspectDir, 'unbundled-resources'),
 		join(convertedAppDir, 'v/dev/unbundled-resources')
