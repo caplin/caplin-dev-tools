@@ -15,7 +15,6 @@ import {
 
 function setUpApplicationFiles(convertedAppDir, conversionMetadata, defaulAspectDir) {
 	copySync(join(templateDir, '.babelrc'), join(convertedAppDir, '.babelrc'));
-	copySync(conversionMetadata.aliasesFileLocation, join(convertedAppDir, 'aliases.js'));
 	copySync(conversionMetadata.authenticationFileLocation, join(convertedAppDir, 'server', 'authentication.js'));
 	copySync(join(templateDir, 'alias-loader'), join(convertedAppDir, 'node_modules', 'alias-loader'));
 	copySync(join(templateDir, 'app-meta-loader'), join(convertedAppDir, 'node_modules', 'app-meta-loader'));
@@ -36,8 +35,9 @@ function setUpApplicationFiles(convertedAppDir, conversionMetadata, defaulAspect
 		join(convertedAppDir, 'node_modules', 'caplin-services')
 	);
 	copySync(join(templateDir, 'config'), join(convertedAppDir, 'config'));
+	copySync(conversionMetadata.aliasesFileLocation, join(convertedAppDir, 'config', 'aliases.js'));
+	copySync(join(templateDir, 'html-templates.js'), join(convertedAppDir, 'config', 'html-templates.js'));
 	copySync(join(templateDir, 'index.js'), join(convertedAppDir, 'index.js'));
-	copySync(join(templateDir, 'html-templates.js'), join(convertedAppDir, 'html-templates.js'));
 	copySync(join(templateDir, 'i18n-loader'), join(convertedAppDir, 'node_modules', 'i18n-loader'));
 	copySync(
 		join(templateDir, 'jstestdriver-functions'),
@@ -52,7 +52,6 @@ function setUpApplicationFiles(convertedAppDir, conversionMetadata, defaulAspect
 		join(convertedAppDir, 'server', 'privatekey.pem')
 	);
 	copySync(join(templateDir, 'service-loader'), join(convertedAppDir, 'node_modules', 'service-loader'));
-	copySync(join(templateDir, 'test-aliases.js'), join(convertedAppDir, 'test-aliases.js'));
 	copySync(join(templateDir, 'test-index.js'), join(convertedAppDir, 'test-index.js'));
 	copySync(
 		join(defaulAspectDir, 'unbundled-resources'),
@@ -64,7 +63,6 @@ function setUpApplicationFiles(convertedAppDir, conversionMetadata, defaulAspect
 	);
 	copySync(join(conversionMetadata.brjsApplicationDir, 'WEB-INF'), join(convertedAppDir, 'config', 'WEB-INF'));
 	writeFileSync(join(convertedAppDir, 'webpack.config.js'), conversionMetadata.webpackConfig);
-	copySync(join(templateDir, 'xml-documents.js'), join(convertedAppDir, 'xml-documents.js'));
 }
 
 // Given an application populate its `package.json` with all the newly created packages as dependencies.
