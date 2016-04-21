@@ -1,0 +1,11 @@
+language: node_js
+script: "cd cli && npm install && npm test"
+node_js:
+  - 'stable'
+
+# Use container-based Travis infrastructure.
+sudo: true
+
+cache:
+  directories:
+    - node_modules
