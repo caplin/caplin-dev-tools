@@ -1,6 +1,6 @@
 {
   "name": "@caplin/express-dev-server",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Express.js server modules for developing Caplin applications",
   "scripts": {
     "build": "babel src --out-dir ."

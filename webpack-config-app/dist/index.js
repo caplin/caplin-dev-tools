@@ -94,17 +94,20 @@ var webpackConfigGenerator = function webpackConfigGenerator(argsMap) {
 				loader: 'file-loader'
 			}, {
 				test: /\.js$/,
-				loaders: ['babel-loader?cacheDirectory'],
+				loader: 'babel-loader?cacheDirectory',
 				exclude: babelLoaderExclude
 			}, {
 				test: /\.js$/,
-				loaders: ['@caplin/patch-loader']
+				loader: '@caplin/patch-loader'
 			}, {
 				test: /\.properties$/,
 				loader: 'i18n-loader'
 			}, {
 				test: /\.scss$/,
 				loaders: ['style-loader', 'css-loader', 'sass-loader']
+			}, {
+				test: /\.xml$/,
+				loader: '@caplin/xml-loader'
 			}, {
 				test: moduleUsesGlobal,
 				loader: 'imports-loader?this=>window'
