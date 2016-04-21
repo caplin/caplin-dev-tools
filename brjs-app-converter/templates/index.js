@@ -1,3 +1,4 @@
+import 'mobile-default-aspect/themes/caplin/caplin-theme.scss';
 import 'instrumentdetails/resources/en.properties';
 import 'smspanel/resources/en.properties';
 import 'connection/resources/en.properties';
@@ -23,3 +24,4 @@ const JNDITokenMap = {
 };
 
 (new App()).initialise(JNDITokenMap); // eslint-disable-line
+
