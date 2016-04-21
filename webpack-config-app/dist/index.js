@@ -101,7 +101,7 @@ var webpackConfigGenerator = function webpackConfigGenerator(argsMap) {
 				loader: '@caplin/patch-loader'
 			}, {
 				test: /\.properties$/,
-				loader: 'i18n-loader'
+				loader: '@caplin/i18n-loader'
 			}, {
 				test: /\.scss$/,
 				loaders: ['style-loader', 'css-loader', 'sass-loader']
@@ -132,7 +132,7 @@ var webpackConfigGenerator = function webpackConfigGenerator(argsMap) {
 				// Application aliases, loaded with `alias-loader`.
 				'caplin.fx.tenor.currency-tenors$': 'caplin-fx-aliases/caplin.fx.tenor.currency-tenors',
 				// Application services, loaded with `service-loader`.
-				'br.app-meta-service$': 'brjs-services/br.app-meta-service',
+				'br.app-meta-service$': '@caplin/brjs-services/br.app-meta-service',
 				'caplin.permission-service$': 'caplin-services/caplin.permission-service',
 				'caplin.fx.business-date-service$': 'caplin-fx-services/caplin.fx.business-date-service',
 				'caplin.fx.permission-service$': 'caplin-fx-services/caplin.fx.permission-service',
@@ -141,18 +141,18 @@ var webpackConfigGenerator = function webpackConfigGenerator(argsMap) {
 				'caplin.trade-service$': 'caplin-services/caplin.trade-service',
 				'caplin.trade-message-service$': 'caplin-services/caplin.trade-message-service',
 				jasmine: 'jstestdriver-functions'
-			},
-			// Needed for tests?
-			root: [
-				// resolve('node_modules')
-			]
+			}
 		},
 		// Needed for tests?
-		//resolveLoader: {
-		//	root: [
-		//		resolve('node_modules')
-		//	]
-		//},
+		// root: [ resolve('node_modules') ]
+		resolveLoader: {
+			alias: {
+				'alias': '@caplin/alias-loader',
+				'app-meta': '@caplin/app-meta-loader',
+				'service': '@caplin/service-loader'
+			}
+			// root: [resolve('node_modules')]
+		},
 		plugins: []
 	};
 
