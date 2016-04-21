@@ -3,7 +3,7 @@ import {join, resolve} from 'path';
 import {Server} from 'karma';
 import {DefinePlugin} from 'webpack';
 
-import webpackConfig from '../webpack.config';
+import webpackConfig from './webpack.config';
 
 const testEntry = resolve(__dirname, 'test-entry.js');
 

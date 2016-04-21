@@ -1,7 +1,9 @@
+import {resolve} from 'path';
+
 import {webpackConfigGenerator} from '@caplin/webpack-config-app';
 
 const webpackConfig = webpackConfigGenerator({
-	basePath: __dirname
+	basePath: resolve(__dirname, '..')
 });
 
 export default webpackConfig;

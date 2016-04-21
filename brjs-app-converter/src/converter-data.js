@@ -13,7 +13,7 @@ export const templateDir = join(__dirname, '..', 'templates');
 const appPackageJSONTemplate = readFileSync(join(templateDir, '_app-package.json'));
 const brPkgPackageJSONTemplate = readFileSync(join(templateDir, '_brpkg-package.json'));
 const thirdpartyPackageJSONTemplate = readFileSync(join(templateDir, '_thirdparty-package.json'));
-const webpackConfigTemplate = readFileSync(join(templateDir, 'webpack.config.js'));
+const webpackConfigTemplate = readFileSync(join(templateDir, 'config', 'webpack.config.js'));
 
 export const compiledAppPackageJSONTemplate = template(appPackageJSONTemplate);
 export const compiledBRLibPackageJSONTemplate = template(brPkgPackageJSONTemplate);

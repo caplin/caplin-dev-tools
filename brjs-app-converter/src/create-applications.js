@@ -36,7 +36,6 @@ function setUpApplicationFiles(convertedAppDir, conversionMetadata, defaulAspect
 	);
 	copySync(join(templateDir, 'config'), join(convertedAppDir, 'config'));
 	copySync(conversionMetadata.aliasesFileLocation, join(convertedAppDir, 'config', 'aliases.js'));
-	copySync(join(templateDir, 'html-templates.js'), join(convertedAppDir, 'config', 'html-templates.js'));
 	copySync(join(templateDir, 'index.js'), join(convertedAppDir, 'index.js'));
 	copySync(join(templateDir, 'i18n-loader'), join(convertedAppDir, 'node_modules', 'i18n-loader'));
 	copySync(
@@ -60,7 +59,7 @@ function setUpApplicationFiles(convertedAppDir, conversionMetadata, defaulAspect
 		join(convertedAppDir, 'public')
 	);
 	copySync(join(conversionMetadata.brjsApplicationDir, 'WEB-INF'), join(convertedAppDir, 'config', 'WEB-INF'));
-	writeFileSync(join(convertedAppDir, 'webpack.config.js'), conversionMetadata.webpackConfig);
+	writeFileSync(join(convertedAppDir, 'config', 'webpack.config.js'), conversionMetadata.webpackConfig);
 }
 
 // Given an application populate its `package.json` with all the newly created packages as dependencies.
