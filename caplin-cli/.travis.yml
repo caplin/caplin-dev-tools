@@ -1,0 +1,18 @@
+language: node_js
+script: "npm test"
+node_js:
+  - 'stable'
+
+# Use container-based Travis infrastructure.
+sudo: true
+
+cache:
+  directories:
+    - node_modules
+
+install:
+  # Log HTTP requests
+  - npm config set loglevel http
+  - npm install -g npm@3.5.2
+   # Instal npm dependecies and ensure that npm cache is not stale
+  - npm install

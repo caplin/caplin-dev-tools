@@ -1,0 +1,38 @@
+{
+  "name": "caplin-cli",
+  "version": "1.0.0",
+  "description": "caplin-cli app bootstrapping experiment",
+  "main": "index.js",
+  "bin": {
+    "caplin-cli": "./index.js"
+  },
+  "scripts": {
+    "test": "./node_modules/.bin/mocha",
+    "generateDocs": "./node_modules/.bin/jsdoc cli.js -c jsdoc.json"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/caplin/caplin-cli.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/caplin/caplin-cli/issues"
+  },
+  "homepage": "https://github.com/caplin/caplin-cli#readme",
+  "devDependencies": {
+    "jsdoc": "^3.4.0",
+    "minami": "^1.1.1"
+  },
+  "dependencies": {
+    "auto-load": "^2.1.0",
+    "chalk": "^1.1.3",
+    "copy-template-dir": "git://github.com/stevesouth/copy-template-dir.git#graceful-fs",
+    "fmt": "^0.5.0",
+    "inquirer": "^1.0.0",
+    "minimist": "^1.2.0",
+    "mocha": "^2.4.5",
+    "rimraf": "^2.5.2",
+    "yeoman-assert": "^2.1.2"
+  }
+}
