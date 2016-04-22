@@ -5,7 +5,7 @@ import server from '@caplin/express-dev-server/server';
 import authentication from './authentication';
 import indexPage from './index-page';
 import keymaster from './keymaster';
-import webpackConfig from '../webpack.config';
+import webpackConfig from '../config/webpack.config';
 
 const app = server({webpackConfig});
 const applicationPath = '/mobile';

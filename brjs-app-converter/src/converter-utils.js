@@ -28,7 +28,7 @@ function readBoilerplateFile(conversionDataDirContents, fileName, compiledTempla
 // If a file is present in the `conversion-data` override directory use it else use the template version.
 function getBoilerplateFileLocation(conversionDataDirContents, fileName, filePath = fileName) {
 	if (conversionDataDirContents.includes(fileName)) {
-		return join('..', 'conversion-data', filePath);
+		return join('..', 'conversion-data', fileName);
 	}
 
 	return join(templateDir, filePath);
@@ -72,9 +72,9 @@ function useConversionDataDirectoryFilesIfPresent(backupDir, entryModuleID, pack
 	);
 
 	return {
-		aliasesFileLocation: getBoilerplateFileLocationPartial('aliases.js'),
+		aliasesFileLocation: getBoilerplateFileLocationPartial('aliases.js', 'config/aliases.js'),
 		authenticationFileLocation: getBoilerplateFileLocationPartial('authentication.js'),
-		metadataFileLocation: getBoilerplateFileLocationPartial('metadata.js'),
+		metadataFileLocation: getBoilerplateFileLocationPartial('metadata.js', 'config/metadata.js'),
 		privateKeyFileLocation,
 		sdkJSLibrariesDir,
 		webpackConfig: readBoilerplateFilePartial('webpack.config.js', compiledWebpackConfig)

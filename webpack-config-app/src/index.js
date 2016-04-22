@@ -30,7 +30,7 @@ const webpackConfigGenerator = function(argsMap) {
 	const babelLoaderExclude = [];
 	const basePath = argsMap.basePath;
 
-	for (const packageDir of readdirSync(join('../../packages'))) {
+	for (const packageDir of readdirSync(join(basePath, '../../packages'))) {
 		try {
 			accessSync(join(basePath, `node_modules/${packageDir}/compiler.json`), F_OK);
 		} catch (e) {
@@ -69,7 +69,7 @@ const webpackConfigGenerator = function(argsMap) {
 				loader: '@caplin/patch-loader'
 			}, {
 				test: /\.properties$/,
-				loader: 'i18n-loader'
+				loader: '@caplin/i18n-loader'
 			}, {
 				test: /\.scss$/,
 				loaders: ['style-loader', 'css-loader', 'sass-loader']
@@ -100,7 +100,7 @@ const webpackConfigGenerator = function(argsMap) {
 				// Application aliases, loaded with `alias-loader`.
 				'caplin.fx.tenor.currency-tenors$': 'caplin-fx-aliases/caplin.fx.tenor.currency-tenors',
 				// Application services, loaded with `service-loader`.
-				'br.app-meta-service$': 'brjs-services/br.app-meta-service',
+				'br.app-meta-service$': '@caplin/brjs-services/br.app-meta-service',
 				'caplin.permission-service$': 'caplin-services/caplin.permission-service',
 				'caplin.fx.business-date-service$': 'caplin-fx-services/caplin.fx.business-date-service',
 				'caplin.fx.permission-service$': 'caplin-fx-services/caplin.fx.permission-service',
@@ -111,16 +111,16 @@ const webpackConfigGenerator = function(argsMap) {
 				jasmine: 'jstestdriver-functions'
 			},
 			// Needed for tests?
-			root: [
-				// resolve('node_modules')
-			]
+			// root: [ resolve('node_modules') ]
 		},
-		// Needed for tests?
-		//resolveLoader: {
-		//	root: [
-		//		resolve('node_modules')
-		//	]
-		//},
+		resolveLoader: {
+			alias: {
+				'alias': '@caplin/alias-loader',
+				'app-meta': '@caplin/app-meta-loader',
+				'service': '@caplin/service-loader'
+			}
+			// root: [resolve('node_modules')]
+		},
 		plugins: []
 	};
 

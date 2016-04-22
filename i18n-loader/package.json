@@ -1,0 +1,14 @@
+{
+  "name": "@caplin/i18n-loader",
+  "version": "1.0.0",
+  "description": "Webpack loader used for loading Caplin i18n properties files",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "properties": "^1.2.1"
+  }
+}

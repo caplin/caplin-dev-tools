@@ -1,7 +1,7 @@
 {
-  "name": "app-meta-loader",
+  "name": "@caplin/alias-loader",
   "version": "1.0.0",
-  "description": "",
+  "description": "Webpack loader used for loading Caplin aliases",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"

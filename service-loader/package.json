@@ -1,7 +1,7 @@
 {
-  "name": "alias-loader",
+  "name": "@caplin/service-loader",
   "version": "1.0.0",
-  "description": "",
+  "description": "Webpack loader used for loading a Caplin service",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
