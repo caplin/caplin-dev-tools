@@ -1,8 +1,8 @@
 import {shim} from 'array-includes';
 
-import { moveBRJSApplicationCodeToPackages } from './convert-app';
-import { createPackagesFromLibs } from './convert-libs';
-import { convertSDKToPackages } from './convert-sdk';
+import {moveBRJSApplicationCodeToPackages} from './convert-app';
+import {createPackagesFromLibs} from './convert-libs';
+import {convertSDKToPackages} from './convert-sdk';
 import convertPackagesToNewFormat from './convert-packages';
 import {
 	createConversionMetadataDataType,
@@ -14,7 +14,7 @@ import {createApplicationAndVariants} from './create-applications';
 shim();
 
 // Provide the name and entry point of the app to convert. Variants is a Caplin internal option.
-export default function({ app, entry, vars }) {
+export default function({app, entry, vars}) {
 	verifyCLIArgs(app, entry);
 
 	const applicationVariants = vars ? vars.split(',') : [];
