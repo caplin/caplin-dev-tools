@@ -108,7 +108,7 @@ const webpackConfigGenerator = function(argsMap) {
 				'caplin.message-service$': 'caplin-services/caplin.message-service',
 				'caplin.trade-service$': 'caplin-services/caplin.trade-service',
 				'caplin.trade-message-service$': 'caplin-services/caplin.trade-message-service',
-				jasmine: 'jstestdriver-functions'
+				jasmine: '@caplin/jstestdriver-functions'
 			},
 			// Needed for tests?
 			// root: [ resolve('node_modules') ]
