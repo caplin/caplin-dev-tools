@@ -31,6 +31,7 @@ function setUpApplicationFiles(convertedAppDir, conversionMetadata, defaulAspect
 	copySync(join(templateDir, 'config'), join(convertedAppDir, 'config'));
 	copySync(conversionMetadata.aliasesFileLocation, join(convertedAppDir, 'config', 'aliases.js'));
 	copySync(join(templateDir, 'index.js'), join(convertedAppDir, 'index.js'));
+	copySync(join('..', 'conversion-data', 'keymaster.js'), join(convertedAppDir, 'server', 'keymaster.js'));
 	copySync(conversionMetadata.metadataFileLocation, join(convertedAppDir, 'config', 'metadata.js'));
 	copySync(join(templateDir, 'server'), join(convertedAppDir, 'server'));
 	copySync(conversionMetadata.authenticationFileLocation, join(convertedAppDir, 'server', 'authentication.js'));
