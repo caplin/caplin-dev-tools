@@ -162,7 +162,7 @@ var webpackConfigGenerator = function webpackConfigGenerator(argsMap) {
 
 	if (isBuild) {
 		webpackConfig.plugins.push(new _appcacheWebpackPlugin2.default({
-			cache: _glob2.default.sync('public/*'),
+			cache: _glob2.default.sync('public/**/*.*'),
 			comment: 'version ' + process.env.npm_package_version, // eslint-disable-line
 			output: '../manifest.appcache'
 		}));
