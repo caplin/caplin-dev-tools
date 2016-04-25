@@ -16,6 +16,10 @@ var _minimist = require('minimist');
 
 var _minimist2 = _interopRequireDefault(_minimist);
 
+var _glob = require('glob');
+
+var _glob2 = _interopRequireDefault(_glob);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 // Some thirdparty libraries use global `this` to reference `window`. webpack replaces such references to
@@ -158,6 +162,7 @@ var webpackConfigGenerator = function webpackConfigGenerator(argsMap) {
 
 	if (isBuild) {
 		webpackConfig.plugins.push(new _appcacheWebpackPlugin2.default({
+			cache: _glob2.default.sync('public/*'),
 			comment: 'version ' + process.env.npm_package_version, // eslint-disable-line
 			output: '../manifest.appcache'
 		}));

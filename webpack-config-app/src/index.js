@@ -5,6 +5,7 @@ import {appendModulePatch} from '@caplin/patch-loader/patchesStore';
 import AppCachePlugin from 'appcache-webpack-plugin';
 import {includePaths} from 'bourbon';
 import parseArgs from 'minimist';
+import glob from 'glob';
 
 // Some thirdparty libraries use global `this` to reference `window`. webpack replaces such references to
 // `this` with `undefined` when it wraps those modules. To load them without error you will therefore
@@ -127,6 +128,7 @@ const webpackConfigGenerator = function(argsMap) {
 	if (isBuild) {
 		webpackConfig.plugins.push(
 			new AppCachePlugin({
+				cache: glob.sync('public/*'),
 				comment: `version ${process.env.npm_package_version}`, // eslint-disable-line
 				output: '../manifest.appcache'
 			})
