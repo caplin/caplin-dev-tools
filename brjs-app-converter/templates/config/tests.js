@@ -116,16 +116,17 @@ function createPackageKarmaConfig(packageInfo) {
 }
 
 const packageKarmaConfigs = packagesToTest.map(packageInfo => {
-		if (module !== null) {
-	if (module === packageInfo) {
-		console.log(`Running tests for "${ packageInfo }" only`);
+	const packageName = typeof packageInfo === 'object' ? packageInfo.packageName : packageInfo;
+	if (module !== null) {
+		if (module === packageName) {
+			console.log(`Running tests for "${ packageName }" only`);
+			return createPackageKarmaConfig(packageInfo)
+		}
+	} else {
+		console.log(`Running tests for "${ packageName }"`);
 		return createPackageKarmaConfig(packageInfo)
 	}
-} else {
-	console.log(`Running tests for "${ packageInfo }"`);
-	return createPackageKarmaConfig(packageInfo)
-}
-return null;
+	return null;
 });
 
 function runPackageTests(packageKarmaConfig, resolve) {
