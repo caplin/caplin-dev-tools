@@ -1,14 +1,7 @@
-import {
-	join,
-	sep
-} from 'path';
+import {join, sep} from 'path';
 
-import {
-	copySync,
-	writeFileSync
-} from 'fs-extra';
+import {copySync} from 'fs-extra';
 
-import {compiledBRLibPackageJSONTemplate} from './converter-data';
 import {createNamespaceDirectoriesIfMissing} from './converter-utils';
 
 function createBladeNamespaceDirectoriesIfMissing(bladesetBladesDir, bladeName, bladePackageDir) {
@@ -23,9 +16,8 @@ function createBladeNamespaceDirectoriesIfMissing(bladesetBladesDir, bladeName, 
 export function moveBladeCodeToPackages(bladesetBladesDir, bladeName, packagesDir) {
 	const bladeDir = join(bladesetBladesDir, bladeName);
 	const bladePackageDir = join(packagesDir, bladeName);
-	const packageJSON = compiledBRLibPackageJSONTemplate({packageName: bladeName});
 
 	copySync(bladeDir, bladePackageDir);
-	writeFileSync(join(bladePackageDir, 'package.json'), packageJSON);
+
 	return createBladeNamespaceDirectoriesIfMissing(bladesetBladesDir, bladeName, bladePackageDir);
 }

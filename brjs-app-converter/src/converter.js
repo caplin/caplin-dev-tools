@@ -10,6 +10,7 @@ import {
 	verifyCLIArgs
 } from './converter-utils';
 import {createApplicationAndVariants} from './create-applications';
+import {moveApplicationPackagesToLibs} from './move-libs';
 
 shim();
 
@@ -27,6 +28,7 @@ export default function({app, entry, vars}) {
 	const convertSDK = moveBRJSCode.then(() => convertSDKToPackages(conversionMetadata));
 	const createApplications = convertSDK.then(() => createApplicationAndVariants(conversionMetadata));
 	const convertPackages = createApplications.then(() => convertPackagesToNewFormat(conversionMetadata));
+	const structureUpdated = convertPackages.then(() => moveApplicationPackagesToLibs(conversionMetadata));
 
-	convertPackages.catch(console.error); // eslint-disable-line
+	structureUpdated.catch(console.error); // eslint-disable-line
 }

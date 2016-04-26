@@ -24,7 +24,7 @@ webpackConfig.entry = testEntry;
 webpackConfig.resolve.alias['$aliases-data$'] = join(__dirname, 'aliases-test.js');
 
 const baseKarmaConfig = {
-	basePath: resolve(__dirname, '../node_modules'),
+	basePath: resolve(__dirname, '../libs'),
 	browsers: ['Chrome'],
 	frameworks: ['jasmine'],
 	preprocessors: {

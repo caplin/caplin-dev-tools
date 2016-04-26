@@ -52,13 +52,17 @@ function setUpApplicationFiles(convertedAppDir, conversionMetadata, defaulAspect
 }
 
 // Given an application populate its `package.json` with all the newly created packages as dependencies.
-function populateApplicationPackageJSON(applicationName, convertedAppDir, {packagesDir, packagesDirName}) {
+function populateApplicationPackageJSON(
+	applicationName, convertedAppDir, {packagesDir, packagesDirName, packagesThatShouldBeLibs}
+) {
 	const appDependencies = {};
 	const appPackageJSON = JSON.parse(compiledAppPackageJSONTemplate({applicationName}));
 	const appPackageJSONFileLocation = join(convertedAppDir, 'package.json');
 
 	for (const packageDir of readdirSync(packagesDir)) {
-		appDependencies[packageDir] = `../../${packagesDirName}/${packageDir}`;
+		if (packagesThatShouldBeLibs.includes(packageDir) === false) {
+			appDependencies[packageDir] = `../../${packagesDirName}/${packageDir}`;
+		}
 	}
 
 	appPackageJSON.dependencies = appDependencies;
