@@ -20,13 +20,13 @@ export default function({app, entry, vars}) {
 	const applicationVariants = vars ? vars.split(',') : [];
 	const conversionMetadata = createConversionMetadataDataType(app, applicationVariants, entry);
 
-	Promise.all([
-		moveCurrentCodebase(conversionMetadata),
-		createPackagesFromLibs(conversionMetadata),
-		moveBRJSApplicationCodeToPackages(conversionMetadata),
-		convertSDKToPackages(conversionMetadata)
-	]).then(() => {
-		convertPackagesToNewFormat(conversionMetadata);
-	});
-	createApplicationAndVariants(conversionMetadata);
+	moveCurrentCodebase(conversionMetadata);
+
+	const createPackages = createPackagesFromLibs(conversionMetadata);
+	const moveBRJSCode = createPackages.then(() => moveBRJSApplicationCodeToPackages(conversionMetadata));
+	const convertSDK = moveBRJSCode.then(() => convertSDKToPackages(conversionMetadata));
+	const convertPackages = convertSDK.then(() => convertPackagesToNewFormat(conversionMetadata));
+	const createApplications = convertPackages.then(() => createApplicationAndVariants(conversionMetadata));
+
+	createApplications.catch(console.error); // eslint-disable-line
 }
