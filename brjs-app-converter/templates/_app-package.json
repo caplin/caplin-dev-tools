@@ -12,7 +12,7 @@
   "devDependencies": {
     "@caplin/build-tasks": "^1.0.0",
     "@caplin/express-dev-server": "^1.0.0",
-    "appcache-webpack-plugin": "github:briandipalma/appcache-webpack-plugin",
+    "appcache-webpack-plugin": "caplin/appcache-webpack-plugin",
     "@caplin/webpack-config-app": "^1.1.0",
     "babel-cli": "^6.7.5",
     "babel-code-frame": "^6.7.5",
