@@ -7,7 +7,7 @@ Object.defineProperty(exports, "__esModule", {
 var _path = require('path');
 
 exports.default = function (applicationPath, application, appRoot) {
-	var applicationAspectPrefix = 'libs' + applicationPath + '-';
+	var applicationAspectPrefix = 'node_modules' + applicationPath + '-';
 
 	// Serve up unbundled-resources from `node_modules`.
 	application.get('/unbundled-resources/*', function (_ref, res) {
