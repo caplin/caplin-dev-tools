@@ -14,10 +14,10 @@ import {createNamespaceDirectoriesIfMissing} from './converter-utils';
 // Find all blades in a bladeset, move and convert them to packages.
 function moveAndConvertBladesCode(bladesetDir, packagesDir) {
 	const bladesetBladesDir = join(bladesetDir, 'blades');
+	const moveBladesPromises = readdirSync(bladesetBladesDir)
+		.map((bladeName) => moveBladeCodeToPackages(bladesetBladesDir, bladeName, packagesDir));
 
-	return Promise.all(readdirSync(bladesetBladesDir).map(bladeName =>
-		moveBladeCodeToPackages(bladesetBladesDir, bladeName, packagesDir)
-	));
+	return Promise.all(moveBladesPromises);
 }
 
 // Given a bladeset move all the bladeset code and blades into the packages directory.
@@ -29,8 +29,7 @@ export function moveBladesetCode({applicationName, brjsApplicationDir, packagesD
 	const bladesetNamespacedDir = join(bladesetPackageDir, 'src', applicationName, bladesetName);
 	const packageJSON = compiledBRLibPackageJSONTemplate({packageName});
 	const bladesetDirContents = readdirSync(bladesetDir);
-
-	const convertedBlade = moveAndConvertBladesCode(bladesetDir, packagesDir);
+	const convertedBlades = moveAndConvertBladesCode(bladesetDir, packagesDir);
 
 	copySync(bladesetDir, bladesetPackageDir);
 	writeFileSync(join(bladesetPackageDir, 'package.json'), packageJSON);
@@ -41,5 +40,6 @@ export function moveBladesetCode({applicationName, brjsApplicationDir, packagesD
 	if (bladesetDirContents.includes('blades')) {
 		removeSync(join(bladesetPackageDir, 'blades'));
 	}
-	return Promise.all([convertedBlade, createdNamespace]);
+
+	return Promise.all([convertedBlades, createdNamespace]);
 }

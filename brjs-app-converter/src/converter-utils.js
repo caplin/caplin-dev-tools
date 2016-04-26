@@ -126,20 +126,21 @@ export function createNamespaceDirectoriesIfMissing(namespacedDir, packageDir) {
 
 		if (packageDirContents.includes('src')) {
 			return new Promise((resolve, reject) => {
-				const removeCallback = (removeError) => {
+				function removeCallback(removeError) {
 					if (removeError) {
 						console.error(removeError); // eslint-disable-line
 					}
+
 					resolve();
-				};
-				const copyCallback = (copyError) => {
+				}
+				function copyCallback(copyError) {
 					if (copyError) {
 						console.error(copyError); // eslint-disable-line
-						resolve();
+						reject(copyError);
 					} else {
 						remove(join(packageDir, 'src-bck'), removeCallback);
 					}
-				};
+				}
 
 				// webpack will need a complete namespaced directory structure to load modules.
 				renameSync(join(packageDir, 'src'), join(packageDir, 'src-bck'));
@@ -150,6 +151,7 @@ export function createNamespaceDirectoriesIfMissing(namespacedDir, packageDir) {
 			});
 		}
 	}
+
 	return Promise.resolve();
 }
 
