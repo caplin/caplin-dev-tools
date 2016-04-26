@@ -24,17 +24,20 @@ export function convertLib(packageDir, packageName) {
 	} else {
 		createBRLibPackageJSON(packageDir, packageName);
 	}
+
 	return Promise.resolve();
 }
 
 // Move BRJS application's libs to packages directory and convert them to something webpack can load.
-export function createPackagesFromLibs({ applicationLibsDir, packagesDir }) {
+export function createPackagesFromLibs({applicationLibsDir, packagesDir}) {
 	// Firstly create a packages directory with all the application's `libs`.
 	copySync(applicationLibsDir, packagesDir);
 
-	return Promise.all(readdirSync(packagesDir).map(packageName => {
+	const convertLibsPromises = readdirSync(packagesDir).map((packageName) => {
 		const packageDir = join(packagesDir, packageName);
 
 		return convertLib(packageDir, packageName);
-	}));
+	});
+
+	return Promise.all(convertLibsPromises);
 }

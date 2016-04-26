@@ -31,6 +31,7 @@ export function convertBRLibToPackage(packageDirectory, packageName) {
 	const namespacedLibSrcDir = getNamespacedLibSrcDirName(packageDirectory, packageName);
 
 	createBRLibPackageJSON(packageDirectory, packageName);
+
 	return createNamespaceDirectoriesIfMissing(namespacedLibSrcDir, packageDirectory);
 }
 
@@ -40,5 +41,6 @@ export function convertLibToPackage(packageDirectory, packageName) {
 	const namespacedLibSrcDir = join(packageDirectory, 'src', packageName);
 
 	createBRLibPackageJSON(packageDirectory, packageName);
+
 	return createNamespaceDirectoriesIfMissing(namespacedLibSrcDir, packageDirectory);
 }
