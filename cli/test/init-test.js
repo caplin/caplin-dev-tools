@@ -16,6 +16,13 @@ describe('init', function () {
     });
 
     it('should initialise the workspace', function () {
-        //todo
+        var cp = execFile('node', ['./index.js', 'init']);
+        var expected = "needs to be run in an empty directory";
+
+        cp.stdout.on('data', function (data) {
+            if(data.indexOf(expected) > -1) {
+                isDisplayed();
+            }
+        });
     });
 });

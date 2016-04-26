@@ -4,7 +4,7 @@ var assert = require('yeoman-assert');
 var pkg = require('../package.json');
 
 describe('version', function () {
-    it('should display version', function (isDisplayed) {
+    it('should display correct version', function (isDisplayed) {
         var cp = execFile('node', ['./index.js', 'version']);
 
         cp.stdout.on('data', function (data) {
