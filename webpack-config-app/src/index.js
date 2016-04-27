@@ -133,6 +133,13 @@ const webpackConfigGenerator = function(argsMap) {
 				output: '../manifest.appcache'
 			})
 		);
+		webpackConfig.module.loaders.push(
+			{
+				test: /\.js$/,
+				//exclude: /.spec.js/, // excluding .spec files
+				loader: "uglify"
+			}
+		);
 	}
 
 	// Add aliases for the app's libs.
