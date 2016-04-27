@@ -107,6 +107,7 @@ export function createConversionMetadataDataType(applicationName, applicationVar
 		// string: Packages directory, where all `libs`, `blades` etc are moved to.
 		packagesDir: join(packagesDirName),
 		packagesDirName,
+		packagesThatShouldBeLibs: [],
 		privateKeyFileLocation: conversionData.privateKeyFileLocation,
 		sdkJSLibrariesDir: conversionData.sdkJSLibrariesDir,
 		webpackConfig: conversionData.webpackConfig

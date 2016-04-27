@@ -83,11 +83,10 @@ function getLibraryWindowExports(packageName, manifestExports) {
 // Convert BRJS thirdparty lib to npm package. It bundles the library files into a single file to emulate
 // what BRJS would inject into its JS bundle. We then create a `package.json` with a `main` that points to
 // this combined JS file.
-export function convertThirdpartyLibraryToPackage(packageDirectory, packageName) {
+export function convertThirdpartyLibraryToPackage(packageDirectory, packageName, createPackageJSON) {
 	let combinedLibrarySource = '';
 	const manifestFileLocation = join(packageDirectory, 'thirdparty-lib.manifest');
 	const manifestYAML = safeLoad(readFileSync(manifestFileLocation, 'utf8'));
-	const thirdpartyPackageJSON = compiledThirdpartyJSONTemplate({packageName});
 
 	combinedLibrarySource += getLibraryDependencyRequires(manifestYAML.depends);
 	combinedLibrarySource += getLibrarySource(packageDirectory, manifestYAML.js);
@@ -95,5 +94,10 @@ export function convertThirdpartyLibraryToPackage(packageDirectory, packageName)
 	combinedLibrarySource += getLibraryWindowExports(packageName, manifestYAML.exports);
 
 	writeFileSync(join(packageDirectory, 'converted_library.js'), combinedLibrarySource);
-	writeFileSync(join(packageDirectory, 'package.json'), thirdpartyPackageJSON);
+
+	if (createPackageJSON) {
+		const thirdpartyPackageJSON = compiledThirdpartyJSONTemplate({packageName});
+
+		writeFileSync(join(packageDirectory, 'package.json'), thirdpartyPackageJSON);
+	}
 }

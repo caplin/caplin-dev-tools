@@ -1,214 +1,144 @@
-import glob from "glob";
-import path from "path";
-import mv from 'mv';
+import {copySync, lstatSync, readdirSync, readFileSync, writeFileSync} from 'fs-extra';
+import glob from 'glob';
 import rimraf from 'rimraf';
-import fs from 'fs';
-import chalk from 'chalk';
 
-const slash = path.sep;
-const rootDir = process.cwd();
-
-function getBasePath(sourceFiles) {
-	let firstDir = path.dirname(sourceFiles[0]);
-	const lastDir = path.dirname(sourceFiles[sourceFiles.length - 1]);
-	let attempts = 0;
-
-	while (attempts < 3) {
-		attempts++;
-		if (lastDir.indexOf(firstDir) !== -1) {
-			return firstDir;
-		} else {
-			firstDir = path.dirname(firstDir);
-		}
-	}
+function deleteUnusedFiles(packagePath) {
+	rimraf.sync(`${packagePath}/resources`);
+	rimraf.sync(`${packagePath}/test-unit`);
+	rimraf.sync(`${packagePath}/test-acceptance`);
+	rimraf.sync(`${packagePath}/compiled`);
+	rimraf.sync(`${packagePath}/src`);
+	rimraf.sync(`${packagePath}/br-lib.conf`);
+	rimraf.sync(`${packagePath}/_resources/aliases.xml`);
+	rimraf.sync(`${packagePath}/_resources/aliasDefinitions.xml`);
+	rimraf.sync(`${packagePath}/_resources-test-ut/aliases.xml`);
+	rimraf.sync(`${packagePath}/_resources-test-ut/aliasDefinitions.xml`);
+	rimraf.sync(`${packagePath}/_resources-test-at/aliases.xml`);
+	rimraf.sync(`${packagePath}/_resources-test-at/aliasDefinitions.xml`);
 }
 
-// move src/somename/**/*.js -> ./**/*.js
-function moveTest(absolutePath, subDirectory, fileName, testTypeDir) {
-	// testTypeDir
-	return new Promise((resolve, reject) => {
-		const testFile = absolutePath + '/' + testTypeDir + subDirectory + '/' + fileName + 'Test.js';
-		const moveToPath = absolutePath + subDirectory + '/' + testTypeDir + '/' + fileName + 'Test.js';
-		// move test-unit/tests/**/*.js -> ~tests/*.js
-		if (fileExists(testFile)) {
-			mv(testFile, moveToPath, { mkdirp: true }, err => {
-				resolve();
-			});
-		} else {
-			resolve();
-		}
-	});
-}
+function updateMappings(srcPath, moduleSources) {
+	let fileContents = readFileSync(srcPath, 'utf8');
+	const strings = fileContents.match(/(["'])(?:(?=(\\?))\2.)*?\1/g);
 
-function fileExists(path) {
-	try {
-		fs.accessSync(path, fs.F_OK);
-		return true;
-	} catch (e) {
-		return false;
-	}
-	return false;
-}
+	if (strings) {
+		let needsWrite = false;
 
-function getFiles(dir, files_){
-	files_ = files_ || [];
-	var files = fs.readdirSync(dir);
-	for (var i in files){
-		var name = dir + '/' + files[i];
-		if (fs.statSync(name).isDirectory()){
-			getFiles(name, files_);
-		} else {
-			files_.push(name);
-		}
-	}
-	return files_;
-}
+		strings.forEach((string) => {
+			const mapping = string.replace(/'/g, '').replace(/"/g, '');
+			const value = moduleSources.get(mapping);
 
-export default function convertPackagesToNewFormat({ packagesDir }) {
-	const jsRequireMappings = Object.create(null);
-
-	// Generate mappings for all logical .js files in this working dir
-	glob.sync(packagesDir + '/**/*.js').forEach(srcPath => {
-		// remove initial prefix path /foo/
-		if (srcPath.indexOf('test-unit') === -1 && srcPath.indexOf('test-acceptance') === -1) {
-			const packagePath = srcPath.replace(packagesDir + '/', '').replace('.js', '');
-			const mappingKey = packagePath.replace(packagePath.split('/')[0] + '/src/', '');
-			jsRequireMappings[mappingKey] = null;
-		}
-	});
-
-	console.log(chalk.white(`Converting packages...`));
-	// Now we go through each package and re-structure the package
-	// we also go through each src file and re-map the require path if needed
-	Promise.all(fs.readdirSync(packagesDir).map(workingDir => new Promise((resolve, reject) => {
-		const absolutePath = packagesDir + '/' + workingDir;
-
-		if (!fs.lstatSync(absolutePath).isDirectory()) {
-			resolve();
-			return;
-		}
-		const sourceFiles = glob.sync(absolutePath + '/src/**/*.js');
-		const basePath = getBasePath(sourceFiles);
-
-		Promise.all([
-			new Promise((resolve, reject) =>
-				mv(absolutePath + '/resources', absolutePath + '/_resources', { mkdirp: true }, err => resolve(err))),
-			new Promise((resolve, reject) =>
-				mv(absolutePath + '/test-unit/resources', absolutePath + '/_resources-test-ut', { mkdirp: true }, err => resolve(err))),
-			new Promise((resolve, reject) =>
-				mv(absolutePath + '/test-acceptance/resources', absolutePath + '/_resources-test-at', { mkdirp: true }, err => resolve(err))),
-			new Promise((resolve, reject) =>
-				mv(absolutePath + '/test-unit/tests', absolutePath + '/_test-ut', { mkdirp: true }, err => resolve(err))),
-			new Promise((resolve, reject) =>
-				mv(absolutePath + '/test-acceptance/tests', absolutePath + '/_test-at', { mkdirp: true }, err => resolve(err))),
-			new Promise((resolve, reject) =>
-				mv(absolutePath + '/tests/test-unit/', absolutePath + '/_test-ut', { mkdirp: true }, err => resolve(err))),
-			new Promise((resolve, reject) =>
-				mv(absolutePath + '/tests/test-acceptance/', absolutePath + '/_test-at', { mkdirp: true }, err => resolve(err)))
-		]).then(err => {
-			Promise.all(sourceFiles.map(filePath => new Promise((resolve, reject) => {
-				const fileName = path.basename(filePath, '.js');
-				const subDirectory = path.dirname(filePath).replace(basePath, '');
-				const mappingKey = filePath.replace(absolutePath + '/', '').replace('.js', '').replace('src/', '');
-				const mappingValue = workingDir + subDirectory + '/' + fileName;
-				const moveToPath = 'packages/' + mappingValue + '.js';
-
-				jsRequireMappings[mappingKey] = mappingValue;
-
-				if (fileExists(filePath)) {
-					mv(filePath, moveToPath, { mkdirp: true }, err => {
-						Promise.all([
-							moveTest(absolutePath, subDirectory, fileName, '_test-ut'),
-							moveTest(absolutePath, subDirectory, fileName, '_test-at')
-						]).then(function() {
-							resolve();
-						});
-					});
-				} else {
-					resolve();
-				}
-			}))).then(done => {
-				rimraf.sync(absolutePath + '/src');
-				rimraf.sync(absolutePath + '/tests');
-				rimraf.sync(absolutePath + '/test-unit');
-				rimraf.sync(absolutePath + '/test-acceptance');
-				rimraf.sync(absolutePath + '/compiled');
-				rimraf.sync(absolutePath + '/br-lib.conf');
-				rimraf.sync(absolutePath + '/_resources/aliases.xml');
-				rimraf.sync(absolutePath + '/_resources/aliasDefinitions.xml');
-				rimraf.sync(absolutePath + '/_resources-test-ut/aliases.xml');
-				rimraf.sync(absolutePath + '/_resources-test-ut/aliasDefinitions.xml');
-				rimraf.sync(absolutePath + '/_resources-test-at/aliases.xml');
-				rimraf.sync(absolutePath + '/_resources-test-at/aliasDefinitions.xml');
-
-				console.log(chalk.green(`Converted "${ workingDir }"`));
-				resolve();
-			}).catch(err => {
-				console.log(err);
-				resolve();
-			});
-		}).catch(err => {
-			console.log(err);
-			resolve();
-		});
-	}))).then(done => {
-		console.log(chalk.white(`Updating require mappings...`));
-		// Go through every source file and update mappings to the new ones
-		glob.sync(rootDir + '/**/*.js').forEach(srcPath => {
-			if (srcPath.indexOf('test-unit') === -1
-				&& srcPath.indexOf('test-acceptance') === -1
-				&& srcPath.indexOf('node_modules') === -1
-				&& srcPath.indexOf('converted_library') === -1) {
-
-				let fileContents = fs.readFileSync(srcPath, 'utf8');
-				const strings = fileContents.match(/(["'])(?:(?=(\\?))\2.)*?\1/g)
-
-				if (strings) {
-					let needsWrite = false;
-
-					for (let i = 0; i < strings.length; i++) {
-						const mapping = strings[i].replace(/'/g, '').replace(/"/g, '');
-						const value = jsRequireMappings[mapping];
-
-						if (value && mapping) {
-							fileContents = fileContents.replace(
-								new RegExp(`'${ mapping }'`, 'g'), `'${ value }'`
-							);
-							fileContents = fileContents.replace(
-								new RegExp(`"${ mapping }"`, 'g'), `"${ value }"`
-							);
-							needsWrite = true;
-						}
-					}
-					if (fileContents.indexOf('/test-unit/resources/') !== -1) {
-						fileContents = fileContents.replace(
-							/\/test-unit\/resources\//g, '/_resources-test-ut/'
-						);
-						needsWrite = true;
-					}
-					if (fileContents.indexOf('/test-acceptance/resources/') !== -1) {
-						fileContents = fileContents.replace(
-							/\/test-unit\/resources\//g, '/_resources-test-at/'
-						);
-						needsWrite = true;
-					}
-					if (fileContents.indexOf('/resources/') !== -1) {
-						fileContents = fileContents.replace(
-							/\/resources\//g, '/_resources/'
-						);
-						needsWrite = true;
-					}
-					if (needsWrite) {
-						//console.log(chalk.green(`Updated "${ srcPath }"`));
-						fs.writeFileSync(srcPath, fileContents, 'utf8')
-					}
-				}
+			if (value && mapping && value !== mapping) {
+				fileContents = fileContents.replace(new RegExp(`'${mapping}'`, 'g'), `'${value}'`);
+				fileContents = fileContents.replace(new RegExp(`"${mapping}"`, 'g'), `'${value}'`);
+				needsWrite = true;
 			}
 		});
-		console.log(chalk.white(`Updated require mappings`));
-		console.log(chalk.white(`Conversion complete!`));
-	}).catch(err => {
-		console.log(chalk.red(err + '\n'));
-		console.log(chalk.red(`Failure!`));
+
+		if (needsWrite) {
+			writeFileSync(srcPath, fileContents, 'utf8');
+		}
+	}
+}
+
+function updateAllImportsInPackage(packagePath, moduleSources) {
+	const packageJSFiles = glob.sync(`${packagePath}/**/*.js`);
+
+	packageJSFiles.forEach((jsFilePath) => updateMappings(jsFilePath, moduleSources));
+}
+
+function getPackageSrcCommonPath(packageSrcFiles, commonRoot) {
+	const directoryTree = packageSrcFiles
+		.map((packageSrcFilePath) => packageSrcFilePath.replace(commonRoot, ''))
+		.map((packageSrcFilePath) => packageSrcFilePath.split('/'))
+		.reduce((partialDirectoryTree, filePaths) => {
+			filePaths.reduce((currentTreeNode, filePath) => {
+				if (currentTreeNode[filePath] === undefined) {
+					currentTreeNode[filePath] = {};
+				}
+
+				return currentTreeNode[filePath];
+			}, partialDirectoryTree);
+
+			return partialDirectoryTree;
+		}, {});
+
+	let commonPath = '';
+	let currentDirectory = directoryTree;
+
+	while (Object.keys(currentDirectory).length === 1 && !Object.keys(currentDirectory)[0].endsWith('.js')) {
+		const pathPart = Object.keys(currentDirectory)[0];
+
+		commonPath = `${commonPath}${pathPart}/`;
+		currentDirectory = currentDirectory[pathPart];
+	}
+
+	return commonPath;
+}
+
+function copyPackageSrcToNewLocations(packagePath, packagesDir, moduleSources) {
+	const packageSrcFiles = glob.sync(`${packagePath}/src/**/*.js`);
+	const commonPath = getPackageSrcCommonPath(packageSrcFiles, `${packagePath}/src/`);
+	const currentFileLocationRegExp = new RegExp(`${packagePath}\/src\/${commonPath}(.*)`);
+
+	packageSrcFiles.forEach((packageSrcFile) => {
+		const currentModuleSource = packageSrcFile.replace(`${packagePath}/src/`, '').replace('.js', '');
+		const newSrcFilePath = packageSrcFile.replace(currentFileLocationRegExp, `${packagePath}/$1`);
+		const newModuleSource = newSrcFilePath.replace(`${packagesDir}/`, '').replace('.js', '');
+
+		copySync(packageSrcFile, newSrcFilePath);
+		moduleSources.set(currentModuleSource, newModuleSource);
 	});
+}
+
+function fileExists(filePath) {
+	try {
+		lstatSync(filePath);
+	} catch (err) {
+		return false;
+	}
+
+	return true;
+}
+
+function copyPackageFoldersToNewLocations(packagePath) {
+	const packageFoldersThatMustBeMoved = [
+		{src: `${packagePath}/resources`, dest: `${packagePath}/_resources`},
+		{src: `${packagePath}/test-unit/resources`, dest: `${packagePath}/_resources-test-ut`},
+		{src: `${packagePath}/test-acceptance/resources`, dest: `${packagePath}/_resources-test-at`},
+		{src: `${packagePath}/test-unit/tests`, dest: `${packagePath}/_test-ut`},
+		{src: `${packagePath}/test-acceptance/tests`, dest: `${packagePath}/_test-at`},
+		{src: `${packagePath}/tests/test-unit/`, dest: `${packagePath}/_test-ut`},
+		{src: `${packagePath}/tests/test-acceptance/`, dest: `${packagePath}/_test-at`}
+	];
+
+	packageFoldersThatMustBeMoved
+		.filter(({src}) => fileExists(src))
+		.forEach(({src, dest}) => copySync(src, dest));
+}
+
+// Every package except thirdparty ones.
+function findAllPackagesThatRequireConversion(packagesDir) {
+	return readdirSync(packagesDir)
+		.map((packagesDirContent) => `${packagesDir}/${packagesDirContent}`)
+		.filter((packagesDirContentPath) => lstatSync(packagesDirContentPath).isDirectory())
+		.filter((packagesDirContentPath) => fileExists(`${packagesDirContentPath}/thirdparty-lib.manifest`) === false);
+}
+
+export default function convertPackagesToNewFormat({packagesDir}) {
+	const moduleSources = new Map();
+	const packagesToConvert = findAllPackagesThatRequireConversion(packagesDir);
+
+	// Copy all the package folders to their new locations.
+	packagesToConvert.forEach(copyPackageFoldersToNewLocations);
+	// Copy all the src modules to their new locations.
+	packagesToConvert.forEach((packagePath) => copyPackageSrcToNewLocations(packagePath, packagesDir, moduleSources));
+	// Copy all the tests to their new locations.
+	// Update all the require statements.
+	packagesToConvert.forEach((packagePath) => updateAllImportsInPackage(packagePath, moduleSources));
+	// Update the app and js-patches imports.
+	updateAllImportsInPackage('apps', moduleSources);
+	updateAllImportsInPackage('brjs-app/js-patches', moduleSources);
+	// Delete all the old folders and files.
+	packagesToConvert.forEach(deleteUnusedFiles);
 }

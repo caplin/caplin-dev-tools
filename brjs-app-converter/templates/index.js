@@ -1,15 +1,15 @@
 import 'mobile-default-aspect/themes/caplin/caplin-theme.scss';
-import 'instrumentdetails/resources/en.properties';
-import 'smspanel/resources/en.properties';
-import 'connection/resources/en.properties';
-import 'loginscreen/resources/en.properties';
-import 'mobile-default-aspect/resources/en.properties';
-import 'mobile-blotter/resources/i18n/en.properties';
-import 'ui/resources/en.properties';
-import 'mobile-authentication/resources/en.properties';
-import 'tokenpanel/resources/en.properties';
-import 'watchlist/resources/en.properties';
-import App from 'mobile/App';
+import 'instrumentdetails/_resources/en.properties';
+import 'smspanel/_resources/en.properties';
+import 'connection/_resources/en.properties';
+import 'loginscreen/_resources/en.properties';
+import 'mobile-default-aspect/_resources/en.properties';
+import 'mobile-blotter/_resources/i18n/en.properties';
+import 'ui/_resources/en.properties';
+import 'mobile-authentication/_resources/en.properties';
+import 'tokenpanel/_resources/en.properties';
+import 'watchlist/_resources/en.properties';
+import App from 'mobile-default-aspect/App';
 
 const JNDITokenMap = {
 	'LIBERATOR.PRIMARY.ADDRESS': '172.20.0.82',
@@ -24,4 +24,3 @@ const JNDITokenMap = {
 };
 
 (new App()).initialise(JNDITokenMap); // eslint-disable-line
-

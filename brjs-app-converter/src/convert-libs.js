@@ -12,29 +12,31 @@ import {
 } from './convert-lib';
 import {convertThirdpartyLibraryToPackage} from './convert-thirdparty-lib';
 
-export function convertLib(packageDir, packageName) {
+export function convertLib(packageDir, packageName, createPackageJSON = true) {
 	const packageContentsFileNames = readdirSync(packageDir);
 
 	if (packageContentsFileNames.includes('thirdparty-lib.manifest')) {
-		convertThirdpartyLibraryToPackage(packageDir, packageName);
+		convertThirdpartyLibraryToPackage(packageDir, packageName, createPackageJSON);
 	} else if (packageContentsFileNames.includes('br-lib.conf') && packageContentsFileNames.includes('src')) {
-		return convertBRLibToPackage(packageDir, packageName);
+		return convertBRLibToPackage(packageDir, packageName, createPackageJSON);
 	} else if (packageContentsFileNames.includes('src')) {
-		return convertLibToPackage(packageDir, packageName);
+		return convertLibToPackage(packageDir, packageName, createPackageJSON);
 	} else {
-		createBRLibPackageJSON(packageDir, packageName);
+		createBRLibPackageJSON(packageDir, packageName, createPackageJSON);
 	}
 
 	return Promise.resolve();
 }
 
 // Move BRJS application's libs to packages directory and convert them to something webpack can load.
-export function createPackagesFromLibs({applicationLibsDir, packagesDir}) {
+export function createPackagesFromLibs({applicationLibsDir, packagesDir, packagesThatShouldBeLibs}) {
 	// Firstly create a packages directory with all the application's `libs`.
 	copySync(applicationLibsDir, packagesDir);
 
 	const convertLibsPromises = readdirSync(packagesDir).map((packageName) => {
 		const packageDir = join(packagesDir, packageName);
+
+		packagesThatShouldBeLibs.push(packageName);
 
 		return convertLib(packageDir, packageName);
 	});

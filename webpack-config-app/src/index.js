@@ -135,6 +135,13 @@ const webpackConfigGenerator = function(argsMap) {
 		);
 	}
 
+	// Add aliases for the app's libs.
+	const libsDir = resolve(basePath, 'libs');
+
+	for (const libDir of readdirSync(libsDir)) {
+		webpackConfig.resolve.alias[libDir] = resolve(libsDir, libDir);
+	}
+
 	return webpackConfig;
 }
 

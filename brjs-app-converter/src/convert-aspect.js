@@ -1,18 +1,14 @@
 import {join} from 'path';
 
-import {
-	copySync,
-	writeFileSync
-} from 'fs-extra';
-
-import {compiledBRLibPackageJSONTemplate} from './converter-data';
+import {copySync} from 'fs-extra';
 
 // Move the application aspect code into the `pkgs` directory.
-export function moveAspectCode({applicationName, brjsApplicationDir, packagesDir}, aspectName) {
+export function moveAspectCode(
+	{applicationName, brjsApplicationDir, packagesDir, packagesThatShouldBeLibs}, aspectName
+) {
 	const packageName = `${applicationName}-${aspectName}`;
 	const aspectPackageDir = join(packagesDir, packageName);
-	const packageJSON = compiledBRLibPackageJSONTemplate({packageName});
 
 	copySync(join(brjsApplicationDir, aspectName), aspectPackageDir);
-	writeFileSync(join(aspectPackageDir, 'package.json'), packageJSON);
+	packagesThatShouldBeLibs.push(packageName);
 }

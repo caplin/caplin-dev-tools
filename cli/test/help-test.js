@@ -9,8 +9,9 @@ describe('help', function () {
 
         cp.stdout.on('data', function (data) {
             stdOutput += data;
-            if(stdOutput.indexOf('caplin-cli commands') > -1) {
-                isDisplayed();
+             if(stdOutput.indexOf('Prints the current caplin-cli version') > -1) {
+                 cp.stdout.destroy();
+                 isDisplayed();
             }
         });
     });
