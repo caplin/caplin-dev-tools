@@ -1,0 +1,3 @@
+{
+    "extends": "./node_modules/@briandipalma/eslint-config-bdp/configurations/react.js"
+}

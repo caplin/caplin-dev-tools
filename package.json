@@ -4,8 +4,8 @@
   "description": "",
   "main": "index.js",
   "bin": {
-   "brjs-app-converter": "./brjs-app-converter/src/cli.js",
-   "caplin-cli": "./cli/index.js"
+    "brjs-app-converter": "./brjs-app-converter/src/cli.js",
+    "caplin-cli": "./cli/index.js"
   },
   "scripts": {
     "install": "cd brjs-app-converter && npm i && cd ../cli && npm i"
@@ -20,5 +20,10 @@
   "bugs": {
     "url": "https://github.com/caplin/caplin-dev-tools/issues"
   },
-  "homepage": "https://github.com/caplin/caplin-dev-tools#readme"
+  "homepage": "https://github.com/caplin/caplin-dev-tools#readme",
+  "devDependencies": {
+    "@briandipalma/eslint-config-bdp": "^8.1.0",
+    "eslint": "^2.8.0",
+    "eslint-plugin-react": "^5.0.1"
+  }
 }
