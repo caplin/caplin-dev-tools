@@ -25,6 +25,10 @@ var _glob = require('glob');
 
 var _glob2 = _interopRequireDefault(_glob);
 
+var _webpack = require('webpack');
+
+var _webpack2 = _interopRequireDefault(_webpack);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 // Some thirdparty libraries use global `this` to reference `window`. webpack replaces such references to
@@ -171,10 +175,20 @@ function webpackConfigGenerator(argsMap) {
 			comment: 'version ' + process.env.npm_package_version, // eslint-disable-line
 			output: '../manifest.appcache'
 		}));
-		webpackConfig.module.loaders.push({
-			test: /\.js$/,
-			loader: 'uglify'
-		});
+		webpackConfig.plugins.push(new _webpack2.default.DefinePlugin({
+			'process.env': {
+				'NODE_ENV': JSON.stringify('production')
+			}
+		}));
+		webpackConfig.plugins.push(new _webpack2.default.optimize.UglifyJsPlugin({
+			output: {
+				comments: false
+			},
+			compress: {
+				warnings: false,
+				screw_ie8: true
+			}
+		}));
 	}
 
 	// Add aliases for the app's code directories.

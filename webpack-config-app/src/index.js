@@ -141,11 +141,16 @@ export function webpackConfigGenerator(argsMap) {
 				}
 			})
 		);
-		webpackConfig.module.loaders.push(
-			{
-				test: /\.js$/,
-				loader: 'uglify'
-			}
+		webpackConfig.plugins.push(
+			new webpack.optimize.UglifyJsPlugin({
+				output: {
+					comments: false
+				},
+				compress: {
+					warnings: false,
+					screw_ie8: true
+				}
+			})
 		);
 	}
 
