@@ -128,7 +128,7 @@ export function webpackConfigGenerator(argsMap) {
 	if (isBuild) {
 		webpackConfig.plugins.push(
 			new AppCachePlugin({
-				cache: glob.sync('public/**/*.*'),
+				cache: glob.sync('public/**/*.*').concat(glob.sync('v/**/*.*')),
 				comment: `version ${process.env.npm_package_version}`, // eslint-disable-line
 				output: '../manifest.appcache'
 			})

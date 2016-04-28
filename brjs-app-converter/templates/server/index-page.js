@@ -178,9 +178,7 @@ function InitializingAnimation() {
 				</svg>
 				<p id="status">{'loading'}</p>
 				<p>
-					<span id="loading-percent">
-						&nbsp;
-					</span>
+					<span id="loading-percent" />
 				</p>
 			</div>
 			<div
