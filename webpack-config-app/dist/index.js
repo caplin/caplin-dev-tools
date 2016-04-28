@@ -178,7 +178,7 @@ function webpackConfigGenerator(argsMap) {
 	}
 
 	// Add aliases for the app's code directories.
-	var codeDirs = (0, _path.resolve)(basePath, 'src');
+	var codeDirs = (0, _path.resolve)(basePath, 'libs');
 
 	var _iteratorNormalCompletion2 = true;
 	var _didIteratorError2 = false;
@@ -207,4 +207,3 @@ function webpackConfigGenerator(argsMap) {
 
 	return webpackConfig;
 }
-
