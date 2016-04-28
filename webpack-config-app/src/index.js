@@ -6,6 +6,7 @@ import AppCachePlugin from 'appcache-webpack-plugin';
 import {includePaths} from 'bourbon';
 import parseArgs from 'minimist';
 import glob from 'glob';
+import webpack from 'webpack';
 
 // Some thirdparty libraries use global `this` to reference `window`. webpack replaces such references to
 // `this` with `undefined` when it wraps those modules. To load them without error you will therefore
@@ -131,6 +132,13 @@ export function webpackConfigGenerator(argsMap) {
 				cache: glob.sync('public/**/*.*').concat(glob.sync('v/**/*.*')),
 				comment: `version ${process.env.npm_package_version}`, // eslint-disable-line
 				output: '../manifest.appcache'
+			})
+		);
+		webpackConfig.plugins.push(
+			new webpack.DefinePlugin({
+				'process.env':{
+					'NODE_ENV': JSON.stringify('production')
+				}
 			})
 		);
 		webpackConfig.module.loaders.push(
