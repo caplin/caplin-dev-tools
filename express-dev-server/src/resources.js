@@ -1,7 +1,7 @@
 import {join} from 'path';
 
 export default (applicationPath, application, appRoot) => {
-	const applicationAspectPrefix = `libs${applicationPath}-`;
+	const applicationAspectPrefix = `src${applicationPath}-`;
 
 	// Serve up unbundled-resources from `node_modules`.
 	application.get('/unbundled-resources/*', ({params}, res) => {

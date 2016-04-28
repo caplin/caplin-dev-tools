@@ -150,7 +150,7 @@ export function webpackConfigGenerator(argsMap) {
 	}
 
 	// Add aliases for the app's code directories.
-	const codeDirs = resolve(basePath, 'libs');
+	const codeDirs = resolve(basePath, 'src');
 
 	for (const codeDir of readdirSync(codeDirs)) {
 		webpackConfig.resolve.alias[codeDir] = resolve(codeDirs, codeDir);
