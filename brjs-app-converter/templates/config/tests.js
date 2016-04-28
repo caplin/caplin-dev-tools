@@ -1,158 +1,92 @@
-import {join, resolve} from 'path';
+import {join} from 'path';
 
-import {Server} from 'karma';
-import {DefinePlugin} from 'webpack';
+import {configurePackageTestDatatype} from '@caplin/jasmine-karma-test-runner';
+import {createPackagesKarmaConfigs, runPackagesTests} from '@caplin/karma-test-runner';
 
 import webpackConfig from './webpack.config';
 
-const testEntry = resolve(__dirname, 'test-entry.js');
-
-let module = null;
-let devMode = false;
-const args = process.argv.slice(2);
-
-args.forEach(arg => {
-	if (arg === '--dev') {
-	console.log('Running test runner in dev mode');
-	devMode = true;
-} else {
-	module = arg;
-}
-});
-
-webpackConfig.entry = testEntry;
 webpackConfig.resolve.alias['$aliases-data$'] = join(__dirname, 'aliases-test.js');
 
-const baseKarmaConfig = {
-	basePath: resolve(__dirname, '../libs'),
-	browsers: ['Chrome'],
-	frameworks: ['jasmine'],
-	preprocessors: {
-		[testEntry]: ['webpack']
-	},
-	singleRun: !devMode,
-	webpackMiddleware: {
-		stats: {
-			assets: false,
-			colors: true,
-			chunks: false
-		}
+const packagesTestDatatypes = [{
+	packageName: 'appcache',
+	filesToServe: {
+		pattern: '_test-ut/manifest.*',
+		watched: false,
+		included: false
 	}
-};
-
-const packagesToTest = [
-	{
-		packageName: 'appcache',
-		filesToServe: {
-			pattern: 'appcache/_test-ut/manifest.*',
-			watched: false,
-			included: false
-		}
-	},
-	'appconsole',
-	'authenticationService',
-	'connection',
-	'currencyService',
-	'dateServices',
-	'formattedRates',
-	'fxtrading',
-	{
-		packageName: 'icons',
-		filesToServe: {
-			pattern: 'icons/_resources-test-ut/*.svg',
-			watched: false,
-			included: false
-		}
-	},
-	'infinite',
-	'instrumentdetails',
-	'keyboards',
-	{
-		packageName: 'loading',
-		filesToServe: {
-			pattern: 'loading/_test-ut/*.*',
-			watched: false,
-			included: false
-		}
-	},
-	'loginscreen',
-	'mobile-blotter',
-	'mobile-default-aspect',
-	'router',
-	'sljs-utils',
-	'smspanel',
-	'timeService',
-	'tokenpanel',
-	'trading',
-	'tradingstatus',
-	'ui',
-	'utils',
-	'watchlist',
-	'watchlistService'
-];
-
-function createPackageKarmaConfig(packageInfo) {
-	const files = [testEntry];
-	const packageName = packageInfo.packageName || packageInfo;
-
-	if (typeof packageInfo === 'object') {
-		files.push(packageInfo.filesToServe);
+}, {
+	packageName: 'appconsole'
+}, {
+	packageName: 'authenticationService'
+}, {
+	packageName: 'connection'
+}, {
+	packageName: 'currencyService'
+}, {
+	packageName: 'dateServices'
+}, {
+	packageName: 'formattedRates'
+}, {
+	packageName: 'fxtrading'
+}, {
+	packageName: 'icons',
+	filesToServe: {
+		pattern: '_resources-test-ut/*.svg',
+		watched: false,
+		included: false
 	}
-
-	const plugins = [
-		new DefinePlugin({PACKAGE: `"${packageName}"`})
-	];
-	const packageWebpackConfig = {
-			...webpackConfig,
-		plugins
-};
-	const packageKarmaConfig = {
-			...baseKarmaConfig,
-		files,
-		webpack: packageWebpackConfig
-};
-
-	return packageKarmaConfig;
-}
-
-const packageKarmaConfigs = packagesToTest.map(packageInfo => {
-	const packageName = typeof packageInfo === 'object' ? packageInfo.packageName : packageInfo;
-	if (module !== null) {
-		if (module === packageName) {
-			console.log(`Running tests for "${ packageName }" only`);
-			return createPackageKarmaConfig(packageInfo)
-		}
-	} else {
-		console.log(`Running tests for "${ packageName }"`);
-		return createPackageKarmaConfig(packageInfo)
+}, {
+	packageName: 'infinite'
+}, {
+	packageName: 'instrumentdetails'
+}, {
+	packageName: 'keyboards'
+}, {
+	packageName: 'loading',
+	filesToServe: {
+		pattern: '_test-ut/*.*',
+		watched: false,
+		included: false
 	}
-	return null;
-});
+}, {
+	packageName: 'loginscreen'
+}, {
+	packageName: 'mobile-blotter'
+}, {
+	packageName: 'mobile-default-aspect'
+}, {
+	packageName: 'router'
+}, {
+	packageName: 'sljs-utils'
+}, {
+	packageName: 'smspanel'
+}, {
+	packageName: 'timeService'
+}, {
+	packageName: 'tokenpanel'
+}, {
+	packageName: 'trading'
+}, {
+	packageName: 'tradingstatus'
+}, {
+	packageName: 'ui'
+}, {
+	packageName: 'utils'
+}, {
+	packageName: 'watchlist'
+}, {
+	packageName: 'watchlistService'
+}];
 
-function runPackageTests(packageKarmaConfig, resolve) {
-	const server = new Server(packageKarmaConfig, (code) => {
-			if (code === 0) {
-		resolve();
-	} else {
-		if (!devMode) {
-			process.exit(code);
-		}
-	}
-});
+const jasminePackagesTestDatatypes = packagesTestDatatypes
+	.map((packageTestDatatype) => {
+		packageTestDatatype.webpackConfig = webpackConfig;
+		packageTestDatatype.packageDirectory = join(__dirname, '../libs', packageTestDatatype.packageName);
 
-	server.start();
-}
+		return packageTestDatatype;
+	})
+	.map(configurePackageTestDatatype);
 
-async function runPackagesTests() {
-	for (const packageKarmaConfig of packageKarmaConfigs) {
-		if (packageKarmaConfig) {
-			await new Promise((resolve) => runPackageTests(packageKarmaConfig, resolve));
-		}
-	}
+const karmaConfigs = createPackagesKarmaConfigs(jasminePackagesTestDatatypes);
 
-	if (!devMode) {
-		process.exit(0);
-	}
-}
-
-runPackagesTests();
+runPackagesTests(karmaConfigs);

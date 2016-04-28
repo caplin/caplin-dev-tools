@@ -12,6 +12,8 @@
   "devDependencies": {
     "@caplin/build-tasks": "^1.0.0",
     "@caplin/express-dev-server": "^1.0.0",
+    "@caplin/jasmine-karma-test-runner": "^1.0.0",
+    "@caplin/karma-test-runner": "^1.0.0",
     "@caplin/webpack-config-app": "^1.1.0",
     "babel-cli": "^6.7.5",
     "babel-plugin-transform-object-rest-spread": "^6.6.5",
@@ -19,12 +21,7 @@
     "babel-preset-react": "^6.5.0",
     "babel-preset-stage-3": "^6.5.0",
     "jsrsasign": "^5.0.5",
-    "karma": "^0.13.22",
-    "karma-chrome-launcher": "^0.2.3",
-    "karma-jasmine": "^0.1.0",
-    "karma-webpack": "^1.7.0",
     "react": "^15.0.1",
-    "react-dom": "^15.0.1",
-    "webpack": "^1.12.9"
+    "react-dom": "^15.0.1"
   }
 }
