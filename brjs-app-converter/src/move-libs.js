@@ -8,7 +8,7 @@ export function moveApplicationPackagesToLibs({applicationName, packagesThatShou
 	for (const packageThatIsLib of packagesThatShouldBeLibs) {
 		move(
 			join(packagesDir, packageThatIsLib),
-			join(convertedAppDir, 'libs', packageThatIsLib),
+			join(convertedAppDir, 'src', packageThatIsLib),
 			(err) => {
 				if (err) {
 					console.error(err); // eslint-disable-line

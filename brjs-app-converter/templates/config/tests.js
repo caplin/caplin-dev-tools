@@ -1,3 +1,4 @@
+import {readdirSync} from 'fs';
 import {join} from 'path';
 
 import {configurePackageTestDatatype} from '@caplin/jasmine-karma-test-runner';
@@ -7,6 +8,7 @@ import webpackConfig from './webpack.config';
 
 webpackConfig.resolve.alias['$aliases-data$'] = join(__dirname, 'aliases-test.js');
 
+const codeDirectories = readdirSync(join(__dirname, '../src'));
 const packagesTestDatatypes = [{
 	packageName: 'appcache',
 	filesToServe: {
@@ -81,7 +83,11 @@ const packagesTestDatatypes = [{
 const jasminePackagesTestDatatypes = packagesTestDatatypes
 	.map((packageTestDatatype) => {
 		packageTestDatatype.webpackConfig = webpackConfig;
-		packageTestDatatype.packageDirectory = join(__dirname, '../libs', packageTestDatatype.packageName);
+		packageTestDatatype.packageDirectory = join(__dirname, '../node_modules', packageTestDatatype.packageName);
+
+		if (codeDirectories.includes(packageTestDatatype.packageName)) {
+			packageTestDatatype.packageDirectory = join(__dirname, '../src', packageTestDatatype.packageName);
+		}
 
 		return packageTestDatatype;
 	})

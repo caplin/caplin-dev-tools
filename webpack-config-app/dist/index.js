@@ -167,7 +167,7 @@ function webpackConfigGenerator(argsMap) {
 
 	if (isBuild) {
 		webpackConfig.plugins.push(new _appcacheWebpackPlugin2.default({
-			cache: _glob2.default.sync('public/**/*.*'),
+			cache: _glob2.default.sync('public/**/*.*').concat(_glob2.default.sync('v/**/*.*')),
 			comment: 'version ' + process.env.npm_package_version, // eslint-disable-line
 			output: '../manifest.appcache'
 		}));
@@ -178,7 +178,7 @@ function webpackConfigGenerator(argsMap) {
 	}
 
 	// Add aliases for the app's code directories.
-	var codeDirs = (0, _path.resolve)(basePath, 'libs');
+	var codeDirs = (0, _path.resolve)(basePath, 'src');
 
 	var _iteratorNormalCompletion2 = true;
 	var _didIteratorError2 = false;
