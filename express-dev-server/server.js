@@ -4,8 +4,6 @@ Object.defineProperty(exports, "__esModule", {
 	value: true
 });
 
-var _path = require('path');
-
 var _express = require('express');
 
 var _express2 = _interopRequireDefault(_express);

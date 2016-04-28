@@ -1,5 +1,3 @@
-import {join} from 'path';
-
 import express from 'express';
 
 import poll from './poll';

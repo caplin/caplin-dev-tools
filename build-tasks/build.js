@@ -7,8 +7,8 @@ import rimraf from 'rimraf';
 import webpack from 'webpack';
 
 const distDir = join(process.cwd(), 'dist');
-let indexPage;
-let webpackConfig;
+let indexPage = '';
+let webpackConfig = {};
 
 export function cleanDistAndBuildWAR(config) {
 	indexPage = config.indexPage;
