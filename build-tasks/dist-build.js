@@ -26,8 +26,8 @@ var _webpack2 = _interopRequireDefault(_webpack);
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var distDir = (0, _path.join)(process.cwd(), 'dist');
-var indexPage = void 0;
-var webpackConfig = void 0;
+var indexPage = '';
+var webpackConfig = {};
 
 function cleanDistAndBuildWAR(config) {
 	indexPage = config.indexPage;
