@@ -27,20 +27,20 @@ function moduleCannotHaveRequire(absolutePath) {
 	return absolutePath.match(/sinon/);
 }
 
-const webpackConfigGenerator = function(argsMap) {
+export function webpackConfigGenerator(argsMap) {
 	const babelLoaderExclude = [];
 	const basePath = argsMap.basePath;
 
 	for (const packageDir of readdirSync(join(basePath, '../../packages'))) {
 		try {
 			accessSync(join(basePath, `node_modules/${packageDir}/compiler.json`), F_OK);
-		} catch (e) {
+		} catch (err) {
 			babelLoaderExclude.push(join(basePath, `node_modules/${packageDir}/`));
 		}
 	}
 
 	const variant = parseArgs(process.argv.slice(2)).variant;
-	const entryFile = variant ? 'index-' + variant + '.js': 'index.js';
+	const entryFile = variant ? `index-${variant}.js` : 'index.js';
 	const appEntryPoint = join(basePath, entryFile);
 	const buildOutputDir = join(basePath, 'dist', 'public');
 	const isBuild = process.env.npm_lifecycle_event === 'build'; // eslint-disable-line
@@ -110,15 +110,15 @@ const webpackConfigGenerator = function(argsMap) {
 				'caplin.trade-service$': 'caplin-services/caplin.trade-service',
 				'caplin.trade-message-service$': 'caplin-services/caplin.trade-message-service',
 				jasmine: '@caplin/jstestdriver-functions'
-			},
+			}
 			// Needed for tests?
 			// root: [ resolve('node_modules') ]
 		},
 		resolveLoader: {
 			alias: {
-				'alias': '@caplin/alias-loader',
+				alias: '@caplin/alias-loader',
 				'app-meta': '@caplin/app-meta-loader',
-				'service': '@caplin/service-loader'
+				service: '@caplin/service-loader'
 			}
 			// root: [resolve('node_modules')]
 		},
@@ -136,20 +136,17 @@ const webpackConfigGenerator = function(argsMap) {
 		webpackConfig.module.loaders.push(
 			{
 				test: /\.js$/,
-				//exclude: /.spec.js/, // excluding .spec files
-				loader: "uglify"
+				loader: 'uglify'
 			}
 		);
 	}
 
-	// Add aliases for the app's libs.
-	const libsDir = resolve(basePath, 'libs');
+	// Add aliases for the app's code directories.
+	const codeDirs = resolve(basePath, 'src');
 
-	for (const libDir of readdirSync(libsDir)) {
-		webpackConfig.resolve.alias[libDir] = resolve(libsDir, libDir);
+	for (const codeDir of readdirSync(codeDirs)) {
+		webpackConfig.resolve.alias[codeDir] = resolve(codeDirs, codeDir);
 	}
 
 	return webpackConfig;
 }
-
-module.exports = {webpackConfigGenerator};

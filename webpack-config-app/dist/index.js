@@ -1,5 +1,10 @@
 'use strict';
 
+Object.defineProperty(exports, "__esModule", {
+	value: true
+});
+exports.webpackConfigGenerator = webpackConfigGenerator;
+
 var _fs = require('fs');
 
 var _path = require('path');
@@ -41,7 +46,7 @@ function moduleCannotHaveRequire(absolutePath) {
 	return absolutePath.match(/sinon/);
 }
 
-var webpackConfigGenerator = function webpackConfigGenerator(argsMap) {
+function webpackConfigGenerator(argsMap) {
 	var babelLoaderExclude = [];
 	var basePath = argsMap.basePath;
 
@@ -55,7 +60,7 @@ var webpackConfigGenerator = function webpackConfigGenerator(argsMap) {
 
 			try {
 				(0, _fs.accessSync)((0, _path.join)(basePath, 'node_modules/' + packageDir + '/compiler.json'), _fs.F_OK);
-			} catch (e) {
+			} catch (err) {
 				babelLoaderExclude.push((0, _path.join)(basePath, 'node_modules/' + packageDir + '/'));
 			}
 		}
@@ -146,14 +151,14 @@ var webpackConfigGenerator = function webpackConfigGenerator(argsMap) {
 				'caplin.trade-message-service$': 'caplin-services/caplin.trade-message-service',
 				jasmine: '@caplin/jstestdriver-functions'
 			}
+			// Needed for tests?
+			// root: [ resolve('node_modules') ]
 		},
-		// Needed for tests?
-		// root: [ resolve('node_modules') ]
 		resolveLoader: {
 			alias: {
-				'alias': '@caplin/alias-loader',
+				alias: '@caplin/alias-loader',
 				'app-meta': '@caplin/app-meta-loader',
-				'service': '@caplin/service-loader'
+				service: '@caplin/service-loader'
 			}
 			// root: [resolve('node_modules')]
 		},
@@ -166,20 +171,24 @@ var webpackConfigGenerator = function webpackConfigGenerator(argsMap) {
 			comment: 'version ' + process.env.npm_package_version, // eslint-disable-line
 			output: '../manifest.appcache'
 		}));
+		webpackConfig.module.loaders.push({
+			test: /\.js$/,
+			loader: 'uglify'
+		});
 	}
 
-	// Add aliases for the app's libs.
-	var libsDir = (0, _path.resolve)(basePath, 'libs');
+	// Add aliases for the app's code directories.
+	var codeDirs = (0, _path.resolve)(basePath, 'src');
 
 	var _iteratorNormalCompletion2 = true;
 	var _didIteratorError2 = false;
 	var _iteratorError2 = undefined;
 
 	try {
-		for (var _iterator2 = (0, _fs.readdirSync)(libsDir)[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
-			var libDir = _step2.value;
+		for (var _iterator2 = (0, _fs.readdirSync)(codeDirs)[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
+			var codeDir = _step2.value;
 
-			webpackConfig.resolve.alias[libDir] = (0, _path.resolve)(libsDir, libDir);
+			webpackConfig.resolve.alias[codeDir] = (0, _path.resolve)(codeDirs, codeDir);
 		}
 	} catch (err) {
 		_didIteratorError2 = true;
@@ -197,7 +206,5 @@ var webpackConfigGenerator = function webpackConfigGenerator(argsMap) {
 	}
 
 	return webpackConfig;
-};
-
-module.exports = { webpackConfigGenerator: webpackConfigGenerator };
+}
 
