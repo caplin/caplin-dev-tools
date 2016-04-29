@@ -16,18 +16,6 @@ import {
 function setUpApplicationFiles(convertedAppDir, conversionMetadata, defaulAspectDir) {
 	copySync(join(templateDir, '.babelrc'), join(convertedAppDir, '.babelrc'));
 	copySync(conversionMetadata.authenticationFileLocation, join(convertedAppDir, 'server', 'authentication.js'));
-	copySync(
-		join(templateDir, 'caplin-fx-aliases'),
-		join(convertedAppDir, 'node_modules', 'caplin-fx-aliases')
-	);
-	copySync(
-		join(templateDir, 'caplin-fx-services'),
-		join(convertedAppDir, 'node_modules', 'caplin-fx-services')
-	);
-	copySync(
-		join(templateDir, 'caplin-services'),
-		join(convertedAppDir, 'node_modules', 'caplin-services')
-	);
 	copySync(join(templateDir, 'config'), join(convertedAppDir, 'config'));
 	copySync(conversionMetadata.aliasesFileLocation, join(convertedAppDir, 'config', 'aliases.js'));
 	copySync(join(templateDir, 'index.js'), join(convertedAppDir, 'index.js'));
