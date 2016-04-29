@@ -15,11 +15,10 @@ import {moveApplicationPackagesToLibs} from './move-libs';
 shim();
 
 // Provide the name and entry point of the app to convert. Variants is a Caplin internal option.
-export default function({app, entry, vars}) {
-	verifyCLIArgs(app, entry);
+export default function({app}) {
+	verifyCLIArgs(app);
 
-	const applicationVariants = vars ? vars.split(',') : [];
-	const conversionMetadata = createConversionMetadataDataType(app, applicationVariants, entry);
+	const conversionMetadata = createConversionMetadataDataType(app);
 
 	moveCurrentCodebase(conversionMetadata);
 

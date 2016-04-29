@@ -1,6 +1,4 @@
 # BRJS application converter
-[![Dependency Status](https://david-dm.org/caplin/brjs-app-converter.png)](https://david-dm.org/caplin/brjs-app-converter)
-[![devDependency Status](https://david-dm.org/caplin/brjs-app-converter/dev-status.svg)](https://david-dm.org/caplin/brjs-app-converter#info=devDependencies)
 
 ## What
 
@@ -14,47 +12,47 @@ within the application directory.
 1. It's first step is to back up the entire folder (except for hidden files) into a `brjs-app` directory. This allows
 a user to access the old application files.
 2. It then creates a new top level directory for the application packages.
-3. It copies all the application's libs, blades, bladesets, aspects and SDK libs into the packages directory.
+3. It copies all the application's libs and SDK libs into the packages directory.
 	* While copying them it generates a stub `package.json` for each copied directory.
 4. It then creates another top level directory called `apps`.
 5. Within this directory it creates a directory for the restructured application.
-	* For an app named `mobile` it creates `apps/mobile` and populates it with a few boilerplate application files e.g.
-	`package.json`, `webpack.config.js`.
+	* For an app named `mobile` it creates `apps/mobile` and populates it with a few application files that the user
+	provides.
 
 This leaves the project with three top level directories, `apps`, `packages`, and `brjs-app` (which can be
 deleted once the user is satisfied they don't need the old files).
 
 These screenshots contrast before and after:
 
-![alt text](https://github.com/caplin/brjs-app-converter/raw/master/preparation/current.png "Current Structure")
-![alt text](https://github.com/caplin/brjs-app-converter/raw/master/preparation/post.png "Post Conversion Structure")
+![alt text](https://github.com/caplin/caplin-dev-tools/brjs-app-converter/raw/master/preparation/current.png "Current Structure")
+![alt text](https://github.com/caplin/caplin-dev-tools/brjs-app-converter/raw/master/preparation/post.png "Post Conversion Structure")
 
 ## How
 
 Firstly the tool needs to be installed via npm, this can be done with
 
-`npm i -g caplin/brjs-app-converter`
+`npm i -g caplin/caplin-dev-tools`
 
 Which asks npm to install (`i`) the repo globally (`-g`), this means the command `brjs-app-converter` is now made
 available on the command line.
 
-The conversion tool has its own boilerplate application files but the user can provide their own by placing them in a
-`conversion-data` directory next to the BRJS project directory.
+The conversion tool requires the user to provide their application files by placing them in a `conversion-data`
+directory next to the BRJS project directory. In the `conversion-data` directory you can place an `sdk` directory and
+if that exists it will be used instead of the application's own `sdk` directory. The application files have to be
+placed inside a directory with the same name as the application e.g. for an app called `mobile` place the files you
+wish copied into the converted application in `conversion-data\mobile`. The files that can be copied are the `index.js`
+module, the application `package.json` and the `config` and `server` directories.
 
-The files that can be placed there are the `aliases.js` module, `sdk` directory, `conf` directory (which would contain the `privatekey.pem` file), `entry.js` module, `metadata.js`
-module and the `webpack.config.js` module. Any or none of these files can be overridden.
-
-Then you must navigate into the BRJS project directory (e.g. C/dev/someApp, not C/dev/someApp/apps/someApp) and run the tool.
+Then you must navigate into the BRJS project directory (e.g. C/dev/someApp, not C/dev/someApp/apps/someApp) and run the
+tool.
 
 ```bash
-brjs-app-converter --app mobile --entry mobile/App --vars client,client1
+brjs-app-converter --app mobile
 ```
 
 The parameters mean:
 
 * Provide the name of the app to convert with `--app`.
-* Provide the entry module of the app (relative to `default-aspect/src` directory) with `--entry`.
-* [Optional] Provide the variants of the app to create with `--vars`.
 
 ## Following steps.
 

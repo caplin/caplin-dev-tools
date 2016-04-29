@@ -5,34 +5,9 @@ import {
 	copy,
 	mkdirsSync,
 	readdirSync,
-	readFileSync,
 	remove,
 	renameSync
 } from 'fs-extra';
-import partial from 'lodash/function/partial';
-
-import {
-	compiledWebpackConfigTemplate,
-	templateDir
-} from './converter-data';
-
-// If a file is present in the `conversion-data` override directory read it else read the template version.
-function readBoilerplateFile(conversionDataDirContents, fileName, compiledTemplate) {
-	if (conversionDataDirContents.includes(fileName)) {
-		return readFileSync(join('..', 'conversion-data', fileName));
-	}
-
-	return compiledTemplate;
-}
-
-// If a file is present in the `conversion-data` override directory use it else use the template version.
-function getBoilerplateFileLocation(conversionDataDirContents, fileName, filePath = fileName) {
-	if (conversionDataDirContents.includes(fileName)) {
-		return join('..', 'conversion-data', fileName);
-	}
-
-	return join(templateDir, filePath);
-}
 
 // If a directory is present in the `conversion-data` override directory use it else use the template version.
 function getBoilerplateDirLocation(backupDir, conversionDataDirContents, fileName, filePath) {
@@ -43,27 +18,10 @@ function getBoilerplateDirLocation(backupDir, conversionDataDirContents, fileNam
 	return join(backupDir, filePath);
 }
 
-// Return the contents of the `conversion-data` directory.
-function getConversionDataDirContents() {
-	const conversionDataDir = join('..', 'conversion-data');
-	const parentDirContents = readdirSync('..');
-
-	if (parentDirContents.includes('conversion-data')) {
-		return readdirSync(conversionDataDir);
-	}
-
-	console.log("A conversion-data directory was not provided, using default data."); // eslint-disable-line
-
-	return [];
-}
-
 // The user can provide a directory with files that override the boilerplate files what the conversion tool
 // uses by default. We check for the existance of these overrides and use them if present.
-function useConversionDataDirectoryFilesIfPresent(backupDir, entryModuleID, packagesDirName) {
-	const compiledWebpackConfig = compiledWebpackConfigTemplate({packagesDirName});
-	const conversionDataDirContents = getConversionDataDirContents();
-	const getBoilerplateFileLocationPartial = partial(getBoilerplateFileLocation, conversionDataDirContents);
-	const readBoilerplateFilePartial = partial(readBoilerplateFile, conversionDataDirContents);
+function useConversionDataDirectoryFilesIfPresent(backupDir) {
+	const conversionDataDirContents = readdirSync(join('..', 'conversion-data'));
 	const sdkJSLibrariesDir = getBoilerplateDirLocation(
 		backupDir, conversionDataDirContents, 'sdk', join('sdk', 'libs', 'javascript')
 	);
@@ -72,45 +30,32 @@ function useConversionDataDirectoryFilesIfPresent(backupDir, entryModuleID, pack
 	);
 
 	return {
-		aliasesFileLocation: getBoilerplateFileLocationPartial('aliases.js', 'config/aliases.js'),
-		authenticationFileLocation: getBoilerplateFileLocationPartial('authentication.js'),
-		metadataFileLocation: getBoilerplateFileLocationPartial('metadata.js', 'config/metadata.js'),
 		privateKeyFileLocation,
-		sdkJSLibrariesDir,
-		webpackConfig: readBoilerplateFilePartial('webpack.config.js', compiledWebpackConfig)
+		sdkJSLibrariesDir
 	};
 }
 
 // Create all the metadata required for converting an app, directory locations etc.
-export function createConversionMetadataDataType(applicationName, applicationVariants, entryModuleID) {
+export function createConversionMetadataDataType(applicationName) {
 	// string: Directory that BRJS project is moved to.
 	const backupDir = join('brjs-app');
 	// string: Directory that BRJS application is moved to.
 	const brjsApplicationDir = join(backupDir, 'apps', applicationName);
 	// string: Name of packages directory.
 	const packagesDirName = 'packages';
-	const conversionData = useConversionDataDirectoryFilesIfPresent(
-		backupDir, entryModuleID, packagesDirName
-	);
+	const conversionData = useConversionDataDirectoryFilesIfPresent(backupDir);
 
 	return {
-		aliasesFileLocation: conversionData.aliasesFileLocation,
-		authenticationFileLocation: conversionData.authenticationFileLocation,
 		applicationName,
 		// string: The BRJS application's `libs` directory
 		applicationLibsDir: join(brjsApplicationDir, 'libs'),
-		applicationVariants,
 		backupDir,
 		brjsApplicationDir,
-		entryModule: conversionData.entryModule,
-		metadataFileLocation: conversionData.metadataFileLocation,
-		// string: Packages directory, where all `libs`, `blades` etc are moved to.
 		packagesDir: join(packagesDirName),
 		packagesDirName,
 		packagesThatShouldBeLibs: [],
 		privateKeyFileLocation: conversionData.privateKeyFileLocation,
-		sdkJSLibrariesDir: conversionData.sdkJSLibrariesDir,
-		webpackConfig: conversionData.webpackConfig
+		sdkJSLibrariesDir: conversionData.sdkJSLibrariesDir
 	};
 }
 
@@ -170,10 +115,20 @@ export function moveCurrentCodebase({backupDir}) {
 }
 
 // Fail fast if some of the CLI arguments are missing.
-export function verifyCLIArgs(applicationName, applicationEntryModule) {
+export function verifyCLIArgs(applicationName) {
 	if (applicationName === undefined) {
 		throw new Error('An application name must be provided.');
-	} else if (applicationEntryModule === undefined) {
-		throw new Error('An application entry module must be provided.');
+	}
+
+	const parentDirContents = readdirSync('..');
+
+	if (parentDirContents.includes('conversion-data') === false) {
+		throw new Error('A conversion-data directory must be provided.');
+	}
+
+	const conversionDataDirContents = readdirSync(join('..', 'conversion-data'));
+
+	if (conversionDataDirContents.includes(applicationName) === false) {
+		throw new Error(`A conversion-data/${applicationName} directory for the application files must be provided.`);
 	}
 }
