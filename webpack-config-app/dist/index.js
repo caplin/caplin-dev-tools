@@ -143,16 +143,16 @@ function webpackConfigGenerator(argsMap) {
 				// `app-meta!$app-metadata` required in `BRAppMetaService`, loaded with `app-meta-loader`.
 				'$app-metadata$': (0, _path.join)(basePath, 'config', 'metadata.js'),
 				// Application aliases, loaded with `alias-loader`.
-				'caplin.fx.tenor.currency-tenors$': 'caplin-fx-aliases/caplin.fx.tenor.currency-tenors',
+				'caplin.fx.tenor.currency-tenors$': '@caplin/caplin-fx-aliases/caplin.fx.tenor.currency-tenors',
 				// Application services, loaded with `service-loader`.
 				'br.app-meta-service$': '@caplin/brjs-services/br.app-meta-service',
-				'caplin.permission-service$': 'caplin-services/caplin.permission-service',
-				'caplin.fx.business-date-service$': 'caplin-fx-services/caplin.fx.business-date-service',
-				'caplin.fx.permission-service$': 'caplin-fx-services/caplin.fx.permission-service',
-				'caplin.preference-service$': 'caplin-services/caplin.preference-service',
-				'caplin.message-service$': 'caplin-services/caplin.message-service',
-				'caplin.trade-service$': 'caplin-services/caplin.trade-service',
-				'caplin.trade-message-service$': 'caplin-services/caplin.trade-message-service',
+				'caplin.permission-service$': '@caplin/caplin-services/caplin.permission-service',
+				'caplin.fx.business-date-service$': '@caplin/caplin-fx-services/caplin.fx.business-date-service',
+				'caplin.fx.permission-service$': '@caplin/caplin-fx-services/caplin.fx.permission-service',
+				'caplin.preference-service$': '@caplin/caplin-services/caplin.preference-service',
+				'caplin.message-service$': '@caplin/caplin-services/caplin.message-service',
+				'caplin.trade-service$': '@caplin/caplin-services/caplin.trade-service',
+				'caplin.trade-message-service$': '@caplin/caplin-services/caplin.trade-message-service',
 				jasmine: '@caplin/jstestdriver-functions'
 			}
 			// Needed for tests?
@@ -177,7 +177,7 @@ function webpackConfigGenerator(argsMap) {
 		}));
 		webpackConfig.plugins.push(new _webpack2.default.DefinePlugin({
 			'process.env': {
-				'NODE_ENV': JSON.stringify('production')
+				NODE_ENV: JSON.stringify('production')
 			}
 		}));
 		webpackConfig.plugins.push(new _webpack2.default.optimize.UglifyJsPlugin({
@@ -186,7 +186,7 @@ function webpackConfigGenerator(argsMap) {
 			},
 			compress: {
 				warnings: false,
-				screw_ie8: true
+				screw_ie8: true // eslint-disable-line
 			}
 		}));
 	}
