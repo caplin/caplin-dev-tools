@@ -1,12 +1,12 @@
 module.exports = function(config) {
 	config.set({
 		files: [
-			'./libs/**/_test-ut/**/*.js'
+			'./src/**/_test-ut/**/*.js'
 		],
 		browsers: ['Chrome'],
 		frameworks: ['mocha'],
 		preprocessors: {
-			['./libs/**/*.js']: ['webpack']
+			['./src/**/*.js']: ['webpack']
 		},
 		singleRun: true,
 		webpackMiddleware: {
