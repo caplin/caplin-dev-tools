@@ -5,6 +5,7 @@ import {
 	mkdirsSync,
 	readdirSync,
 	readJsonSync,
+	statSync,
 	writeJsonSync
 } from 'fs-extra';
 
@@ -30,7 +31,10 @@ function populateApplicationPackageJSON(
 	const appPackageJSONFileLocation = join(convertedAppDir, 'package.json');
 
 	for (const packageDir of readdirSync(packagesDir)) {
-		if (packagesThatShouldBeLibs.includes(packageDir) === false) {
+		const isNotLib = packagesThatShouldBeLibs.includes(packageDir) === false;
+		const isDirectory = statSync(join(packagesDir, packageDir)).isDirectory();
+
+		if (isNotLib && isDirectory) {
 			appDependencies[packageDir] = `../../${packagesDirName}/${packageDir}`;
 		}
 	}

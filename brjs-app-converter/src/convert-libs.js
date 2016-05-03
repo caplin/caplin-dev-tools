@@ -1,8 +1,9 @@
 import {join} from 'path';
 
 import {
+	copySync,
 	readdirSync,
-	copySync
+	statSync
 } from 'fs-extra';
 
 import {
@@ -33,11 +34,13 @@ export function createPackagesFromLibs({applicationLibsDir, packagesDir}) {
 	// Firstly create a packages directory with all the application's `libs`.
 	copySync(applicationLibsDir, packagesDir);
 
-	const convertLibsPromises = readdirSync(packagesDir).map((packageName) => {
-		const packageDir = join(packagesDir, packageName);
-
-		return convertLib(packageDir, packageName);
-	});
+	const convertLibsPromises = readdirSync(packagesDir)
+		.map((fileName) => ({
+			packageDir: join(packagesDir, fileName),
+			packageName: fileName
+		}))
+		.filter(({packageDir}) => statSync(packageDir).isDirectory())
+		.map(({packageDir, packageName}) => convertLib(packageDir, packageName));
 
 	return Promise.all(convertLibsPromises);
 }
