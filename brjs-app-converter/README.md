@@ -98,7 +98,7 @@ without breaking the BRJS application. Verify the BRJS application still works f
 * Third party libraries that don't export a value should have their `exports` property in their
 `thirdparty-lib.manifest` file set to `null`; if it's set to `"{}"` errors will be thrown during bundling.
 * Capture the application's aliases to an aliases file. The aliases can be captured by searching for the `alias!$data`
-network request or executing `require("alias!$data")` when the application is running in BRJS.
+network request or the `alias!$data` module in the BRJS `bundle.js`. The aliases bundle can be converted by running the `jscodeshift` transform script called `aliases-transform.js` which is stored inside the `preparation` directory  using `astexplorer.net`.
 * Capture the applications's metadata. This can be done by executing `require("app-meta!$data")` when the application
 is running in BRJS. A `metadata.js` module is created by the conversion and you can paste the metadata in there
 following the conversion.
