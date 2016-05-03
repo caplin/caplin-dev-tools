@@ -5,9 +5,12 @@ import {
 	copy,
 	mkdirsSync,
 	readdirSync,
+	readFileSync,
 	remove,
-	renameSync
+	renameSync,
+	statSync
 } from 'fs-extra';
+import {safeLoad} from 'js-yaml';
 
 // If a directory is present in the `conversion-data` override directory use it else use the template version.
 function getBoilerplateDirLocation(backupDir, conversionDataDirContents, fileName, filePath) {
@@ -37,6 +40,8 @@ function useConversionDataDirectoryFilesIfPresent(backupDir) {
 
 // Create all the metadata required for converting an app, directory locations etc.
 export function createConversionMetadataDataType(applicationName) {
+	const appConfFileName = join('apps', applicationName, 'app.conf');
+	let applicationNamespaceRoot = applicationName;
 	// string: Directory that BRJS project is moved to.
 	const backupDir = join('brjs-app');
 	// string: Directory that BRJS application is moved to.
@@ -45,8 +50,15 @@ export function createConversionMetadataDataType(applicationName) {
 	const packagesDirName = 'packages';
 	const conversionData = useConversionDataDirectoryFilesIfPresent(backupDir);
 
+	if (statSync(appConfFileName).isFile()) {
+		const appConfYAML = safeLoad(readFileSync(appConfFileName, 'utf8'));
+
+		applicationNamespaceRoot = appConfYAML.requirePrefix;
+	}
+
 	return {
 		applicationName,
+		applicationNamespaceRoot,
 		// string: The BRJS application's `libs` directory
 		applicationLibsDir: join(brjsApplicationDir, 'libs'),
 		backupDir,
