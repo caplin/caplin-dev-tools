@@ -11,44 +11,15 @@ var _path = require('path');
 
 var _patchesStore = require('@caplin/patch-loader/patchesStore');
 
-var _appcacheWebpackPlugin = require('appcache-webpack-plugin');
-
-var _appcacheWebpackPlugin2 = _interopRequireDefault(_appcacheWebpackPlugin);
-
-var _bourbon = require('bourbon');
-
 var _minimist = require('minimist');
 
 var _minimist2 = _interopRequireDefault(_minimist);
-
-var _glob = require('glob');
-
-var _glob2 = _interopRequireDefault(_glob);
 
 var _webpack = require('webpack');
 
 var _webpack2 = _interopRequireDefault(_webpack);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-// Some thirdparty libraries use global `this` to reference `window`. webpack replaces such references to
-// `this` with `undefined` when it wraps those modules. To load them without error you will therefore
-// need to inject a reference to `window`. This can be done with the `imports-loader`.
-function moduleUsesGlobal(absolutePath) {
-	return absolutePath.match(/MutationObservers/) || absolutePath.match(/CustomElements/) || absolutePath.match(/sinon/);
-}
-
-// Some thirdparty library modules check if `module` exists so they can export themself using it as
-// opposed to attaching to the global. The way BRJS loaded them they didn't have access to `module` so to
-// simulate a similar environment we need to remove `module`.
-function moduleCannotBelieveItsACJSModule(absolutePath) {
-	return absolutePath.match(/browser-modules/);
-}
-
-// Some thirdparty libraries use a check for `require` to set themself to CJS module mode.
-function moduleCannotHaveRequire(absolutePath) {
-	return absolutePath.match(/sinon/);
-}
 
 function webpackConfigGenerator(argsMap) {
 	var babelLoaderExclude = [];
@@ -63,8 +34,8 @@ function webpackConfigGenerator(argsMap) {
 			var packageDir = _step.value;
 
 			try {
-				(0, _fs.accessSync)((0, _path.join)(basePath, 'node_modules/' + packageDir + '/compiler.json'), _fs.F_OK);
-			} catch (err) {
+				(0, _fs.statSync)((0, _path.join)(basePath, 'node_modules/' + packageDir + '/compiler.json'));
+			} catch (packageShouldNotBeBabeledError) {
 				babelLoaderExclude.push((0, _path.join)(basePath, 'node_modules/' + packageDir + '/'));
 			}
 		}
@@ -121,39 +92,15 @@ function webpackConfigGenerator(argsMap) {
 			}, {
 				test: /\.xml$/,
 				loader: '@caplin/xml-loader'
-			}, {
-				test: moduleUsesGlobal,
-				loader: 'imports-loader?this=>window'
-			}, {
-				test: moduleCannotBelieveItsACJSModule,
-				loader: 'imports-loader?module=>undefined'
-			}, {
-				test: moduleCannotHaveRequire,
-				loader: 'imports-loader?require=>undefined'
 			}]
 		},
 		patchLoader: (0, _patchesStore.appendModulePatch)(),
-		sassLoader: {
-			includePaths: _bourbon.includePaths
-		},
 		resolve: {
 			alias: {
 				// `alias!$aliases-data` required in `AliasRegistry`, loaded with `alias-loader`.
 				'$aliases-data$': (0, _path.join)(basePath, 'config', 'aliases.js'),
 				// `app-meta!$app-metadata` required in `BRAppMetaService`, loaded with `app-meta-loader`.
-				'$app-metadata$': (0, _path.join)(basePath, 'config', 'metadata.js'),
-				// Application aliases, loaded with `alias-loader`.
-				'caplin.fx.tenor.currency-tenors$': '@caplin/caplin-fx-aliases/caplin.fx.tenor.currency-tenors',
-				// Application services, loaded with `service-loader`.
-				'br.app-meta-service$': '@caplin/brjs-services/br.app-meta-service',
-				'caplin.permission-service$': '@caplin/caplin-services/caplin.permission-service',
-				'caplin.fx.business-date-service$': '@caplin/caplin-fx-services/caplin.fx.business-date-service',
-				'caplin.fx.permission-service$': '@caplin/caplin-fx-services/caplin.fx.permission-service',
-				'caplin.preference-service$': '@caplin/caplin-services/caplin.preference-service',
-				'caplin.message-service$': '@caplin/caplin-services/caplin.message-service',
-				'caplin.trade-service$': '@caplin/caplin-services/caplin.trade-service',
-				'caplin.trade-message-service$': '@caplin/caplin-services/caplin.trade-message-service',
-				jasmine: '@caplin/jstestdriver-functions'
+				'$app-metadata$': (0, _path.join)(basePath, 'config', 'metadata.js')
 			}
 			// Needed for tests?
 			// root: [ resolve('node_modules') ]
@@ -170,16 +117,12 @@ function webpackConfigGenerator(argsMap) {
 	};
 
 	if (isBuild) {
-		webpackConfig.plugins.push(new _appcacheWebpackPlugin2.default({
-			cache: _glob2.default.sync('public/**/*.*').concat(_glob2.default.sync('v/**/*.*')),
-			comment: 'version ' + process.env.npm_package_version, // eslint-disable-line
-			output: '../manifest.appcache'
-		}));
 		webpackConfig.plugins.push(new _webpack2.default.DefinePlugin({
 			'process.env': {
 				NODE_ENV: JSON.stringify('production')
 			}
 		}));
+
 		webpackConfig.plugins.push(new _webpack2.default.optimize.UglifyJsPlugin({
 			output: {
 				comments: false
