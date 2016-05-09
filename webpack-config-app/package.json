@@ -1,6 +1,6 @@
 {
   "name": "@caplin/webpack-config-app",
-  "version": "1.7.1",
+  "version": "1.7.2",
   "description": "webpack config common to Caplin applications",
   "main": "dist/index.js",
   "scripts": {

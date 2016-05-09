@@ -82,7 +82,7 @@ function webpackConfigGenerator(argsMap) {
 				exclude: babelLoaderExclude
 			}, {
 				test: /\.js$/,
-				loader: '@caplin/patch-loader'
+				loader: '@caplin/patch-loader?minimize=false'
 			}, {
 				test: /\.properties$/,
 				loader: '@caplin/i18n-loader'
