@@ -72,7 +72,7 @@ function webpackConfigGenerator(argsMap) {
 		module: {
 			loaders: [{
 				test: /\.html$/,
-				loaders: ['dom-loader', 'html-loader']
+				loaders: ['dom-loader', 'html-loader?minimize=false']
 			}, {
 				test: /\.(jpg|png|svg|woff)$/,
 				loader: 'file-loader'
@@ -82,7 +82,7 @@ function webpackConfigGenerator(argsMap) {
 				exclude: babelLoaderExclude
 			}, {
 				test: /\.js$/,
-				loader: '@caplin/patch-loader?minimize=false'
+				loader: '@caplin/patch-loader'
 			}, {
 				test: /\.properties$/,
 				loader: '@caplin/i18n-loader'
