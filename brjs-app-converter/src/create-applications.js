@@ -12,7 +12,7 @@ import {
 import {templateDir} from './converter-data';
 
 function setUpApplicationFiles(applicationName, convertedAppDir, conversionMetadata, defaulAspectDir) {
-	const applicationFiles = (join('..', 'conversion-data', applicationName));
+	const applicationFiles = readdirSync(join('..', 'conversion-data', applicationName));
 
 	copySync(join(templateDir, '.babelrc'), join(convertedAppDir, '.babelrc'));
 	copySync(join('..', 'conversion-data', applicationName, 'config'), join(convertedAppDir, 'config'));
