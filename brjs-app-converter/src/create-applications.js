@@ -12,9 +12,15 @@ import {
 import {templateDir} from './converter-data';
 
 function setUpApplicationFiles(applicationName, convertedAppDir, conversionMetadata, defaulAspectDir) {
+	const applicationFiles = (join('..', 'conversion-data', applicationName));
+
 	copySync(join(templateDir, '.babelrc'), join(convertedAppDir, '.babelrc'));
 	copySync(join('..', 'conversion-data', applicationName, 'config'), join(convertedAppDir, 'config'));
-	copySync(join('..', 'conversion-data', applicationName, 'index.js'), join(convertedAppDir, 'index.js'));
+	applicationFiles
+		.filter((applicationFile) => applicationFile.startsWith('index'))
+		.forEach((indexFile) => {
+			copySync(join('..', 'conversion-data', applicationName, indexFile), join(convertedAppDir, indexFile));
+		});
 	copySync(conversionMetadata.privateKeyFileLocation, join(convertedAppDir, 'server', 'privatekey.pem'));
 	copySync(join('..', 'conversion-data', applicationName, 'server'), join(convertedAppDir, 'server'));
 	copySync(join(defaulAspectDir, 'unbundled-resources'), join(convertedAppDir, 'v/dev/unbundled-resources'));
