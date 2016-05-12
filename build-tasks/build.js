@@ -40,7 +40,7 @@ function webpackBuildCallback(error) {
 		const archive = create('zip');
 		const warWriteStream = createWriteStream('app.war');
 
-		archive.directory(distDir);
+		archive.directory(distDir, '');
 		archive.pipe(warWriteStream);
 		archive.finalize();
 	}

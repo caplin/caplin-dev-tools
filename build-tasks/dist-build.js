@@ -59,7 +59,7 @@ function webpackBuildCallback(error) {
 			var archive = (0, _archiver.create)('zip');
 			var warWriteStream = (0, _fsExtra.createWriteStream)('app.war');
 
-			archive.directory(distDir);
+			archive.directory(distDir, '');
 			archive.pipe(warWriteStream);
 			archive.finalize();
 		}
