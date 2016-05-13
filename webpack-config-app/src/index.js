@@ -2,12 +2,12 @@ import {readdirSync, statSync} from 'fs';
 import {join, resolve} from 'path';
 
 import {appendModulePatch} from '@caplin/patch-loader/patchesStore';
+import ExtractTextPlugin from 'extract-text-webpack-plugin';
 import parseArgs from 'minimist';
 import webpack from 'webpack';
 
-export function webpackConfigGenerator(argsMap) {
+export function webpackConfigGenerator({basePath}) {
 	const babelLoaderExclude = [];
-	const basePath = argsMap.basePath;
 
 	for (const packageDir of readdirSync(join(basePath, '../../packages'))) {
 		try {
@@ -17,13 +17,18 @@ export function webpackConfigGenerator(argsMap) {
 		}
 	}
 
+	const isBuild = process.env.npm_lifecycle_event === 'build'; // eslint-disable-line
 	const variant = parseArgs(process.argv.slice(2)).variant;
+	const version = process.env.npm_package_version; // eslint-disable-line
+
 	const entryFile = variant ? `index-${variant}.js` : 'index.js';
 	const appEntryPoint = join(basePath, entryFile);
 	const buildOutputDir = join(basePath, 'dist', 'public');
-	const isBuild = process.env.npm_lifecycle_event === 'build'; // eslint-disable-line
-	const bundleName = isBuild ? `bundle-${process.env.npm_package_version}.js` : 'bundle.js'; // eslint-disable-line
+	const bundleName = isBuild ? `bundle-${version}.js` : 'bundle.js';
+	const i18nFileName = isBuild ? `i18n-${version}.js` : 'i18n.js';
+	const i18nExtractorPlugin = new ExtractTextPlugin(i18nFileName, {allChunks: true});
 	const publicPath = isBuild ? 'public/' : '/public/';
+
 	const webpackConfig = {
 		cache: true,
 		entry: appEntryPoint,
@@ -48,7 +53,7 @@ export function webpackConfigGenerator(argsMap) {
 				loader: '@caplin/patch-loader'
 			}, {
 				test: /\.properties$/,
-				loader: '@caplin/i18n-loader'
+				loader: i18nExtractorPlugin.extract(['raw-loader', '@caplin/i18n-loader'])
 			}, {
 				test: /\.scss$/,
 				loaders: ['style-loader', 'css-loader', 'sass-loader']
@@ -76,7 +81,9 @@ export function webpackConfigGenerator(argsMap) {
 			}
 			// root: [resolve('node_modules')]
 		},
-		plugins: []
+		plugins: [
+			i18nExtractorPlugin
+		]
 	};
 
 	if (isBuild) {
@@ -90,6 +97,7 @@ export function webpackConfigGenerator(argsMap) {
 
 		webpackConfig.plugins.push(
 			new webpack.optimize.UglifyJsPlugin({
+				exclude: /i18n(.*)\.js/,
 				output: {
 					comments: false
 				},

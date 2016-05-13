@@ -11,6 +11,10 @@ var _path = require('path');
 
 var _patchesStore = require('@caplin/patch-loader/patchesStore');
 
+var _extractTextWebpackPlugin = require('extract-text-webpack-plugin');
+
+var _extractTextWebpackPlugin2 = _interopRequireDefault(_extractTextWebpackPlugin);
+
 var _minimist = require('minimist');
 
 var _minimist2 = _interopRequireDefault(_minimist);
@@ -21,9 +25,10 @@ var _webpack2 = _interopRequireDefault(_webpack);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-function webpackConfigGenerator(argsMap) {
+function webpackConfigGenerator(_ref) {
+	var basePath = _ref.basePath;
+
 	var babelLoaderExclude = [];
-	var basePath = argsMap.basePath;
 
 	var _iteratorNormalCompletion = true;
 	var _didIteratorError = false;
@@ -54,13 +59,18 @@ function webpackConfigGenerator(argsMap) {
 		}
 	}
 
+	var isBuild = process.env.npm_lifecycle_event === 'build'; // eslint-disable-line
 	var variant = (0, _minimist2.default)(process.argv.slice(2)).variant;
+	var version = process.env.npm_package_version; // eslint-disable-line
+
 	var entryFile = variant ? 'index-' + variant + '.js' : 'index.js';
 	var appEntryPoint = (0, _path.join)(basePath, entryFile);
 	var buildOutputDir = (0, _path.join)(basePath, 'dist', 'public');
-	var isBuild = process.env.npm_lifecycle_event === 'build'; // eslint-disable-line
-	var bundleName = isBuild ? 'bundle-' + process.env.npm_package_version + '.js' : 'bundle.js'; // eslint-disable-line
+	var bundleName = isBuild ? 'bundle-' + version + '.js' : 'bundle.js';
+	var i18nFileName = isBuild ? 'i18n-' + version + '.js' : 'i18n.js';
+	var i18nExtractorPlugin = new _extractTextWebpackPlugin2.default(i18nFileName, { allChunks: true });
 	var publicPath = isBuild ? 'public/' : '/public/';
+
 	var webpackConfig = {
 		cache: true,
 		entry: appEntryPoint,
@@ -85,7 +95,7 @@ function webpackConfigGenerator(argsMap) {
 				loader: '@caplin/patch-loader'
 			}, {
 				test: /\.properties$/,
-				loader: '@caplin/i18n-loader'
+				loader: i18nExtractorPlugin.extract(['raw-loader', '@caplin/i18n-loader'])
 			}, {
 				test: /\.scss$/,
 				loaders: ['style-loader', 'css-loader', 'sass-loader']
@@ -113,7 +123,7 @@ function webpackConfigGenerator(argsMap) {
 			}
 			// root: [resolve('node_modules')]
 		},
-		plugins: []
+		plugins: [i18nExtractorPlugin]
 	};
 
 	if (isBuild) {
@@ -124,6 +134,7 @@ function webpackConfigGenerator(argsMap) {
 		}));
 
 		webpackConfig.plugins.push(new _webpack2.default.optimize.UglifyJsPlugin({
+			exclude: /i18n(.*)\.js/,
 			output: {
 				comments: false
 			},

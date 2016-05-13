@@ -24,7 +24,14 @@ module.exports = function i18nLoader(i18nPropertiesSource) {
 };
 
 function createModuleSource(language, result) {
-	return `
-require('br/I18n').registerTranslations('${language}', ${JSON.stringify(result)});
-`;
+	const registerTranslations = `
+(function () {
+var p = ${JSON.stringify(result, null, '\t')};
+var i = window.$_brjsI18nProperties;
+
+if (!i.${language}) { i.${language} = {}; }
+for (var key in p) { i.${language}[key] = p[key]; }
+})();`;
+
+	return registerTranslations;
 }
