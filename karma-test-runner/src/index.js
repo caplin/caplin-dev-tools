@@ -21,7 +21,8 @@ export const baseKarmaConfig = {
 		stats: {
 			assets: false,
 			colors: true,
-			chunks: false
+			chunks: false,
+			'errors-only': true
 		}
 	}
 };
