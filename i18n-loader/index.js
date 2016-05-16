@@ -1,26 +1,7 @@
-const sep = require('path').sep;
-
-const properties = require('properties');
+const commonLoader = require('./common');
 
 module.exports = function i18nLoader(i18nPropertiesSource) {
-	this.cacheable();
-
-	const callback = this.async();
-	const language = this.resource
-		.split(sep)
-		.pop()
-		.split('.')
-		.shift();
-
-	function propertiesParsed(error, result) {
-		if (error) {
-			return callback(error);
-		}
-
-		return callback(null, createModuleSource(language, result));
-	}
-
-	properties.parse(i18nPropertiesSource, propertiesParsed);
+	commonLoader(i18nPropertiesSource, createModuleSource, this);
 };
 
 function createModuleSource(language, result) {

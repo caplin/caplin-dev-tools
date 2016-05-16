@@ -60,6 +60,7 @@ function webpackConfigGenerator(_ref) {
 	}
 
 	var isBuild = process.env.npm_lifecycle_event === 'build'; // eslint-disable-line
+	var isTest = process.env.npm_lifecycle_event.startsWith('test'); // eslint-disable-line
 	var variant = (0, _minimist2.default)(process.argv.slice(2)).variant;
 	var version = process.env.npm_package_version; // eslint-disable-line
 
@@ -69,7 +70,12 @@ function webpackConfigGenerator(_ref) {
 	var bundleName = isBuild ? 'bundle-' + version + '.js' : 'bundle.js';
 	var i18nFileName = isBuild ? 'i18n-' + version + '.js' : 'i18n.js';
 	var i18nExtractorPlugin = new _extractTextWebpackPlugin2.default(i18nFileName, { allChunks: true });
+	var i18nLoader = i18nExtractorPlugin.extract(['raw-loader', '@caplin/i18n-loader']);
 	var publicPath = isBuild ? 'public/' : '/public/';
+
+	if (isTest) {
+		i18nLoader = '@caplin/i18n-loader/inline';
+	}
 
 	var webpackConfig = {
 		cache: true,
@@ -95,7 +101,7 @@ function webpackConfigGenerator(_ref) {
 				loader: '@caplin/patch-loader'
 			}, {
 				test: /\.properties$/,
-				loader: i18nExtractorPlugin.extract(['raw-loader', '@caplin/i18n-loader'])
+				loader: i18nLoader
 			}, {
 				test: /\.scss$/,
 				loaders: ['style-loader', 'css-loader', 'sass-loader']
