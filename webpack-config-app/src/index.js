@@ -74,7 +74,9 @@ export function webpackConfigGenerator({basePath}) {
 				// `alias!$aliases-data` required in `AliasRegistry`, loaded with `alias-loader`.
 				'$aliases-data$': join(basePath, 'config', 'aliases.js'),
 				// `app-meta!$app-metadata` required in `BRAppMetaService`, loaded with `app-meta-loader`.
-				'$app-metadata$': join(basePath, 'config', 'metadata.js')
+				'$app-metadata$': join(basePath, 'config', 'metadata.js'),
+				'ct-core/BRClassUtility$': join(__dirname, 'null.js'),
+				'br/dynamicRefRequire$': join(__dirname, 'null.js')
 			}
 			// Needed for tests?
 			// root: [ resolve('node_modules') ]
