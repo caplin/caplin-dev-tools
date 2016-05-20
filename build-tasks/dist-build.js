@@ -27,10 +27,12 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 var distDir = (0, _path.join)(process.cwd(), 'dist');
 var indexPage = '';
+var warName = '';
 var webpackConfig = {};
 
 function cleanDistAndBuildWAR(config) {
 	indexPage = config.indexPage;
+	warName = config.warName || 'app';
 	webpackConfig = config.webpackConfig;
 	// Remove the current `dist` directory.
 	(0, _rimraf2.default)(distDir, rimrafCallback);
@@ -57,7 +59,7 @@ function webpackBuildCallback(error) {
 			(0, _fsExtra.writeFileSync)((0, _path.join)(distDir, 'index.html'), indexFile, 'utf8');
 
 			var archive = (0, _archiver.create)('zip');
-			var warWriteStream = (0, _fsExtra.createWriteStream)('app.war');
+			var warWriteStream = (0, _fsExtra.createWriteStream)(warName + '.war');
 
 			archive.directory(distDir, '');
 			archive.pipe(warWriteStream);

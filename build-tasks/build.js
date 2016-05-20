@@ -8,10 +8,12 @@ import webpack from 'webpack';
 
 const distDir = join(process.cwd(), 'dist');
 let indexPage = '';
+let warName = '';
 let webpackConfig = {};
 
 export function cleanDistAndBuildWAR(config) {
 	indexPage = config.indexPage;
+	warName = config.warName || 'app';
 	webpackConfig = config.webpackConfig;
 	// Remove the current `dist` directory.
 	rimraf(distDir, rimrafCallback);
@@ -38,7 +40,7 @@ function webpackBuildCallback(error) {
 		writeFileSync(join(distDir, 'index.html'), indexFile, 'utf8');
 
 		const archive = create('zip');
-		const warWriteStream = createWriteStream('app.war');
+		const warWriteStream = createWriteStream(`${warName}.war`);
 
 		archive.directory(distDir, '');
 		archive.pipe(warWriteStream);
