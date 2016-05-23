@@ -1,26 +1,22 @@
-'use strict';
+"use strict";
 
 Object.defineProperty(exports, "__esModule", {
 	value: true
 });
 
-var _nodegit = require('nodegit');
-
-var _nodegit2 = _interopRequireDefault(_nodegit);
-
-var _child_process = require('child_process');
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+var _child_process = require("child_process");
 
 function getHeadCommit() {
-	return _nodegit2.default.Repository.open(process.cwd()).then(function (repo) {
+	return Git.Repository.open(process.cwd()).then(function (repo) {
 		return repo.getHeadCommit();
 	});
 }
 
 function getHash() {
-	return getHeadCommit().then(function (commit) {
-		return commit.sha();
+	return new Promise(function (resolve, reject) {
+		(0, _child_process.exec)("git rev-parse HEAD", function (error, stdout, stderr) {
+			resolve(stdout);
+		});
 	});
 }
 
@@ -35,7 +31,7 @@ function getCommitCount() {
 function createFullVersion(semVer) {
 	return Promise.all([getCommitCount(), getHash()]).then(function (output) {
 		return new Promise(function (resolve, reject) {
-			resolve(semVer + '-' + output[0].trim() + '-' + output[1].substr(0, 8));
+			resolve(semVer + "-" + output[0].trim() + "-" + output[1].trim().substr(0, 8));
 		});
 	});
 }

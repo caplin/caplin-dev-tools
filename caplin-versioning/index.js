@@ -1,4 +1,3 @@
-import Git from 'nodegit';
 import { exec } from 'child_process';
 
 function getHeadCommit() {
@@ -8,7 +7,11 @@ function getHeadCommit() {
 }
 
 function getHash() {
-	return getHeadCommit().then(commit => commit.sha());	
+	return new Promise((resolve, reject) => {
+		exec("git rev-parse HEAD", function (error, stdout, stderr) {
+			resolve(stdout);
+		});
+	})	
 }
 
 function getCommitCount() {
@@ -22,7 +25,7 @@ function getCommitCount() {
 function createFullVersion(semVer) {
 	return Promise.all([getCommitCount(), getHash()])
 		.then(output => new Promise((resolve, reject) => {
-			resolve(`${ semVer }-${ output[0].trim() }-${ output[1].substr(0, 8) }`);
+			resolve(`${ semVer }-${ output[0].trim() }-${ output[1].trim().substr(0, 8) }`);
 		}));
 }
 
