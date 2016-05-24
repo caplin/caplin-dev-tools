@@ -127,7 +127,3 @@ module.exports = {
 	}
 };
 ```
-
-
- conversion tool in the application's `config` directory
-e.g. `apps\mobile\config` and once the conversion is complete you can paste the metadata in there.
