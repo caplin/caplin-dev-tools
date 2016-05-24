@@ -112,5 +112,22 @@ network request or the `alias!$data` module in the BRJS `bundle.js`. The aliases
 `jscodeshift` transform script called `aliases-transform.js` which is stored inside the `preparation` directory using
 the `astexplorer.net` website.
 * Capture the applications's metadata. This can be done by executing `require("app-meta!$data")` when the application
-is running in BRJS. A `metadata.js` module is created by the conversion tool in the application's `config` directory
+is running in BRJS. A `metadata.js` module should be created in the application's `conversion-data` `config` directory
+containing that metadata. The code below is an example of a metadata module.
+
+```javascript
+const VERSION = process.env.VERSION || 'dev';
+
+module.exports = {
+	APP_VERSION: process.env.NODE_ENV === 'production' ? VERSION : 'dev',
+	VERSIONED_BUNDLE_PATH: 'v/dev',
+	LOCALE_COOKIE_NAME: 'BRJS.LOCALE',
+	APP_LOCALES: {
+		en: true
+	}
+};
+```
+
+
+ conversion tool in the application's `config` directory
 e.g. `apps\mobile\config` and once the conversion is complete you can paste the metadata in there.
