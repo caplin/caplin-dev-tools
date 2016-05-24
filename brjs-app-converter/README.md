@@ -18,14 +18,16 @@ a user to access the old application files.
 5. Within this directory it creates a directory for the restructured application.
 	* For an app named `mobile` it creates `apps/mobile` and populates it with a few application files that the user
 	provides.
+	* It also creates a `src` directory for the application `apps/mobile/src` that contains the blades/bladesets and
+	aspects of the application.
 
 This leaves the project with three top level directories, `apps`, `packages`, and `brjs-app` (which can be
 deleted once the user is satisfied they don't need the old files).
 
 These screenshots contrast before and after:
 
-![alt text](https://github.com/caplin/caplin-dev-tools/brjs-app-converter/raw/master/preparation/current.png "Current Structure")
-![alt text](https://github.com/caplin/caplin-dev-tools/brjs-app-converter/raw/master/preparation/post.png "Post Conversion Structure")
+![alt text](https://raw.githubusercontent.com/caplin/caplin-dev-tools/master/brjs-app-converter/preparation/current.png "Current Structure")
+![alt text](https://raw.githubusercontent.com/caplin/caplin-dev-tools/master/brjs-app-converter/preparation/post.png "Post Conversion Structure")
 
 ## How
 
@@ -37,11 +39,14 @@ Which asks npm to install (`i`) the repo globally (`-g`), this means the command
 available on the command line.
 
 The conversion tool requires the user to provide their application files by placing them in a `conversion-data`
-directory next to the BRJS project directory. In the `conversion-data` directory you can place an `sdk` directory and
-if that exists it will be used instead of the application's own `sdk` directory. The application files have to be
-placed inside a directory with the same name as the application e.g. for an app called `mobile` place the files you
-wish copied into the converted application in `conversion-data\mobile`. The files that can be copied are the `index.js`
-module, the application `package.json` and the `config` and `server` directories.
+directory next to the BRJS project directory.
+
+This is an example of the files/folders that can be inside the `conversion-data` directory, they aren't all required to
+test a conversion.
+
+![alt text](https://raw.githubusercontent.com/caplin/caplin-dev-tools/master/brjs-app-converter/preparation/conversion-data.png "Conversion data")
+
+In the `conversion-data` directory you can place an `sdk` directory and if that exists it will be used instead of the application's own `sdk` directory. The application files have to be placed inside a directory with the same name as the application e.g. for an app called `mobile` place the files you wish copied into the converted application in `conversion-data\mobile`. The files that can be copied are the `index.js` module, the application `package.json` and the `config` and `server` directories.
 
 Then you must navigate into the BRJS project directory (e.g. C/dev/someApp, not C/dev/someApp/apps/someApp) and run the
 tool.
@@ -52,7 +57,7 @@ brjs-app-converter --app mobile
 
 The parameters mean:
 
-* Provide the name of the app to convert with `--app`.
+* Provide the name of the app directory to convert with `--app`.
 
 ## Following steps.
 
@@ -86,28 +91,23 @@ need to have `this` set to the `window` object, this can be done with webpack's 
 are included in the generated `webpack.config.js` file.
 
 Caplin `EventHub` uses the `getClass` method which requires there to be a global namespace structure pointing to the
-class, when the code is fully CJS or when it's loaded by webpack the global namespace structure is not created. To work
-around this you can create a global namespace and assign the class that is being requested to the global namespace.
+class, when the code is fully CJS or when it's loaded by webpack the global namespace structure is not created. This
+will require changing the code to use `var MyClass = require('CLASS_NAME')` instead and passing the class in as a
+trailing parameter to `getProxy` and `subscribe`, the gc-cli tool [handles this automatically](https://github.com/caplin/gc-cli/commit/15c465fb9cac8a669e495c7315130dad06c0fe86).
 
-## Required preparation
+## Preparation
 
-These operations need to be performed on the application before conversion. It should be possible to make these changes
-without breaking the BRJS application. Verify the BRJS application still works following these changes.
+These operations should be performed on the application before conversion. It's possible to make these changes
+without breaking the BRJS application. Verify the BRJS application still works following these changes. It is possible
+to run the conversion without completing these steps but it's likely the application will not load.
 
 * The codebase should be converted to CJS, this can be done using https://github.com/caplin/gc-cli
 * Third party libraries that don't export a value should have their `exports` property in their
 `thirdparty-lib.manifest` file set to `null`; if it's set to `"{}"` errors will be thrown during bundling.
 * Capture the application's aliases to an aliases file. The aliases can be captured by searching for the `alias!$data`
-network request or the `alias!$data` module in the BRJS `bundle.js`. The aliases bundle can be converted by running the `jscodeshift` transform script called `aliases-transform.js` which is stored inside the `preparation` directory  using `astexplorer.net`.
+network request or the `alias!$data` module in the BRJS `bundle.js`. The aliases bundle can be converted by running the
+`jscodeshift` transform script called `aliases-transform.js` which is stored inside the `preparation` directory using
+the `astexplorer.net` website.
 * Capture the applications's metadata. This can be done by executing `require("app-meta!$data")` when the application
-is running in BRJS. A `metadata.js` module is created by the conversion and you can paste the metadata in there
-following the conversion.
-* `service!` imports should be wrapped in try/catch blocks. The modules should then use `ServiceRegistry.getService` to
-access the service. This allows the services to be loaded in BRJS and to be used in both BRJS and webpack. The try/catch
-block prevents the bundle from failing to load in webpack and accessing the services via the
-`ServiceRegistry.getService` method avoids this issue https://github.com/BladeRunnerJS/brjs/issues/1213.
-N.B. Do not move the `service!` requires to the module head as these requires have side effects (they cause the
-`ServiceRegistry` to construct services before the application code has had a chance to run).
-* `alias!` imports should be treated in a similar manner as `service!` but `AliasRegistry.getClass` should be used
-to access them. `alias!` requires can be moved to the head of the module as there are no harmful side effects to
-requiring them in module scope.
+is running in BRJS. A `metadata.js` module is created by the conversion tool in the application's `config` directory
+e.g. `apps\mobile\config` and once the conversion is complete you can paste the metadata in there.

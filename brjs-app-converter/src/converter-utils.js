@@ -143,4 +143,12 @@ export function verifyCLIArgs(applicationName) {
 	if (conversionDataDirContents.includes(applicationName) === false) {
 		throw new Error(`A conversion-data/${applicationName} directory for the application files must be provided.`);
 	}
+
+	const appFolderName = join('apps', applicationName);
+
+	try {
+		accessSync(appFolderName);
+	} catch (appFolderInaccesibleError) {
+		throw new Error(`The folder ${appFolderName} could not be found.`);
+	}
 }
