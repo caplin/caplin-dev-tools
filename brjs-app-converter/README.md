@@ -41,8 +41,8 @@ available on the command line.
 The conversion tool uses any user provided application configuration files (`aliases.js`, `metadata.js`,
 `html-templates.js`) that are placed in a `conversion-data` directory next to the BRJS project directory.
 
-This is an example of the files/folders that can be inside the `conversion-data` directory, they aren't all required to
-test a conversion. There is no need to copy the application source into `conversion-data`.
+The screenshot below shows the files/folders that can be inside the `conversion-data` directory, they aren't all
+required to test a conversion. There is no need to copy the application source into `conversion-data`.
 
 ![alt text](https://raw.githubusercontent.com/caplin/caplin-dev-tools/master/brjs-app-converter/preparation/conversion-data.png "Conversion data")
 
@@ -51,7 +51,7 @@ application's own `sdk` directory. The application config files have to be place
 as the application e.g. for an app called `mobile` place the files you wish copied into the converted application in `conversion-data\mobile`. The files that can be copied are the `index.js` module, the application `package.json` and
 the `config` and `server` directories.
 
-Then you must navigate into the BRJS project directory (e.g. C/dev/someApp, not C/dev/someApp/apps/someApp) and run the
+Then you must navigate to the BRJS project root directory (e.g. C/dev/someApp, not C/dev/someApp/apps/someApp) and run the
 tool.
 
 ```bash
