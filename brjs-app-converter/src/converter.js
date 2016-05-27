@@ -1,5 +1,3 @@
-import {shim} from 'array-includes';
-
 import {moveBRJSApplicationCodeToPackages} from './convert-app';
 import {createPackagesFromLibs} from './convert-libs';
 import {convertSDKToPackages} from './convert-sdk';
@@ -11,8 +9,6 @@ import {
 } from './converter-utils';
 import {createApplicationAndVariants} from './create-applications';
 import {moveApplicationPackagesToLibs} from './move-libs';
-
-shim();
 
 // Provide the name and entry point of the app to convert. Variants is a Caplin internal option.
 export default function({app}) {
