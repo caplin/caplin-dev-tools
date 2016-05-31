@@ -52,7 +52,7 @@ function webpackBuildCallback(error) {
 			var version = process.env.npm_package_version; // eslint-disable-line
 			var indexFile = indexPage({ variant: variant, version: version });
 
-			(0, _fsExtra.copySync)((0, _path.join)(process.cwd(), 'config', 'WEB-INF'), (0, _path.join)(distDir, 'WEB-INF'));
+			(0, _fsExtra.copySync)((0, _path.join)(process.cwd(), 'scripts', 'WEB-INF'), (0, _path.join)(distDir, 'WEB-INF'));
 			(0, _fsExtra.copySync)((0, _path.join)(process.cwd(), 'public'), (0, _path.join)(distDir, 'public'));
 			(0, _fsExtra.copySync)((0, _path.join)(process.cwd(), 'v'), (0, _path.join)(distDir, 'v'));
 			(0, _fsExtra.copySync)((0, _path.join)(process.cwd(), 'v/dev/unbundled-resources'), (0, _path.join)(distDir, 'unbundled-resources'));

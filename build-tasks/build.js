@@ -33,7 +33,7 @@ function webpackBuildCallback(error) {
 		const version = process.env.npm_package_version; // eslint-disable-line
 		const indexFile = indexPage({variant, version});
 
-		copySync(join(process.cwd(), 'config', 'WEB-INF'), join(distDir, 'WEB-INF'));
+		copySync(join(process.cwd(), 'scripts', 'WEB-INF'), join(distDir, 'WEB-INF'));
 		copySync(join(process.cwd(), 'public'), join(distDir, 'public'));
 		copySync(join(process.cwd(), 'v'), join(distDir, 'v'));
 		copySync(join(process.cwd(), 'v/dev/unbundled-resources'), join(distDir, 'unbundled-resources'));

@@ -23,7 +23,7 @@ export function webpackConfigGenerator({basePath}) {
 	const version = process.env.npm_package_version; // eslint-disable-line
 
 	const entryFile = variant ? `index-${variant}.js` : 'index.js';
-	const appEntryPoint = join(basePath, entryFile);
+	const appEntryPoint = join(basePath, 'src', entryFile);
 	const buildOutputDir = join(basePath, 'dist', 'public');
 	const bundleName = isBuild ? `bundle-${version}.js` : 'bundle.js';
 	const i18nFileName = isBuild ? `i18n-${version}.js` : 'i18n.js';
@@ -68,13 +68,15 @@ export function webpackConfigGenerator({basePath}) {
 				loader: '@caplin/xml-loader'
 			}]
 		},
-		patchLoader: appendModulePatch(),
+		patchLoader: appendModulePatch({
+			cwd: join(basePath, '..', '..', 'brjs-app', 'js-patches')
+		}),
 		resolve: {
 			alias: {
 				// `alias!$aliases-data` required in `AliasRegistry`, loaded with `alias-loader`.
-				'$aliases-data$': join(basePath, 'config', 'aliases.js'),
+				'$aliases-data$': join(basePath, 'src', 'config', 'aliases.js'),
 				// `app-meta!$app-metadata` required in `BRAppMetaService`, loaded with `app-meta-loader`.
-				'$app-metadata$': join(basePath, 'config', 'metadata.js'),
+				'$app-metadata$': join(basePath, 'src', 'config', 'metadata.js'),
 				'ct-core/BRClassUtility$': join(__dirname, 'null.js'),
 				'br/dynamicRefRequire$': join(__dirname, 'null.js')
 			}

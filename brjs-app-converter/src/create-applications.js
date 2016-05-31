@@ -2,7 +2,6 @@ import {join} from 'path';
 
 import {
 	copySync,
-	mkdirsSync,
 	readdirSync,
 	readJsonSync,
 	statSync,
@@ -12,20 +11,13 @@ import {
 import {templateDir} from './converter-data';
 
 function setUpApplicationFiles(applicationName, convertedAppDir, conversionMetadata, defaulAspectDir) {
-	const applicationFiles = readdirSync(join('..', 'conversion-data', applicationName));
+	copySync(join('..', 'conversion-data', applicationName), join(convertedAppDir));
 
 	copySync(join(templateDir, '.babelrc'), join(convertedAppDir, '.babelrc'));
-	copySync(join('..', 'conversion-data', applicationName, 'config'), join(convertedAppDir, 'config'));
-	applicationFiles
-		.filter((applicationFile) => applicationFile.startsWith('index'))
-		.forEach((indexFile) => {
-			copySync(join('..', 'conversion-data', applicationName, indexFile), join(convertedAppDir, indexFile));
-		});
 	copySync(conversionMetadata.privateKeyFileLocation, join(convertedAppDir, 'server', 'privatekey.pem'));
-	copySync(join('..', 'conversion-data', applicationName, 'server'), join(convertedAppDir, 'server'));
 	copySync(join(defaulAspectDir, 'unbundled-resources'), join(convertedAppDir, 'v/dev/unbundled-resources'));
 	copySync(join(defaulAspectDir, 'unbundled-resources'), join(convertedAppDir, 'public'));
-	copySync(join(conversionMetadata.brjsApplicationDir, 'WEB-INF'), join(convertedAppDir, 'config', 'WEB-INF'));
+	copySync(join(conversionMetadata.brjsApplicationDir, 'WEB-INF'), join(convertedAppDir, 'scripts', 'WEB-INF'));
 }
 
 // Given an application populate its `package.json` with all the newly created packages as dependencies.
@@ -53,7 +45,6 @@ function populateApplicationPackageJSON(
 function createApplication(applicationName, conversionMetadata, defaulAspectDir) {
 	const convertedAppDir = join('apps', applicationName);
 
-	mkdirsSync(convertedAppDir);
 	setUpApplicationFiles(applicationName, convertedAppDir, conversionMetadata, defaulAspectDir);
 	populateApplicationPackageJSON(applicationName, convertedAppDir, conversionMetadata);
 }
