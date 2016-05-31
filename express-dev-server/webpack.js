@@ -14,9 +14,9 @@ var _webpackDevMiddleware2 = _interopRequireDefault(_webpackDevMiddleware);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-exports.default = function (application, webpackConfig) {
-	var compiler = (0, _webpack2.default)(webpackConfig);
-	var devMiddlewareOptions = {
+exports.default = (application, webpackConfig) => {
+	const compiler = (0, _webpack2.default)(webpackConfig);
+	const devMiddlewareOptions = {
 		// Required, path to bind the middleware to.
 		publicPath: webpackConfig.output.publicPath,
 		noInfo: false,
@@ -27,7 +27,7 @@ exports.default = function (application, webpackConfig) {
 			chunks: false
 		}
 	};
-	var devMiddleware = (0, _webpackDevMiddleware2.default)(compiler, devMiddlewareOptions);
+	const devMiddleware = (0, _webpackDevMiddleware2.default)(compiler, devMiddlewareOptions);
 
 	application.use(devMiddleware);
 };

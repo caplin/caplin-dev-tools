@@ -25,10 +25,10 @@ var _webpack2 = _interopRequireDefault(_webpack);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var distDir = (0, _path.join)(process.cwd(), 'dist');
-var indexPage = '';
-var warName = '';
-var webpackConfig = {};
+const distDir = (0, _path.join)(process.cwd(), 'dist');
+let indexPage = '';
+let warName = '';
+let webpackConfig = {};
 
 function cleanDistAndBuildWAR(config) {
 	indexPage = config.indexPage;
@@ -48,9 +48,9 @@ function webpackBuildCallback(error) {
 	if (error) {
 		console.error(error); // eslint-disable-line
 	} else {
-			var variant = (0, _minimist2.default)(process.argv.slice(2)).variant;
-			var version = process.env.npm_package_version; // eslint-disable-line
-			var indexFile = indexPage({ variant: variant, version: version });
+			const variant = (0, _minimist2.default)(process.argv.slice(2)).variant;
+			const version = process.env.npm_package_version; // eslint-disable-line
+			const indexFile = indexPage({ variant, version });
 
 			(0, _fsExtra.copySync)((0, _path.join)(process.cwd(), 'scripts', 'WEB-INF'), (0, _path.join)(distDir, 'WEB-INF'));
 			(0, _fsExtra.copySync)((0, _path.join)(process.cwd(), 'public'), (0, _path.join)(distDir, 'public'));
@@ -58,8 +58,8 @@ function webpackBuildCallback(error) {
 			(0, _fsExtra.copySync)((0, _path.join)(process.cwd(), 'v/dev/unbundled-resources'), (0, _path.join)(distDir, 'unbundled-resources'));
 			(0, _fsExtra.writeFileSync)((0, _path.join)(distDir, 'index.html'), indexFile, 'utf8');
 
-			var archive = (0, _archiver.create)('zip');
-			var warWriteStream = (0, _fsExtra.createWriteStream)(warName + '.war');
+			const archive = (0, _archiver.create)('zip');
+			const warWriteStream = (0, _fsExtra.createWriteStream)(`${ warName }.war`);
 
 			archive.directory(distDir, '');
 			archive.pipe(warWriteStream);

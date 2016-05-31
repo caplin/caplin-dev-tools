@@ -6,15 +6,13 @@ Object.defineProperty(exports, "__esModule", {
 
 var _path = require('path');
 
-exports.default = function (applicationPath, application, appRoot) {
-	var applicationAspectPrefix = 'src' + applicationPath + '-';
+exports.default = (applicationPath, application, appRoot) => {
+	const applicationAspectPrefix = `src${ applicationPath }-`;
 
 	// Serve up unbundled-resources from `node_modules`.
-	application.get('/unbundled-resources/*', function (_ref, res) {
-		var params = _ref.params;
-
-		var resourcePath = applicationAspectPrefix + 'default-aspect/unbundled-resources/' + params['0'];
-		var absResourcePath = (0, _path.join)(appRoot, resourcePath);
+	application.get('/unbundled-resources/*', ({ params }, res) => {
+		const resourcePath = `${ applicationAspectPrefix }default-aspect/unbundled-resources/${ params['0'] }`;
+		const absResourcePath = (0, _path.join)(appRoot, resourcePath);
 
 		res.sendFile(absResourcePath);
 	});
