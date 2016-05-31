@@ -25,65 +25,42 @@ var _webpack2 = _interopRequireDefault(_webpack);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-function webpackConfigGenerator(_ref) {
-	var basePath = _ref.basePath;
+function webpackConfigGenerator({ basePath }) {
+	const babelLoaderExclude = [];
 
-	var babelLoaderExclude = [];
-
-	var _iteratorNormalCompletion = true;
-	var _didIteratorError = false;
-	var _iteratorError = undefined;
-
-	try {
-		for (var _iterator = (0, _fs.readdirSync)((0, _path.join)(basePath, '../../packages'))[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
-			var packageDir = _step.value;
-
-			try {
-				(0, _fs.statSync)((0, _path.join)(basePath, 'node_modules/' + packageDir + '/compiler.json'));
-			} catch (packageShouldNotBeBabeledError) {
-				babelLoaderExclude.push((0, _path.join)(basePath, 'node_modules/' + packageDir + '/'));
-			}
-		}
-	} catch (err) {
-		_didIteratorError = true;
-		_iteratorError = err;
-	} finally {
+	for (const packageDir of (0, _fs.readdirSync)((0, _path.join)(basePath, '../../packages'))) {
 		try {
-			if (!_iteratorNormalCompletion && _iterator.return) {
-				_iterator.return();
-			}
-		} finally {
-			if (_didIteratorError) {
-				throw _iteratorError;
-			}
+			(0, _fs.statSync)((0, _path.join)(basePath, `node_modules/${ packageDir }/compiler.json`));
+		} catch (packageShouldNotBeBabeledError) {
+			babelLoaderExclude.push((0, _path.join)(basePath, `node_modules/${ packageDir }/`));
 		}
 	}
 
-	var isBuild = process.env.npm_lifecycle_event === 'build'; // eslint-disable-line
-	var isTest = process.env.npm_lifecycle_event.startsWith('test'); // eslint-disable-line
-	var variant = (0, _minimist2.default)(process.argv.slice(2)).variant;
-	var version = process.env.npm_package_version; // eslint-disable-line
+	const isBuild = process.env.npm_lifecycle_event === 'build'; // eslint-disable-line
+	const isTest = process.env.npm_lifecycle_event.startsWith('test'); // eslint-disable-line
+	const variant = (0, _minimist2.default)(process.argv.slice(2)).variant;
+	const version = process.env.npm_package_version; // eslint-disable-line
 
-	var entryFile = variant ? 'index-' + variant + '.js' : 'index.js';
-	var appEntryPoint = (0, _path.join)(basePath, 'src', entryFile);
-	var buildOutputDir = (0, _path.join)(basePath, 'dist', 'public');
-	var bundleName = isBuild ? 'bundle-' + version + '.js' : 'bundle.js';
-	var i18nFileName = isBuild ? 'i18n-' + version + '.js' : 'i18n.js';
-	var i18nExtractorPlugin = new _extractTextWebpackPlugin2.default(i18nFileName, { allChunks: true });
-	var i18nLoader = i18nExtractorPlugin.extract(['raw-loader', '@caplin/i18n-loader']);
-	var publicPath = isBuild ? 'public/' : '/public/';
+	const entryFile = variant ? `index-${ variant }.js` : 'index.js';
+	const appEntryPoint = (0, _path.join)(basePath, 'src', entryFile);
+	const buildOutputDir = (0, _path.join)(basePath, 'dist', 'public');
+	const bundleName = isBuild ? `bundle-${ version }.js` : 'bundle.js';
+	const i18nFileName = isBuild ? `i18n-${ version }.js` : 'i18n.js';
+	const i18nExtractorPlugin = new _extractTextWebpackPlugin2.default(i18nFileName, { allChunks: true });
+	let i18nLoader = i18nExtractorPlugin.extract(['raw-loader', '@caplin/i18n-loader']);
+	const publicPath = isBuild ? 'public/' : '/public/';
 
 	if (isTest) {
 		i18nLoader = '@caplin/i18n-loader/inline';
 	}
 
-	var webpackConfig = {
+	const webpackConfig = {
 		cache: true,
 		entry: appEntryPoint,
 		output: {
 			path: buildOutputDir,
 			filename: bundleName,
-			publicPath: publicPath
+			publicPath
 		},
 		module: {
 			loaders: [{
@@ -156,31 +133,10 @@ function webpackConfigGenerator(_ref) {
 	}
 
 	// Add aliases for the app's code directories.
-	var codeDirs = (0, _path.resolve)(basePath, 'src');
+	const codeDirs = (0, _path.resolve)(basePath, 'src');
 
-	var _iteratorNormalCompletion2 = true;
-	var _didIteratorError2 = false;
-	var _iteratorError2 = undefined;
-
-	try {
-		for (var _iterator2 = (0, _fs.readdirSync)(codeDirs)[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
-			var codeDir = _step2.value;
-
-			webpackConfig.resolve.alias[codeDir] = (0, _path.resolve)(codeDirs, codeDir);
-		}
-	} catch (err) {
-		_didIteratorError2 = true;
-		_iteratorError2 = err;
-	} finally {
-		try {
-			if (!_iteratorNormalCompletion2 && _iterator2.return) {
-				_iterator2.return();
-			}
-		} finally {
-			if (_didIteratorError2) {
-				throw _iteratorError2;
-			}
-		}
+	for (const codeDir of (0, _fs.readdirSync)(codeDirs)) {
+		webpackConfig.resolve.alias[codeDir] = (0, _path.resolve)(codeDirs, codeDir);
 	}
 
 	return webpackConfig;
