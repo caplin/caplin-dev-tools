@@ -6,15 +6,6 @@
   "scripts": {
     "build": "babel src --out-dir dist"
   },
-  "babel": {
-    "plugins": [
-      "transform-object-rest-spread"
-    ],
-    "presets": [
-      "node6",
-      "stage-3"
-    ]
-  },
   "keywords": [],
   "license": "ISC",
   "devDependencies": {
