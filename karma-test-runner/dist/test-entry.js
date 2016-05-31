@@ -1,5 +1,5 @@
 "use strict";
 
-var testsContext = require.context(PACKAGE_DIRECTORY, true, /.*_test-[ua]t.*\.js$/);
+const testsContext = require.context(PACKAGE_DIRECTORY, true, /.*_test-[ua]t.*\.js$/);
 
 testsContext.keys().forEach(testsContext);
