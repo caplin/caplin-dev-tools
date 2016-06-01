@@ -63,7 +63,10 @@ const baseKarmaConfig = exports.baseKarmaConfig = {
 			assets: false,
 			colors: true,
 			chunks: false,
-			'errors-only': true
+			errors: true,
+			warnings: false,
+			hash: false,
+			version: false
 		}
 	}
 };
