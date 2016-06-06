@@ -68,7 +68,8 @@ const baseKarmaConfig = exports.baseKarmaConfig = {
 			hash: false,
 			version: false
 		}
-	}
+	},
+	reporters: ['spec']
 };
 
 function createPackageKarmaConfig({ filesToServe, packageDirectory, webpackConfig, frameworks }) {
@@ -94,6 +95,7 @@ function createPackageKarmaConfig({ filesToServe, packageDirectory, webpackConfi
 }
 
 function runPackageTests(packageKarmaConfig, resolvePromise) {
+	console.log('Running tests for: \x1b[35m' + packageKarmaConfig.basePath + '\x1b[0m');
 	const server = new _karma.Server(packageKarmaConfig, exitCode => {
 		if (exitCode === 0) {
 			resolvePromise();

@@ -1,6 +1,6 @@
 {
   "name": "@caplin/karma-test-runner",
-  "version": "1.1.2",
+  "version": "1.1.3",
   "description": "Package that allows running all the UTs and ATs in a package using Karma",
   "main": "dist/index.js",
   "scripts": {
@@ -12,7 +12,8 @@
     "babel-cli": "^6.7.5",
     "babel-plugin-transform-object-rest-spread": "^6.6.5",
     "babel-preset-node6": "^11.0.0",
-    "babel-preset-stage-3": "^6.5.0"
+    "babel-preset-stage-3": "^6.5.0",
+    "karma-spec-reporter": "0.0.26"
   },
   "dependencies": {
     "karma": "^0.13.22",
