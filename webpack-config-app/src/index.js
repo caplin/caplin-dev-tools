@@ -38,6 +38,7 @@ export function webpackConfigGenerator({basePath}) {
 	const webpackConfig = {
 		cache: true,
 		entry: appEntryPoint,
+		devtool: 'inline-source-map',
 		output: {
 			path: buildOutputDir,
 			filename: bundleName,
