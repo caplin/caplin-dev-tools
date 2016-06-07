@@ -55,7 +55,7 @@ const testEntry = (0, _path.resolve)(__dirname, 'test-entry.js');
 const baseKarmaConfig = exports.baseKarmaConfig = {
 	browsers: ['Chrome'],
 	preprocessors: {
-		[testEntry]: ['webpack']
+		[testEntry]: ['webpack', 'sourcemap']
 	},
 	singleRun: !devMode,
 	webpackMiddleware: {
