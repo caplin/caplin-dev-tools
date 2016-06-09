@@ -54,8 +54,7 @@ function webpackBuildCallback(error) {
 
 			(0, _fsExtra.copySync)((0, _path.join)(process.cwd(), 'scripts', 'WEB-INF'), (0, _path.join)(distDir, 'WEB-INF'));
 			(0, _fsExtra.copySync)((0, _path.join)(process.cwd(), 'public'), (0, _path.join)(distDir, 'public'));
-			(0, _fsExtra.copySync)((0, _path.join)(process.cwd(), 'v'), (0, _path.join)(distDir, 'v'));
-			(0, _fsExtra.copySync)((0, _path.join)(process.cwd(), 'v/dev/unbundled-resources'), (0, _path.join)(distDir, 'unbundled-resources'));
+			(0, _fsExtra.copySync)((0, _path.join)(process.cwd(), 'public/dev/unbundled-resources'), (0, _path.join)(distDir, 'unbundled-resources'));
 			(0, _fsExtra.writeFileSync)((0, _path.join)(distDir, 'index.html'), indexFile, 'utf8');
 
 			const archive = (0, _archiver.create)('zip');
