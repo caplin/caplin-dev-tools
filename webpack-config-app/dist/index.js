@@ -36,9 +36,13 @@ function webpackConfigGenerator({ basePath }) {
 		}
 	}
 
+	const args = (0, _minimist2.default)(process.argv.slice(2));
+	const {
+		sourceMaps,
+		variant
+	} = args;
 	const isBuild = process.env.npm_lifecycle_event === 'build'; // eslint-disable-line
 	const isTest = process.env.npm_lifecycle_event.startsWith('test'); // eslint-disable-line
-	const variant = (0, _minimist2.default)(process.argv.slice(2)).variant;
 	const version = process.env.npm_package_version; // eslint-disable-line
 
 	const entryFile = variant ? `index-${ variant }.js` : 'index.js';
@@ -57,7 +61,6 @@ function webpackConfigGenerator({ basePath }) {
 	const webpackConfig = {
 		cache: true,
 		entry: appEntryPoint,
-		devtool: 'inline-source-map',
 		output: {
 			path: buildOutputDir,
 			filename: bundleName,
@@ -113,6 +116,10 @@ function webpackConfigGenerator({ basePath }) {
 		},
 		plugins: [i18nExtractorPlugin]
 	};
+
+	if (sourceMaps) {
+		webpackConfig.devtool = 'inline-source-map';
+	}
 
 	if (isBuild) {
 		webpackConfig.plugins.push(new _webpack2.default.DefinePlugin({

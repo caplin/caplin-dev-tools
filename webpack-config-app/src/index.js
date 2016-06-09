@@ -17,9 +17,13 @@ export function webpackConfigGenerator({basePath}) {
 		}
 	}
 
+	const args = parseArgs(process.argv.slice(2));
+	const {
+		sourceMaps,
+		variant
+	} = args;
 	const isBuild = process.env.npm_lifecycle_event === 'build'; // eslint-disable-line
 	const isTest = process.env.npm_lifecycle_event.startsWith('test'); // eslint-disable-line
-	const variant = parseArgs(process.argv.slice(2)).variant;
 	const version = process.env.npm_package_version; // eslint-disable-line
 
 	const entryFile = variant ? `index-${variant}.js` : 'index.js';
@@ -38,7 +42,6 @@ export function webpackConfigGenerator({basePath}) {
 	const webpackConfig = {
 		cache: true,
 		entry: appEntryPoint,
-		devtool: 'inline-source-map',
 		output: {
 			path: buildOutputDir,
 			filename: bundleName,
@@ -96,6 +99,10 @@ export function webpackConfigGenerator({basePath}) {
 			i18nExtractorPlugin
 		]
 	};
+
+	if (sourceMaps) {
+		webpackConfig.devtool = 'inline-source-map';
+	}
 
 	if (isBuild) {
 		webpackConfig.plugins.push(
