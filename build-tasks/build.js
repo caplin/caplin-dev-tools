@@ -6,32 +6,27 @@ import parseArgs from 'minimist';
 import rimraf from 'rimraf';
 import webpack from 'webpack';
 
-let buildCallback = () => {
+const NO_OP = () => {
 	// Called after app is built.
 };
 const buildDir = join(process.cwd(), 'build');
 const distDir = join(buildDir, 'dist');
-let indexPage = '';
-let warName = '';
-let webpackConfig = {};
 
 export function cleanDistAndBuildWAR(config) {
-	buildCallback = config.buildCallback;
-	indexPage = config.indexPage;
-	warName = config.warName || 'app';
-	webpackConfig = config.webpackConfig;
-
-	// Remove the current `dist` directory.
-	rimraf(distDir, rimrafCallback);
+	// Remove the current `build` directory.
+	rimraf(buildDir, rimrafCallback(config));
 }
 
 // When we've removed the previous `dist` directory build the application.
-function rimrafCallback() {
-	webpack(webpackConfig, webpackBuildCallback);
+function rimrafCallback(config) {
+	return () => webpack(
+		config.webpackConfig,
+		(error) => webpackBuildCallback(error, config)
+	);
 }
 
 // When we've built the application copy any missing WAR files.
-function webpackBuildCallback(error) {
+function webpackBuildCallback(error, {buildCallback = NO_OP, indexPage, warName}) {
 	if (error) {
 		console.error(error); // eslint-disable-line
 	} else {

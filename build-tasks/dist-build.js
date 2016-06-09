@@ -25,32 +25,24 @@ var _webpack2 = _interopRequireDefault(_webpack);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-let buildCallback = () => {
+const NO_OP = () => {
 	// Called after app is built.
 };
 const buildDir = (0, _path.join)(process.cwd(), 'build');
 const distDir = (0, _path.join)(buildDir, 'dist');
-let indexPage = '';
-let warName = '';
-let webpackConfig = {};
 
 function cleanDistAndBuildWAR(config) {
-	buildCallback = config.buildCallback;
-	indexPage = config.indexPage;
-	warName = config.warName || 'app';
-	webpackConfig = config.webpackConfig;
-
-	// Remove the current `dist` directory.
-	(0, _rimraf2.default)(distDir, rimrafCallback);
+	// Remove the current `build` directory.
+	(0, _rimraf2.default)(buildDir, rimrafCallback(config));
 }
 
 // When we've removed the previous `dist` directory build the application.
-function rimrafCallback() {
-	(0, _webpack2.default)(webpackConfig, webpackBuildCallback);
+function rimrafCallback(config) {
+	return () => (0, _webpack2.default)(config.webpackConfig, error => webpackBuildCallback(error, config));
 }
 
 // When we've built the application copy any missing WAR files.
-function webpackBuildCallback(error) {
+function webpackBuildCallback(error, { buildCallback = NO_OP, indexPage, warName }) {
 	if (error) {
 		console.error(error); // eslint-disable-line
 	} else {
