@@ -15,7 +15,7 @@ function setUpApplicationFiles(applicationName, convertedAppDir, conversionMetad
 
 	copySync(join(templateDir, '.babelrc'), join(convertedAppDir, '.babelrc'));
 	copySync(conversionMetadata.privateKeyFileLocation, join(convertedAppDir, 'server', 'privatekey.pem'));
-	copySync(join(defaulAspectDir, 'unbundled-resources'), join(convertedAppDir, 'v/dev/unbundled-resources'));
+	copySync(join(defaulAspectDir, 'unbundled-resources'), join(convertedAppDir, 'public/dev/unbundled-resources'));
 	copySync(join(defaulAspectDir, 'unbundled-resources'), join(convertedAppDir, 'public'));
 	copySync(join(conversionMetadata.brjsApplicationDir, 'WEB-INF'), join(convertedAppDir, 'scripts', 'WEB-INF'));
 }

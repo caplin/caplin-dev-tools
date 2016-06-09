@@ -35,8 +35,7 @@ function webpackBuildCallback(error) {
 
 		copySync(join(process.cwd(), 'scripts', 'WEB-INF'), join(distDir, 'WEB-INF'));
 		copySync(join(process.cwd(), 'public'), join(distDir, 'public'));
-		copySync(join(process.cwd(), 'v'), join(distDir, 'v'));
-		copySync(join(process.cwd(), 'v/dev/unbundled-resources'), join(distDir, 'unbundled-resources'));
+		copySync(join(process.cwd(), 'public/dev/unbundled-resources'), join(distDir, 'unbundled-resources'));
 		writeFileSync(join(distDir, 'index.html'), indexFile, 'utf8');
 
 		const archive = create('zip');
