@@ -6,11 +6,6 @@
   "scripts": {
     "build": "babel index.js > dist.js"
   },
-  "babel": {
-    "presets": [
-      "node6"
-    ]
-  },
   "keywords": [],
   "author": "Dominic Gannaway <dg@domgan.com> (https://github.com/trueadm)",
   "license": "MIT",

@@ -5,11 +5,6 @@
   "scripts": {
     "build": "babel src --out-dir ."
   },
-  "babel": {
-    "presets": [
-      "node6"
-    ]
-  },
   "keywords": [],
   "author": "Brian Di Palma <offler@gmail.com> (https://github.com/briandipalma)",
   "license": "ISC",

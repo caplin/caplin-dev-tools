@@ -6,11 +6,6 @@
   "scripts": {
     "build": "babel src --out-dir dist"
   },
-  "babel": {
-    "presets": [
-      "node6"
-    ]
-  },
   "author": "",
   "license": "ISC",
   "devDependencies": {
