@@ -47,7 +47,7 @@ function webpackConfigGenerator({ basePath }) {
 
 	const entryFile = variant ? `index-${ variant }.js` : 'index.js';
 	const appEntryPoint = (0, _path.join)(basePath, 'src', entryFile);
-	const buildOutputDir = (0, _path.join)(basePath, 'dist', 'public');
+	const buildOutputDir = (0, _path.join)(basePath, 'build', 'dist', 'public');
 	const bundleName = isBuild ? `bundle-${ version }.js` : 'bundle.js';
 	const i18nFileName = isBuild ? `i18n-${ version }.js` : 'i18n.js';
 	const i18nExtractorPlugin = new _extractTextWebpackPlugin2.default(i18nFileName, { allChunks: true });

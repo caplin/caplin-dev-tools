@@ -6,15 +6,21 @@ import parseArgs from 'minimist';
 import rimraf from 'rimraf';
 import webpack from 'webpack';
 
-const distDir = join(process.cwd(), 'dist');
+let buildCallback = () => {
+	// Called after app is built.
+};
+const buildDir = join(process.cwd(), 'build');
+const distDir = join(buildDir, 'dist');
 let indexPage = '';
 let warName = '';
 let webpackConfig = {};
 
 export function cleanDistAndBuildWAR(config) {
+	buildCallback = config.buildCallback;
 	indexPage = config.indexPage;
 	warName = config.warName || 'app';
 	webpackConfig = config.webpackConfig;
+
 	// Remove the current `dist` directory.
 	rimraf(distDir, rimrafCallback);
 }
@@ -35,11 +41,11 @@ function webpackBuildCallback(error) {
 
 		copySync(join(process.cwd(), 'scripts', 'WEB-INF'), join(distDir, 'WEB-INF'));
 		copySync(join(process.cwd(), 'public'), join(distDir, 'public'));
-		copySync(join(process.cwd(), 'public/dev/unbundled-resources'), join(distDir, 'unbundled-resources'));
 		writeFileSync(join(distDir, 'index.html'), indexFile, 'utf8');
+		buildCallback();
 
 		const archive = create('zip');
-		const warWriteStream = createWriteStream(`${warName}.war`);
+		const warWriteStream = createWriteStream(join(buildDir, `${warName}.war`));
 
 		archive.directory(distDir, '');
 		archive.pipe(warWriteStream);

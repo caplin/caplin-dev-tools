@@ -25,15 +25,21 @@ var _webpack2 = _interopRequireDefault(_webpack);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-const distDir = (0, _path.join)(process.cwd(), 'dist');
+let buildCallback = () => {
+	// Called after app is built.
+};
+const buildDir = (0, _path.join)(process.cwd(), 'build');
+const distDir = (0, _path.join)(buildDir, 'dist');
 let indexPage = '';
 let warName = '';
 let webpackConfig = {};
 
 function cleanDistAndBuildWAR(config) {
+	buildCallback = config.buildCallback;
 	indexPage = config.indexPage;
 	warName = config.warName || 'app';
 	webpackConfig = config.webpackConfig;
+
 	// Remove the current `dist` directory.
 	(0, _rimraf2.default)(distDir, rimrafCallback);
 }
@@ -54,11 +60,11 @@ function webpackBuildCallback(error) {
 
 			(0, _fsExtra.copySync)((0, _path.join)(process.cwd(), 'scripts', 'WEB-INF'), (0, _path.join)(distDir, 'WEB-INF'));
 			(0, _fsExtra.copySync)((0, _path.join)(process.cwd(), 'public'), (0, _path.join)(distDir, 'public'));
-			(0, _fsExtra.copySync)((0, _path.join)(process.cwd(), 'public/dev/unbundled-resources'), (0, _path.join)(distDir, 'unbundled-resources'));
 			(0, _fsExtra.writeFileSync)((0, _path.join)(distDir, 'index.html'), indexFile, 'utf8');
+			buildCallback();
 
 			const archive = (0, _archiver.create)('zip');
-			const warWriteStream = (0, _fsExtra.createWriteStream)(`${ warName }.war`);
+			const warWriteStream = (0, _fsExtra.createWriteStream)((0, _path.join)(buildDir, `${ warName }.war`));
 
 			archive.directory(distDir, '');
 			archive.pipe(warWriteStream);
