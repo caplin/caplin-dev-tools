@@ -8,6 +8,9 @@
   },
   "keywords": [],
   "license": "ISC",
+  "files": [
+    "dist"
+  ],
   "devDependencies": {
     "babel-cli": "^6.7.5",
     "babel-preset-node6": "^11.0.0"

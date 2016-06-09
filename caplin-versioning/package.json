@@ -9,6 +9,9 @@
   "keywords": [],
   "author": "Dominic Gannaway <dg@domgan.com> (https://github.com/trueadm)",
   "license": "MIT",
+  "files": [
+    "dist.js"
+  ],
   "devDependencies": {
     "babel-cli": "^6.7.5",
     "babel-preset-node6": "^11.0.0"
