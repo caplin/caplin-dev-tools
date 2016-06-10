@@ -35,6 +35,8 @@ var _path = require('path');
 
 var _karma = require('karma');
 
+var _constants = require('karma/lib/constants');
+
 var _minimist = require('minimist');
 
 var _minimist2 = _interopRequireDefault(_minimist);
@@ -54,22 +56,23 @@ const testEntry = (0, _path.resolve)(__dirname, 'test-entry.js');
 
 const baseKarmaConfig = exports.baseKarmaConfig = {
 	browsers: ['Chrome'],
+	logLevel: _constants.LOG_ERROR,
 	preprocessors: {
 		[testEntry]: ['webpack', 'sourcemap']
 	},
+	reporters: ['dots'],
 	singleRun: !devMode,
 	webpackMiddleware: {
+		noInfo: true,
 		stats: {
 			assets: false,
-			colors: true,
 			chunks: false,
 			errors: true,
-			warnings: false,
 			hash: false,
-			version: false
+			version: false,
+			warnings: false
 		}
-	},
-	reporters: ['spec']
+	}
 };
 
 function createPackageKarmaConfig({ filesToServe, packageDirectory, webpackConfig, frameworks }) {
@@ -96,6 +99,7 @@ function createPackageKarmaConfig({ filesToServe, packageDirectory, webpackConfi
 
 function runPackageTests(packageKarmaConfig, resolvePromise) {
 	console.log('Running tests for: \x1b[35m' + packageKarmaConfig.basePath + '\x1b[0m');
+
 	const server = new _karma.Server(packageKarmaConfig, exitCode => {
 		if (exitCode === 0) {
 			resolvePromise();

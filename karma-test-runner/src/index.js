@@ -1,8 +1,17 @@
-import {resolve} from 'path';
+import {
+	resolve
+} from 'path';
 
-import {Server} from 'karma';
+import {
+	Server
+} from 'karma';
+import {
+	LOG_ERROR
+} from 'karma/lib/constants';
 import parseArgs from 'minimist';
-import {DefinePlugin} from 'webpack';
+import {
+	DefinePlugin
+} from 'webpack';
 
 const args = parseArgs(process.argv.slice(2));
 // Keeps browser/Karma running after test run.
@@ -13,22 +22,23 @@ const testEntry = resolve(__dirname, 'test-entry.js');
 
 export const baseKarmaConfig = {
 	browsers: ['Chrome'],
+	logLevel: LOG_ERROR,
 	preprocessors: {
 		[testEntry]: ['webpack', 'sourcemap']
 	},
+	reporters: ['dots'],
 	singleRun: !devMode,
 	webpackMiddleware: {
+		noInfo: true,
 		stats: {
 			assets: false,
-			colors: true,
 			chunks: false,
 			errors: true,
-			warnings: false,
 			hash: false,
-			version: false
+			version: false,
+			warnings: false
 		}
-	},
-	reporters: ['spec']
+	}
 };
 
 function createPackageKarmaConfig({filesToServe, packageDirectory, webpackConfig, frameworks}) {
@@ -59,6 +69,7 @@ function createPackageKarmaConfig({filesToServe, packageDirectory, webpackConfig
 
 function runPackageTests(packageKarmaConfig, resolvePromise) {
 	console.log('Running tests for: \x1b[35m' + packageKarmaConfig.basePath + '\x1b[0m');
+
 	const server = new Server(packageKarmaConfig, (exitCode) => {
 		if (exitCode === 0) {
 			resolvePromise();
