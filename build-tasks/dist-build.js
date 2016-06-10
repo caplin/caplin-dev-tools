@@ -50,7 +50,7 @@ function webpackBuildCallback(error, { buildCallback = NO_OP, indexPage, version
 			const indexFile = indexPage({ variant, version });
 
 			(0, _fsExtra.copySync)((0, _path.join)(process.cwd(), 'scripts', 'WEB-INF'), (0, _path.join)(distDir, 'WEB-INF'));
-			(0, _fsExtra.copySync)((0, _path.join)(process.cwd(), 'public'), (0, _path.join)(distDir, 'public'));
+			(0, _fsExtra.copySync)((0, _path.join)(process.cwd(), 'public', 'dev'), (0, _path.join)(distDir, 'public', version));
 			(0, _fsExtra.writeFileSync)((0, _path.join)(distDir, 'index.html'), indexFile, 'utf8');
 			buildCallback();
 
