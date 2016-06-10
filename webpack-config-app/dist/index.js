@@ -25,7 +25,7 @@ var _webpack2 = _interopRequireDefault(_webpack);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-function webpackConfigGenerator({ basePath }) {
+function webpackConfigGenerator({ basePath, version = 'dev' }) {
 	const babelLoaderExclude = [];
 
 	for (const packageDir of (0, _fs.readdirSync)((0, _path.join)(basePath, '../../packages'))) {
@@ -43,13 +43,12 @@ function webpackConfigGenerator({ basePath }) {
 	} = args;
 	const isBuild = process.env.npm_lifecycle_event === 'build'; // eslint-disable-line
 	const isTest = process.env.npm_lifecycle_event.startsWith('test'); // eslint-disable-line
-	const version = process.env.npm_package_version; // eslint-disable-line
 
 	const entryFile = variant ? `index-${ variant }.js` : 'index.js';
 	const appEntryPoint = (0, _path.join)(basePath, 'src', entryFile);
 	const buildOutputDir = (0, _path.join)(basePath, 'build', 'dist', 'public');
-	const bundleName = isBuild ? `bundle-${ version }.js` : 'bundle.js';
-	const i18nFileName = isBuild ? `i18n-${ version }.js` : 'i18n.js';
+	const bundleName = `bundle-${ version }.js`;
+	const i18nFileName = `i18n-${ version }.js`;
 	const i18nExtractorPlugin = new _extractTextWebpackPlugin2.default(i18nFileName, { allChunks: true });
 	let i18nLoader = i18nExtractorPlugin.extract(['raw-loader', '@caplin/i18n-loader']);
 	const publicPath = isBuild ? 'public/' : '/public/';
@@ -124,7 +123,7 @@ function webpackConfigGenerator({ basePath }) {
 	if (isBuild) {
 		webpackConfig.plugins.push(new _webpack2.default.DefinePlugin({
 			'process.env': {
-				NODE_ENV: JSON.stringify('production')
+				VERSION: JSON.stringify(version)
 			}
 		}));
 

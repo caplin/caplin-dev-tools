@@ -42,12 +42,11 @@ function rimrafCallback(config) {
 }
 
 // When we've built the application copy any missing WAR files.
-function webpackBuildCallback(error, { buildCallback = NO_OP, indexPage, warName }) {
+function webpackBuildCallback(error, { buildCallback = NO_OP, indexPage, version, warName }) {
 	if (error) {
 		console.error(error); // eslint-disable-line
 	} else {
 			const variant = (0, _minimist2.default)(process.argv.slice(2)).variant;
-			const version = process.env.npm_package_version; // eslint-disable-line
 			const indexFile = indexPage({ variant, version });
 
 			(0, _fsExtra.copySync)((0, _path.join)(process.cwd(), 'scripts', 'WEB-INF'), (0, _path.join)(distDir, 'WEB-INF'));

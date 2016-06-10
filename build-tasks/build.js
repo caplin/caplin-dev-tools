@@ -1,7 +1,15 @@
-import {join} from 'path';
+import {
+	join
+} from 'path';
 
-import {create} from 'archiver';
-import {copySync, createWriteStream, writeFileSync} from 'fs-extra';
+import {
+	create
+} from 'archiver';
+import {
+	copySync,
+	createWriteStream,
+	writeFileSync
+} from 'fs-extra';
 import parseArgs from 'minimist';
 import rimraf from 'rimraf';
 import webpack from 'webpack';
@@ -26,12 +34,11 @@ function rimrafCallback(config) {
 }
 
 // When we've built the application copy any missing WAR files.
-function webpackBuildCallback(error, {buildCallback = NO_OP, indexPage, warName}) {
+function webpackBuildCallback(error, {buildCallback = NO_OP, indexPage, version, warName}) {
 	if (error) {
 		console.error(error); // eslint-disable-line
 	} else {
 		const variant = parseArgs(process.argv.slice(2)).variant;
-		const version = process.env.npm_package_version; // eslint-disable-line
 		const indexFile = indexPage({variant, version});
 
 		copySync(join(process.cwd(), 'scripts', 'WEB-INF'), join(distDir, 'WEB-INF'));

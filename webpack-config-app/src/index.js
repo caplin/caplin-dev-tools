@@ -1,12 +1,20 @@
-import {readdirSync, statSync} from 'fs';
-import {join, resolve} from 'path';
+import {
+	readdirSync,
+	statSync
+} from 'fs';
+import {
+	join,
+	resolve
+} from 'path';
 
-import {appendModulePatch} from '@caplin/patch-loader/patchesStore';
+import {
+	appendModulePatch
+} from '@caplin/patch-loader/patchesStore';
 import ExtractTextPlugin from 'extract-text-webpack-plugin';
 import parseArgs from 'minimist';
 import webpack from 'webpack';
 
-export function webpackConfigGenerator({basePath}) {
+export function webpackConfigGenerator({basePath, version = 'dev'}) {
 	const babelLoaderExclude = [];
 
 	for (const packageDir of readdirSync(join(basePath, '../../packages'))) {
@@ -24,13 +32,12 @@ export function webpackConfigGenerator({basePath}) {
 	} = args;
 	const isBuild = process.env.npm_lifecycle_event === 'build'; // eslint-disable-line
 	const isTest = process.env.npm_lifecycle_event.startsWith('test'); // eslint-disable-line
-	const version = process.env.npm_package_version; // eslint-disable-line
 
 	const entryFile = variant ? `index-${variant}.js` : 'index.js';
 	const appEntryPoint = join(basePath, 'src', entryFile);
 	const buildOutputDir = join(basePath, 'build', 'dist', 'public');
-	const bundleName = isBuild ? `bundle-${version}.js` : 'bundle.js';
-	const i18nFileName = isBuild ? `i18n-${version}.js` : 'i18n.js';
+	const bundleName = `bundle-${version}.js`;
+	const i18nFileName = `i18n-${version}.js`;
 	const i18nExtractorPlugin = new ExtractTextPlugin(i18nFileName, {allChunks: true});
 	let i18nLoader = i18nExtractorPlugin.extract(['raw-loader', '@caplin/i18n-loader']);
 	const publicPath = isBuild ? 'public/' : '/public/';
@@ -108,7 +115,7 @@ export function webpackConfigGenerator({basePath}) {
 		webpackConfig.plugins.push(
 			new webpack.DefinePlugin({
 				'process.env': {
-					NODE_ENV: JSON.stringify('production')
+					VERSION: JSON.stringify(version)
 				}
 			})
 		);
