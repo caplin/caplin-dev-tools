@@ -94,6 +94,9 @@ export function createPackagesKarmaConfigs(packagesTestMetadata) {
 }
 
 export async function runPackagesTests(packagesKarmaConfigs) {
+	// When the user hits Control-C we want to exit the process even if we have queued test runs.
+	process.on('SIGINT', process.exit);
+
 	try {
 		for (const packageKarmaConfig of packagesKarmaConfigs) {
 			await new Promise((resolve) => runPackageTests(packageKarmaConfig, resolve));

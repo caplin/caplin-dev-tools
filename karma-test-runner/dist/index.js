@@ -9,6 +9,9 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 
 let runPackagesTests = exports.runPackagesTests = (() => {
 	var ref = _asyncToGenerator(function* (packagesKarmaConfigs) {
+		// When the user hits Control-C we want to exit the process even if we have queued test runs.
+		process.on('SIGINT', process.exit);
+
 		try {
 			for (const packageKarmaConfig of packagesKarmaConfigs) {
 				yield new Promise(function (resolve) {
