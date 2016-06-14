@@ -1,5 +1,5 @@
 {
-  "name": "mobile",
+  "name": "{{appName}}",
   "version": "1.0.0",
   "description": "",
   "scripts": {
