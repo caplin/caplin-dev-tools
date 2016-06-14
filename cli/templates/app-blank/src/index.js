@@ -1,3 +1,3 @@
-var Example = require('./example/Example').default;
+import Example from './example/Example';
 
 console.log((new Example()).sayHello());
