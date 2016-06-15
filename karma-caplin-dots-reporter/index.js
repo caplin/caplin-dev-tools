@@ -1,9 +1,11 @@
 const chalk = require('chalk');
 const logSymbols = require('log-symbols');
+const util = require('util');
 
 const onErrorCallbacks = [];
 
-function CaplinDotsReporter(hasColors, options) {
+function CaplinDotsReporter(hasColors, options, adapter) {
+	this.adapters = [adapter || process.stdout.write.bind(process.stdout)]
 	chalk.enabled = hasColors;
 
 	// Configuration
@@ -32,6 +34,7 @@ function CaplinDotsReporter(hasColors, options) {
 
 	this.TOTAL_SUCCESS = 0;
 	this.TOTAL_FAILED = 0;
+	this.FAILED = [];
 
 	this.onRunStart = function () {
 		this._dotsCount = 0;
@@ -42,10 +45,18 @@ function CaplinDotsReporter(hasColors, options) {
 		this.TOTAL_SUCCESS++;
 	};
 
-	this.specFailure = function (browser, results) {
+	this.specFailure = function (browser, result) {
+		var msg = '\n' + chalk.red(browser.name + ' ' + result.suite.join(' ') + ' ' + result.description + '\n\t');
+
+		result.log.forEach(function (log) {
+			msg += format(log);
+		})
+		msg += '\n'
+		
 		this._writeCharacter(options.icon.failure);
 		this.TOTAL_FAILED++;
-		triggerOnErrorCallbacks(results);
+		this.FAILED.push(msg);
+		triggerOnErrorCallbacks(msg);
 	};
 
 	this.specSkipped = function () {
@@ -62,14 +73,24 @@ function CaplinDotsReporter(hasColors, options) {
 		}
 	};
 
-	this.onRunComplete = function (browsers, results) {
-		if (browsers.length > 1 && !results.disconnected && !results.error) {
-			if (!results.failed) {
-				this.write(this.TOTAL_SUCCESS, results.success);
-			} else {
-				this.write(this.TOTAL_FAILED, results.failed, results.success);
-			}
+	this.onBrowserComplete = function (browser) {
+		const results = browser.lastResult;
+		const totalExecuted = results.success + results.failed;
+		let msg = util.format('\n%s: Executed %d of %d', browser, totalExecuted, results.total);
+
+		if (results.failed) {
+			msg += chalk.red(` (${results.failed} FAILED)`);
 		}
+		if (results.skipped) {
+			msg += util.format(' (skipped %d)', results.skipped);
+		}
+
+		msg += ' (' + (results.totalTime / 1000) + ' secs)';
+
+		if (this.TOTAL_FAILED > 0) {
+			this.FAILED.forEach(msg => write('\n' + msg));
+		}	
+		write(msg + '\n');
 	};
 
 	this._writeCharacter = function (character) {
@@ -79,6 +100,10 @@ function CaplinDotsReporter(hasColors, options) {
 }
 
 CaplinDotsReporter.$inject = ['config.colors', 'config.caplinDotsReporter'];
+
+function format(log) {
+	return log.replace(/[\r\n]+/g, '\n\t');
+}
 
 function triggerOnErrorCallbacks(error) {
 	onErrorCallbacks.forEach(callback => callback(error));

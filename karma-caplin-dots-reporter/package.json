@@ -1,7 +1,7 @@
 {
   "name": "karma-caplin-dots-reporter",
   "description": "Caplin's Karma dots reporter plugin.",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "author": "Dominic Gannaway",
   "keywords": [
     "karma-plugin",

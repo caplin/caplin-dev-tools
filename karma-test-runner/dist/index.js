@@ -81,6 +81,13 @@ const baseKarmaConfig = exports.baseKarmaConfig = {
 		[testEntry]: ['webpack', 'sourcemap']
 	},
 	reporters: ['caplin-dots'],
+	caplinDotsReporter: {
+		icon: {
+			success : '.',
+			failure : 'F',
+			ignore  : '-'
+		}
+	}
 	singleRun: !devMode,
 	webpackMiddleware: {
 		noInfo: true,
@@ -152,6 +159,7 @@ function createPackagesKarmaConfigs(packagesTestMetadata) {
 function showSummary({ success, failed, error }) {
 	if (failed > 0 || error) {
 		console.log(`\nSummary: \x1b[41m\x1b[30mTesting ended with failures/errors!\x1b[0m`);
+		console.log(errors.join('\n') + '\n');
 	} else {
 		console.log(`\nSummary: \x1b[42m\x1b[30mTesting ended with no failures!\x1b[0m`);
 	}
