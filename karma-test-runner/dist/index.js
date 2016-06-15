@@ -80,14 +80,14 @@ const baseKarmaConfig = exports.baseKarmaConfig = {
 	preprocessors: {
 		[testEntry]: ['webpack', 'sourcemap']
 	},
-	reporters: ['caplin-dots'],
 	caplinDotsReporter: {
 		icon: {
-			success : '.',
-			failure : 'F',
-			ignore  : '-'
+			success: '.',
+			failure: 'F',
+			ignore: '-'
 		}
-	}
+	},
+	reporters: ['caplin-dots'],
 	singleRun: !devMode,
 	webpackMiddleware: {
 		noInfo: true,
@@ -128,13 +128,7 @@ function runPackageTests(packageKarmaConfig, resolvePromise, summary) {
 	console.log('Running tests for: \x1b[35m' + packageKarmaConfig.basePath + '\x1b[0m');
 
 	const server = new _karma.Server(packageKarmaConfig, exitCode => {
-		if (exitCode === 0) {
-			resolvePromise();
-		} else if (!devMode) {
-			console.log(`\nTesting has been terminated early due to test(s) failing in: \x1b[35m${ packageKarmaConfig.basePath }\x1b[0m`);
-			showSummary(summary);
-			process.exit(0); //eslint-disable-line
-		}
+		resolvePromise();
 	});
 
 	server.on('run_complete', (browsers, { success, failed, error, logs }) => {

@@ -79,13 +79,7 @@ function runPackageTests(packageKarmaConfig, resolvePromise, summary) {
 	console.log('Running tests for: \x1b[35m' + packageKarmaConfig.basePath + '\x1b[0m');
 
 	const server = new Server(packageKarmaConfig, (exitCode) => {
-		if (exitCode === 0) {
-			resolvePromise();
-		} else if (!devMode) {
-			console.log(`\nTesting has been terminated early due to test(s) failing in: \x1b[35m${ packageKarmaConfig.basePath }\x1b[0m`);
-			showSummary(summary);
-			process.exit(0); //eslint-disable-line
-		}
+		resolvePromise();
 	});
 	
 	server.on('run_complete', (browsers, { success, failed, error, logs }) => {
