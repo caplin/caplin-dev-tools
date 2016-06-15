@@ -12,7 +12,7 @@ import parseArgs from 'minimist';
 import {
 	DefinePlugin
 } from 'webpack';
-import { onError } from '@caplin/karma-caplin-dots-reporter';
+import { onError } from 'karma-caplin-dots-reporter';
 
 const args = parseArgs(process.argv.slice(2));
 // Keeps browser/Karma running after test run.

@@ -61,7 +61,7 @@ var _minimist2 = _interopRequireDefault(_minimist);
 
 var _webpack = require('webpack');
 
-var _karmaCaplinDotsReporter = require('@caplin/karma-caplin-dots-reporter');
+var _karmaCaplinDotsReporter = require('karma-caplin-dots-reporter');
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
