@@ -1,0 +1,21 @@
+{
+  "name": "@caplin/karma-caplin-dots-reporter",
+  "description": "Caplin's Karma dots reporter plugin.",
+  "version": "1.0.0",
+  "author": "Dominic Gannaway",
+  "keywords": [
+    "karma-plugin",
+    "karma-reporter",
+    "dots",
+    "configurable"
+  ],
+  "license": "MIT",
+  "main": "index.js",
+  "peerDependencies": {
+    "karma" : ">=0.9"
+  },
+  "dependencies": {
+    "chalk": "^0.5.1",
+    "log-symbols": "^1.0.1"
+  }
+}
