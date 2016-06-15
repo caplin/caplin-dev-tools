@@ -10,19 +10,34 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 let runPackagesTests = exports.runPackagesTests = (() => {
 	var ref = _asyncToGenerator(function* (packagesKarmaConfigs) {
 		// When the user hits Control-C we want to exit the process even if we have queued test runs.
-		process.on('SIGINT', process.exit);
+		process.on('SIGINT', function () {
+			console.log('\nTesting has been terminated due to the process being exited!\x1b[0m');
+			showSummary(summary);
+			process.exit();
+		});
+		const summary = {
+			success: 0,
+			failed: 0,
+			error: false,
+			errors: []
+		};
+		(0, _karmaCaplinDotsReporter.onError)(function (error) {
+			summary.errors.push(error);
+		});
 
 		try {
 			for (const packageKarmaConfig of packagesKarmaConfigs) {
 				yield new Promise(function (resolve) {
-					return runPackageTests(packageKarmaConfig, resolve);
+					return runPackageTests(packageKarmaConfig, resolve, summary);
 				});
 			}
 		} catch (err) {
+			showSummary(summary);
 			console.error(err);
 		}
 
 		if (!devMode) {
+			showSummary(summary);
 			process.exit(0);
 		}
 	});
@@ -46,6 +61,8 @@ var _minimist2 = _interopRequireDefault(_minimist);
 
 var _webpack = require('webpack');
 
+var _karmaCaplinDotsReporter = require('@caplin/karma-caplin-dots-reporter');
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { return Promise.resolve(value).then(function (value) { return step("next", value); }, function (err) { return step("throw", err); }); } } return step("next"); }); }; }
@@ -63,7 +80,7 @@ const baseKarmaConfig = exports.baseKarmaConfig = {
 	preprocessors: {
 		[testEntry]: ['webpack', 'sourcemap']
 	},
-	reporters: ['dots'],
+	reporters: ['caplin-dots'],
 	singleRun: !devMode,
 	webpackMiddleware: {
 		noInfo: true,
@@ -100,15 +117,23 @@ function createPackageKarmaConfig({ filesToServe, packageDirectory, webpackConfi
 	return packageKarmaConfig;
 }
 
-function runPackageTests(packageKarmaConfig, resolvePromise) {
+function runPackageTests(packageKarmaConfig, resolvePromise, summary) {
 	console.log('Running tests for: \x1b[35m' + packageKarmaConfig.basePath + '\x1b[0m');
 
 	const server = new _karma.Server(packageKarmaConfig, exitCode => {
 		if (exitCode === 0) {
 			resolvePromise();
 		} else if (!devMode) {
-			process.exit(exitCode); //eslint-disable-line
+			console.log(`\nTesting has been terminated early due to test(s) failing in: \x1b[35m${ packageKarmaConfig.basePath }\x1b[0m`);
+			showSummary(summary);
+			process.exit(0); //eslint-disable-line
 		}
+	});
+
+	server.on('run_complete', (browsers, { success, failed, error, logs }) => {
+		summary.success += success;
+		summary.failed += failed;
+		summary.error = summary.error || error;
 	});
 
 	server.start();
@@ -122,4 +147,15 @@ function createPackagesKarmaConfigs(packagesTestMetadata) {
 
 		return requestedPackagesToTest.includes(packageName);
 	}).map(createPackageKarmaConfig);
+}
+
+function showSummary({ success, failed, error }) {
+	if (failed > 0 || error) {
+		console.log(`\nSummary: \x1b[41m\x1b[30mTesting ended with failures/errors!\x1b[0m`);
+	} else {
+		console.log(`\nSummary: \x1b[42m\x1b[30mTesting ended with no failures!\x1b[0m`);
+	}
+	console.log(`\x1b[35mPassed:\x1b[0m ${ success }`);
+	console.log(`\x1b[35mFailed:\x1b[0m ${ failed }`);
+	console.log(`\x1b[35mErrors:\x1b[0m ${ error ? 'Yes' : 'No' }`);
 }
