@@ -18,7 +18,7 @@
     "babel-preset-stage-3": "^6.5.0"
   },
   "dependencies": {
-    "@caplin/karma-caplin-dots-reporter": "^1.0.0",
+    "karma-caplin-dots-reporter": "^1.1.0",
     "karma": "^0.13.22",
     "karma-chrome-launcher": "^1.0.1",
     "karma-sourcemap-loader": "^0.3.7",
