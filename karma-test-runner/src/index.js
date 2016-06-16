@@ -75,8 +75,12 @@ function createPackageKarmaConfig({filesToServe, packageDirectory, webpackConfig
 	return packageKarmaConfig;
 }
 
+function getShortPathFromBasePath(basePath) {
+	return basePath.substring(basePath.indexOf('apps'));
+}
+
 function runPackageTests(packageKarmaConfig, resolvePromise, summary) {
-	console.log('Running tests for: \x1b[35m' + packageKarmaConfig.basePath + '\x1b[0m');
+	console.log('Running tests for: \x1b[35m' + getShortPathFromBasePath(packageKarmaConfig.basePath) + '\x1b[0m');
 
 	const server = new Server(packageKarmaConfig, (exitCode) => {
 		resolvePromise();
@@ -135,12 +139,13 @@ export async function runPackagesTests(packagesKarmaConfigs) {
 	}
 }
 
-function showSummary({ success, failed, error }) {
+function showSummary({ success, failed, error, errors }) {
+	console.log(`\n== Test Report ==`);
 	if (failed > 0 || error) {
-		console.log(`\nSummary: \x1b[41m\x1b[30mTesting ended with failures/errors!\x1b[0m`);
+		console.log(`\n\x1b[41m\x1b[30mTesting ended with failures/errors!\x1b[0m`);
 		console.log(errors.join('\n') + '\n');
 	} else {
-		console.log(`\nSummary: \x1b[42m\x1b[30mTesting ended with no failures!\x1b[0m`);
+		console.log(`\n\x1b[42m\x1b[30mTesting ended with no failures!\x1b[0m`);
 	}
 	console.log(`\x1b[35mPassed:\x1b[0m ${ success }`);
 	console.log(`\x1b[35mFailed:\x1b[0m ${ failed }`);
