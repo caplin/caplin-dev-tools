@@ -80,7 +80,7 @@ function getShortPathFromBasePath(basePath) {
 }
 
 function runPackageTests(packageKarmaConfig, resolvePromise, summary) {
-	console.log('Running tests for: \x1b[35m' + getShortPathFromBasePath(packageKarmaConfig.basePath) + '\x1b[0m');
+	console.log('\nRunning tests for: \x1b[35m' + getShortPathFromBasePath(packageKarmaConfig.basePath) + '\x1b[0m');
 
 	const server = new Server(packageKarmaConfig, (exitCode) => {
 		resolvePromise();
