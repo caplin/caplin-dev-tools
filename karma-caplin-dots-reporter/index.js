@@ -4,7 +4,7 @@ const util = require('util');
 
 const onErrorCallbacks = [];
 
-function CaplinDotsReporter(hasColors, options, adapter) {
+function CaplinDotsReporter(formatError, hasColors, options, adapter) {
 	this.adapters = [adapter || process.stdout.write.bind(process.stdout)]
 	chalk.enabled = hasColors;
 
@@ -46,10 +46,10 @@ function CaplinDotsReporter(hasColors, options, adapter) {
 	};
 
 	this.specFailure = function (browser, result) {
-		var msg = '\n' + chalk.red(browser.name + ' ' + result.suite.join(' ') + ' ' + result.description + '\n\t');
+		var msg = '\n' + chalk.red(browser.name + ' ' + result.suite.join(' ') + ' ' + result.description + '\n');
 
 		result.log.forEach(function (log) {
-			msg += format(log);
+			msg += formatError(log, '\t')
 		})
 		msg += '\n'
 		
@@ -99,11 +99,7 @@ function CaplinDotsReporter(hasColors, options, adapter) {
 	};
 }
 
-CaplinDotsReporter.$inject = ['config.colors', 'config.caplinDotsReporter'];
-
-function format(log) {
-	return log.replace(/[\r\n]+/g, '\n\t');
-}
+CaplinDotsReporter.$inject = ['formatError', 'config.colors', 'config.caplinDotsReporter'];
 
 function triggerOnErrorCallbacks(error) {
 	onErrorCallbacks.forEach(callback => callback(error));
