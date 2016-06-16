@@ -46,13 +46,13 @@ function CaplinDotsReporter(formatError, hasColors, options, adapter) {
 	};
 
 	this.specFailure = function (browser, result) {
-		var msg = '\n' + chalk.red(browser.name + ' ' + result.suite.join(' ') + ' ' + result.description + '\n');
+		var msg = chalk.red(browser.name + ' ' + result.suite.join(' ') + ' ' + result.description + '\n');
 
 		result.log.forEach(function (log) {
 			msg += formatError(log, '\t')
 		})
 		msg += '\n'
-		
+
 		this._writeCharacter(options.icon.failure);
 		this.TOTAL_FAILED++;
 		this.FAILED.push(msg);

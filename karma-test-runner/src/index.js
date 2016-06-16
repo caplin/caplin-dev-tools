@@ -79,8 +79,8 @@ function getShortPathFromBasePath(basePath) {
 	return basePath.substring(basePath.indexOf('apps'));
 }
 
-function runPackageTests(packageKarmaConfig, resolvePromise, summary) {
-	console.log('\nRunning tests for: \x1b[35m' + getShortPathFromBasePath(packageKarmaConfig.basePath) + '\x1b[0m');
+function runPackageTests(packageKarmaConfig, resolvePromise, summary, packageName) {
+	console.log('\nRunning tests for: \x1b[35m' + packageName + '\x1b[0m');
 
 	const server = new Server(packageKarmaConfig, (exitCode) => {
 		resolvePromise();
@@ -114,6 +114,9 @@ export async function runPackagesTests(packagesKarmaConfigs) {
 		showSummary(summary);
 		process.exit();
 	});
+	// this might bring up issues if our tests start running concurrently, 
+	// but given we currently run package by package, it should be fine
+	let packageName = '';
 	const summary = {
 		success: 0,
 		failed: 0,
@@ -121,12 +124,13 @@ export async function runPackagesTests(packagesKarmaConfigs) {
 		errors: []
 	};
 	onError(error => {
-		summary.errors.push(error);
+		summary.errors.push({ packageName, error });
 	});
 
 	try {
 		for (const packageKarmaConfig of packagesKarmaConfigs) {
-			await new Promise((resolve) => runPackageTests(packageKarmaConfig, resolve, summary));
+			packageName = getShortPathFromBasePath(packageKarmaConfig.basePath);
+			await new Promise((resolve) => runPackageTests(packageKarmaConfig, resolve, summary, packageName));
 		}
 	} catch (err) {
 		showSummary(summary);
@@ -143,7 +147,7 @@ function showSummary({ success, failed, error, errors }) {
 	console.log(`\n== Test Report ==`);
 	if (failed > 0 || error) {
 		console.log(`\n\x1b[41m\x1b[30mTesting ended with failures/errors!\x1b[0m`);
-		console.log(errors.join('\n') + '\n');
+		console.log(errors.map(({packageName, error}) => `\nTest failed in: \x1b[35m${packageName}\n${error}`).join('\n') + '\n');
 	} else {
 		console.log(`\n\x1b[42m\x1b[30mTesting ended with no failures!\x1b[0m`);
 	}
