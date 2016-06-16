@@ -4,6 +4,10 @@ Object.defineProperty(exports, "__esModule", {
 	value: true
 });
 
+var _dotenv = require('dotenv');
+
+var _dotenv2 = _interopRequireDefault(_dotenv);
+
 var _express = require('express');
 
 var _express2 = _interopRequireDefault(_express);
@@ -22,6 +26,9 @@ exports.default = ({ webpackConfig }) => {
 	const app = (0, _express2.default)();
 	const APP_PORT = 8080;
 	const appRoot = process.cwd();
+
+	// Load application environment variables from `.env` file, to inject into JNDI tokens.
+	_dotenv2.default.config();
 
 	// Serve static files (HTML, XML, CSS), contained in application directory.
 	app.use(_express2.default.static(appRoot));
