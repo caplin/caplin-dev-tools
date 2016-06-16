@@ -1,14 +1,24 @@
-import {moveBRJSApplicationCodeToPackages} from './convert-app';
-import {createPackagesFromLibs} from './convert-libs';
-import {convertSDKToPackages} from './convert-sdk';
+import {
+	moveBRJSApplicationCodeToPackages
+} from './convert-app';
+import {
+	createPackagesFromLibs
+} from './convert-libs';
+import {
+	convertSDKToPackages
+} from './convert-sdk';
 import convertPackagesToNewFormat from './convert-packages';
 import {
 	createConversionMetadataDataType,
 	moveCurrentCodebase,
 	verifyCLIArgs
 } from './converter-utils';
-import {createApplicationAndVariants} from './create-applications';
-import {moveApplicationPackagesToLibs} from './move-libs';
+import {
+	createApplicationAndVariants
+} from './create-applications';
+import {
+	moveApplicationPackagesToLibs
+} from './move-libs';
 
 // Provide the name and entry point of the app to convert. Variants is a Caplin internal option.
 export default function({app}) {

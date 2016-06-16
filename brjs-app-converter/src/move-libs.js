@@ -1,6 +1,10 @@
-import {join} from 'path';
+import {
+	join
+} from 'path';
 
-import {move} from 'fs-extra';
+import {
+	move
+} from 'fs-extra';
 
 export function moveApplicationPackagesToLibs({applicationName, packagesThatShouldBeLibs, packagesDir}) {
 	const convertedAppDir = join('apps', applicationName);

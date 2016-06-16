@@ -10,15 +10,17 @@ import {
 	writeJsonSync
 } from 'fs-extra';
 
-import {templateDir} from './converter-data';
+import {
+	templateDir
+} from './converter-data';
 
-function setUpApplicationFiles(applicationName, convertedAppDir, conversionMetadata, defaulAspectDir) {
+function setUpApplicationFiles(applicationName, convertedAppDir, conversionMetadata, defaultAspectDir) {
 	copySync(join('..', 'conversion-data', applicationName), join(convertedAppDir));
 
 	copySync(join(templateDir, '.babelrc'), join(convertedAppDir, '.babelrc'));
 	copySync(conversionMetadata.privateKeyFileLocation, join(convertedAppDir, 'server', 'privatekey.pem'));
-	copySync(join(defaulAspectDir, 'unbundled-resources'), join(convertedAppDir, 'public/dev/unbundled-resources'));
-	copySync(join(defaulAspectDir, 'unbundled-resources'), join(convertedAppDir, 'public/dev'));
+	copySync(join(defaultAspectDir, 'unbundled-resources'), join(convertedAppDir, 'public/dev/unbundled-resources'));
+	copySync(join(defaultAspectDir, 'unbundled-resources'), join(convertedAppDir, 'public/dev'));
 	copySync(join(conversionMetadata.brjsApplicationDir, 'WEB-INF'), join(convertedAppDir, 'scripts', 'WEB-INF'));
 }
 
@@ -44,17 +46,17 @@ function populateApplicationPackageJSON(
 }
 
 // Create application variant
-function createApplication(applicationName, conversionMetadata, defaulAspectDir) {
+function createApplication(applicationName, conversionMetadata, defaultAspectDir) {
 	const convertedAppDir = join('apps', applicationName);
 
-	setUpApplicationFiles(applicationName, convertedAppDir, conversionMetadata, defaulAspectDir);
+	setUpApplicationFiles(applicationName, convertedAppDir, conversionMetadata, defaultAspectDir);
 	populateApplicationPackageJSON(applicationName, convertedAppDir, conversionMetadata);
 }
 
 // Create application and application variants directories.
 export function createApplicationAndVariants(conversionMetadata) {
 	const {applicationName, packagesDir} = conversionMetadata;
-	const defaulAspectDir = join(packagesDir, `${applicationName}-default-aspect`);
+	const defaultAspectDir = join(packagesDir, `${applicationName}-default-aspect`);
 
-	createApplication(applicationName, conversionMetadata, defaulAspectDir);
+	createApplication(applicationName, conversionMetadata, defaultAspectDir);
 }

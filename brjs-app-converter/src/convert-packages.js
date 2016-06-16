@@ -1,4 +1,10 @@
-import {copySync, lstatSync, readdirSync, readFileSync, writeFileSync} from 'fs-extra';
+import {
+	copySync,
+	lstatSync,
+	readdirSync,
+	readFileSync,
+	writeFileSync
+} from 'fs-extra';
 import glob from 'glob';
 import rimraf from 'rimraf';
 
