@@ -6,7 +6,6 @@ import webpackMiddleware from './webpack';
 
 export default ({webpackConfig}) => {
 	const app = express();
-	const APP_PORT = 8080;
 	const appRoot = process.cwd();
 
 	// Load application environment variables from `.env` file, to inject into JNDI tokens.
@@ -18,6 +17,8 @@ export default ({webpackConfig}) => {
 	poll(app);
 	// Handlers/middleware for webpack.
 	webpackMiddleware(app, webpackConfig);
+
+	const APP_PORT = process.env.PORT || 8080; // eslint-disable-line
 
 	// Don't bind to `localhost` as that will mean the server won't be accessible by other machines on the LAN.
 	app.listen(APP_PORT, (err) => console.log(err || `Listening on port ${APP_PORT}`)); // eslint-disable-line
