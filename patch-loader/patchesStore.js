@@ -15,7 +15,7 @@ const {
 } = require('glob');
 
 const GLOB_OPTIONS = {
-	cwd: join(__dirname, '..', '..', '..', '..', '..', 'brjs-app', 'js-patches')
+	cwd: join(process.cwd(), '..', 'js-patches')
 };
 const patches = new Map();
 

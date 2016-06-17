@@ -90,9 +90,7 @@ function webpackConfigGenerator({ basePath, version = 'dev' }) {
 				loader: '@caplin/xml-loader'
 			}]
 		},
-		patchLoader: (0, _patchesStore.appendModulePatch)({
-			cwd: (0, _path.join)(basePath, '..', '..', 'brjs-app', 'js-patches')
-		}),
+		patchLoader: (0, _patchesStore.appendModulePatch)(),
 		resolve: {
 			alias: {
 				// `alias!$aliases-data` required in `AliasRegistry`, loaded with `alias-loader`.
