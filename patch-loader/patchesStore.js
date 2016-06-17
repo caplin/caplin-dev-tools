@@ -1,11 +1,18 @@
 // eslint-disable-next-line
 'use strict';
 
-const readFileSync = require('fs').readFileSync;
-const join = require('path').join;
-const sep = require('path').sep;
-const basename = require('path').basename;
-const sync = require('glob').sync;
+const {
+	readFileSync
+} = require('fs');
+const {
+	basename,
+	join,
+	sep
+} = require('path');
+
+const {
+	sync
+} = require('glob');
 
 const GLOB_OPTIONS = {
 	cwd: join(__dirname, '..', '..', '..', '..', '..', 'brjs-app', 'js-patches')
@@ -30,7 +37,6 @@ module.exports.appendModulePatch = function appendModulePatch(options) {
 	return appendPatchToPatchedModules;
 };
 
-// TODO this has be refactored to do O(1) lookups using a map rather than O(n) lookups for patches
 function appendPatchToPatchedModules(loaderAPI, moduleSource) {
 	const patchEntry = patches.get(basename(loaderAPI.resourcePath));
 

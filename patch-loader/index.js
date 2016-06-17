@@ -1,3 +1,4 @@
+
 module.exports = function patchLoader(moduleSource) {
 	this.cacheable();
 
