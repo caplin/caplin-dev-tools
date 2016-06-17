@@ -35,8 +35,7 @@ function updateMappings(srcPath, moduleSources) {
 			const value = moduleSources.get(mapping);
 
 			if (value && mapping && value !== mapping) {
-				fileContents = fileContents.replace(new RegExp(`'${mapping}'`, 'g'), `'${value}'`);
-				fileContents = fileContents.replace(new RegExp(`"${mapping}"`, 'g'), `'${value}'`);
+				fileContents = fileContents.replace(new RegExp(`['"]${mapping}['"]`, 'g'), `'${value}'`);
 				needsWrite = true;
 			}
 		});
