@@ -1,0 +1,22 @@
+{
+  "name": "@caplin/patch-loader",
+  "version": "2.1.0",
+  "description": "A js module patch loader for webpack",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/caplin/patch-loader.git"
+  },
+  "bugs": {
+    "url": "https://github.com/caplin/patch-loader/issues"
+  },
+  "homepage": "https://github.com/caplin/patch-loader#readme",
+  "dependencies": {
+    "glob": "^7.0.3"
+  }
+}
