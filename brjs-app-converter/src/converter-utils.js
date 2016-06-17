@@ -1,4 +1,6 @@
-import {join} from 'path';
+import {
+	join
+} from 'path';
 
 import {
 	accessSync,
@@ -10,7 +12,9 @@ import {
 	renameSync,
 	statSync
 } from 'fs-extra';
-import {safeLoad} from 'js-yaml';
+import {
+	safeLoad
+} from 'js-yaml';
 
 // If a directory is present in the `conversion-data` override directory use it else use the template version.
 function getBoilerplateDirLocation(backupDir, conversionDataDirContents, fileName, filePath) {
