@@ -5,7 +5,6 @@ import webpackMiddleware from './webpack';
 const app = express();
 const APP_PORT = 8080;
 const appRoot = join(__dirname, '..');
-const applicationPath = '/{{appName}}';
 
 // Serve static files (HTML, XML, CSS), contained in application directory.
 app.use(express.static(appRoot));

@@ -1,9 +1,9 @@
 {
-  "name": "mobile",
+  "name": "untitled",
   "version": "1.0.0",
   "description": "",
   "scripts": {
-    "build": "webpack --progress --colors",
+    "build": "babel-node scripts/build.js",
     "serve": "babel-node server/server.js",
     "serve:debug": "babel-node --debug-brk server/server.js",
     "test": "karma start"
