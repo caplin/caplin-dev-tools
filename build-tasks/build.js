@@ -41,8 +41,13 @@ function webpackBuildCallback(error, {buildCallback = NO_OP, indexPage, version,
 		const variant = parseArgs(process.argv.slice(2)).variant;
 		const indexFile = indexPage({variant, version});
 
-		copySync(join(process.cwd(), 'scripts', 'WEB-INF'), join(distDir, 'WEB-INF'));
-		copySync(join(process.cwd(), 'public', 'dev'), join(distDir, 'public', version));
+		try {
+			copySync(join(process.cwd(), 'scripts', 'WEB-INF'), join(distDir, 'WEB-INF'));
+			copySync(join(process.cwd(), 'public', 'dev'), join(distDir, 'public', version));	
+		} catch () {
+			// do nothing
+		}
+		
 		writeFileSync(join(distDir, 'index.html'), indexFile, 'utf8');
 		buildCallback();
 
