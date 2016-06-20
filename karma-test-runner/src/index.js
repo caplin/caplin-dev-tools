@@ -144,14 +144,16 @@ export async function runPackagesTests(packagesKarmaConfigs) {
 }
 
 function showSummary({ success, failed, error, errors }) {
-	console.log(`\n== Test Report ==`);
-	if (failed > 0 || error) {
-		console.log(`\n\x1b[41m\x1b[30mTesting ended with failures/errors!\x1b[0m`);
-		console.log(errors.map(({packageName, error}) => `\nTest failed in: \x1b[35m${packageName}\n${error}`).join('\n') + '\n');
-	} else {
-		console.log(`\n\x1b[42m\x1b[30mTesting ended with no failures!\x1b[0m`);
+	if (!devMode) {
+		console.log(`\n== Test Report ==`);
+		if (failed > 0 || error) {
+			console.log(`\n\x1b[41m\x1b[30mTesting ended with failures/errors!\x1b[0m`);
+			console.log(errors.map(({packageName, error}) => `\nTest failed in: \x1b[35m${packageName}\n${error}`).join('\n') + '\n');
+		} else {
+			console.log(`\n\x1b[42m\x1b[30mTesting ended with no failures!\x1b[0m`);
+		}
+		console.log(`\x1b[35mPassed:\x1b[0m ${ success }`);
+		console.log(`\x1b[35mFailed:\x1b[0m ${ failed }`);
+		console.log(`\x1b[35mErrors:\x1b[0m ${ error ? 'Yes' : 'No' }`);
 	}
-	console.log(`\x1b[35mPassed:\x1b[0m ${ success }`);
-	console.log(`\x1b[35mFailed:\x1b[0m ${ failed }`);
-	console.log(`\x1b[35mErrors:\x1b[0m ${ error ? 'Yes' : 'No' }`);
 }

@@ -72,7 +72,7 @@ export function webpackConfigGenerator({basePath, version = 'dev'}) {
 				test: /\.properties$/,
 				loader: i18nLoader
 			}, {
-				test: /\.scss$/,
+				test: /\.(css|scss)$/,
 				loaders: ['style-loader', 'css-loader', 'sass-loader']
 			}, {
 				test: /\.xml$/,
