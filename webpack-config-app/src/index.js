@@ -3,8 +3,7 @@ import {
 	statSync
 } from 'fs';
 import {
-	join,
-	resolve
+	join
 } from 'path';
 
 import {
@@ -133,13 +132,6 @@ export function webpackConfigGenerator({basePath, version = 'dev'}) {
 				}
 			})
 		);
-	}
-
-	// Add aliases for the app's code directories.
-	const codeDirs = resolve(basePath, 'src');
-
-	for (const codeDir of readdirSync(codeDirs)) {
-		webpackConfig.resolve.alias[codeDir] = resolve(codeDirs, codeDir);
 	}
 
 	return webpackConfig;
