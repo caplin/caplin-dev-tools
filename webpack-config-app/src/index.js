@@ -72,8 +72,11 @@ export function webpackConfigGenerator({basePath, version = 'dev'}) {
 				test: /\.properties$/,
 				loader: i18nLoader
 			}, {
-				test: /\.(css|scss)$/,
+				test: /\.scss$/,
 				loaders: ['style-loader', 'css-loader', 'sass-loader']
+			}, {
+				test: /\.css$/,
+				loaders: ['style-loader', 'css-loader']
 			}, {
 				test: /\.xml$/,
 				loader: '@caplin/xml-loader'
