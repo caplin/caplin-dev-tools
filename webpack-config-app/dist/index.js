@@ -137,12 +137,5 @@ function webpackConfigGenerator({ basePath, version = 'dev' }) {
 		}));
 	}
 
-	// Add aliases for the app's code directories.
-	const codeDirs = (0, _path.resolve)(basePath, 'src');
-
-	for (const codeDir of (0, _fs.readdirSync)(codeDirs)) {
-		webpackConfig.resolve.alias[codeDir] = (0, _path.resolve)(codeDirs, codeDir);
-	}
-
 	return webpackConfig;
 }
