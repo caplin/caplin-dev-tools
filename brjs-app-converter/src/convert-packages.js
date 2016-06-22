@@ -1,6 +1,7 @@
 import {
 	dirname,
-	relative
+	relative,
+	sep
 } from 'path';
 
 import {
@@ -45,7 +46,9 @@ export function createRelativeModuleSource(importerPathName, moduleSourceToPathN
 	const absoluteImporterFileName = `/${importerPathName}`;
 	const absoluteImportedFileName = moduleSourceToPathNamePrefix + moduleSource;
 	const directoryOfImporterFile = dirname(absoluteImporterFileName);
-	const relativeFilePathToImportedModule = relative(directoryOfImporterFile, absoluteImportedFileName);
+	const relativeFilePathToImportedModule = relative(directoryOfImporterFile, absoluteImportedFileName)
+	// Convert Windows separator to Unix style for module URIs.
+		.replace(sep, '/');
 
 	if (relativeFilePathToImportedModule.startsWith('.')) {
 		return relativeFilePathToImportedModule;
