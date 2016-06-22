@@ -48,7 +48,8 @@ export function createRelativeModuleSource(importerPathName, moduleSourceToPathN
 	const directoryOfImporterFile = dirname(absoluteImporterFileName);
 	const relativeFilePathToImportedModule = relative(directoryOfImporterFile, absoluteImportedFileName)
 	// Convert Windows separator to Unix style for module URIs.
-		.replace(sep, '/');
+		.split(sep)
+		.join('/');
 
 	if (relativeFilePathToImportedModule.startsWith('.')) {
 		return relativeFilePathToImportedModule;
