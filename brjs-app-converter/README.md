@@ -9,7 +9,7 @@ Restructures a BRJS application to a simpler, flatter structure that integrates 
 Given a BRJS application directory this tool will move the contents of the application directory to new locations
 within the application directory.
 
-1. It's first step is to back up the entire folder (except for hidden files) into a `brjs-app` directory. This allows
+1. It's first step is to back up the entire folder (except for hidden files) into a `brjs-app-backup` directory. This allows
 a user to access the old application files.
 2. It then creates a new top level directory for the application packages.
 3. It copies all the application's libs and SDK libs into the packages directory.
@@ -21,7 +21,7 @@ a user to access the old application files.
 	* It also creates a `src` directory for the application `apps/mobile/src` that contains the blades/bladesets and
 	aspects of the application.
 
-This leaves the project with three top level directories, `apps`, `packages`, and `brjs-app` (which can be
+This leaves the project with three top level directories, `apps`, `packages`, and `brjs-app-backup` (which can be
 deleted once the user is satisfied they don't need the old files).
 
 These screenshots contrast before and after:

@@ -225,7 +225,7 @@ export default function convertPackagesToNewFormat({applicationName, packagesDir
 	packagesToConvert.forEach(createPackageImportsUpdater(packagesDir, packagesThatShouldBeLibs, moduleSources));
 	// Update the app and js-patches imports.
 	updateAllImportsInPackage('apps', moduleSources, makeAppModulesRelative);
-	updateAllImportsInPackage('brjs-app/js-patches', moduleSources);
+	updateAllImportsInPackage('brjs-app-backup/js-patches', moduleSources);
 	// Delete all the old folders and files.
 	packagesToConvert.forEach(deleteUnusedFiles);
 }

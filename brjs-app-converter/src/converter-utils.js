@@ -48,7 +48,7 @@ export function createConversionMetadataDataType(applicationName) {
 	const appConfFileName = join('apps', applicationName, 'app.conf');
 	let applicationNamespaceRoot = applicationName;
 	// string: Directory that BRJS project is moved to.
-	const backupDir = join('brjs-app');
+	const backupDir = join('brjs-app-backup');
 	// string: Directory that BRJS application is moved to.
 	const brjsApplicationDir = join(backupDir, 'apps', applicationName);
 	// string: Name of packages directory.
