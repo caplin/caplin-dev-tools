@@ -1,6 +1,6 @@
 {
   "name": "@caplin/caplin-fx-services",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "description": "Modules for every Caplin FX service",
   "main": "index.js",
   "scripts": {
