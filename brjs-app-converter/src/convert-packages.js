@@ -27,6 +27,13 @@ function deleteUnusedFiles(packagePath) {
 	rimraf.sync(`${packagePath}/_resources-test-ut/aliasDefinitions.xml`);
 	rimraf.sync(`${packagePath}/_resources-test-at/aliases.xml`);
 	rimraf.sync(`${packagePath}/_resources-test-at/aliasDefinitions.xml`);
+	deleteSrcTestFolders(packagePath);
+}
+
+function deleteSrcTestFolders(packagePath) {
+	const srcTestFolders = glob.sync(`${packagePath}/**/src-test`);
+
+	srcTestFolders.forEach((path) => rimraf.sync(path));
 }
 
 // Should this package use relative imports if importing an application level (in `src` directory) module.
@@ -47,6 +54,7 @@ export function createRelativeModuleSource(importerPathName, moduleSourceToPathN
 	const absoluteImportedFileName = moduleSourceToPathNamePrefix + moduleSource;
 	const directoryOfImporterFile = dirname(absoluteImporterFileName);
 	const relativeFilePathToImportedModule = relative(directoryOfImporterFile, absoluteImportedFileName)
+
 	// Convert Windows separator to Unix style for module URIs.
 		.split(sep)
 		.join('/');
@@ -77,7 +85,9 @@ function createModuleSourceProcessor(applicationPackages, moduleSourceToPathName
 
 		// Is the module you are importing located in the application's `src` directory.
 		if (isImportedModuleFromRelativePackage) {
-			return createRelativeModuleSource(importerPathName, moduleSourceToPathNamePrefix, moduleSource);
+			return createRelativeModuleSource(
+				importerPathName, moduleSourceToPathNamePrefix, moduleSource
+			);
 		}
 
 		return moduleSource;
@@ -120,6 +130,12 @@ function updateMappings(srcPath, moduleSources, makeModuleSourceRelative = modul
 				const relativeModuleSource = makeModuleSourceRelative(value, srcPath);
 
 				fileContents = fileContents.replace(new RegExp(`['"]${mapping}['"]`, 'g'), `'${relativeModuleSource}'`);
+				needsWrite = true;
+			} else if (mapping.indexOf('/src-test/') !== -1) {
+				// a quick fix to relative "src-test" urls
+				const fixedSrcTestSource = mapping.replace('/src-test/', '/_test-src/');
+
+				fileContents = fileContents.replace(new RegExp(`['"]${mapping}['"]`, 'g'), `'${fixedSrcTestSource}'`);
 				needsWrite = true;
 			}
 		});
@@ -180,6 +196,22 @@ function copyPackageSrcToNewLocations(packagePath, packagesDir, moduleSources) {
 	});
 }
 
+function copyPackageSrcTestToNewLocations(packagePath, packagesDir, moduleSources) {
+	const packageSrcTestFiles = glob.sync(`${packagePath}/**/src-test/**/*.js`);
+	const commonPath = getPackageSrcCommonPath(packageSrcTestFiles, packagePath);
+	const currentFileLocationRegExp = new RegExp(`${packagePath}(.*)${commonPath}(.*)`);
+
+	packageSrcTestFiles.forEach((packageSrcTestFile) => {
+		// const currentModuleSource = packageSrcTestFile.replace(`${packagePath}`, '').replace('.js', '');
+		const currentModuleSource = packageSrcTestFile.replace(/.*src-test\//, '').replace('.js', '');
+		const newSrcFilePath = packageSrcTestFile.replace(currentFileLocationRegExp, `${packagePath}/_test-src/$2`);
+		const newModuleSource = newSrcFilePath.replace(`${packagesDir}/`, '').replace('.js', '');
+
+		copySync(packageSrcTestFile, newSrcFilePath);
+		moduleSources.set(currentModuleSource, newModuleSource);
+	});
+}
+
 function fileExists(filePath) {
 	try {
 		lstatSync(filePath);
@@ -224,6 +256,10 @@ export default function convertPackagesToNewFormat({applicationName, packagesDir
 	packagesToConvert.forEach(copyPackageFoldersToNewLocations);
 	// Copy all the src modules to their new locations.
 	packagesToConvert.forEach((packagePath) => copyPackageSrcToNewLocations(packagePath, packagesDir, moduleSources));
+	// Copy all the src-test modules to their new locations.
+	packagesToConvert.forEach(
+		(packagePath) => copyPackageSrcTestToNewLocations(packagePath, packagesDir, moduleSources)
+	);
 	// Copy all the tests to their new locations.
 	// Update all the require statements.
 	packagesToConvert.forEach(createPackageImportsUpdater(packagesDir, packagesThatShouldBeLibs, moduleSources));
