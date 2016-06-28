@@ -195,7 +195,6 @@ function copyPackageSrcTestToNewLocations(packagePath, packagesDir, moduleSource
 	const currentFileLocationRegExp = new RegExp(`${packagePath}(.*)${commonPath}(.*)`);
 
 	packageSrcTestFiles.forEach((packageSrcTestFile) => {
-		// const currentModuleSource = packageSrcTestFile.replace(`${packagePath}`, '').replace('.js', '');
 		const currentModuleSource = packageSrcTestFile.replace(/.*src-test\//, '').replace('.js', '');
 		const newSrcFilePath = packageSrcTestFile.replace(currentFileLocationRegExp, `${packagePath}/_test-src/$2`);
 		const newModuleSource = newSrcFilePath.replace(`${packagesDir}/`, '').replace('.js', '');
