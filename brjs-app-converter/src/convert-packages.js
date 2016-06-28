@@ -27,13 +27,7 @@ function deleteUnusedFiles(packagePath) {
 	rimraf.sync(`${packagePath}/_resources-test-ut/aliasDefinitions.xml`);
 	rimraf.sync(`${packagePath}/_resources-test-at/aliases.xml`);
 	rimraf.sync(`${packagePath}/_resources-test-at/aliasDefinitions.xml`);
-	deleteSrcTestFolders(packagePath);
-}
-
-function deleteSrcTestFolders(packagePath) {
-	const srcTestFolders = glob.sync(`${packagePath}/**/src-test`);
-
-	srcTestFolders.forEach((path) => rimraf.sync(path));
+	rimraf.sync(`${packagePath}/**/src-test`);
 }
 
 // Should this package use relative imports if importing an application level (in `src` directory) module.
@@ -54,7 +48,6 @@ export function createRelativeModuleSource(importerPathName, moduleSourceToPathN
 	const absoluteImportedFileName = moduleSourceToPathNamePrefix + moduleSource;
 	const directoryOfImporterFile = dirname(absoluteImporterFileName);
 	const relativeFilePathToImportedModule = relative(directoryOfImporterFile, absoluteImportedFileName)
-
 	// Convert Windows separator to Unix style for module URIs.
 		.split(sep)
 		.join('/');
