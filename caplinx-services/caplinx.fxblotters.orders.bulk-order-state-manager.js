@@ -1,1 +1,1 @@
-module.exports = require('br/ServiceRegistry').getService('REQUIRED_SERVICE');
+module.exports = loaderInjectedValue;
