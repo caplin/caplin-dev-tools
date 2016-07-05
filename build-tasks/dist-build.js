@@ -60,7 +60,7 @@ function webpackBuildCallback(error, { buildCallback = NO_OP, indexPage, version
 			buildCallback();
 
 			const archive = (0, _archiver.create)('zip');
-			const warWriteStream = (0, _fsExtra.createWriteStream)((0, _path.join)(buildDir, `${ warName }.war`));
+			const warWriteStream = (0, _fsExtra.createWriteStream)((0, _path.join)(buildDir, 'exported-wars', `${ warName }.war`));
 
 			archive.directory(distDir, '');
 			archive.pipe(warWriteStream);

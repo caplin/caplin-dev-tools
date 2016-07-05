@@ -52,7 +52,7 @@ function webpackBuildCallback(error, {buildCallback = NO_OP, indexPage, version,
 		buildCallback();
 
 		const archive = create('zip');
-		const warWriteStream = createWriteStream(join(buildDir, `${warName}.war`));
+		const warWriteStream = createWriteStream(join(buildDir, 'exported-wars', `${warName}.war`));
 
 		archive.directory(distDir, '');
 		archive.pipe(warWriteStream);
