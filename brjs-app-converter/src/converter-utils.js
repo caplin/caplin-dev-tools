@@ -5,7 +5,6 @@ import {
 import {
 	accessSync,
 	copy,
-	copySync,
 	mkdirsSync,
 	readdirSync,
 	readFileSync,
@@ -129,10 +128,6 @@ export function moveCurrentCodebase({backupDir}) {
 	for (const fileName of projectFiles) {
 		renameSync(fileName, join(backupDir, fileName));
 	}
-}
-
-export function moveJSPatches({backupDir}) {
-	copySync(join(backupDir, 'js-patches'), join('apps', 'js-patches'));
 }
 
 // Fail fast if some of the CLI arguments are missing.

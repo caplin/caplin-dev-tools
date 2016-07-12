@@ -11,7 +11,6 @@ import convertPackagesToNewFormat from './convert-packages';
 import {
 	createConversionMetadataDataType,
 	moveCurrentCodebase,
-	moveJSPatches,
 	verifyCLIArgs
 } from './converter-utils';
 import {
@@ -35,7 +34,6 @@ export default function({app}) {
 	const createApplications = convertSDK.then(() => createApplicationAndVariants(conversionMetadata));
 	const convertPackages = createApplications.then(() => convertPackagesToNewFormat(conversionMetadata));
 	const structureUpdated = convertPackages.then(() => moveApplicationPackagesToLibs(conversionMetadata));
-	const jsPatchesMoved = structureUpdated.then(() => moveJSPatches(conversionMetadata));
 
-	jsPatchesMoved.catch(console.error); // eslint-disable-line
+	structureUpdated.catch(console.error); // eslint-disable-line
 }

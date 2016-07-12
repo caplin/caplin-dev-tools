@@ -1,5 +1,6 @@
 import {
 	dirname,
+	join,
 	relative,
 	sep
 } from 'path';
@@ -174,7 +175,16 @@ function getPackageSrcCommonPath(packageSrcFiles, commonRoot) {
 	return commonPath;
 }
 
-function copyPackageSrcToNewLocations(packagePath, packagesDir, moduleSources) {
+// If the copied source has a patch; move the patch to the `js-patches` folder in its new location.
+function copyJSPatch(backupDir, currentModuleSource, newSrcFilePath, packagesDir) {
+	const patchFileName = join(backupDir, 'js-patches', `${currentModuleSource}.js`);
+
+	if (fileExists(patchFileName)) {
+		copySync(patchFileName, join('apps', 'js-patches', newSrcFilePath.replace(`${packagesDir}/`, '')));
+	}
+}
+
+function copyPackageSrcToNewLocations(packagePath, packagesDir, moduleSources, backupDir) {
 	const packageSrcFiles = glob.sync(`${packagePath}/src/**/*.js`);
 	const commonPath = getPackageSrcCommonPath(packageSrcFiles, `${packagePath}/src/`);
 	const currentFileLocationRegExp = new RegExp(`${packagePath}\/src\/${commonPath}(.*)`);
@@ -184,6 +194,7 @@ function copyPackageSrcToNewLocations(packagePath, packagesDir, moduleSources) {
 		const newSrcFilePath = packageSrcFile.replace(currentFileLocationRegExp, `${packagePath}/$1`);
 		const newModuleSource = newSrcFilePath.replace(`${packagesDir}/`, '').replace('.js', '');
 
+		copyJSPatch(backupDir, currentModuleSource, newSrcFilePath, packagesDir);
 		copySync(packageSrcFile, newSrcFilePath);
 		moduleSources.set(currentModuleSource, newModuleSource);
 	});
@@ -238,7 +249,9 @@ function findAllPackagesThatRequireConversion(packagesDir) {
 		.filter((packagesDirContentPath) => fileExists(`${packagesDirContentPath}/thirdparty-lib.manifest`) === false);
 }
 
-export default function convertPackagesToNewFormat({applicationName, packagesDir, packagesThatShouldBeLibs}) {
+export default function convertPackagesToNewFormat({
+	applicationName, backupDir, packagesDir, packagesThatShouldBeLibs
+}) {
 	const applicationModuleToPathPrefix = `/apps/${applicationName}/src/`;
 	const makeAppModulesRelative = createModuleSourceProcessor(packagesThatShouldBeLibs, applicationModuleToPathPrefix);
 	const moduleSources = new Map();
@@ -247,7 +260,9 @@ export default function convertPackagesToNewFormat({applicationName, packagesDir
 	// Copy all the package folders to their new locations.
 	packagesToConvert.forEach(copyPackageFoldersToNewLocations);
 	// Copy all the src modules to their new locations.
-	packagesToConvert.forEach((packagePath) => copyPackageSrcToNewLocations(packagePath, packagesDir, moduleSources));
+	packagesToConvert.forEach(
+		(packagePath) => copyPackageSrcToNewLocations(packagePath, packagesDir, moduleSources, backupDir)
+	);
 	// Copy all the src-test modules to their new locations.
 	packagesToConvert.forEach(
 		(packagePath) => copyPackageSrcTestToNewLocations(packagePath, packagesDir, moduleSources)
