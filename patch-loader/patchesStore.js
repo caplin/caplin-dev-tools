@@ -5,7 +5,6 @@ const {
 	readFileSync
 } = require('fs');
 const {
-	basename,
 	join,
 	sep
 } = require('path');
@@ -14,10 +13,13 @@ const {
 	sync
 } = require('glob');
 
+const applicationNodeModulesPath = join(process.cwd(), 'node_modules');
 const GLOB_OPTIONS = {
 	cwd: join(process.cwd(), '..', 'js-patches')
 };
+const packagesPath = join(process.cwd(), '..', '..', 'packages');
 const patches = new Map();
+const pathPrefix = new RegExp(`(?:${applicationNodeModulesPath}|${packagesPath})${sep}`);
 
 module.exports.appendModulePatch = function appendModulePatch(options) {
 	const patchesOptions = options || GLOB_OPTIONS;
@@ -31,14 +33,17 @@ module.exports.appendModulePatch = function appendModulePatch(options) {
 		const convertedPatchFileName = patchFileName.replace(/\//g, sep);
 		const patchFile = readFileSync(join(patchesOptions.cwd, patchFileName), 'utf8');
 
-		patches.set(basename(convertedPatchFileName), patchFile);
+		patches.set(convertedPatchFileName, patchFile);
 	});
 
 	return appendPatchToPatchedModules;
 };
 
 function appendPatchToPatchedModules(loaderAPI, moduleSource) {
-	const patchEntry = patches.get(basename(loaderAPI.resourcePath));
+	// Remove the absolute path prefix to the application's `node_modules` or `packages` from the `resourcePath` to
+	// calculate the `importedModule`.
+	const [, importedModule] = loaderAPI.resourcePath.split(pathPrefix);
+	const patchEntry = patches.get(importedModule);
 
 	if (patchEntry) {
 		return moduleSource + patchEntry;
