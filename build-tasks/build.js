@@ -6,6 +6,9 @@ import {
 	create
 } from 'archiver';
 import {
+	mkdir
+} from 'fs';
+import {
 	copySync,
 	createWriteStream,
 	writeFileSync
@@ -50,12 +53,14 @@ function webpackBuildCallback(error, {buildCallback = NO_OP, indexPage, version,
 
 		writeFileSync(join(distDir, 'index.html'), indexFile, 'utf8');
 		buildCallback();
-
 		const archive = create('zip');
-		const warWriteStream = createWriteStream(join(buildDir, 'exported-wars', `${warName}.war`));
 
-		archive.directory(distDir, '');
-		archive.pipe(warWriteStream);
-		archive.finalize();
+		mkdir(join(buildDir, 'exported-wars'), () => {
+			const warWriteStream = createWriteStream(join(buildDir, 'exported-wars', `${warName}.war`));
+
+			archive.directory(distDir, '');
+			archive.pipe(warWriteStream);
+			archive.finalize();
+		});
 	}
 }

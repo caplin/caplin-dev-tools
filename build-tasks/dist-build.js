@@ -9,6 +9,8 @@ var _path = require('path');
 
 var _archiver = require('archiver');
 
+var _fs = require('fs');
+
 var _fsExtra = require('fs-extra');
 
 var _minimist = require('minimist');
@@ -58,13 +60,15 @@ function webpackBuildCallback(error, { buildCallback = NO_OP, indexPage, version
 
 			(0, _fsExtra.writeFileSync)((0, _path.join)(distDir, 'index.html'), indexFile, 'utf8');
 			buildCallback();
-
 			const archive = (0, _archiver.create)('zip');
-			const warWriteStream = (0, _fsExtra.createWriteStream)((0, _path.join)(buildDir, 'exported-wars', `${ warName }.war`));
 
-			archive.directory(distDir, '');
-			archive.pipe(warWriteStream);
-			archive.finalize();
+			(0, _fs.mkdir)((0, _path.join)(buildDir, 'exported-wars'), () => {
+				const warWriteStream = (0, _fsExtra.createWriteStream)((0, _path.join)(buildDir, 'exported-wars', `${ warName }.war`));
+
+				archive.directory(distDir, '');
+				archive.pipe(warWriteStream);
+				archive.finalize();
+			});
 		}
 }
 
