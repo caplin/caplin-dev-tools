@@ -17,9 +17,11 @@ const applicationNodeModulesPath = join(process.cwd(), 'node_modules');
 const GLOB_OPTIONS = {
 	cwd: join(process.cwd(), '..', 'js-patches')
 };
+// Windows backslashes have to be escaped or else they are treated as special characters in the `RegExp`.
+const esc = (path) => path.replace(/\\/g, '\\\\');
 const packagesPath = join(process.cwd(), '..', '..', 'packages');
 const patches = new Map();
-const pathPrefix = new RegExp(`(?:${applicationNodeModulesPath}|${packagesPath})${sep}`);
+const pathPrefix = new RegExp(`(?:${esc(applicationNodeModulesPath)}|${esc(packagesPath)})${esc(sep)}`);
 
 module.exports.appendModulePatch = function appendModulePatch(options) {
 	const patchesOptions = options || GLOB_OPTIONS;
