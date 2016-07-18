@@ -58,7 +58,7 @@ export function webpackConfigGenerator({basePath, version = 'dev'}) {
 				test: /\.html$/,
 				loaders: ['dom-loader', 'html-loader?minimize=false']
 			}, {
-				test: /\.(jpg|png|svg|woff)$/,
+				test: /\.(gif|jpg|png|svg|woff)$/,
 				loader: 'file-loader'
 			}, {
 				test: /\.js$/,
