@@ -24,8 +24,8 @@ const buildDir = join(process.cwd(), 'build');
 const distDir = join(buildDir, 'dist');
 
 export function cleanDistAndBuildWAR(config) {
-	// Remove the current `build` directory.
-	rimraf(buildDir, rimrafCallback(config));
+	// Remove the current `build/dist` directory.
+	rimraf(distDir, rimrafCallback(config));
 }
 
 // When we've removed the previous `dist` directory build the application.
