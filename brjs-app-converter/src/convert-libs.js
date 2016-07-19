@@ -5,6 +5,7 @@ import {
 import {
 	copySync,
 	readdirSync,
+	removeSync,
 	statSync
 } from 'fs-extra';
 
@@ -17,12 +18,18 @@ import {convertThirdpartyLibraryToPackage} from './convert-thirdparty-lib';
 
 export function convertLib(packageDir, packageName, createPackageJSON = true) {
 	const packageContentsFileNames = readdirSync(packageDir);
+	const hasSrcDirectory = packageContentsFileNames.includes('src') || packageContentsFileNames.includes('src-es6');
+
+	if (packageContentsFileNames.includes('src-es6')) {
+		copySync(join(packageDir, 'src-es6'), join(packageDir, 'src'));
+		removeSync(join(packageDir, 'src-es6'));
+	}
 
 	if (packageContentsFileNames.includes('thirdparty-lib.manifest')) {
 		convertThirdpartyLibraryToPackage(packageDir, packageName, createPackageJSON);
-	} else if (packageContentsFileNames.includes('br-lib.conf') && packageContentsFileNames.includes('src')) {
+	} else if (packageContentsFileNames.includes('br-lib.conf') && hasSrcDirectory) {
 		return convertBRLibToPackage(packageDir, packageName, createPackageJSON);
-	} else if (packageContentsFileNames.includes('src')) {
+	} else if (hasSrcDirectory) {
 		return convertLibToPackage(packageDir, packageName, createPackageJSON);
 	} else {
 		createBRLibPackageJSON(packageDir, packageName, createPackageJSON);
