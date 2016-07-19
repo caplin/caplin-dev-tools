@@ -1,4 +1,6 @@
-import {join} from 'path';
+import {
+	join
+} from 'path';
 
 import {
 	copySync,
