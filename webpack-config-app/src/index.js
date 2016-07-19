@@ -18,9 +18,10 @@ export function webpackConfigGenerator({basePath, version = 'dev'}) {
 
 	for (const packageDir of readdirSync(join(basePath, '../../packages'))) {
 		try {
-			statSync(join(basePath, `node_modules/${packageDir}/compiler.json`));
-		} catch (packageShouldNotBeBabeledError) {
+			statSync(join(basePath, `node_modules/${packageDir}/converted_library.js`));
 			babelLoaderExclude.push(join(basePath, `node_modules/${packageDir}/`));
+		} catch (packageShouldBeBabeledError) {
+			// Ignore.
 		}
 	}
 

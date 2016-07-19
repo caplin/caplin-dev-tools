@@ -30,9 +30,10 @@ function webpackConfigGenerator({ basePath, version = 'dev' }) {
 
 	for (const packageDir of (0, _fs.readdirSync)((0, _path.join)(basePath, '../../packages'))) {
 		try {
-			(0, _fs.statSync)((0, _path.join)(basePath, `node_modules/${ packageDir }/compiler.json`));
-		} catch (packageShouldNotBeBabeledError) {
+			(0, _fs.statSync)((0, _path.join)(basePath, `node_modules/${ packageDir }/converted_library.js`));
 			babelLoaderExclude.push((0, _path.join)(basePath, `node_modules/${ packageDir }/`));
+		} catch (packageShouldBeBabeledError) {
+			// Ignore.
 		}
 	}
 
