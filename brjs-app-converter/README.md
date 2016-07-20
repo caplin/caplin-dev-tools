@@ -127,3 +127,14 @@ module.exports = {
 	}
 };
 ```
+
+## Tips
+
+To create the `css`/`less`/`sass` imports for the app being converted open the BRJS CSS bundles
+and extract the bundled files with this RegExp.
+
+`[^]*?/\*\*\* ([./a-z-A-Z\d]*) \*\*\*/`
+
+you can convert the comments to imports with this replacement pattern.
+
+`import '$1';\n`
