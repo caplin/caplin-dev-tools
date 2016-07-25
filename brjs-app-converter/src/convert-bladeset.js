@@ -1,9 +1,19 @@
-import {join} from 'path';
+import {
+	join
+} from 'path';
 
-import {copySync, readdirSync, removeSync} from 'fs-extra';
+import {
+	copySync,
+	readdirSync,
+	removeSync
+} from 'fs-extra';
 
-import {moveBladeCodeToPackages} from './convert-blade';
-import {createNamespaceDirectoriesIfMissing} from './converter-utils';
+import {
+	moveBladeCodeToPackages
+} from './convert-blade';
+import {
+	createNamespaceDirectoriesIfMissing
+} from './converter-utils';
 
 // Find all blades in a bladeset, move and convert them to packages.
 function moveAndConvertBladesCode(bladesetDir, bladesetName, conversionMetadata) {

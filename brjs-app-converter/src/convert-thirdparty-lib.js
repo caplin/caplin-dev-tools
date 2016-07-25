@@ -1,13 +1,19 @@
-import {join} from 'path';
+import {
+	join
+} from 'path';
 
 import {
 	readdirSync,
 	readFileSync,
 	writeFileSync
 } from 'fs-extra';
-import {safeLoad} from 'js-yaml';
+import {
+	safeLoad
+} from 'js-yaml';
 
-import {compiledThirdpartyJSONTemplate} from './converter-data';
+import {
+	compiledThirdpartyJSONTemplate
+} from './converter-data';
 
 // Returns the libraries dependencies as require statements. This way when webpack loads the combined
 // library files it also loads the library's dependencies.

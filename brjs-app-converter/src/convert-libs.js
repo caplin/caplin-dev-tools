@@ -14,7 +14,9 @@ import {
 	convertLibToPackage,
 	createBRLibPackageJSON
 } from './convert-lib';
-import {convertThirdpartyLibraryToPackage} from './convert-thirdparty-lib';
+import {
+	convertThirdpartyLibraryToPackage
+} from './convert-thirdparty-lib';
 
 export function convertLib(packageDir, packageName, createPackageJSON = true) {
 	const packageContentsFileNames = readdirSync(packageDir);

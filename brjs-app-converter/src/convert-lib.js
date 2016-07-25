@@ -8,8 +8,12 @@ import {
 } from 'fs-extra';
 import yaml from 'js-yaml';
 
-import {compiledBRLibPackageJSONTemplate} from './converter-data';
-import {createNamespaceDirectoriesIfMissing} from './converter-utils';
+import {
+	compiledBRLibPackageJSONTemplate
+} from './converter-data';
+import {
+	createNamespaceDirectoriesIfMissing
+} from './converter-utils';
 
 // Some BR libs don't have directories for their namespaces. They put all their code in the `src`
 // directory directly. Webpack can't load these packages, so we need to create the namespaced
