@@ -128,6 +128,11 @@ module.exports = {
 };
 ```
 
+## Side effects
+
+The conversion tool moves source files which means that when searching the history of a file in git the `--follow` flag
+will be required to view the pre-move history.
+
 ## Tips
 
 To create the `css`/`less`/`sass` imports for the app being converted open the BRJS CSS bundles
