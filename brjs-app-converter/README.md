@@ -143,3 +143,15 @@ and extract the bundled files with this RegExp.
 you can convert the comments to imports with this replacement pattern.
 
 `import '$1';\n`
+
+To extract the transforms/handlers from a `renderDefinitions.xml` file use this RegExp
+
+`[^]*?<(handler|transform) className="(.*?)"`
+
+`import '$2';\nBehaviorFactory.BEHAVIOUR_CLASSES['$2'] = $2;\n`
+
+To extract the controls from a `renderDefinitions.xml` file use this RegExp
+
+`[^]*?<control className="(.*?)"`
+
+`import '$1';\nControlFactory.CONTROL_CLASSES['$1'] = $1;\n`
