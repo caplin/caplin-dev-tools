@@ -131,7 +131,7 @@ module.exports = {
 ## Side effects
 
 The conversion tool moves source files which means that when searching the history of a file in git the `--follow` flag
-will be required to view the pre-move history.
+will be required to view the pre-move history. Being unable to follow moves also affects tools like `gitk` and stash.
 
 ## Tips
 
