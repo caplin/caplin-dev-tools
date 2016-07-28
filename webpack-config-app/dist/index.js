@@ -91,7 +91,7 @@ function webpackConfigGenerator({ basePath, version = 'dev' }) {
 				loaders: ['style-loader', 'css-loader']
 			}, {
 				test: /\.xml$/,
-				loader: '@caplin/xml-loader'
+				loader: 'raw-loader'
 			}]
 		},
 		patchLoader: (0, _patchesStore.appendModulePatch)(),
