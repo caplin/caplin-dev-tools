@@ -12,7 +12,9 @@ import parseArgs from 'minimist';
 import {
 	DefinePlugin
 } from 'webpack';
-import { onError } from 'karma-caplin-dots-reporter';
+import {
+	onError
+} from 'karma-caplin-dots-reporter';
 
 const args = parseArgs(process.argv.slice(2));
 // Keeps browser/Karma running after test run.
@@ -85,7 +87,7 @@ function runPackageTests(packageKarmaConfig, resolvePromise, summary, packageNam
 	const server = new Server(packageKarmaConfig, (exitCode) => {
 		resolvePromise();
 	});
-	
+
 	server.on('run_complete', (browsers, { success, failed, error, logs }) => {
 		summary.success += success;
 		summary.failed += failed;
@@ -114,7 +116,7 @@ export async function runPackagesTests(packagesKarmaConfigs) {
 		showSummary(summary);
 		process.exit();
 	});
-	// this might bring up issues if our tests start running concurrently, 
+	// this might bring up issues if our tests start running concurrently,
 	// but given we currently run package by package, it should be fine
 	let packageName = '';
 	const summary = {
