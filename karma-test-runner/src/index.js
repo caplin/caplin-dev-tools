@@ -51,12 +51,8 @@ export const baseKarmaConfig = {
 	}
 };
 
-function createPackageKarmaConfig({filesToServe, packageDirectory, webpackConfig, frameworks}) {
-	const files = [testEntry];
-
-	if (filesToServe) {
-		files.push(filesToServe);
-	}
+function createPackageKarmaConfig({files = [], frameworks = [], packageDirectory, webpackConfig}) {
+	files.push(testEntry);
 
 	const plugins = [
 		new DefinePlugin({PACKAGE_DIRECTORY: `"${packageDirectory}"`})
