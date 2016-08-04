@@ -153,8 +153,8 @@ function showSummary({ success, failed, error, errors }) {
 		console.log(`\x1b[35mPassed:\x1b[0m ${ success }`);
 		console.log(`\x1b[35mFailed:\x1b[0m ${ failed }`);
 		console.log(`\x1b[35mErrors:\x1b[0m ${ error ? 'Yes' : 'No' }`);
-	}
-	if (failed > 0 || error) {
-		process.exit(1);
+		if (failed > 0 || error) {
+			process.exit(1);
+		}
 	}
 }
