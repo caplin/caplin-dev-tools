@@ -61,7 +61,7 @@ function getLibraryModuleExports(manifestExports) {
 	const exportsExist = 'Object.keys(module.exports).length';
 	const moduleExports = `module.exports = ${exportsExist} ? module.exports : ${manifestExports};`;
 
-	return `\nif (module) ${moduleExports}\n`;
+	return `\nif (typeof module !== "undefined") ${moduleExports}\n`;
 }
 
 function getLibraryWindowExports(packageName, manifestExports) {
@@ -73,14 +73,19 @@ function getLibraryWindowExports(packageName, manifestExports) {
 	// declared in those libraries can leak to the global scope but in webpack they don't so we must
 	// explictly export them to the global/window.
 	if (manifestExports) {
-		windowExports += `\nwindow.${manifestExports} = (module && module.exports) || ${manifestExports};\n`;
+		const windowExport = `(typeof module !== "undefined" && module.exports) || ${manifestExports};\n`;
+
+		windowExports += `\nwindow.${manifestExports} = ${windowExport}`;
 	}
 
 	// If the `exports` value differs to the package name export that too. BRJS would export the module
 	// exports to the `window` at the bottom of the thirdparty JS bundle for the library. The export
 	// identifier used by BRJS is the package name.
 	if (safePackageExports !== manifestExports) {
-		windowExports += `\nwindow.${safePackageExports} = require("${packageName}");\n`;
+		// `require` might be nulled down by webpack configuration so check if it exists.
+		const packageRequire = `typeof require == 'function' && require('${packageName}');\n`;
+
+		windowExports += `\nwindow.${safePackageExports} = ${packageRequire}`;
 	}
 
 	return windowExports;
