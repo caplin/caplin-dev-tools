@@ -17,11 +17,13 @@ import rimraf from 'rimraf';
 
 function deleteUnusedFiles(packagePath) {
 	rimraf.sync(`${packagePath}/resources`);
+	rimraf.sync(`${packagePath}/tests`);
 	rimraf.sync(`${packagePath}/test-unit`);
 	rimraf.sync(`${packagePath}/test-acceptance`);
 	rimraf.sync(`${packagePath}/compiled`);
 	rimraf.sync(`${packagePath}/src`);
 	rimraf.sync(`${packagePath}/br-lib.conf`);
+	rimraf.sync(`${packagePath}/.js-style`);
 	rimraf.sync(`${packagePath}/_resources/aliases.xml`);
 	rimraf.sync(`${packagePath}/_resources/aliasDefinitions.xml`);
 	rimraf.sync(`${packagePath}/_resources-test-ut/aliases.xml`);
