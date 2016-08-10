@@ -53,9 +53,11 @@ function webpackConfigGenerator({ basePath, version = 'dev' }) {
 	const i18nExtractorPlugin = new _extractTextWebpackPlugin2.default(i18nFileName, { allChunks: true });
 	let i18nLoader = i18nExtractorPlugin.extract(['raw-loader', '@caplin/i18n-loader']);
 	const publicPath = isBuild ? 'public/' : '/public/';
+	let serviceLoader = '@caplin/service-loader';
 
 	if (isTest) {
 		i18nLoader = '@caplin/i18n-loader/inline';
+		serviceLoader = '@caplin/service-loader/cache-deletion-loader';
 	}
 
 	const webpackConfig = {
@@ -104,16 +106,13 @@ function webpackConfigGenerator({ basePath, version = 'dev' }) {
 				'ct-core/BRJSClassUtility$': (0, _path.join)(__dirname, 'null.js'),
 				'br/dynamicRefRequire$': (0, _path.join)(__dirname, 'null.js')
 			}
-			// Needed for tests?
-			// root: [ resolve('node_modules') ]
 		},
 		resolveLoader: {
 			alias: {
 				alias: '@caplin/alias-loader',
 				'app-meta': '@caplin/app-meta-loader',
-				service: '@caplin/service-loader'
+				service: serviceLoader
 			}
-			// root: [resolve('node_modules')]
 		},
 		plugins: [i18nExtractorPlugin]
 	};
