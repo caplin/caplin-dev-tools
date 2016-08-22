@@ -93,6 +93,7 @@ const baseKarmaConfig = exports.baseKarmaConfig = {
 	},
 	reporters: ['caplin-dots'],
 	singleRun: !devMode,
+	failOnEmptyTestSuite: true,
 	webpackMiddleware: {
 		noInfo: true,
 		stats: {
