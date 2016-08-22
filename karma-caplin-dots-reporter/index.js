@@ -89,6 +89,7 @@ function CaplinDotsReporter(formatError, hasColors, options, adapter) {
 
 		if (this.TOTAL_FAILED > 0) {
 			this.FAILED.forEach(msg => write('\n' + msg));
+			this.FAILED = [];
 		}	
 		write(msg + '\n');
 	};
