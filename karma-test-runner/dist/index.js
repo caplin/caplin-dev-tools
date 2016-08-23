@@ -3,7 +3,7 @@
 Object.defineProperty(exports, "__esModule", {
 	value: true
 });
-exports.runPackagesTests = exports.baseKarmaConfig = undefined;
+exports.runPackagesTests = undefined;
 
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
@@ -52,6 +52,7 @@ let runPackagesTests = exports.runPackagesTests = (() => {
 })();
 
 exports.createPackagesKarmaConfigs = createPackagesKarmaConfigs;
+exports.createPackagesATsKarmaConfigs = createPackagesATsKarmaConfigs;
 
 var _path = require('path');
 
@@ -76,14 +77,12 @@ const args = (0, _minimist2.default)(process.argv.slice(2));
 const devMode = args.dev || false;
 // Packages user wants to test, if the user specifies none all packages will be tested.
 const requestedPackagesToTest = args._;
-const testEntry = (0, _path.resolve)(__dirname, 'test-entry.js');
+const atsTestEntry = (0, _path.resolve)(__dirname, 'ats-test-entry.js');
+const utsTestEntry = (0, _path.resolve)(__dirname, 'uts-test-entry.js');
 
-const baseKarmaConfig = exports.baseKarmaConfig = {
+const baseKarmaConfig = {
 	browsers: ['Chrome'],
 	logLevel: _constants.LOG_ERROR,
-	preprocessors: {
-		[testEntry]: ['webpack', 'sourcemap']
-	},
 	caplinDotsReporter: {
 		icon: {
 			success: '.',
@@ -107,7 +106,7 @@ const baseKarmaConfig = exports.baseKarmaConfig = {
 	}
 };
 
-function createPackageKarmaConfig({ files = [], frameworks = [], packageDirectory, webpackConfig }) {
+function createPackageKarmaConfig({ files = [], frameworks = [], packageDirectory, webpackConfig }, testEntry) {
 	files.push(testEntry);
 
 	const plugins = [new _webpack.DefinePlugin({ PACKAGE_DIRECTORY: `"${ packageDirectory }"` })];
@@ -116,6 +115,9 @@ function createPackageKarmaConfig({ files = [], frameworks = [], packageDirector
 		plugins
 	});
 	const packageKarmaConfig = _extends({}, baseKarmaConfig, {
+		preprocessors: {
+			[testEntry]: ['webpack', 'sourcemap']
+		},
 		basePath: packageDirectory,
 		files,
 		frameworks,
@@ -145,14 +147,22 @@ function runPackageTests(packageKarmaConfig, resolvePromise, summary, packageNam
 	server.start();
 }
 
-function createPackagesKarmaConfigs(packagesTestMetadata) {
+function filterPackagesToTestIfFilterIsSpecified(packagesTestMetadata) {
 	return packagesTestMetadata.filter(({ packageName }) => {
 		if (requestedPackagesToTest.length === 0) {
 			return true;
 		}
 
 		return requestedPackagesToTest.includes(packageName);
-	}).map(createPackageKarmaConfig);
+	});
+}
+
+function createPackagesKarmaConfigs(packagesTestMetadata) {
+	return filterPackagesToTestIfFilterIsSpecified(packagesTestMetadata).map(packageTestMetadata => createPackageKarmaConfig(packageTestMetadata, utsTestEntry));
+}
+
+function createPackagesATsKarmaConfigs(packagesTestMetadata) {
+	return filterPackagesToTestIfFilterIsSpecified(packagesTestMetadata).map(packageTestMetadata => createPackageKarmaConfig(packageTestMetadata, atsTestEntry));
 }
 
 function showSummary({ success, failed, error, errors }) {

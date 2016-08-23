@@ -21,14 +21,12 @@ const args = parseArgs(process.argv.slice(2));
 const devMode = args.dev || false;
 // Packages user wants to test, if the user specifies none all packages will be tested.
 const requestedPackagesToTest = args._;
-const testEntry = resolve(__dirname, 'test-entry.js');
+const atsTestEntry = resolve(__dirname, 'ats-test-entry.js');
+const utsTestEntry = resolve(__dirname, 'uts-test-entry.js');
 
-export const baseKarmaConfig = {
+const baseKarmaConfig = {
 	browsers: ['Chrome'],
 	logLevel: LOG_ERROR,
-	preprocessors: {
-		[testEntry]: ['webpack', 'sourcemap']
-	},
 	caplinDotsReporter: {
 		icon: {
 			success : '.',
@@ -52,7 +50,7 @@ export const baseKarmaConfig = {
 	}
 };
 
-function createPackageKarmaConfig({files = [], frameworks = [], packageDirectory, webpackConfig}) {
+function createPackageKarmaConfig({files = [], frameworks = [], packageDirectory, webpackConfig}, testEntry) {
 	files.push(testEntry);
 
 	const plugins = [
@@ -65,6 +63,9 @@ function createPackageKarmaConfig({files = [], frameworks = [], packageDirectory
 	};
 	const packageKarmaConfig = {
 		...baseKarmaConfig,
+		preprocessors: {
+			[testEntry]: ['webpack', 'sourcemap']
+		},
 		basePath: packageDirectory,
 		files,
 		frameworks,
@@ -94,7 +95,7 @@ function runPackageTests(packageKarmaConfig, resolvePromise, summary, packageNam
 	server.start();
 }
 
-export function createPackagesKarmaConfigs(packagesTestMetadata) {
+function filterPackagesToTestIfFilterIsSpecified(packagesTestMetadata) {
 	return packagesTestMetadata
 		.filter(({packageName}) => {
 			if (requestedPackagesToTest.length === 0) {
@@ -102,8 +103,17 @@ export function createPackagesKarmaConfigs(packagesTestMetadata) {
 			}
 
 			return requestedPackagesToTest.includes(packageName);
-		})
-		.map(createPackageKarmaConfig);
+		});
+}
+
+export function createPackagesKarmaConfigs(packagesTestMetadata) {
+	return filterPackagesToTestIfFilterIsSpecified(packagesTestMetadata)
+		.map((packageTestMetadata) => createPackageKarmaConfig(packageTestMetadata, utsTestEntry));
+}
+
+export function createPackagesATsKarmaConfigs(packagesTestMetadata) {
+	return filterPackagesToTestIfFilterIsSpecified(packagesTestMetadata)
+		.map((packageTestMetadata) => createPackageKarmaConfig(packageTestMetadata, atsTestEntry));
 }
 
 export async function runPackagesTests(packagesKarmaConfigs) {
