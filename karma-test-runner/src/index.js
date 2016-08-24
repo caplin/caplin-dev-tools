@@ -18,6 +18,8 @@ import {
 
 const args = parseArgs(process.argv.slice(2));
 // Keeps browser/Karma running after test run.
+const atsOnly = args.ats || args._.includes('--ats') || false;
+const utsOnly = args.uts || args._.includes('--uts') || false;
 const devMode = args.dev || false;
 // Packages user wants to test, if the user specifies none all packages will be tested.
 const requestedPackagesToTest = args._;
@@ -107,11 +109,19 @@ function filterPackagesToTestIfFilterIsSpecified(packagesTestMetadata) {
 }
 
 export function createPackagesKarmaConfigs(packagesTestMetadata) {
+	if (atsOnly) {
+		return [];
+	}
+
 	return filterPackagesToTestIfFilterIsSpecified(packagesTestMetadata)
 		.map((packageTestMetadata) => createPackageKarmaConfig(packageTestMetadata, utsTestEntry));
 }
 
 export function createPackagesATsKarmaConfigs(packagesTestMetadata) {
+	if (utsOnly) {
+		return [];
+	}
+
 	return filterPackagesToTestIfFilterIsSpecified(packagesTestMetadata)
 		.map((packageTestMetadata) => createPackageKarmaConfig(packageTestMetadata, atsTestEntry));
 }
