@@ -51,7 +51,7 @@ const baseKarmaConfig = {
 };
 
 function createPackageKarmaConfig({files = [], frameworks = [], packageDirectory, webpackConfig}, testEntry) {
-	files.push(testEntry);
+	const karmaFiles = [...files, testEntry];
 
 	const plugins = [
 		new DefinePlugin({PACKAGE_DIRECTORY: `"${packageDirectory}"`})
@@ -67,7 +67,7 @@ function createPackageKarmaConfig({files = [], frameworks = [], packageDirectory
 			[testEntry]: ['webpack', 'sourcemap']
 		},
 		basePath: packageDirectory,
-		files,
+		files: karmaFiles,
 		frameworks,
 		webpack: packageWebpackConfig
 	};
