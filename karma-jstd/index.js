@@ -1,12 +1,19 @@
 
-module.exports = function configurePackageTestDatatype(packageTestDatatype) {
-	if (!packageTestDatatype.files) {
-		packageTestDatatype.files = [];
-	}
+module.exports = function configurePackageTestDatatype(testDatatype) {
+	const currentKarmaFiles = testDatatype.files || [];
+	const jstdAdapterLocation = require.resolve('karma-jstd-adapter', 'jstd-adapter.js');
+	const jstdTestDatatype = {
+		files: [
+			...currentKarmaFiles,
+			jstdAdapterLocation
+		]
+	};
 
-	packageTestDatatype.files = [
-		require.resolve('karma-jstd-adapter', 'jstd-adapter.js')
-	];
-
-	return packageTestDatatype;
+	// Return a clone of the TestDatatype instead of modifying it.
+	return Object
+		.assign(
+			{},
+			testDatatype,
+			jstdTestDatatype
+		);
 };
