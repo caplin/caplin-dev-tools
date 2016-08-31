@@ -19,6 +19,9 @@ import {
 import {
 	moveApplicationPackagesToLibs
 } from './move-libs';
+import {
+	injectI18nRequires
+} from './inject-i18n-requires';
 
 // Provide the name and entry point of the app to convert. Variants is a Caplin internal option.
 export default function({app}) {
@@ -34,6 +37,7 @@ export default function({app}) {
 	const createApplications = convertSDK.then(() => createApplicationAndVariants(conversionMetadata));
 	const convertPackages = createApplications.then(() => convertPackagesToNewFormat(conversionMetadata));
 	const structureUpdated = convertPackages.then(() => moveApplicationPackagesToLibs(conversionMetadata));
+	const i18nRequiresAdded = structureUpdated.then(() => injectI18nRequires(conversionMetadata));
 
-	structureUpdated.catch(console.error); // eslint-disable-line
+	i18nRequiresAdded.catch(console.error); // eslint-disable-line
 }

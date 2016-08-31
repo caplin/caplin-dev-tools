@@ -9,15 +9,22 @@ import {
 export function moveApplicationPackagesToLibs({applicationName, packagesThatShouldBeLibs, packagesDir}) {
 	const convertedAppDir = join('apps', applicationName);
 
-	for (const packageThatIsLib of packagesThatShouldBeLibs) {
-		move(
-			join(packagesDir, packageThatIsLib),
-			join(convertedAppDir, 'src', packageThatIsLib),
-			(err) => {
-				if (err) {
-					console.error(err); // eslint-disable-line
-				}
-			}
-		);
-	}
+	const movePromises = packagesThatShouldBeLibs
+		.map((packageThatIsLib) => {
+			return new Promise((resolve, reject) => {
+				move(
+					join(packagesDir, packageThatIsLib),
+					join(convertedAppDir, 'src', packageThatIsLib),
+					(err) => {
+						if (err) {
+							reject(err);
+						} else {
+							resolve();
+						}
+					}
+				);
+			});
+		});
+
+	return Promise.all(movePromises);
 }
