@@ -26,7 +26,7 @@ export function injectI18nRequires({applicationName, packagesDirName = 'packages
 	const appJSFilePaths = sync(`apps/${applicationName}/src/**/*.js`);
 	const appPropertiesFilePaths = sync(`apps/${applicationName}/src/**/en.properties`, globOptions);
 	const propertiesToFilePath = new Map();
-	const packageJSFilePaths = sync(`${packagesDirName}/**/*.js`, {ignore: '**/Translator.js'});
+	const packageJSFilePaths = sync(`${packagesDirName}/**/*.js`);
 	const packagePropertiesFilePaths = sync(`${packagesDirName}/**/en.properties`, globOptions);
 
 	// Firstly add package to package requires.
