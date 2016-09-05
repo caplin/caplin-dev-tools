@@ -4,7 +4,8 @@ import {
 } from 'fs';
 import {
 	dirname,
-	relative
+	relative,
+	sep
 } from 'path';
 
 import {
@@ -169,7 +170,10 @@ function resolveI18nRequirePaths(jsFilePath, propertiesFilesToRequire, isRelativ
 		let requirePath = removeDirPrefix(propertyFileToRequire);
 
 		if (isRelative(propertyFileToRequire, jsFileDir)) {
-			requirePath = relative(jsFileDir, propertyFileToRequire);
+			requirePath = relative(jsFileDir, propertyFileToRequire)
+					// Convert Windows separator to Unix style for module URIs.
+					.split(sep)
+					.join('/');
 
 			if (requirePath.startsWith('..') === false) {
 				requirePath = `./${requirePath}`;
