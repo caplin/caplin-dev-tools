@@ -59,7 +59,7 @@ export function webpackConfigGenerator({basePath, version = 'dev'}) {
 		module: {
 			loaders: [{
 				test: /\.html$/,
-				loaders: ['dom-loader', 'html-loader?minimize=false']
+				loaders: ['@caplin/html-loader']
 			}, {
 				test: /\.(gif|jpg|png|svg|woff)$/,
 				loader: 'file-loader'

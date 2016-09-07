@@ -1,0 +1,12 @@
+{
+  "name": "@caplin/html-loader",
+  "version": "1.0.0",
+  "description": "Caplin HTML templates loader",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "Brian Di Palma <offler@gmail.com> (https://github.com/briandipalma)",
+  "license": "ISC"
+}
