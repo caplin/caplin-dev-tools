@@ -22,6 +22,9 @@ import {
 import {
 	injectI18nRequires
 } from './inject-i18n-requires';
+import {
+	injectHTMLRequires
+} from './inject-html-requires';
 
 // Provide the name and entry point of the app to convert. Variants is a Caplin internal option.
 export default function({app}) {
@@ -38,6 +41,7 @@ export default function({app}) {
 	const convertPackages = createApplications.then(() => convertPackagesToNewFormat(conversionMetadata));
 	const structureUpdated = convertPackages.then(() => moveApplicationPackagesToLibs(conversionMetadata));
 	const i18nRequiresAdded = structureUpdated.then(() => injectI18nRequires(conversionMetadata));
+	const htmlRequiresAdded = i18nRequiresAdded.then(() => injectHTMLRequires(conversionMetadata));
 
-	i18nRequiresAdded.catch(console.error); // eslint-disable-line
+	htmlRequiresAdded.catch(console.error); // eslint-disable-line
 }
