@@ -26,7 +26,9 @@ var _webpack2 = _interopRequireDefault(_webpack);
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function webpackConfigGenerator({ basePath, version = 'dev' }) {
-	const babelLoaderExclude = [];
+	// Do not compile `babel-polyfill`/`core-js` using babel, it's not supported and causes
+	// issues in older browsers (IE11) https://github.com/zloirock/core-js/issues/189
+	const babelLoaderExclude = [(0, _path.join)(basePath, 'node_modules/babel-polyfill/')];
 
 	for (const packageDir of (0, _fs.readdirSync)((0, _path.join)(basePath, '../../packages'))) {
 		try {

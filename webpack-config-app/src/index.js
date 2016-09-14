@@ -14,7 +14,9 @@ import parseArgs from 'minimist';
 import webpack from 'webpack';
 
 export function webpackConfigGenerator({basePath, version = 'dev'}) {
-	const babelLoaderExclude = [];
+	// Do not compile `babel-polyfill`/`core-js` using babel, it's not supported and causes
+	// issues in older browsers (IE11) https://github.com/zloirock/core-js/issues/189
+	const babelLoaderExclude = [join(basePath, 'node_modules/babel-polyfill/')];
 
 	for (const packageDir of readdirSync(join(basePath, '../../packages'))) {
 		try {
