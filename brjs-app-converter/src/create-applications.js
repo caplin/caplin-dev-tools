@@ -28,7 +28,6 @@ function setUpApplicationFiles(applicationName, convertedAppDir, conversionMetad
 function populateApplicationPackageJSON(
 	applicationName, convertedAppDir, {packagesDir, packagesDirName, packagesThatShouldBeLibs}
 ) {
-	const appDependencies = {};
 	const appPackageJSON = readJsonSync(join('..', 'conversion-data', applicationName, 'package.json'));
 	const appPackageJSONFileLocation = join(convertedAppDir, 'package.json');
 
@@ -37,11 +36,10 @@ function populateApplicationPackageJSON(
 		const isDirectory = statSync(join(packagesDir, packageDir)).isDirectory();
 
 		if (isNotLib && isDirectory) {
-			appDependencies[packageDir] = `../../${packagesDirName}/${packageDir}`;
+			appPackageJSON.dependencies[packageDir] = `../../${packagesDirName}/${packageDir}`;
 		}
 	}
 
-	appPackageJSON.dependencies = appDependencies;
 	writeJsonSync(appPackageJSONFileLocation, appPackageJSON, {spaces: 2});
 }
 
