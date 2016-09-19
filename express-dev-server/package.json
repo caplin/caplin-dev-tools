@@ -1,6 +1,6 @@
 {
   "name": "@caplin/express-dev-server",
-  "version": "1.6.0",
+  "version": "1.7.2",
   "description": "Express.js server modules for developing Caplin applications",
   "scripts": {
     "build": "babel src --out-dir ."
@@ -15,6 +15,7 @@
   "dependencies": {
     "dotenv": "^2.0.0",
     "express": "^4.13.4",
+    "http-proxy": "^1.14.0",
     "webpack": "^1.13.0",
     "webpack-dev-middleware": "^1.6.1"
   }
