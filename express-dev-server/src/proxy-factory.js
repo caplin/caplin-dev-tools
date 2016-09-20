@@ -2,9 +2,13 @@ import {
 	createProxyServer
 } from 'http-proxy';
 
-export default ({host = 'http://localhost', port = '9999'}) => {
+export default ({host = 'http://localhost', port = '9999'} = {}) => {
 	const proxy = createProxyServer({
 		target: `${host}:${port}`
+	});
+
+	proxy.on('error', (err, req) => {
+		console.error(`Error proxying ${req.path}`, err); //eslint-disable-line
 	});
 
 	proxy.on('proxyReq', (req) => {

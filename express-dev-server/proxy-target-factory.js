@@ -6,7 +6,7 @@ Object.defineProperty(exports, "__esModule", {
 
 var _child_process = require('child_process');
 
-exports.default = ({ cmd = 'mvn', args = ['-f', 'server/proxy-target-FXPro', 'jetty:run'] }) => {
+exports.default = ({ cmd = 'mvn', args = ['-f', 'server/proxy-target-FXPro', 'jetty:run'] } = {}) => {
 	const proxyTarget = (0, _child_process.spawn)(cmd, args);
 
 	proxyTarget.stdout.on('data', data => {

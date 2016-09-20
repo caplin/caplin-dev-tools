@@ -2,7 +2,7 @@ import {
 	spawn
 } from 'child_process';
 
-export default ({cmd = 'mvn', args = ['-f', 'server/proxy-target-FXPro', 'jetty:run']}) => {
+export default ({cmd = 'mvn', args = ['-f', 'server/proxy-target-FXPro', 'jetty:run']} = {}) => {
 	const proxyTarget = spawn(cmd, args);
 
 	proxyTarget.stdout.on('data', (data) => {
