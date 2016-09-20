@@ -3,7 +3,8 @@ import {
 } from 'child_process';
 
 export default ({cmd = 'mvn', args = ['-f', 'server/proxy-target-FXPro', 'jetty:run']} = {}) => {
-	const proxyTarget = spawn(cmd, args);
+	// {shell: true} is required for Windows.
+	const proxyTarget = spawn(cmd, args, {shell: true});
 
 	proxyTarget.stdout.on('data', (data) => {
 		console.log(`stdout: ${data}`); //eslint-disable-line

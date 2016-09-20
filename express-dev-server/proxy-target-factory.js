@@ -7,7 +7,8 @@ Object.defineProperty(exports, "__esModule", {
 var _child_process = require('child_process');
 
 exports.default = ({ cmd = 'mvn', args = ['-f', 'server/proxy-target-FXPro', 'jetty:run'] } = {}) => {
-	const proxyTarget = (0, _child_process.spawn)(cmd, args);
+	// {shell: true} is required for Windows.
+	const proxyTarget = (0, _child_process.spawn)(cmd, args, { shell: true });
 
 	proxyTarget.stdout.on('data', data => {
 		console.log(`stdout: ${ data }`); //eslint-disable-line
