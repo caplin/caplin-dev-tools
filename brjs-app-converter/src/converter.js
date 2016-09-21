@@ -25,6 +25,9 @@ import {
 import {
 	injectHTMLRequires
 } from './inject-html-requires';
+import {
+	runPostConversionScript
+} from './post-conversion-script';
 
 // Provide the name and entry point of the app to convert. Variants is a Caplin internal option.
 export default function({app}) {
@@ -42,6 +45,7 @@ export default function({app}) {
 	const structureUpdated = convertPackages.then(() => moveApplicationPackagesToLibs(conversionMetadata));
 	const i18nRequiresAdded = structureUpdated.then(() => injectI18nRequires(conversionMetadata));
 	const htmlRequiresAdded = i18nRequiresAdded.then(() => injectHTMLRequires(conversionMetadata));
+	const postConversionScript = htmlRequiresAdded.then(() => runPostConversionScript(conversionMetadata));
 
-	htmlRequiresAdded.catch(console.error); // eslint-disable-line
+	postConversionScript.catch(console.error); // eslint-disable-line
 }

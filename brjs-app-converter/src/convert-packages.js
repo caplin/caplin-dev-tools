@@ -15,7 +15,7 @@ import {
 import glob from 'glob';
 import rimraf from 'rimraf';
 
-function deleteUnusedFiles(packagePath) {
+export function deleteUnusedFiles(packagePath) {
 	rimraf.sync(`${packagePath}/resources`);
 	rimraf.sync(`${packagePath}/tests`);
 	rimraf.sync(`${packagePath}/test-unit`);
@@ -227,7 +227,7 @@ function fileExists(filePath) {
 	return true;
 }
 
-function copyPackageFoldersToNewLocations(packagePath) {
+export function copyPackageFoldersToNewLocations(packagePath) {
 	const packageFoldersThatMustBeMoved = [
 		{src: `${packagePath}/resources`, dest: `${packagePath}/_resources`},
 		{src: `${packagePath}/test-unit/resources`, dest: `${packagePath}/_resources-test-ut`},
