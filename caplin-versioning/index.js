@@ -1,35 +1,40 @@
-import { exec } from 'child_process';
-
-function getHeadCommit() {
-	return Git.Repository
-		.open(process.cwd())
-		.then(repo => repo.getHeadCommit());
-}
+import {
+	exec
+} from 'child_process';
 
 function getHash() {
-	return new Promise((resolve, reject) => {
-		exec("git rev-parse HEAD", function (error, stdout, stderr) {
-			resolve(stdout);
-		});
-	})	
+	return new Promise((resolve) => {
+		exec(
+			'git rev-parse HEAD',
+			(error, stdout) => {
+				resolve(stdout);
+			}
+		);
+	});
 }
 
 function getCommitCount() {
-	return new Promise((resolve, reject) => {
-		exec("git rev-list --count HEAD", function (error, stdout, stderr) {
-			resolve(stdout);
-		});
-	})
+	return new Promise((resolve) => {
+		exec(
+			'git rev-list --count HEAD',
+			(error, stdout) => {
+				resolve(stdout);
+			}
+		);
+	});
 }
 
-function createFullVersion(semVer) {
-	return Promise.all([getCommitCount(), getHash()])
-		.then(output => new Promise((resolve, reject) => {
-			resolve(`${ semVer }-${ output[0].trim() }-${ output[1].trim().substr(0, 8) }`);
+export default function createFullVersion(semVer) {
+	return Promise
+		.all([
+			getCommitCount(),
+			getHash()
+		])
+		.then((output) => new Promise((resolve) => {
+			const commitCount = output[0].trim();
+			const gitHash = output[1].trim().substr(0, 8);
+			const version = `${semVer}-${commitCount}-${gitHash}`;
+
+			resolve(version);
 		}));
 }
-
-export default createFullVersion;
-
-// Example usage
-// createFullVersion('1.0.0').then(version => console.log(version))
