@@ -46,21 +46,26 @@ function webpackBuildCallback(error, {buildCallback = NO_OP, indexPage, version,
 
 		try {
 			copySync(join(process.cwd(), 'scripts', 'WEB-INF'), join(distDir, 'WEB-INF'));
-			copySync(join(process.cwd(), 'public', 'dev'), join(distDir, 'public', version));	
-		} catch (e) {
+			copySync(join(process.cwd(), 'public', 'dev'), join(distDir, 'public', version));
+		} catch (err) {
 			// do nothing
 		}
 
 		writeFileSync(join(distDir, 'index.html'), indexFile, 'utf8');
+		// Allows the user of this package to attach their own post build/pre WAR creation script.
 		buildCallback();
-		const archive = create('zip');
 
-		mkdir(join(buildDir, 'exported-wars'), () => {
-			const warWriteStream = createWriteStream(join(buildDir, 'exported-wars', `${warName}-${version}.war`));
+		mkdir(
+			join(buildDir, 'exported-wars'),
+			() => {
+				const archive = create('zip');
+				const versionedWARName = `${warName}-${version}.war`;
+				const warWriteStream = createWriteStream(join(buildDir, 'exported-wars', versionedWARName));
 
-			archive.directory(distDir, '');
-			archive.pipe(warWriteStream);
-			archive.finalize();
-		});
+				archive.directory(distDir, '');
+				archive.pipe(warWriteStream);
+				archive.finalize();
+			}
+		);
 	}
 }

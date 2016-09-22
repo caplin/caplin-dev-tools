@@ -54,16 +54,18 @@ function webpackBuildCallback(error, { buildCallback = NO_OP, indexPage, version
 			try {
 				(0, _fsExtra.copySync)((0, _path.join)(process.cwd(), 'scripts', 'WEB-INF'), (0, _path.join)(distDir, 'WEB-INF'));
 				(0, _fsExtra.copySync)((0, _path.join)(process.cwd(), 'public', 'dev'), (0, _path.join)(distDir, 'public', version));
-			} catch (e) {
+			} catch (err) {
 				// do nothing
 			}
 
 			(0, _fsExtra.writeFileSync)((0, _path.join)(distDir, 'index.html'), indexFile, 'utf8');
+			// Allows the user of this package to attach their own post build/pre WAR creation script.
 			buildCallback();
-			const archive = (0, _archiver.create)('zip');
 
 			(0, _fs.mkdir)((0, _path.join)(buildDir, 'exported-wars'), () => {
-				const warWriteStream = (0, _fsExtra.createWriteStream)((0, _path.join)(buildDir, 'exported-wars', `${ warName }-${ version }.war`));
+				const archive = (0, _archiver.create)('zip');
+				const versionedWARName = `${ warName }-${ version }.war`;
+				const warWriteStream = (0, _fsExtra.createWriteStream)((0, _path.join)(buildDir, 'exported-wars', versionedWARName));
 
 				archive.directory(distDir, '');
 				archive.pipe(warWriteStream);
