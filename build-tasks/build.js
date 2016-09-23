@@ -50,7 +50,7 @@ function webpackBuildCallback(error, {buildCallback = NO_OP, indexPage, version,
 
 		writeFileSync(join(distDir, 'index.html'), indexFile, 'utf8');
 		// Allows the user of this package to attach their own post build/pre WAR creation script.
-		buildCallback();
+		buildCallback({version});
 
 		mkdir(
 			join(buildDir, 'exported-wars'),

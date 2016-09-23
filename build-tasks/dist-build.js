@@ -58,7 +58,7 @@ function webpackBuildCallback(error, { buildCallback = NO_OP, indexPage, version
 
 			(0, _fsExtra.writeFileSync)((0, _path.join)(distDir, 'index.html'), indexFile, 'utf8');
 			// Allows the user of this package to attach their own post build/pre WAR creation script.
-			buildCallback();
+			buildCallback({ version });
 
 			(0, _fs.mkdir)((0, _path.join)(buildDir, 'exported-wars'), () => {
 				const archive = (0, _archiver.create)('zip');
