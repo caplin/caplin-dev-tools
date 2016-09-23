@@ -21,7 +21,8 @@ const NO_OP = () => {
 	// Called after app is built.
 };
 const buildDir = join(process.cwd(), 'build');
-const distDir = join(buildDir, 'dist');
+
+export const distDir = join(buildDir, 'dist');
 
 export function cleanDistAndBuildWAR(config) {
 	// Remove the current `build/dist` directory.
@@ -44,12 +45,8 @@ function webpackBuildCallback(error, {buildCallback = NO_OP, indexPage, version,
 		const variant = parseArgs(process.argv.slice(2)).variant;
 		const indexFile = indexPage({variant, version});
 
-		try {
-			copySync(join(process.cwd(), 'scripts', 'WEB-INF'), join(distDir, 'WEB-INF'));
-			copySync(join(process.cwd(), 'public', 'dev'), join(distDir, 'public', version));
-		} catch (err) {
-			// do nothing
-		}
+		copySync(join(process.cwd(), 'public', 'dev'), join(distDir, 'public', version));
+		copySync(join(process.cwd(), 'scripts', 'WEB-INF'), join(distDir, 'WEB-INF'));
 
 		writeFileSync(join(distDir, 'index.html'), indexFile, 'utf8');
 		// Allows the user of this package to attach their own post build/pre WAR creation script.

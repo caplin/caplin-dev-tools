@@ -3,6 +3,7 @@
 Object.defineProperty(exports, "__esModule", {
 	value: true
 });
+exports.distDir = undefined;
 exports.cleanDistAndBuildWAR = cleanDistAndBuildWAR;
 
 var _path = require('path');
@@ -31,7 +32,8 @@ const NO_OP = () => {
 	// Called after app is built.
 };
 const buildDir = (0, _path.join)(process.cwd(), 'build');
-const distDir = (0, _path.join)(buildDir, 'dist');
+
+const distDir = exports.distDir = (0, _path.join)(buildDir, 'dist');
 
 function cleanDistAndBuildWAR(config) {
 	// Remove the current `build/dist` directory.
@@ -51,12 +53,8 @@ function webpackBuildCallback(error, { buildCallback = NO_OP, indexPage, version
 			const variant = (0, _minimist2.default)(process.argv.slice(2)).variant;
 			const indexFile = indexPage({ variant, version });
 
-			try {
-				(0, _fsExtra.copySync)((0, _path.join)(process.cwd(), 'scripts', 'WEB-INF'), (0, _path.join)(distDir, 'WEB-INF'));
-				(0, _fsExtra.copySync)((0, _path.join)(process.cwd(), 'public', 'dev'), (0, _path.join)(distDir, 'public', version));
-			} catch (err) {
-				// do nothing
-			}
+			(0, _fsExtra.copySync)((0, _path.join)(process.cwd(), 'public', 'dev'), (0, _path.join)(distDir, 'public', version));
+			(0, _fsExtra.copySync)((0, _path.join)(process.cwd(), 'scripts', 'WEB-INF'), (0, _path.join)(distDir, 'WEB-INF'));
 
 			(0, _fsExtra.writeFileSync)((0, _path.join)(distDir, 'index.html'), indexFile, 'utf8');
 			// Allows the user of this package to attach their own post build/pre WAR creation script.
