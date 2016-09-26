@@ -53,7 +53,12 @@ function webpackBuildCallback(error, { buildCallback = NO_OP, indexPage, version
 			const variant = (0, _minimist2.default)(process.argv.slice(2)).variant;
 			const indexFile = indexPage({ variant, version });
 
-			(0, _fsExtra.copySync)((0, _path.join)(process.cwd(), 'public', 'dev'), (0, _path.join)(distDir, 'public', version));
+			try {
+				(0, _fsExtra.copySync)((0, _path.join)(process.cwd(), 'public', 'dev'), (0, _path.join)(distDir, 'public', version));
+			} catch (err) {
+				// Certain apps bundle all their static assets.
+			}
+
 			(0, _fsExtra.copySync)((0, _path.join)(process.cwd(), 'scripts', 'WEB-INF'), (0, _path.join)(distDir, 'WEB-INF'));
 
 			(0, _fsExtra.writeFileSync)((0, _path.join)(distDir, 'index.html'), indexFile, 'utf8');
