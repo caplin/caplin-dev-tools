@@ -279,4 +279,9 @@ export default function convertPackagesToNewFormat({
 	updateAllImportsInPackage('brjs-app-backup/js-patches', moduleSources);
 	// Delete all the old folders and files.
 	packagesToConvert.forEach(deleteUnusedFiles);
+
+	// Return a function that allows post conversion scripts to perform import path updates.
+	return (packagePath) => {
+		updateAllImportsInPackage(packagePath, moduleSources, makeAppModulesRelative);
+	};
 }

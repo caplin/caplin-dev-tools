@@ -12,7 +12,7 @@ import {
 	deleteUnusedFiles
 } from './convert-packages';
 
-export function runPostConversionScript(conversionMetadata) {
+export function runPostConversionScript(conversionMetadata, convertPackages) {
 	let postConversionScript = () => {
 		// The default post conversion script does nothing.
 	};
@@ -31,7 +31,13 @@ export function runPostConversionScript(conversionMetadata) {
 		// Ignore error if this application has no post conversion script to run.
 	}
 
-	postConversionScript(conversionMetadata, {
-		copyPackageFoldersToNewLocations, copySync, deleteUnusedFiles, glob
-	});
+	postConversionScript(
+		conversionMetadata, {
+			convertPackages,
+			copyPackageFoldersToNewLocations,
+			copySync,
+			deleteUnusedFiles,
+			glob
+		}
+	);
 }
