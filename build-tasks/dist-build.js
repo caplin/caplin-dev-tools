@@ -3,7 +3,7 @@
 Object.defineProperty(exports, "__esModule", {
 	value: true
 });
-exports.distDir = undefined;
+exports.distDir = exports.buildDir = undefined;
 exports.cleanDistAndBuildWAR = cleanDistAndBuildWAR;
 
 var _path = require('path');
@@ -31,8 +31,8 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 const NO_OP = () => {
 	// Called after app is built.
 };
-const buildDir = (0, _path.join)(process.cwd(), 'build');
 
+const buildDir = exports.buildDir = (0, _path.join)(process.cwd(), 'build');
 const distDir = exports.distDir = (0, _path.join)(buildDir, 'dist');
 
 function cleanDistAndBuildWAR(config) {

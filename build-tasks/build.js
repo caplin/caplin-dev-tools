@@ -20,8 +20,8 @@ import webpack from 'webpack';
 const NO_OP = () => {
 	// Called after app is built.
 };
-const buildDir = join(process.cwd(), 'build');
 
+export const buildDir = join(process.cwd(), 'build');
 export const distDir = join(buildDir, 'dist');
 
 export function cleanDistAndBuildWAR(config) {
