@@ -24,6 +24,10 @@ const NO_OP = () => {
 export const buildDir = join(process.cwd(), 'build');
 export const distDir = join(buildDir, 'dist');
 
+export function deleteBuildDir(callback) {
+	rimraf(buildDir, callback);
+}
+
 export function cleanDistAndBuildWAR(config) {
 	// Remove the current `build/dist` directory.
 	rimraf(distDir, rimrafCallback(config));

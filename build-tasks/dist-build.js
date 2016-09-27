@@ -4,6 +4,7 @@ Object.defineProperty(exports, "__esModule", {
 	value: true
 });
 exports.distDir = exports.buildDir = undefined;
+exports.deleteBuildDir = deleteBuildDir;
 exports.cleanDistAndBuildWAR = cleanDistAndBuildWAR;
 
 var _path = require('path');
@@ -34,6 +35,10 @@ const NO_OP = () => {
 
 const buildDir = exports.buildDir = (0, _path.join)(process.cwd(), 'build');
 const distDir = exports.distDir = (0, _path.join)(buildDir, 'dist');
+
+function deleteBuildDir(callback) {
+	(0, _rimraf2.default)(buildDir, callback);
+}
 
 function cleanDistAndBuildWAR(config) {
 	// Remove the current `build/dist` directory.
