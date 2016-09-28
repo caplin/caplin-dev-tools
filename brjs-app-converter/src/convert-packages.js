@@ -281,7 +281,10 @@ export default function convertPackagesToNewFormat({
 	packagesToConvert.forEach(deleteUnusedFiles);
 
 	// Return a function that allows post conversion scripts to perform import path updates.
-	return (packagePath) => {
-		updateAllImportsInPackage(packagePath, moduleSources, makeAppModulesRelative);
+	return (packagePath, srcPathModifier) => {
+		// It's possible that the `srcPath` value provided to `makeAppModulesRelative` will be for a file outside the
+		// application root, this would result in incorrect relative paths if the module is moved later as part of a build
+		// step. Allowing the post conversion script to wrap the call to `makeAppModulesRelative` lets it modify `srcPath`. 
+		updateAllImportsInPackage(packagePath, moduleSources, srcPathModifier(makeAppModulesRelative));
 	};
 }
