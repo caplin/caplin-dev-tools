@@ -6,7 +6,8 @@ import {
 	moveAspectCode
 } from './convert-aspect';
 import {
-	moveBladesetCode
+	moveAndConvertBladesCode,
+	moveBladesetCode,
 } from './convert-bladeset';
 
 // Move all code in bladesets/blades/aspects into the packages directory.
@@ -17,6 +18,8 @@ export function moveBRJSApplicationCodeToPackages(conversionMetadata) {
 			return moveBladesetCode(conversionMetadata, fileName);
 		} else if (/^.*-aspect$/.test(fileName)) {
 			moveAspectCode(conversionMetadata, fileName);
+		} else if (fileName === 'blades') {
+			moveAndConvertBladesCode(brjsApplicationDir, '', conversionMetadata);
 		}
 
 		return Promise.resolve();

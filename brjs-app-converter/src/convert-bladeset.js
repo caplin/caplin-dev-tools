@@ -16,9 +16,11 @@ import {
 } from './converter-utils';
 
 // Find all blades in a bladeset, move and convert them to packages.
-function moveAndConvertBladesCode(bladesetDir, bladesetName, conversionMetadata) {
+export function moveAndConvertBladesCode(bladesetDir, bladesetName, conversionMetadata) {
 	const bladesetBladesDir = join(bladesetDir, 'blades');
 	const moveBladesPromises = readdirSync(bladesetBladesDir)
+		// `blades` directories can have `.js-style` files in them so filter them out.
+		.filter((possibleBladeName) => possibleBladeName.startsWith('.') === false)
 		.map((bladeName) => {
 			conversionMetadata.packagesThatShouldBeLibs.push(bladeName);
 
