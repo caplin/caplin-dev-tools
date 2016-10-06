@@ -3,7 +3,7 @@
 Object.defineProperty(exports, "__esModule", {
 	value: true
 });
-exports.distDir = exports.buildDir = undefined;
+exports.warDir = exports.distDir = exports.buildDir = undefined;
 exports.deleteBuildDir = deleteBuildDir;
 exports.cleanDistAndBuildWAR = cleanDistAndBuildWAR;
 
@@ -35,6 +35,7 @@ const NO_OP = () => {
 
 const buildDir = exports.buildDir = (0, _path.join)(process.cwd(), 'build');
 const distDir = exports.distDir = (0, _path.join)(buildDir, 'dist');
+const warDir = exports.warDir = (0, _path.join)(buildDir, 'exported-wars');
 
 function deleteBuildDir(callback) {
 	(0, _rimraf2.default)(buildDir, callback);
@@ -70,10 +71,10 @@ function webpackBuildCallback(error, { buildCallback = NO_OP, indexPage, version
 			// Allows the user of this package to attach their own post build/pre WAR creation script.
 			buildCallback({ version });
 
-			(0, _fs.mkdir)((0, _path.join)(buildDir, 'exported-wars'), () => {
+			(0, _fs.mkdir)(warDir, () => {
 				const archive = (0, _archiver.create)('zip');
 				const versionedWARName = `${ warName }-${ version }.war`;
-				const warWriteStream = (0, _fsExtra.createWriteStream)((0, _path.join)(buildDir, 'exported-wars', versionedWARName));
+				const warWriteStream = (0, _fsExtra.createWriteStream)((0, _path.join)(warDir, versionedWARName));
 
 				archive.directory(distDir, '');
 				archive.pipe(warWriteStream);

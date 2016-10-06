@@ -23,6 +23,7 @@ const NO_OP = () => {
 
 export const buildDir = join(process.cwd(), 'build');
 export const distDir = join(buildDir, 'dist');
+export const warDir = join(buildDir, 'exported-wars');
 
 export function deleteBuildDir(callback) {
 	rimraf(buildDir, callback);
@@ -62,11 +63,11 @@ function webpackBuildCallback(error, {buildCallback = NO_OP, indexPage, version,
 		buildCallback({version});
 
 		mkdir(
-			join(buildDir, 'exported-wars'),
+			warDir,
 			() => {
 				const archive = create('zip');
 				const versionedWARName = `${warName}-${version}.war`;
-				const warWriteStream = createWriteStream(join(buildDir, 'exported-wars', versionedWARName));
+				const warWriteStream = createWriteStream(join(warDir, versionedWARName));
 
 				archive.directory(distDir, '');
 				archive.pipe(warWriteStream);
