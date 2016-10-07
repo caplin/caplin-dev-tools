@@ -21,7 +21,7 @@ const NO_OP = () => {
 	// Called after app is built.
 };
 
-export const buildDir = join(process.cwd(), 'build');
+export const buildDir = 'build';
 export const distDir = join(buildDir, 'dist');
 export const warDir = join(buildDir, 'exported-wars');
 

@@ -33,7 +33,7 @@ const NO_OP = () => {
 	// Called after app is built.
 };
 
-const buildDir = exports.buildDir = (0, _path.join)(process.cwd(), 'build');
+const buildDir = exports.buildDir = 'build';
 const distDir = exports.distDir = (0, _path.join)(buildDir, 'dist');
 const warDir = exports.warDir = (0, _path.join)(buildDir, 'exported-wars');
 
