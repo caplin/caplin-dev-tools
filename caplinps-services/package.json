@@ -1,6 +1,6 @@
 {
   "name": "@caplin/caplinps-services",
-  "version": "1.7.0",
+  "version": "1.8.0",
   "description": "Modules for every Caplin PS service",
   "main": "index.js",
   "scripts": {
