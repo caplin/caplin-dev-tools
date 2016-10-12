@@ -24,7 +24,7 @@ function getCommitCount() {
 	});
 }
 
-export default function createFullVersion(semVer) {
+export default function createFullVersion(semVer, hashLength = 8) {
 	return Promise
 		.all([
 			getCommitCount(),
@@ -32,7 +32,7 @@ export default function createFullVersion(semVer) {
 		])
 		.then((output) => new Promise((resolve) => {
 			const commitCount = output[0].trim();
-			const gitHash = output[1].trim().substr(0, 8);
+			const gitHash = output[1].trim().substr(0, hashLength);
 			const version = `${semVer}-${commitCount}-${gitHash}`;
 
 			resolve(version);
