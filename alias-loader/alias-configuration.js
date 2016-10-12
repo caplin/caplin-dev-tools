@@ -75,41 +75,41 @@ const aliasToModule = {
 	'caplin.ui.toggle-control$': '@caplin/caplin-aliases/caplin.ui.toggle-control',
 	'caplin.motf.confirmation$': '@caplin/caplin-aliases/caplin.motf.confirmation',
 	'caplin.grid.refine.text-refine-component$': '@caplin/caplin-aliases/caplin.grid.refine.text-refine-component',
-	'caplinps.fx.tile.factory$': '@caplin/caplinps-aliases/caplinps.fx.tile.factory',
-	'caplinps.grid.toolbar-component$': '@caplin/caplinps-aliases/caplinps.grid.toolbar-component',
-	'caplinps.fx.confirmation$': '@caplin/caplinps-aliases/caplinps.fx.confirmation',
-	'caplinps.watchlists.toolbar-component$': '@caplin/caplinps-aliases/caplinps.watchlists.toolbar-component',
-	'caplinps.collapsible-menu-model$': '@caplin/caplinps-aliases/caplinps.collapsible-menu-model',
-	'caplinps.permissioned-menu-item-model$': '@caplin/caplinps-aliases/caplinps.permissioned-menu-item-model',
-	'caplinps.watchlists.watchlist-sub-menu-model$': '@caplin/caplinps-aliases/caplinps.watchlists.watchlist-sub-menu-model',
-	'caplinps.grid.date-refine-component$': '@caplin/caplinps-aliases/caplinps.grid.date-refine-component',
-	'caplinps.grid.date-time-refine-component$': '@caplin/caplinps-aliases/caplinps.grid.date-time-refine-component',
 	'caplinps.application-menu-service$': '@caplin/caplinps-services/caplinps.application-menu-service',
-	'caplinps.logging.activity-log-store$': '@caplin/caplinps-services/caplinps.logging.activity-log-store',
-	'caplinps.userpreferences.user-preferences-service$': '@caplin/caplinps-services/caplinps.userpreferences.user-preferences-service',
-	'caplinps.tobo.account-service$': '@caplin/caplinps-services/caplinps.tobo.account-service',
-	'caplinps.tobo.multiple-user-service$': '@caplin/caplinps-services/caplinps.tobo.multiple-user-service',
-	'caplinps.tobo.recentusers.recent-users-service$': '@caplin/caplinps-services/caplinps.tobo.recentusers.recent-users-service',
-	'caplinps.tobo.search-service$': '@caplin/caplinps-services/caplinps.tobo.search-service',
-	'caplinps.shared-message-service$': '@caplin/caplinps-services/caplinps.shared-message-service',
-	'caplinps.workbench-trade-service-listener$': '@caplin/caplinps-services/caplinps.workbench-trade-service-listener',
-	'caplinps.grid.toolbar-decorator$': '@caplin/caplinps-aliases/caplinps.grid.toolbar-decorator',
-	'caplinps.fx.execution.floating-tooltip$': '@caplin/caplinps-services/caplinps.fx.execution.floating-tooltip',
-	'caplinps.fx.tile.shield$': '@caplin/caplinps-aliases/caplinps.fx.tile.shield',
-	'caplinps.fx.execution.fx-date-picker$': '@caplin/caplinps-aliases/caplinps.fx.execution.fx-date-picker',
-	'caplinps.tabs.tab-menu-control$': '@caplin/caplinps-aliases/caplinps.tabs.tab-menu-control',
-	'caplinps.grid.numeric-refine-component$': '@caplin/caplinps-aliases/caplinps.grid.numeric-refine-component',
-	'caplinps.clientsearch.clientSearchFactory$': '@caplin/caplinps-aliases/caplinps.clientsearch.clientSearchFactory',
-	'caplinps.blottertabs.tabbed-blotter$': '@caplin/caplinps-aliases/caplinps.blottertabs.tabbed-blotter',
-	'caplinps.ui.dialog.dialog-manager$': '@caplin/caplinps-aliases/caplinps.ui.dialog.dialog-manager',
+	'caplinps.blottertabs.grid-data-row-highlight-decorator$': '@caplin/caplinps-aliases/caplinps.blottertabs.grid-data-row-highlight-decorator',
 	'caplinps.blottertabs.tab-control$': '@caplin/caplinps-aliases/caplinps.blottertabs.tab-control',
 	'caplinps.blottertabs.blotter-creation-service$': '@caplin/caplinps-services/caplinps.blottertabs.blotter-creation-service',
 	'caplinps.blottertabs.blotter-service$': '@caplin/caplinps-services/caplinps.blottertabs.blotter-service',
 	'caplinps.blottertabs.tab-control-service$': '@caplin/caplinps-services/caplinps.blottertabs.tab-control-service',
-	'caplinps.ui.dialog.default-layout-handler$': '@caplin/caplinps-aliases/caplinps.ui.dialog.default-layout-handler',
+	'caplinps.blottertabs.tabbed-blotter$': '@caplin/caplinps-aliases/caplinps.blottertabs.tabbed-blotter',
+	'caplinps.clientsearch.clientSearchFactory$': '@caplin/caplinps-aliases/caplinps.clientsearch.clientSearchFactory',
+	'caplinps.collapsible-menu-model$': '@caplin/caplinps-aliases/caplinps.collapsible-menu-model',
+	'caplinps.fx.confirmation$': '@caplin/caplinps-aliases/caplinps.fx.confirmation',
+	'caplinps.fx.tile.factory$': '@caplin/caplinps-aliases/caplinps.fx.tile.factory',
+	'caplinps.fx.execution.floating-tooltip$': '@caplin/caplinps-services/caplinps.fx.execution.floating-tooltip',
+	'caplinps.fx.tile.shield$': '@caplin/caplinps-aliases/caplinps.fx.tile.shield',
+	'caplinps.fx.execution.fx-date-picker$': '@caplin/caplinps-aliases/caplinps.fx.execution.fx-date-picker',
+	'caplinps.grid.date-refine-component$': '@caplin/caplinps-aliases/caplinps.grid.date-refine-component',
+	'caplinps.grid.date-time-refine-component$': '@caplin/caplinps-aliases/caplinps.grid.date-time-refine-component',
+	'caplinps.grid.toolbar-decorator$': '@caplin/caplinps-aliases/caplinps.grid.toolbar-decorator',
+	'caplinps.grid.toolbar-component$': '@caplin/caplinps-aliases/caplinps.grid.toolbar-component',
+	'caplinps.grid.numeric-refine-component$': '@caplin/caplinps-aliases/caplinps.grid.numeric-refine-component',
+	'caplinps.logging.activity-log-store$': '@caplin/caplinps-services/caplinps.logging.activity-log-store',
 	'caplinps.menu-selectable-item-model$': '@caplin/caplinps-aliases/caplinps.menu-selectable-item-model',
-	'caplinps.blottertabs.grid-data-row-highlight-decorator$': '@caplin/caplinps-aliases/caplinps.blottertabs.grid-data-row-highlight-decorator',
+	'caplinps.permissioned-menu-item-model$': '@caplin/caplinps-aliases/caplinps.permissioned-menu-item-model',
+	'caplinps.shared-message-service$': '@caplin/caplinps-services/caplinps.shared-message-service',
+	'caplinps.tabs.tab-menu-control$': '@caplin/caplinps-aliases/caplinps.tabs.tab-menu-control',
+	'caplinps.tobo.account-service$': '@caplin/caplinps-services/caplinps.tobo.account-service',
+	'caplinps.tobo.multiple-user-service$': '@caplin/caplinps-services/caplinps.tobo.multiple-user-service',
+	'caplinps.tobo.recentusers.recent-users-service$': '@caplin/caplinps-services/caplinps.tobo.recentusers.recent-users-service',
+	'caplinps.tobo.search-service$': '@caplin/caplinps-services/caplinps.tobo.search-service',
 	'caplinps.tobo.grid.dataprovider.sljs-tobo-container-grid-data-provider$': '@caplin/caplinps-aliases/caplinps.tobo.grid.dataprovider.sljs-tobo-container-grid-data-provider',
+	'caplinps.ui.dialog.dialog-manager$': '@caplin/caplinps-aliases/caplinps.ui.dialog.dialog-manager',
+	'caplinps.userpreferences.user-preferences-service$': '@caplin/caplinps-services/caplinps.userpreferences.user-preferences-service',
+	'caplinps.ui.dialog.default-layout-handler$': '@caplin/caplinps-aliases/caplinps.ui.dialog.default-layout-handler',
+	'caplinps.watchlists.watchlist-sub-menu-model$': '@caplin/caplinps-aliases/caplinps.watchlists.watchlist-sub-menu-model',
+	'caplinps.workbench-trade-service-listener$': '@caplin/caplinps-services/caplinps.workbench-trade-service-listener',
+	'caplinps.watchlists.toolbar-component$': '@caplin/caplinps-aliases/caplinps.watchlists.toolbar-component',
 	'caplinx.motf.orderticket.indicative-rate$': '@caplin/caplinx-aliases/caplinx.motf.orderticket.indicative-rate',
 	'caplinx.motf.motfticket.motf-trade-factory$': '@caplin/caplinx-aliases/caplinx.motf.motfticket.motf-trade-factory',
 	'caplinx.scaffold.searchbutton.search-button$': '@caplin/caplinx-aliases/caplinx.scaffold.searchbutton.search-button',
@@ -139,10 +139,13 @@ const aliasToModule = {
 	'caplinx.dockingpanel.dockingpanel-component$': '@caplin/caplinx-aliases/caplinx.dockingpanel.dockingpanel-component'
 };
 
-module.exports.configureAliases = function(aliases, webpackAppAliases = {}, webpackConfig) {
+module.exports.configureAliases = function(aliases, webpackConfig, testAliases = aliases, webpackAppAliases = {}) {
+	const isTest = process.env.npm_lifecycle_event.startsWith('test'); // eslint-disable-line
+	const aliasesToUse = isTest ? testAliases : aliases;
+
 	// Attach the AliasRegistry aliases to the app's webpack aliases.
 	Object
-		.keys(aliases)
+		.keys(aliasesToUse)
 		.forEach((alias) => {
 			const exactMatchAlias = alias + '$';
 			const moduleToAlias = aliasToModule[exactMatchAlias];
