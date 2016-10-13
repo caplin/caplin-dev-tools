@@ -58,7 +58,7 @@ function getLibrarySource(packageDirectory, manifestJSFiles) {
 function getLibraryModuleExports(manifestExports) {
 	// Certain thirdparty libraries contain UMD boilerplate which checks if `module` exists and exports
 	// library values using `module.exports` instead of putting it on the global/window object.
-	const exportsExist = 'Object.keys(module.exports).length';
+	const exportsExist = '(Object.keys(module.exports).length || typeof module.exports === "function")';
 	const moduleExports = `module.exports = ${exportsExist} ? module.exports : ${manifestExports};`;
 
 	return `\nif (typeof module !== "undefined") ${moduleExports}\n`;
