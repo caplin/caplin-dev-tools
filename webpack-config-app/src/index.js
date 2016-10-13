@@ -63,7 +63,7 @@ export function webpackConfigGenerator({basePath, version = 'dev'}) {
 				test: /\.html$/,
 				loaders: ['@caplin/html-loader']
 			}, {
-				test: /\.(gif|jpg|png|svg|woff)$/,
+				test: /\.(gif|jpg|png|svg|woff|woff2)$/,
 				loader: 'file-loader'
 			}, {
 				test: /\.js$/,
