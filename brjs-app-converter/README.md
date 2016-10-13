@@ -136,13 +136,17 @@ will be required to view the pre-move history. Being unable to follow moves also
 ## Tips
 
 To create the `css`/`less`/`sass` imports for the app being converted open the BRJS CSS bundles
-and extract the bundled files with this RegExp.
+and extract the bundled files with this RegExp in Atom.
 
 `[^]*?/\*\*\* ([./a-z-A-Z\d]*) \*\*\*/`
 
 you can convert the comments to imports with this replacement pattern.
 
 `import '$1';\n`
+
+Then change the file paths to the new structure by removing incorrect prefixes e.g. `libs/` and replace
+`/resources/` with `/_resources/` in file paths. Change `.css` to `.less` if required. `default-aspect/` to
+`./$TRADER-default-aspect/`, `'.*blades/` with `'./`.
 
 To extract the transforms/handlers from a `renderDefinitions.xml` file use this RegExp
 
