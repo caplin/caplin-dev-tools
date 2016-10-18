@@ -94,7 +94,10 @@ function findReferencedTemplateIDs(parsedDOM) {
 			const dataValue = parsedDOM(element).data('bind');
 			// Some template names are code to be executed as opposed to a simple string.
 			// e.g. `template: {name: amount.getTemplateName()}`, we want to skip these.
-			const templateNameMatchArray = dataValue.match(/.*name\s*:\s*['|"](.*?)['|"]/);
+			const templateNameMatchArray = dataValue.match(/.*name\s*:\s*['|"](.*?)['|"]/)
+			// Some template names are strings instead of being wrapped in an object
+			// e.g. `template: 'caplin.orderticket.amount'`.
+				|| dataValue.match(/.*template\s*:\s*['|"](.*?)['|"]/);
 
 			if (templateNameMatchArray) {
 				dependentTemplateIDs.add(templateNameMatchArray[1]);
