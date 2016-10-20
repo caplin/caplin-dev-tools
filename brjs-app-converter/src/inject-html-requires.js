@@ -31,9 +31,15 @@ const templateIDRegExp = /['|"](.*)['|"]/g;
 
 export function injectHTMLRequires({applicationName = 'fxtrader', packagesDirName = 'packages'} = {}) {
 	const appJSFilePaths = sync(`apps/${applicationName}/src/**/*.js`, jsGlobOptions);
-	const appHTMLFilePaths = sync(`apps/${applicationName}/src/**/_resources/**/*.html`, htmlGlobOptions);
+	const appHTMLFilePaths = sync(
+		`apps/${applicationName}/src/**/{_resources,_resources-test-[au]t}/**/*.html`,
+		htmlGlobOptions
+	);
 	const packageJSFilePaths = sync(`${packagesDirName}/**/*.js`);
-	const packageHTMLFilePaths = sync(`${packagesDirName}/**/_resources/**/*.html`, htmlGlobOptions);
+	const packageHTMLFilePaths = sync(
+		`${packagesDirName}/**/{_resources,_resources-test-[au]t}/**/*.html`,
+		htmlGlobOptions
+	);
 	const stripPackagePrefix = dirPrefixRemover(`${packagesDirName}/`);
 	const templateIDsToFileInfo = new Map();
 
