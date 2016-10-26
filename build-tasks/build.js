@@ -43,7 +43,9 @@ function rimrafCallback(config) {
 }
 
 // When we've built the application copy any missing WAR files.
-function webpackBuildCallback(error, {buildCallback = NO_OP, indexPage, version, warName}) {
+function webpackBuildCallback(error, {
+	buildCallback = NO_OP, indexPage, version, warName, webInfLocation = join(process.cwd(), 'scripts', 'WEB-INF')
+}) {
 	if (error) {
 		console.error(error); // eslint-disable-line
 	} else {
@@ -56,7 +58,7 @@ function webpackBuildCallback(error, {buildCallback = NO_OP, indexPage, version,
 			// Certain apps bundle all their static assets.
 		}
 
-		copySync(join(process.cwd(), 'scripts', 'WEB-INF'), join(distDir, 'WEB-INF'));
+		copySync(webInfLocation, join(distDir, 'WEB-INF'));
 
 		writeFileSync(join(distDir, 'index.html'), indexFile, 'utf8');
 		// Allows the user of this package to attach their own post build/pre WAR creation script.
