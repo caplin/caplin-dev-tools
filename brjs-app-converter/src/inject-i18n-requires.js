@@ -151,10 +151,6 @@ function searchForPropertiesPrefix(propertiesToFilePath, discoveredToken, jsFile
 		console.warn( // eslint-disable-line
 			`In ${jsFilePath} with prefixed token ${discoveredToken} there are multiple possible requires, skipping.`
 		);
-
-		allPossibleFilePaths.forEach((possibleFilePath) => {
-			console.warn(possibleFilePath); // eslint-disable-line
-		});
 	} else if (allPossibleFilePaths.size === 0) {
 		console.warn( // eslint-disable-line
 			`In ${jsFilePath} with prefixed token ${discoveredToken} there are no possible requires.`

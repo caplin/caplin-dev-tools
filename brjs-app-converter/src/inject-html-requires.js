@@ -115,6 +115,8 @@ function findReferencedTemplateIDs(parsedDOM) {
 
 // Discover the IDs of templates, create and register a `FileInfo` object for each ID.
 function createTemplateFileInfo(parsedDOM, templateIDsToFileInfo, filePath, referencedTemplateIDs) {
+	let warnedAboutLackOfID = false;
+
 	parsedDOM
 		.root()
 		.children()
@@ -123,9 +125,10 @@ function createTemplateFileInfo(parsedDOM, templateIDsToFileInfo, filePath, refe
 
 			if (id) {
 				templateIDsToFileInfo.set(id, {filePath, referencedTemplateIDs});
-			} else {
+			} else if (warnedAboutLackOfID === false) {
 				// eslint-disable-next-line
 				console.warn(`${filePath} has no id in one of its top level DOM nodes.`);
+				warnedAboutLackOfID = true;
 			}
 		});
 }
@@ -173,7 +176,7 @@ function addMatchIfItsATemplateID(possibleTemplateID, templateIDsToFileInfo, dis
 				// `return 'caplinx.fxexecution.fxtile.metal.metal_' + sCurrentPanel + '_setup';`.
 				if (templatedID.startsWith(matchArray[1]) && templatedID.endsWith(matchArray[2])) {
 					// eslint-disable-next-line
-					console.log(`${possibleTemplateID} triggers a require for the template with ID ${templatedID}`);
+					console.log(`${possibleTemplateID} generates a require for the template with ID ${templatedID}`);
 
 					discoveredTemplateIDs.add(templatedID);
 				}
