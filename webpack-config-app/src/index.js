@@ -13,7 +13,7 @@ import ExtractTextPlugin from 'extract-text-webpack-plugin';
 import parseArgs from 'minimist';
 import webpack from 'webpack';
 
-export function webpackConfigGenerator({basePath, version = 'dev'}) {
+export function webpackConfigGenerator({basePath, version = 'dev', i18nFileName = `i18n-${version}.js`}) {
 	// Do not compile `babel-polyfill`/`core-js` using babel, it's not supported and causes
 	// issues in older browsers (IE11) https://github.com/zloirock/core-js/issues/189
 	const babelLoaderExclude = [join(basePath, 'node_modules/babel-polyfill/')];
@@ -39,7 +39,6 @@ export function webpackConfigGenerator({basePath, version = 'dev'}) {
 	const appEntryPoint = join(basePath, 'src', entryFile);
 	const buildOutputDir = join(basePath, 'build', 'dist', 'public');
 	const bundleName = `bundle-${version}.js`;
-	const i18nFileName = `i18n-${version}.js`;
 	const i18nExtractorPlugin = new ExtractTextPlugin(i18nFileName, {allChunks: true});
 	let i18nLoader = i18nExtractorPlugin.extract(['raw-loader', '@caplin/i18n-loader']);
 	const publicPath = isBuild ? 'public/' : '/public/';

@@ -25,7 +25,7 @@ var _webpack2 = _interopRequireDefault(_webpack);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-function webpackConfigGenerator({ basePath, version = 'dev' }) {
+function webpackConfigGenerator({ basePath, version = 'dev', i18nFileName = `i18n-${ version }.js` }) {
 	// Do not compile `babel-polyfill`/`core-js` using babel, it's not supported and causes
 	// issues in older browsers (IE11) https://github.com/zloirock/core-js/issues/189
 	const babelLoaderExclude = [(0, _path.join)(basePath, 'node_modules/babel-polyfill/')];
@@ -51,7 +51,6 @@ function webpackConfigGenerator({ basePath, version = 'dev' }) {
 	const appEntryPoint = (0, _path.join)(basePath, 'src', entryFile);
 	const buildOutputDir = (0, _path.join)(basePath, 'build', 'dist', 'public');
 	const bundleName = `bundle-${ version }.js`;
-	const i18nFileName = `i18n-${ version }.js`;
 	const i18nExtractorPlugin = new _extractTextWebpackPlugin2.default(i18nFileName, { allChunks: true });
 	let i18nLoader = i18nExtractorPlugin.extract(['raw-loader', '@caplin/i18n-loader']);
 	const publicPath = isBuild ? 'public/' : '/public/';
