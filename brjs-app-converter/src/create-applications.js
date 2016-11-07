@@ -36,7 +36,7 @@ function populateApplicationPackageJSON(
 		const isDirectory = statSync(join(packagesDir, packageDir)).isDirectory();
 
 		if (isNotLib && isDirectory) {
-			appPackageJSON.dependencies[packageDir] = `../../${packagesDirName}/${packageDir}`;
+			appPackageJSON.dependencies[packageDir] = `file:../../${packagesDirName}/${packageDir}`;
 		}
 	}
 
