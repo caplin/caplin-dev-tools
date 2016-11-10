@@ -72,7 +72,7 @@ function getLibraryWindowExports(packageName, manifestExports) {
 	// because it doesn't wrap thirdparty libraries in IIFEs like webpack does, which means variables
 	// declared in those libraries can leak to the global scope but in webpack they don't so we must
 	// explictly export them to the global/window.
-	if (manifestExports) {
+	if (manifestExports && manifestExports !== '{}') {
 		const windowExport = `(typeof module !== "undefined" && module.exports) || ${manifestExports};\n`;
 
 		windowExports += `\nwindow.${manifestExports} = ${windowExport}`;
