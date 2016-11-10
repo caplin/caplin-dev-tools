@@ -13,10 +13,35 @@ import ExtractTextPlugin from 'extract-text-webpack-plugin';
 import parseArgs from 'minimist';
 import webpack from 'webpack';
 
-export function webpackConfigGenerator({basePath, version = 'dev', i18nFileName = `i18n-${version}.js`}) {
+const {
+	sourceMaps,
+	variant
+} = parseArgs(process.argv.slice(2));
+const isBuild = process.env.npm_lifecycle_event === 'build'; // eslint-disable-line
+const isTest = process.env.npm_lifecycle_event.startsWith('test'); // eslint-disable-line
+
+function configureBundleEntryPoint(webpackConfig, basePath) {
+	// Certain apps can have variant entry points e.g. mobile.
+	const entryFile = variant ? `index-${variant}.js` : 'index.js';
+	const appEntryPoint = join(basePath, 'src', entryFile);
+
+	webpackConfig.entry = appEntryPoint;
+}
+
+function configureBabelLoader(webpackConfig, basePath) {
 	// Do not compile `babel-polyfill`/`core-js` using babel, it's not supported and causes
 	// issues in older browsers (IE11) https://github.com/zloirock/core-js/issues/189
-	const babelLoaderExclude = [join(basePath, 'node_modules/babel-polyfill/')];
+	const babelLoaderExclude = [
+		join(basePath, 'node_modules/babel-polyfill/')
+	];
+	const babelLoaderConfig = {
+		test: /\.js$/,
+		loader: 'babel-loader',
+		exclude: babelLoaderExclude,
+		query: {
+			cacheDirectory: true
+		}
+	};
 
 	for (const packageDir of readdirSync(join(basePath, '../../packages'))) {
 		try {
@@ -27,35 +52,74 @@ export function webpackConfigGenerator({basePath, version = 'dev', i18nFileName 
 		}
 	}
 
-	const args = parseArgs(process.argv.slice(2));
-	const {
-		sourceMaps,
-		variant
-	} = args;
-	const isBuild = process.env.npm_lifecycle_event === 'build'; // eslint-disable-line
-	const isTest = process.env.npm_lifecycle_event.startsWith('test'); // eslint-disable-line
+	webpackConfig.module.loaders.push(babelLoaderConfig);
+}
 
-	const entryFile = variant ? `index-${variant}.js` : 'index.js';
-	const appEntryPoint = join(basePath, 'src', entryFile);
-	const buildOutputDir = join(basePath, 'build', 'dist', 'public');
-	const bundleName = `bundle-${version}.js`;
-	const i18nExtractorPlugin = new ExtractTextPlugin(i18nFileName, {allChunks: true});
-	let i18nLoader = i18nExtractorPlugin.extract(['raw-loader', '@caplin/i18n-loader']);
-	const publicPath = isBuild ? 'public/' : '/public/';
-	let serviceLoader = '@caplin/service-loader';
-
-	if (isTest) {
-		i18nLoader = '@caplin/i18n-loader/inline';
-		serviceLoader = '@caplin/service-loader/cache-deletion-loader';
+function configureI18nLoading(webpackConfig, i18nFileName) {
+	const i18nLoaderConfig = {
+		test: /\.properties$/
 	}
 
+	if (isTest) {
+		i18nLoaderConfig.loader = '@caplin/i18n-loader/inline';
+	} else {
+		const i18nExtractorPlugin = new ExtractTextPlugin(i18nFileName, {allChunks: true});
+
+		i18nLoaderConfig.loader = i18nExtractorPlugin.extract(['raw-loader', '@caplin/i18n-loader']);
+		webpackConfig.plugins.push(i18nExtractorPlugin);
+	}
+
+	webpackConfig.module.loaders.push(i18nLoaderConfig);
+}
+
+function configureServiceLoader(webpackConfig) {
+	if (isTest) {
+		webpackConfig.resolveLoader.alias.service = '@caplin/service-loader/cache-deletion-loader';
+	} else {
+		webpackConfig.resolveLoader.alias.service = '@caplin/service-loader';
+	}
+}
+
+function configureDevtool(webpackConfig) {
+	if (sourceMaps) {
+		webpackConfig.devtool = 'inline-source-map';
+	}
+}
+
+function configureBuildDependentConfig(webpackConfig, version) {
+	if (isBuild) {
+		webpackConfig.output.publicPath = 'public/';
+
+		webpackConfig.plugins.push(
+			new webpack.DefinePlugin({
+				'process.env': {
+					VERSION: JSON.stringify(version)
+				}
+			})
+		);
+
+		webpackConfig.plugins.push(
+			new webpack.optimize.UglifyJsPlugin({
+				exclude: /i18n(.*)\.js/,
+				output: {
+					comments: false
+				},
+				compress: {
+					warnings: false,
+					screw_ie8: true // eslint-disable-line
+				}
+			})
+		);
+	} else {
+		webpackConfig.output.publicPath = '/public/';
+	}
+}
+
+export function webpackConfigGenerator({basePath, version = 'dev', i18nFileName = `i18n-${version}.js`}) {
 	const webpackConfig = {
-		cache: true,
-		entry: appEntryPoint,
 		output: {
-			path: buildOutputDir,
-			filename: bundleName,
-			publicPath
+			filename: `bundle-${version}.js`,
+			path: join(basePath, 'build', 'dist', 'public')
 		},
 		module: {
 			loaders: [{
@@ -66,17 +130,7 @@ export function webpackConfigGenerator({basePath, version = 'dev', i18nFileName 
 				loader: 'file-loader'
 			}, {
 				test: /\.js$/,
-				loader: 'babel-loader',
-				exclude: babelLoaderExclude,
-				query: {
-					cacheDirectory: true
-				}
-			}, {
-				test: /\.js$/,
 				loader: '@caplin/patch-loader'
-			}, {
-				test: /\.properties$/,
-				loader: i18nLoader
 			}, {
 				test: /\.scss$/,
 				loaders: ['style-loader', 'css-loader', 'sass-loader']
@@ -105,44 +159,21 @@ export function webpackConfigGenerator({basePath, version = 'dev', i18nFileName 
 		resolveLoader: {
 			alias: {
 				alias: '@caplin/alias-loader',
-				'app-meta': '@caplin/app-meta-loader',
-				service: serviceLoader
+				'app-meta': '@caplin/app-meta-loader'
 			},
 			// Loaders are resolved relative to the resource they are applied to. So when symlinking packages during
 			// development loaders will not be resolved unless we specify the directory that contains the loaders.
 			root: join(basePath, 'node_modules')
 		},
-		plugins: [
-			i18nExtractorPlugin
-		]
+		plugins: []
 	};
 
-	if (sourceMaps) {
-		webpackConfig.devtool = 'inline-source-map';
-	}
-
-	if (isBuild) {
-		webpackConfig.plugins.push(
-			new webpack.DefinePlugin({
-				'process.env': {
-					VERSION: JSON.stringify(version)
-				}
-			})
-		);
-
-		webpackConfig.plugins.push(
-			new webpack.optimize.UglifyJsPlugin({
-				exclude: /i18n(.*)\.js/,
-				output: {
-					comments: false
-				},
-				compress: {
-					warnings: false,
-					screw_ie8: true // eslint-disable-line
-				}
-			})
-		);
-	}
+	configureBundleEntryPoint(webpackConfig, basePath);
+	configureBabelLoader(webpackConfig, basePath);
+	configureI18nLoading(webpackConfig, i18nFileName);
+	configureServiceLoader(webpackConfig);
+	configureDevtool(webpackConfig);
+	configureBuildDependentConfig(webpackConfig, version);
 
 	return webpackConfig;
 }
