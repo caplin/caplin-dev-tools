@@ -78,8 +78,11 @@ function webpackConfigGenerator({ basePath, version = 'dev', i18nFileName = `i18
 				loader: 'file-loader'
 			}, {
 				test: /\.js$/,
-				loader: 'babel-loader?cacheDirectory',
-				exclude: babelLoaderExclude
+				loader: 'babel-loader',
+				exclude: babelLoaderExclude,
+				query: {
+					cacheDirectory: true
+				}
 			}, {
 				test: /\.js$/,
 				loader: '@caplin/patch-loader'
@@ -106,14 +109,20 @@ function webpackConfigGenerator({ basePath, version = 'dev', i18nFileName = `i18
 				'$app-metadata$': (0, _path.join)(basePath, 'src', 'config', 'metadata.js'),
 				'ct-core/BRJSClassUtility$': (0, _path.join)(__dirname, 'null.js'),
 				'br/dynamicRefRequire$': (0, _path.join)(__dirname, 'null.js')
-			}
+			},
+			// Module requires are resolved relative to the resource that is requiring them. When symlinking during
+			// development modules will not be resolved unless we specify their parent directory.
+			root: (0, _path.join)(basePath, 'node_modules')
 		},
 		resolveLoader: {
 			alias: {
 				alias: '@caplin/alias-loader',
 				'app-meta': '@caplin/app-meta-loader',
 				service: serviceLoader
-			}
+			},
+			// Loaders are resolved relative to the resource they are applied to. So when symlinking packages during
+			// development loaders will not be resolved unless we specify the directory that contains the loaders.
+			root: (0, _path.join)(basePath, 'node_modules')
 		},
 		plugins: [i18nExtractorPlugin]
 	};
