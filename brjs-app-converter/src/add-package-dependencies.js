@@ -41,22 +41,28 @@ function isAPackageImport(astNode) {
 	return astNode.callee.name === 'require' && astNode.callee.type === 'Identifier';
 }
 
-function getPackageInfo(importID, availablePackages) {
+// Certain `require` calls don't have string values e.g. `dynamicRefRequire.js`.
+// For these dynamic requires we set `importID` to a default value.
+function getPackageInfo(importID = '', availablePackages) {
 	const packageName = importID.split('/')[0];
 
 	return availablePackages.get(packageName);
 }
 
 function extractPackagesFromJSFile(jsFile, dependencies, availablePackages) {
-	jscodeshift(readFileSync(jsFile, 'utf8'))
-		.find('CallExpression', isAPackageImport)
-		.forEach((path) => {
-			const packageInfo = getPackageInfo(path.value.arguments[0].value, availablePackages)
+	try {
+		jscodeshift(readFileSync(jsFile, 'utf8'))
+			.find('CallExpression', isAPackageImport)
+			.forEach((path) => {
+				const packageInfo = getPackageInfo(path.value.arguments[0].value, availablePackages)
 
-			if (packageInfo) {
-				dependencies.add(packageInfo);
-			}
-		});
+				if (packageInfo) {
+					dependencies.add(packageInfo);
+				}
+			});
+	} catch (e) {
+		console.error(`${jsFile} cannot be parsed for package dependencies.`);
+	}
 }
 
 function findDependencies(packageDir, availablePackages) {

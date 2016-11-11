@@ -1,3 +1,4 @@
+import addPackageDependencies from './add-package-dependencies';
 import {
 	moveBRJSApplicationCodeToPackages
 } from './convert-app';
@@ -51,7 +52,10 @@ export default function({app}) {
 	const structureUpdated = convertPackages.then(() => moveApplicationPackagesToLibs(conversionMetadata));
 	const i18nRequiresAdded = structureUpdated.then(() => injectI18nRequires(conversionMetadata));
 	const htmlRequiresAdded = i18nRequiresAdded.then(() => injectHTMLRequires(conversionMetadata));
-	const postConversionScript = htmlRequiresAdded.then(() => {
+	const packageDependenciesAdded = htmlRequiresAdded.then(() => {
+		addPackageDependencies(conversionMetadata);
+	});
+	const postConversionScript = packageDependenciesAdded.then(() => {
 		runPostConversionScript(conversionMetadata, convertPackagesFunction);
 	});
 

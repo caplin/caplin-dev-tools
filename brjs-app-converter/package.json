@@ -40,6 +40,7 @@
     "fs-extra": "^0.26.3",
     "glob": "^7.0.3",
     "js-yaml": "^3.4.6",
+    "jscodeshift": "^0.3.30",
     "lodash": "^3.10.1",
     "minimist": "^1.2.0",
     "properties": "^1.2.1",
