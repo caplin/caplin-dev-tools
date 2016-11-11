@@ -59,14 +59,29 @@ function createBabelLoaderExcludeList(basePath) {
 	return babelLoaderExclude;
 }
 
+function createBabelLoaderQuery(basePath) {
+	const babelLoaderQuery = {
+		cacheDirectory: true
+	};
+	const babelRC = JSON.parse((0, _fs.readFileSync)((0, _path.join)(basePath, '.babelrc'), 'utf8'));
+
+	if (babelRC.presets) {
+		babelLoaderQuery.presets = babelRC.presets.map(preset => require.resolve(`babel-preset-${ preset }`));
+	}
+
+	if (babelLoaderQuery.plugins) {
+		babelLoaderQuery.plugins = babelRC.plugins.map(plugin => require.resolve(`babel-plugin-${ plugin }`));
+	}
+
+	return babelLoaderQuery;
+}
+
 function configureBabelLoader(webpackConfig, basePath) {
 	const babelLoaderConfig = {
 		test: /\.js$/,
 		loader: 'babel-loader',
 		exclude: createBabelLoaderExcludeList(basePath),
-		query: {
-			cacheDirectory: true
-		}
+		query: createBabelLoaderQuery(basePath)
 	};
 
 	webpackConfig.module.loaders.push(babelLoaderConfig);
