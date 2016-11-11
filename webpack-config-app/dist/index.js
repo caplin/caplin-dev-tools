@@ -40,27 +40,34 @@ function configureBundleEntryPoint(webpackConfig, basePath) {
 	webpackConfig.entry = appEntryPoint;
 }
 
+function createBabelLoaderExcludeList(basePath) {
+	const babelLoaderExclude = [/KeyMasterHack.js/];
+	// Exclude `babel-polyfill`, IE11 issues, https://github.com/zloirock/core-js/issues/189
+	const packagesToExclude = ['babel-polyfill'];
+	const packagesDir = (0, _path.join)(basePath, '../../packages');
+
+	for (const packageDir of (0, _fs.readdirSync)(packagesDir)) {
+		if ((0, _fs.existsSync)((0, _path.join)(packagesDir, `${ packageDir }/converted_library.js`))) {
+			packagesToExclude.push(packageDir);
+		} else if (packageDir.startsWith('br-') || packagesDir.startsWith('ct-') && packagesDir !== 'ct-services') {
+			packagesToExclude.push(packageDir);
+		}
+	}
+
+	babelLoaderExclude.push(new RegExp(`(node_modules|packages)/(${ packagesToExclude.join('|') })`));
+
+	return babelLoaderExclude;
+}
+
 function configureBabelLoader(webpackConfig, basePath) {
-	// Do not compile `babel-polyfill`/`core-js` using babel, it's not supported and causes
-	// issues in older browsers (IE11) https://github.com/zloirock/core-js/issues/189
-	const babelLoaderExclude = [(0, _path.join)(basePath, 'node_modules/babel-polyfill/')];
 	const babelLoaderConfig = {
 		test: /\.js$/,
 		loader: 'babel-loader',
-		exclude: babelLoaderExclude,
+		exclude: createBabelLoaderExcludeList(basePath),
 		query: {
 			cacheDirectory: true
 		}
 	};
-
-	for (const packageDir of (0, _fs.readdirSync)((0, _path.join)(basePath, '../../packages'))) {
-		try {
-			(0, _fs.statSync)((0, _path.join)(basePath, `node_modules/${ packageDir }/converted_library.js`));
-			babelLoaderExclude.push((0, _path.join)(basePath, `node_modules/${ packageDir }/`));
-		} catch (packageShouldBeBabeledError) {
-			// Ignore.
-		}
-	}
 
 	webpackConfig.module.loaders.push(babelLoaderConfig);
 }
