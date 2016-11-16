@@ -38,16 +38,20 @@ exports.cleanDistAndBuildWAR = function cleanDistAndBuildWAR(config) {
 function rimrafCallback(config) {
 	return () => webpack(
 		config.webpackConfig,
-		(error) => webpackBuildCallback(error, config)
+		(error, stats) => webpackBuildCallback(error, stats, config)
 	);
 }
 
 // When we've built the application copy any missing WAR files.
-function webpackBuildCallback(error, {
+function webpackBuildCallback(error, stats, {
 	buildCallback = NO_OP, indexPage, version, warName, webInfLocation = join(process.cwd(), 'scripts', 'WEB-INF')
 }) {
+	const jsonStats = stats.toJson();
+
 	if (error) {
 		console.error(error); // eslint-disable-line
+	} else if (jsonStats.errors.length > 0) {
+		jsonStats.errors.forEach((err) => console.error(err));
 	} else {
 		const variant = parseArgs(process.argv.slice(2)).variant;
 		const indexFile = indexPage({variant, version});
