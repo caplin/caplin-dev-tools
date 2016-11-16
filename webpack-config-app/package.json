@@ -1,20 +1,10 @@
 {
   "name": "@caplin/webpack-config-app",
-  "version": "1.29.0",
+  "version": "1.29.2",
   "description": "webpack config common to Caplin applications",
-  "main": "dist/index.js",
-  "scripts": {
-    "build": "babel src --out-dir dist"
-  },
+  "main": "index.js",
   "author": "",
   "license": "ISC",
-  "files": [
-    "dist"
-  ],
-  "devDependencies": {
-    "babel-cli": "^6.7.5",
-    "babel-preset-node6": "^11.0.0"
-  },
   "dependencies": {
     "@caplin/alias-loader": "^1.0.0",
     "@caplin/app-meta-loader": "^1.0.0",
