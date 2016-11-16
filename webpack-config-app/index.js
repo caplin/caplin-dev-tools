@@ -43,7 +43,7 @@ function createBabelLoaderExcludeList(basePath) {
 		}
 	}
 
-	babelLoaderExclude.push(new RegExp(`(node_modules|packages)/(${packagesToExclude.join('|')})`));
+	babelLoaderExclude.push(new RegExp(`(node_modules|packages)/(${ packagesToExclude.join('|') })/`));
 
 	return babelLoaderExclude;
 }
