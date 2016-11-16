@@ -1,35 +1,35 @@
-import {
+const {
 	join
-} from 'path';
+} = require('path');
 
-import {
+const {
 	create
-} from 'archiver';
-import {
+} = require('archiver');
+const {
 	mkdir
-} from 'fs';
-import {
+} = require('fs');
+const {
 	copySync,
 	createWriteStream,
 	writeFileSync
-} from 'fs-extra';
-import parseArgs from 'minimist';
-import rimraf from 'rimraf';
-import webpack from 'webpack';
+} = require('fs-extra');
+const parseArgs = require('minimist');
+const rimraf = require('rimraf');
+const webpack = require('webpack');
 
 const NO_OP = () => {
 	// Called after app is built.
 };
 
-export const buildDir = 'build';
-export const distDir = join(buildDir, 'dist');
-export const warDir = join(buildDir, 'exported-wars');
+const buildDir = exports.buildDir = 'build';
+const distDir = exports.distDir = join(buildDir, 'dist');
+const warDir = exports.warDir = join(buildDir, 'exported-wars');
 
-export function deleteBuildDir(callback) {
+exports.deleteBuildDir = function deleteBuildDir(callback) {
 	rimraf(buildDir, callback);
 }
 
-export function cleanDistAndBuildWAR(config) {
+exports.cleanDistAndBuildWAR = function cleanDistAndBuildWAR(config) {
 	// Remove the current `build/dist` directory.
 	rimraf(distDir, rimrafCallback(config));
 }
