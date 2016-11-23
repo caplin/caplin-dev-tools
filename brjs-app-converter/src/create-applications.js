@@ -4,6 +4,7 @@ import {
 
 import {
 	copySync,
+	existsSync,
 	readdirSync,
 	readJsonSync,
 	statSync,
@@ -14,14 +15,38 @@ import {
 	templateDir
 } from './converter-data';
 
+function serverDirs(convertedAppDir) {
+	let javaServerDir = join(convertedAppDir, 'scripts');
+	const serverDir = join(convertedAppDir, 'server');
+	let nodeServerDir = serverDir;
+
+	if (existsSync(join(serverDir, 'node'))) {
+		nodeServerDir = join(serverDir, 'node');
+	}
+
+	if (existsSync(join(serverDir, 'java'))) {
+		javaServerDir = join(serverDir, 'java');
+	}
+
+	return {
+		javaServerDir,
+		nodeServerDir
+	};
+}
+
 function setUpApplicationFiles(applicationName, convertedAppDir, conversionMetadata, defaultAspectDir) {
 	copySync(join('..', 'conversion-data', applicationName), join(convertedAppDir));
-
 	copySync(join(templateDir, '.babelrc'), join(convertedAppDir, '.babelrc'));
-	copySync(conversionMetadata.privateKeyFileLocation, join(convertedAppDir, 'server', 'privatekey.pem'));
 	copySync(join(defaultAspectDir, 'unbundled-resources'), join(convertedAppDir, 'public/dev/unbundled-resources'));
 	copySync(join(defaultAspectDir, 'unbundled-resources'), join(convertedAppDir, 'public/dev'));
-	copySync(join(conversionMetadata.brjsApplicationDir, 'WEB-INF'), join(convertedAppDir, 'scripts', 'WEB-INF'));
+
+	const {
+		javaServerDir,
+		nodeServerDir
+	} = serverDirs(convertedAppDir);
+
+	copySync(conversionMetadata.privateKeyFileLocation, join(nodeServerDir, 'privatekey.pem'));
+	copySync(join(conversionMetadata.brjsApplicationDir, 'WEB-INF'), join(javaServerDir, 'WEB-INF'));
 }
 
 // Given an application populate its `package.json` with all the newly created packages as dependencies.
