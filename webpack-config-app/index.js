@@ -4,7 +4,8 @@ const {
 	readFileSync
 } = require('fs');
 const {
-	join
+	join,
+	sep
 } = require('path');
 
 const {
@@ -31,9 +32,11 @@ function configureBundleEntryPoint(webpackConfig, basePath) {
 
 function createBabelLoaderExcludeList(basePath) {
 	const babelLoaderExclude = [/KeyMasterHack.js/];
+	const dirSep = (sep === '\\' ? '\\\\' : sep);
 	// Exclude `babel-polyfill`, IE11 issues, https://github.com/zloirock/core-js/issues/189
 	const packagesToExclude = ['babel-polyfill'];
 	const packagesDir = join(basePath, '../../packages');
+	const rootExclusionDirs = '(node_modules|packages)';
 
 	for (const packageDir of readdirSync(packagesDir)) {
 		if (existsSync(join(packagesDir, `${packageDir}/converted_library.js`))) {
@@ -43,7 +46,10 @@ function createBabelLoaderExcludeList(basePath) {
 		}
 	}
 
-	babelLoaderExclude.push(new RegExp(`(node_modules|packages)/(${ packagesToExclude.join('|') })/`));
+	const packagesToExcludeGroup = `(${ packagesToExclude.join('|') })`;
+	const packagesToExcludeRegExpString = `${ rootExclusionDirs }${ dirSep }${ packagesToExcludeGroup }${ dirSep }`;
+
+	babelLoaderExclude.push(new RegExp(packagesToExcludeRegExpString));
 
 	return babelLoaderExclude;
 }
@@ -79,7 +85,7 @@ function configureBabelLoader(webpackConfig, basePath) {
 function configureI18nLoading(webpackConfig, i18nFileName) {
 	const i18nLoaderConfig = {
 		test: /\.properties$/
-	}
+	};
 
 	if (isTest) {
 		i18nLoaderConfig.loader = '@caplin/i18n-loader/inline';
@@ -199,4 +205,4 @@ module.exports.webpackConfigGenerator = function webpackConfigGenerator({
 	configureBuildDependentConfig(webpackConfig, version);
 
 	return webpackConfig;
-}
+};
