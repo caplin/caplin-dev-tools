@@ -99,12 +99,15 @@ export function convertThirdpartyLibraryToPackage(packageDirectory, packageName,
 	const manifestFileLocation = join(packageDirectory, 'thirdparty-lib.manifest');
 	const manifestYAML = safeLoad(readFileSync(manifestFileLocation, 'utf8'));
 
-	combinedLibrarySource += getLibraryDependencyRequires(manifestYAML.depends);
-	combinedLibrarySource += getLibrarySource(packageDirectory, manifestYAML.js);
-	combinedLibrarySource += getLibraryModuleExports(manifestYAML.exports);
-	combinedLibrarySource += getLibraryWindowExports(packageName, manifestYAML.exports);
+	// The `bugfix` library doesn't provide a valid manifest file.
+	if (manifestYAML !== undefined) {
+		combinedLibrarySource += getLibraryDependencyRequires(manifestYAML.depends);
+		combinedLibrarySource += getLibrarySource(packageDirectory, manifestYAML.js);
+		combinedLibrarySource += getLibraryModuleExports(manifestYAML.exports);
+		combinedLibrarySource += getLibraryWindowExports(packageName, manifestYAML.exports);
 
-	writeFileSync(join(packageDirectory, 'converted_library.js'), combinedLibrarySource);
+		writeFileSync(join(packageDirectory, 'converted_library.js'), combinedLibrarySource);
+	}
 
 	if (createPackageJSON) {
 		const thirdpartyPackageJSON = compiledThirdpartyJSONTemplate({packageName});
