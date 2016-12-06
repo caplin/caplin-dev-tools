@@ -74,6 +74,7 @@ const aliasToModule = {
 	'caplin.menu$': '@caplin/caplin-aliases/caplin.menu',
 	'caplin.ui.toggle-control$': '@caplin/caplin-aliases/caplin.ui.toggle-control',
 	'caplin.motf.confirmation$': '@caplin/caplin-aliases/caplin.motf.confirmation',
+	'caplin.motf.cancel$': '@caplin/caplin-aliases/caplin.motf.cancel',
 	'caplin.motf.cancel.confirmation$': '@caplin/caplin-aliases/caplin.motf.cancel.confirmation',
 	'caplin.grid.refine.text-refine-component$': '@caplin/caplin-aliases/caplin.grid.refine.text-refine-component',
 	'caplinps.application-menu-service$': '@caplin/caplinps-services/caplinps.application-menu-service',
