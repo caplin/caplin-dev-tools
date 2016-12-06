@@ -140,6 +140,7 @@ const aliasToModule = {
 	'caplinx.motf.clientinfo.component$': '@caplin/caplinx-aliases/caplinx.motf.clientinfo.component',
 	'caplinx.dockingpanel.user-container-manager$': '@caplin/caplinx-aliases/caplinx.dockingpanel.user-container-manager',
 	'caplinx.motf.orderticket.component$': '@caplin/caplinx-aliases/caplinx.motf.orderticket.component',
+	'caplinx.motf.motfticket.amend-trade-factory$': '@caplin/caplinx-aliases/caplinx.motf.motfticket.amend-trade-factory',
 	'caplinx.fxblotters.orders.bulk-action-blotter-launcher$': '@caplin/caplinx-services/caplinx.fxblotters.orders.bulk-action-blotter-launcher',
 	'caplinx.fxblotters.orders.bulk-order-state-manager$': '@caplin/caplinx-services/caplinx.fxblotters.orders.bulk-order-state-manager',
 	'caplinx.fxblotters.orders.order-action-allowed-service$': '@caplin/caplinx-services/caplinx.fxblotters.orders.order-action-allowed-service',
