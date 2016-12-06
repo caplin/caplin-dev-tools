@@ -74,6 +74,7 @@ const aliasToModule = {
 	'caplin.menu$': '@caplin/caplin-aliases/caplin.menu',
 	'caplin.ui.toggle-control$': '@caplin/caplin-aliases/caplin.ui.toggle-control',
 	'caplin.motf.confirmation$': '@caplin/caplin-aliases/caplin.motf.confirmation',
+	'caplin.motf.cancel.confirmation$': '@caplin/caplin-aliases/caplin.motf.cancel.confirmation',
 	'caplin.grid.refine.text-refine-component$': '@caplin/caplin-aliases/caplin.grid.refine.text-refine-component',
 	'caplinps.application-menu-service$': '@caplin/caplinps-services/caplinps.application-menu-service',
 	'caplinps.blottertabs.grid-data-row-highlight-decorator$': '@caplin/caplinps-aliases/caplinps.blottertabs.grid-data-row-highlight-decorator',
@@ -143,7 +144,8 @@ const aliasToModule = {
 	'caplinx.fxblotters.orders.order-action-allowed-service$': '@caplin/caplinx-services/caplinx.fxblotters.orders.order-action-allowed-service',
 	'caplinx.fxblotters.orders.order-actions-menu-service$': '@caplin/caplinx-services/caplinx.fxblotters.orders.order-actions-menu-service',
 	'caplinx.fxblotters.orders.order-state-manager$': '@caplin/caplinx-services/caplinx.fxblotters.orders.order-state-manager',
-	'caplinx.dockingpanel.dockingpanel-component$': '@caplin/caplinx-aliases/caplinx.dockingpanel.dockingpanel-component'
+	'caplinx.dockingpanel.dockingpanel-component$': '@caplin/caplinx-aliases/caplinx.dockingpanel.dockingpanel-component',
+	'caplinx.dockedcontainer.docked-container-service$': '@caplin/caplinx-services/caplinx.dockedcontainer.docked-container-service',
 };
 
 module.exports.configureAliases = function(aliases, webpackConfig, testAliases = aliases, webpackAppAliases = {}) {
