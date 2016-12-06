@@ -1,6 +1,6 @@
 {
   "name": "@caplin/caplin-aliases",
-  "version": "1.5.0",
+  "version": "1.5.1",
   "description": "Modules for every Caplin alias",
   "main": "index.js",
   "scripts": {
