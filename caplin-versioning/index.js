@@ -2,12 +2,13 @@ import {
 	exec
 } from 'child_process';
 
-function getHash() {
+function getHash(hashLength) {
 	return new Promise((resolve) => {
 		exec(
 			'git rev-parse HEAD',
 			(error, stdout) => {
-				resolve(stdout);
+				const hash = stdout.trim().substr(0, hashLength)
+				resolve(hash);
 			}
 		);
 	});
@@ -18,23 +19,47 @@ function getCommitCount() {
 		exec(
 			'git rev-list --count HEAD',
 			(error, stdout) => {
-				resolve(stdout);
+				const count = stdout.trim();
+				resolve(count);
 			}
 		);
 	});
 }
 
-export default function createFullVersion(semVer, hashLength = 8) {
+function getBranchDescriptor(defaultBranchName) {
+	return new Promise((resolve) => {
+		exec(
+			'git rev-parse --abbrev-ref HEAD',
+			(error, stdout) => {
+				const descriptor = stdout === defaultBranchName ? null : stdout;
+				resolve(descriptor);
+			}
+		);
+	});
+}
+
+export default function createFullVersion(semVer, { hashLength = 8, masterBranchName = 'master' }) {
 	return Promise
 		.all([
 			getCommitCount(),
-			getHash()
+			getHash(hashLength),
+			getBranchDescriptor(defaultBranchName)
 		])
-		.then((output) => new Promise((resolve) => {
-			const commitCount = output[0].trim();
-			const gitHash = output[1].trim().substr(0, hashLength);
-			const version = `${semVer}-${commitCount}-${gitHash}`;
+		.then(
+			(output) => new Promise(
+				(resolve) => {
+					const versionTokens = output.reduce(
+						(acc, item) => {
+							if (item !== null) {
+								acc.push(item);
+								return acc;
+							}
+						},
+						[semVer]
+					);
 
-			resolve(version);
-		}));
+					resolve(versionTokens.join('-'));
+				}
+			)
+		);
 }
