@@ -28,22 +28,19 @@ function getCommitCount() {
 function getBranchDescriptor(defaultBranchName) {
 	return new Promise(resolve => {
 		(0, _child_process.exec)('git rev-parse --abbrev-ref HEAD', (error, stdout) => {
-			const descriptor = stdout === defaultBranchName ? null : stdout;
+			const currentBranch = stdout.trim();
+			const descriptor = currentBranch === defaultBranchName ? null : currentBranch;
 			resolve(descriptor);
 		});
 	});
 }
 
 function createFullVersion(semVer, { hashLength = 8, masterBranchName = 'master' }) {
-	return Promise.all([getCommitCount(), getHash(hashLength), getBranchDescriptor(defaultBranchName)]).then(output => new Promise(resolve => {
-		const versionTokens = output.reduce((acc, item) => {
-			if (item !== null) {
-				acc.push(item);
-				return acc;
-			}
-		}, [semVer]);
-
-		resolve(versionTokens.join('-'));
-	}));
+	return Promise.all([getCommitCount(), getHash(hashLength), getBranchDescriptor(masterBranchName)]).then(output => output.reduce((acc, item) => {
+		if (item !== null) {
+			acc.push(item);
+		}
+		return acc;
+	}, [semVer]).join('-'));
 }
 

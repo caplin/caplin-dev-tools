@@ -31,7 +31,8 @@ function getBranchDescriptor(defaultBranchName) {
 		exec(
 			'git rev-parse --abbrev-ref HEAD',
 			(error, stdout) => {
-				const descriptor = stdout === defaultBranchName ? null : stdout;
+				const currentBranch = stdout.trim();
+				const descriptor = currentBranch === defaultBranchName ? null : currentBranch;
 				resolve(descriptor);
 			}
 		);
@@ -43,23 +44,17 @@ export default function createFullVersion(semVer, { hashLength = 8, masterBranch
 		.all([
 			getCommitCount(),
 			getHash(hashLength),
-			getBranchDescriptor(defaultBranchName)
+			getBranchDescriptor(masterBranchName)
 		])
 		.then(
-			(output) => new Promise(
-				(resolve) => {
-					const versionTokens = output.reduce(
-						(acc, item) => {
-							if (item !== null) {
-								acc.push(item);
-								return acc;
-							}
-						},
-						[semVer]
-					);
-
-					resolve(versionTokens.join('-'));
-				}
-			)
+			output => output.reduce(
+				(acc, item) => {
+					if (item !== null) {
+						acc.push(item);
+					}
+					return acc;
+				},
+				[semVer]
+			).join('-')
 		);
 }
