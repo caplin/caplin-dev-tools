@@ -38,7 +38,7 @@ function getBranchDescriptor(defaultBranchName) {
 	});
 }
 
-export default function createFullVersion(semVer, { hashLength = 8, masterBranchName = 'master' }) {
+module.exports = function createFullVersion(semVer, { hashLength = 8, masterBranchName = 'master' }) {
 	return Promise
 		.all([
 			getCommitCount(),
