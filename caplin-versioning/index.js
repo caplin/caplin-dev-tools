@@ -1,6 +1,4 @@
-import {
-	exec
-} from 'child_process';
+const exec = require('child_process').exec;
 
 function getHash(hashLength) {
 	return new Promise((resolve) => {
@@ -33,6 +31,7 @@ function getBranchDescriptor(defaultBranchName) {
 			(error, stdout) => {
 				const currentBranch = stdout.trim();
 				const descriptor = currentBranch === defaultBranchName ? null : currentBranch;
+
 				resolve(descriptor);
 			}
 		);
@@ -47,11 +46,12 @@ export default function createFullVersion(semVer, { hashLength = 8, masterBranch
 			getBranchDescriptor(masterBranchName)
 		])
 		.then(
-			output => output.reduce(
+			(output) => output.reduce(
 				(acc, item) => {
 					if (item !== null) {
 						acc.push(item);
 					}
+
 					return acc;
 				},
 				[semVer]
