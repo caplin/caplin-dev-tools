@@ -1,10 +1,5 @@
-'use strict';
 
-Object.defineProperty(exports, "__esModule", {
-	value: true
-});
-
-exports.default = (application, proxy) => {
+module.exports = (application, proxy) => {
 	function proxyRequest(req, res) {
 		proxy.web(req, res);
 	}

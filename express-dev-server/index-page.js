@@ -1,14 +1,13 @@
-'use strict';
-
-Object.defineProperty(exports, "__esModule", {
-	value: true
-});
 /* eslint-disable no-process-env */
 
-exports.default = (application, indexPage) => {
+module.exports = (application, indexPage) => {
 	function indexRequestHandler(req, res) {
 		const indexPageHTML = indexPage();
-		const indexPageHTMLWithInjectedJNDI = indexPageHTML.replace(/@([A-Z|.]+)@/g, jndiTokenReplacer);
+		const indexPageHTMLWithInjectedJNDI = indexPageHTML
+			.replace(
+				/@([A-Z|.]+)@/g,
+				jndiTokenReplacer
+			);
 
 		res.send(indexPageHTMLWithInjectedJNDI);
 	}
@@ -21,7 +20,7 @@ function jndiTokenReplacer(match, jndiToken) {
 		return process.env[jndiToken];
 	}
 
-	console.warn(`A value for JNDI token ${ jndiToken } could not be found.`); // eslint-disable-line
+	console.warn(`A value for JNDI token ${jndiToken} could not be found.`); // eslint-disable-line
 
 	return match;
 }

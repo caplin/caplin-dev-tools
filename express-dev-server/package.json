@@ -1,17 +1,8 @@
 {
   "name": "@caplin/express-dev-server",
-  "version": "1.9.3",
+  "version": "1.9.4",
   "description": "Express.js server modules for developing Caplin applications",
-  "scripts": {
-    "build": "babel src --out-dir ."
-  },
-  "keywords": [],
-  "author": "Brian Di Palma <offler@gmail.com> (https://github.com/briandipalma)",
   "license": "ISC",
-  "devDependencies": {
-    "babel-cli": "^6.7.5",
-    "babel-preset-node6": "^11.0.0"
-  },
   "dependencies": {
     "dotenv": "^2.0.0",
     "express": "^4.13.4",
