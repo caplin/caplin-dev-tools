@@ -1,19 +1,23 @@
-import {
+const {
+	existsSync,
+	readdirSync,
 	readFileSync,
+	statSync,
 	writeFileSync
-} from 'fs';
-import {
+} = require('fs');
+const {
 	dirname,
+	join,
 	relative,
 	sep
-} from 'path';
+} = require('path');
 
-import {
+const {
 	load
-} from 'cheerio';
-import {
+} = require('cheerio');
+const {
 	sync
-} from 'glob';
+} = require('glob');
 
 const jsGlobOptions = {
 	ignore: [
@@ -35,7 +39,10 @@ export function injectHTMLRequires({applicationName = 'fxtrader', packagesDirNam
 		`apps/${applicationName}/src/**/{_resources,_resources-test-[au]t}/**/*.html`,
 		htmlGlobOptions
 	);
-	const packageJSFilePaths = sync(`${packagesDirName}/**/*.js`);
+	const devPackages = readdirSync(packagesDirName)
+		.filter((packageDir) => statSync(join(packagesDirName, packageDir)).isDirectory())
+		.filter((packageDir) => existsSync(join(packagesDirName, packageDir, 'thirdparty-lib.manifest')) === false);
+	const packageJSFilePaths = sync(`${packagesDirName}/{${devPackages.join()}}/**/*.js`);
 	const packageHTMLFilePaths = sync(
 		`${packagesDirName}/**/{_resources,_resources-test-[au]t}/**/*.html`,
 		htmlGlobOptions
@@ -100,10 +107,10 @@ function findReferencedTemplateIDs(parsedDOM) {
 			const dataValue = parsedDOM(element).data('bind');
 			// Some template names are code to be executed as opposed to a simple string.
 			// e.g. `template: {name: amount.getTemplateName()}`, we want to skip these.
-			const templateNameMatchArray = dataValue.match(/.*name\s*:\s*['|"](.*?)['|"]/)
-			// Some template names are strings instead of being wrapped in an object
-			// e.g. `template: 'caplin.orderticket.amount'`.
-				|| dataValue.match(/.*template\s*:\s*['|"](.*?)['|"]/);
+			const templateNameMatchArray = dataValue.match(/.*name\s*:\s*['|"](.*?)['|"]/) ||
+				// Some template names are strings instead of being wrapped in an object
+				// e.g. `template: 'caplin.orderticket.amount'`.
+				dataValue.match(/.*template\s*:\s*['|"](.*?)['|"]/);
 
 			if (templateNameMatchArray) {
 				dependentTemplateIDs.add(templateNameMatchArray[1]);

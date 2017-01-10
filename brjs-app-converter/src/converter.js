@@ -51,11 +51,19 @@ export default function({app}) {
 	});
 	const structureUpdated = convertPackages.then(() => moveApplicationPackagesToLibs(conversionMetadata));
 	const i18nRequiresAdded = structureUpdated.then(() => injectI18nRequires(conversionMetadata));
-	const htmlRequiresAdded = i18nRequiresAdded.then(() => injectHTMLRequires(conversionMetadata));
+	const htmlRequiresAdded = i18nRequiresAdded.then(() => {
+		console.log('Adding HTML requires'); // eslint-disable-line
+
+		injectHTMLRequires(conversionMetadata);
+	});
 	const packageDependenciesAdded = htmlRequiresAdded.then(() => {
+		console.log('Adding package dependencies.'); // eslint-disable-line
+
 		addPackageDependencies(conversionMetadata);
 	});
 	const postConversionScript = packageDependenciesAdded.then(() => {
+		console.log('Running post conversion script.'); // eslint-disable-line
+
 		runPostConversionScript(conversionMetadata, convertPackagesFunction);
 	});
 
