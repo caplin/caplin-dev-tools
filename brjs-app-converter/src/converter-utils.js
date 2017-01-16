@@ -64,6 +64,7 @@ export function createConversionMetadataDataType(applicationName) {
 	const backupDir = join('brjs-app-backup');
 	// string: Directory that BRJS application is moved to.
 	const brjsApplicationDir = join(backupDir, appFilePath);
+	let conversionDataApplicationName = '';
 	// string: Name of packages directory.
 	const packagesDirName = 'packages';
 	const conversionData = useConversionDataDirectoryFilesIfPresent(backupDir, applicationName);
@@ -73,8 +74,12 @@ export function createConversionMetadataDataType(applicationName) {
 
 		applicationNamespaceRoot = appConfYAML.requirePrefix;
 	}
-	// eslint-disable-next-line
-	applicationName = (applicationName === 'ct' ? 'fxtrader' : applicationName);
+
+	if (applicationName === 'ct') {
+		// eslint-disable-next-line
+		applicationName = 'fxtrader';
+		conversionDataApplicationName = 'ct';
+	}
 
 	return {
 		applicationName,
@@ -83,6 +88,7 @@ export function createConversionMetadataDataType(applicationName) {
 		applicationLibsDir: join(brjsApplicationDir, 'libs'),
 		backupDir,
 		brjsApplicationDir,
+		conversionDataApplicationName,
 		packagesDir: join(packagesDirName),
 		packagesDirName,
 		packagesThatShouldBeLibs: [],

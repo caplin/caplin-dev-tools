@@ -1,3 +1,7 @@
+const {
+	join
+} = require('path');
+
 import addPackageDependencies from './add-package-dependencies';
 import {
 	moveBRJSApplicationCodeToPackages
@@ -44,7 +48,17 @@ export default function({app}) {
 
 	const createPackages = createPackagesFromLibs(conversionMetadata);
 	const moveBRJSCode = createPackages.then(() => moveBRJSApplicationCodeToPackages(conversionMetadata));
-	const convertSDK = moveBRJSCode.then(() => convertSDKToPackages(conversionMetadata));
+	let convertSDK = moveBRJSCode.then(() => convertSDKToPackages(conversionMetadata));
+
+	if (app === 'ct') {
+		convertSDK = convertSDK.then(() => {
+			return convertSDKToPackages({
+				packagesDir: conversionMetadata.packagesDir,
+				sdkJSLibrariesDir: join('..', 'conversion-data', 'sdk', 'libs', 'javascript')
+			});
+		});
+	}
+
 	const createApplications = convertSDK.then(() => createApplicationAndVariants(conversionMetadata));
 	const convertPackages = createApplications.then(() => {
 		convertPackagesFunction = convertPackagesToNewFormat(conversionMetadata);

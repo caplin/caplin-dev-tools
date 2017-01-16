@@ -69,17 +69,21 @@ function populateApplicationPackageJSON(
 }
 
 // Create application variant
-function createApplication(applicationName, conversionMetadata, defaultAspectDir) {
+function createApplication(applicationName, conversionMetadata, defaultAspectDir, conversionDataApplicationName) {
 	const convertedAppDir = join('apps', applicationName);
 
-	setUpApplicationFiles(applicationName, convertedAppDir, conversionMetadata, defaultAspectDir);
-	populateApplicationPackageJSON(applicationName, convertedAppDir, conversionMetadata);
+	setUpApplicationFiles(
+		(conversionDataApplicationName || applicationName), convertedAppDir, conversionMetadata, defaultAspectDir
+	);
+	populateApplicationPackageJSON(
+		(conversionDataApplicationName || applicationName), convertedAppDir, conversionMetadata
+	);
 }
 
 // Create application and application variants directories.
 export function createApplicationAndVariants(conversionMetadata) {
-	const {applicationName, packagesDir} = conversionMetadata;
+	const {applicationName, conversionDataApplicationName, packagesDir} = conversionMetadata;
 	const defaultAspectDir = join(packagesDir, `${applicationName}-default-aspect`);
 
-	createApplication(applicationName, conversionMetadata, defaultAspectDir);
+	createApplication(applicationName, conversionMetadata, defaultAspectDir, conversionDataApplicationName);
 }
