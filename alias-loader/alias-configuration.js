@@ -13,6 +13,7 @@ const aliasToModule = {
 	'br.tooltip$': '@caplin/brjs-aliases/br.tooltip',
 	'br.user-prompt-service$': '@caplin/brjs-services/br.user-prompt-service',
 	'br.xml-service$': '@caplin/brjs-services/br.xml-service',
+	'caplin.alerts.notification-service$': '@caplin/caplin-services/caplin.alerts.notification-service',
 	'caplin.grid-component$': '@caplin/caplin-aliases/caplin.grid-component',
 	'caplin.ui.input-control$': '@caplin/caplin-aliases/caplin.ui.input-control',
 	'caplin.watchlist.watchlist-grid-data-provider$': '@caplin/caplin-aliases/caplin.watchlist.watchlist-grid-data-provider',
