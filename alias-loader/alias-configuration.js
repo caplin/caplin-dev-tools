@@ -122,6 +122,7 @@ const aliasToModule = {
 	'caplinps.watchlists.toolbar-component$': '@caplin/caplinps-aliases/caplinps.watchlists.toolbar-component',
 	'caplinps.workbench-component-lifecycle-service$': '@caplin/caplinps-services/caplinps.workbench-component-lifecycle-service',
 	'caplinps.workbench-trade-service-listener$': '@caplin/caplinps-services/caplinps.workbench-trade-service-listener',
+	'caplinx.fxtrader.tile.trade-tile$': '@caplin/caplinx-aliases/caplinx.fxtrader.tile.trade-tile',
 	'caplinx.motf.orderticket.indicative-rate$': '@caplin/caplinx-aliases/caplinx.motf.orderticket.indicative-rate',
 	'caplinx.motf.motfticket.motf-trade-factory$': '@caplin/caplinx-aliases/caplinx.motf.motfticket.motf-trade-factory',
 	'caplinx.scaffold.searchbutton.search-button$': '@caplin/caplinx-aliases/caplinx.scaffold.searchbutton.search-button',
