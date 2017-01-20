@@ -1,4 +1,4 @@
 
-module.exports = function nullModule() {
-	throw new Error('Null module called ' + arguments);
+module.exports = function nullModule(moduleName) {
+	throw new Error('Null module called requesting ' + moduleName);
 };
