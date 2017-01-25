@@ -39,6 +39,7 @@ const aliasToModule = {
 	'caplin.metals-service$': '@caplin/caplin-services/caplin.metals-service',
 	'caplin.PopupManager$': '@caplin/caplin-services/caplin.PopupManager',
 	'caplin.popout-service$': '@caplin/caplin-services/caplin.popout-service',
+	'caplin.web-service-grid-data-provider$': '@caplin/caplin-services/caplin.web-service-grid-data-provider',
 	'caplin.layout-service$': '@caplin/caplin-services/caplin.layout-service',
 	'caplin.fx.confirmation$': '@caplin/caplin-fx-services/caplin.fx.confirmation',
 	'caplin.ui.global-menu-control$': '@caplin/caplin-services/caplin.ui.global-menu-control',
@@ -167,7 +168,7 @@ module.exports.configureAliases = function(aliases, webpackConfig, testAliases =
 	Object
 		.keys(aliasesToUse)
 		.forEach((alias) => {
-			const exactMatchAlias = alias + '$';
+			const exactMatchAlias = `${alias}$`;
 			const moduleToAlias = aliasToModule[exactMatchAlias];
 
 			if (moduleToAlias) {
@@ -180,4 +181,4 @@ module.exports.configureAliases = function(aliases, webpackConfig, testAliases =
 		webpackConfig.resolve.alias,
 		webpackAppAliases
 	);
-}
+};
