@@ -20,6 +20,8 @@ const aliasToModule = {
 	'caplin.chart-macd-study$': '@caplin/caplin-aliases/caplin.chart-macd-study',
 	'caplin.chart-sma-study$': '@caplin/caplin-aliases/caplin.chart-sma-study',
 	'caplin.grid-component$': '@caplin/caplin-aliases/caplin.grid-component',
+	'caplin.grid-drag-decorator$': '@caplin/caplin-aliases/caplin.grid-drag-decorator',
+	'caplin.grid-drop-decorator$': '@caplin/caplin-aliases/caplin.grid-drop-decorator',
 	'caplin.rttp-container-grid-data-provider$': '@caplin/caplin-aliases/caplin.rttp-container-grid-data-provider',
 	'caplin.ui.input-control$': '@caplin/caplin-aliases/caplin.ui.input-control',
 	'caplin.watchlist.watchlist-grid-data-provider$': '@caplin/caplin-aliases/caplin.watchlist.watchlist-grid-data-provider',
