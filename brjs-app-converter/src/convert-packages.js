@@ -232,6 +232,7 @@ export function copyPackageFoldersToNewLocations(packagePath) {
 		{src: `${packagePath}/resources`, dest: `${packagePath}/_resources`},
 		{src: `${packagePath}/test-unit/resources`, dest: `${packagePath}/_resources-test-ut`},
 		{src: `${packagePath}/test-acceptance/resources`, dest: `${packagePath}/_resources-test-at`},
+		{src: `${packagePath}/tests/test-acceptance/js-test-driver/resources`, dest: `${packagePath}/_resources-test-at`},
 		{src: `${packagePath}/test-unit/tests`, dest: `${packagePath}/_test-ut`},
 		{src: `${packagePath}/test-unit/tests-es6`, dest: `${packagePath}/_test-ut`},
 		{src: `${packagePath}/test-unit/js-test-driver/tests`, dest: `${packagePath}/_test-ut`},
