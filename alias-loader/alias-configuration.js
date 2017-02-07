@@ -22,6 +22,8 @@ const aliasToModule = {
 	'caplin.grid-component$': '@caplin/caplin-aliases/caplin.grid-component',
 	'caplin.grid-drag-decorator$': '@caplin/caplin-aliases/caplin.grid-drag-decorator',
 	'caplin.grid-drop-decorator$': '@caplin/caplin-aliases/caplin.grid-drop-decorator',
+	'caplin.grid.refine.date-refine-component$': '@caplin/caplin-aliases/caplin.grid.refine.date-refine-component',
+	'caplin.grid.refine.numeric-refine-component$': '@caplin/caplin-aliases/caplin.grid.refine.numeric-refine-component',
 	'caplin.rttp-container-grid-data-provider$': '@caplin/caplin-aliases/caplin.rttp-container-grid-data-provider',
 	'caplin.ui.input-control$': '@caplin/caplin-aliases/caplin.ui.input-control',
 	'caplin.watchlist.watchlist-grid-data-provider$': '@caplin/caplin-aliases/caplin.watchlist.watchlist-grid-data-provider',
