@@ -1,16 +1,17 @@
-import {join} from 'path';
-import express from 'express';
-import webpackMiddleware from './webpack';
+import notFound from '@caplin/express-dev-server/not-found';
+import resources from '@caplin/express-dev-server/resources';
+import server from '@caplin/express-dev-server/server';
 
-const app = express();
-const APP_PORT = 8080;
-const appRoot = join(__dirname, '..');
+import createWebpackConfig from '../webpack.config';
 
-// Serve static files (HTML, XML, CSS), contained in application directory.
-app.use(express.static(appRoot));
+const app = server({
+	webpackConfig: createWebpackConfig()
+});
+const applicationPath = '/{{appName}}';
+const appRoot = process.cwd();
 
-// Handlers/middleware for webpack.
-webpackMiddleware(app);
+// Resources served from `node_modules` packages.
+resources(applicationPath, app, appRoot);
 
-// Don't bind to `localhost` as that will mean the server won't be accessible by other machines on the LAN.
-app.listen(APP_PORT, (err) => console.log(err || `Listening on port ${APP_PORT}`)); // eslint-disable-line
+// Has to be the last registered route handler.
+notFound(app);

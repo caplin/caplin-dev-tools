@@ -1,7 +1,22 @@
-import {webpackConfigGenerator} from '@caplin/webpack-config-app';
+import {
+	configureAliases
+} from '@caplin/alias-loader/alias-configuration';
+import {
+	webpackConfigGenerator
+} from '@caplin/webpack-config-app';
 
-const webpackConfig = webpackConfigGenerator({
-	basePath: __dirname
-});
+import aliases from './src/config/aliases';
+import testAliases from './src/config/aliases-test';
 
-export default webpackConfig;
+const webpackAppAliases = {	
+};
+
+export default function createWebpackConfig(version) {
+	const webpackConfig = webpackConfigGenerator({
+		basePath: __dirname
+	});
+
+	configureAliases(aliases, webpackConfig, testAliases, webpackAppAliases);
+
+	return webpackConfig;
+}
