@@ -52,6 +52,12 @@ module.exports = {
 
 	commandFunction: function(options) {
 		var name = options[0];
+		var typeOfComponent = options[1];
+
+		if(typeOfComponent === 'react') {
+			name = name.charAt(0).toUpperCase() + name.slice(1);
+		}
+
 		var templateId = "component-" + options[1];
 
 		// check template exists
