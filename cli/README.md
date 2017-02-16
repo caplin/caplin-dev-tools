@@ -1,14 +1,26 @@
-# Caplin Cli
+# Building Apps with Caplin-cli
 
 **Simple command line module to create Node.js apps**
 
 [![Build Status](https://api.travis-ci.org/caplin/caplin-cli.svg)](https://api.travis-ci.org/caplin/caplin-cli)
 
-Getting started...
+## Getting started
 
 #### Installation
 
     npm install -g caplin/caplin-cli
+
+#### Initialising the Workspace
+
+    caplin-cli init
+
+This will generate the following folder structure:
+
+```
+apps/
+caplin-packages/
+custom-packages/
+```
 
 #### Create an app
 
