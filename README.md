@@ -11,3 +11,5 @@ npm install -g https://github.com/caplin/caplin-dev-tools
 ## Running the cli
 
 caplin-cli
+
+To get started building apps please see [Building Apps with Caplin-cli](https://github.com/caplin/caplin-dev-tools/blob/master/cli/README.md)
