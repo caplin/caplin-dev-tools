@@ -4,7 +4,9 @@
   "description": "",
   "scripts": {
     "build": "babel-node scripts/build.js",
-    "serve": "babel-node server/server.js",
+    "build-css": "node-sass src/ -o src/",
+    "watch-css": "npm run build-css && node-sass src/ -o src/ --watch",
+    "serve": "npm run build-css && babel-node server/server.js",
     "serve:debug": "babel-node --debug-brk server/server.js",
     "test": "karma start"
   },
