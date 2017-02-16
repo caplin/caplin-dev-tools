@@ -57,8 +57,8 @@ describe('create-app', function () {
             stdOutput += data;
 
             if(stdOutput.indexOf('Created') > -1) {
-                assert.file('apps/newapp/index.js');
                 assert.file('apps/newapp/index.html');
+                assert.file('apps/newapp/src/index.js');
                 assert.file('apps/newapp/package.json');
                 assert.file('apps/newapp/webpack.config.js');
                 assert.file('apps/newapp/server/server.js');

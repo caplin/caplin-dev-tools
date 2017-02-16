@@ -24,6 +24,11 @@ module.exports = function(config) {
 						exclude: /node_modules/,
 						loader: 'babel-loader',
 						test: /\.js?$/
+					},
+					{
+						test: /\.json$/,
+						include: /node_modules/,
+						loader: 'json-loader'
 					}
 				]
 			}
