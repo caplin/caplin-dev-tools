@@ -42,7 +42,9 @@ export function injectHTMLRequires({applicationName = 'fxtrader', packagesDirNam
 	const devPackages = readdirSync(packagesDirName)
 		.filter((packageDir) => statSync(join(packagesDirName, packageDir)).isDirectory())
 		.filter((packageDir) => existsSync(join(packagesDirName, packageDir, 'thirdparty-lib.manifest')) === false);
-	const packageJSFilePaths = sync(`${packagesDirName}/{${devPackages.join()}}/**/*.js`);
+	const packageJSFilePaths = sync(`${packagesDirName}/{${devPackages.join()}}/**/*.js`)
+		// Don't add requires to `aliasProviders.js` modules as they are run by node and it can't hande HTML requires.
+		.filter((packageJSFilePath) => packageJSFilePath.endsWith('aliasProviders.js') === false);
 	const packageHTMLFilePaths = sync(
 		`${packagesDirName}/**/{_resources,_resources-test-[au]t}/**/*.html`,
 		htmlGlobOptions
