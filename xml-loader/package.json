@@ -1,0 +1,10 @@
+{
+  "name": "@caplin/xml-loader",
+  "version": "2.0.0",
+  "description": "Caplin XML loader",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "license": "ISC"
+}

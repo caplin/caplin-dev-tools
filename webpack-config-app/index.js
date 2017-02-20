@@ -168,7 +168,7 @@ module.exports.webpackConfigGenerator = function webpackConfigGenerator({
 				loaders: ['style-loader', 'css-loader']
 			}, {
 				test: /\.xml$/,
-				loader: 'raw-loader'
+				loader: '@caplin/xml-loader'
 			}]
 		},
 		patchLoader: appendModulePatch(),
