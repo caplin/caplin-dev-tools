@@ -38,11 +38,11 @@ module.exports = {
 
 		try {
 			appsFound = fs.lstatSync(path.join(process.cwd(), 'apps')).isDirectory();
-			packagesFound = fs.lstatSync(path.join(process.cwd(), 'packages')).isDirectory();
+			packagesFound = fs.lstatSync(path.join(process.cwd(), 'caplin-packages')).isDirectory();
 		} catch(e) {}
 
 		if (!appsFound) return workingDirectoryErrorMessage('apps');
-		if (!packagesFound) return workingDirectoryErrorMessage('packages');
+		if (!packagesFound) return workingDirectoryErrorMessage('caplin-packages');
 		
 		return true;
 	},
