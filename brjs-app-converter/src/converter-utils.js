@@ -39,6 +39,9 @@ function useConversionDataDirectoryFilesIfPresent(backupDir, applicationName) {
 	if (applicationName === 'ct') {
 		privateKeyFileLocation = join('..', 'conversion-data', 'ct-privatekey.pem');
 		sdkJSLibrariesDir = join(backupDir, 'ct-core', 'sdk', 'libs', 'javascript');
+	} else if (applicationName === 'br') {
+		privateKeyFileLocation = join('..', 'conversion-data', 'ct-privatekey.pem');
+		sdkJSLibrariesDir = join(backupDir, 'brjs-sdk', 'sdk', 'libs', 'javascript');
 	}
 
 	return {
@@ -50,6 +53,8 @@ function useConversionDataDirectoryFilesIfPresent(backupDir, applicationName) {
 function getApplicationFilePath(applicationName) {
 	if (applicationName === 'ct') {
 		return join('ct-core', 'apps', 'fxtrader');
+	} else if (applicationName === 'br') {
+		return join('brjs-sdk', 'apps', 'it-app');
 	}
 
 	return join('apps', applicationName);
@@ -79,6 +84,10 @@ export function createConversionMetadataDataType(applicationName) {
 		// eslint-disable-next-line
 		applicationName = 'fxtrader';
 		conversionDataApplicationName = 'ct';
+	} else if (applicationName === 'br') {
+		// eslint-disable-next-line
+		applicationName = 'it-app';
+		conversionDataApplicationName = 'br';
 	}
 
 	return {
@@ -175,6 +184,8 @@ export function verifyCLIArgs(applicationName) {
 	// If we are converting the `ct` repo change the location as it's structured differently.
 	if (applicationName === 'ct') {
 		appFolderName = join('ct-core', 'apps', 'fxtrader');
+	} else if (applicationName === 'br') {
+		appFolderName = join('brjs-sdk', 'apps', 'it-app');
 	}
 
 	try {
