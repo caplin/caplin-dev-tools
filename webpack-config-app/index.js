@@ -30,6 +30,25 @@ function configureBundleEntryPoint(webpackConfig, basePath) {
 	webpackConfig.entry = appEntryPoint;
 }
 
+function isPackageToBeExcludedFromBabelCompilation(packagesDir, packageDir) {
+	// The new HTML/XML services are written in ES2015.
+	if (packageDir === 'ct-services' || packageDir === 'br-services') {
+		return false;
+	}
+
+	// BR/CT libs have no ES2015+.
+	if (packageDir.startsWith('br-') || packagesDir.startsWith('ct-')) {
+		return true;
+	}
+
+	// Thirdparty library.
+	if (existsSync(join(packagesDir, `${packageDir}/converted_library.js`))) {
+		return true;
+	}
+
+	return false;
+}
+
 function createBabelLoaderExcludeList(basePath) {
 	const babelLoaderExclude = [/KeyMasterHack.js/];
 	const dirSep = (sep === '\\' ? '\\\\' : sep);
@@ -39,9 +58,7 @@ function createBabelLoaderExcludeList(basePath) {
 	const rootExclusionDirs = '(node_modules|packages)';
 
 	for (const packageDir of readdirSync(packagesDir)) {
-		if (existsSync(join(packagesDir, `${packageDir}/converted_library.js`))) {
-			packagesToExclude.push(packageDir);
-		} else if (packageDir.startsWith('br-') || (packagesDir.startsWith('ct-') && packagesDir !== 'ct-services')) {
+		if (isPackageToBeExcludedFromBabelCompilation(packagesDir, packageDir)) {
 			packagesToExclude.push(packageDir);
 		}
 	}
