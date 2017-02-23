@@ -33,6 +33,24 @@ const htmlGlobOptions = {
 };
 const templateIDRegExp = /['|"](.*)['|"]/g;
 
+function shouldFileBeSkipped(packageJSFilePath, applicationName) {
+	// Don't add requires to `aliasProviders.js` modules as they are run by node and it can't hande HTML requires.
+	if (packageJSFilePath.endsWith('aliasProviders.js')) {
+		return false;
+	}
+
+	// Skip these files in the BRJS repo conversion.
+	if (applicationName === 'it-app' &&
+		(packageJSFilePath.endsWith('ServiceRegistryClass.js') ||
+		packageJSFilePath.endsWith('Errors.js') ||
+		packageJSFilePath.endsWith('Translator.js'))
+	) {
+		return false;
+	}
+
+	return true;
+}
+
 export function injectHTMLRequires({applicationName = 'fxtrader', packagesDirName = 'packages'} = {}) {
 	const appJSFilePaths = sync(`apps/${applicationName}/src/**/*.js`, jsGlobOptions);
 	const appHTMLFilePaths = sync(
@@ -43,8 +61,7 @@ export function injectHTMLRequires({applicationName = 'fxtrader', packagesDirNam
 		.filter((packageDir) => statSync(join(packagesDirName, packageDir)).isDirectory())
 		.filter((packageDir) => existsSync(join(packagesDirName, packageDir, 'thirdparty-lib.manifest')) === false);
 	const packageJSFilePaths = sync(`${packagesDirName}/{${devPackages.join()}}/**/*.js`)
-		// Don't add requires to `aliasProviders.js` modules as they are run by node and it can't hande HTML requires.
-		.filter((packageJSFilePath) => packageJSFilePath.endsWith('aliasProviders.js') === false);
+		.filter((packageJSFilePath) => shouldFileBeSkipped(packageJSFilePath, applicationName));
 	const packageHTMLFilePaths = sync(
 		`${packagesDirName}/**/{_resources,_resources-test-[au]t}/**/*.html`,
 		htmlGlobOptions
