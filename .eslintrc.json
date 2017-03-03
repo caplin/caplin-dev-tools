@@ -1,8 +1,6 @@
 {
-  "parserOptions": {
-    "ecmaVersion": 2017
-  },
   "extends": [
+    "airbnb",
     "prettier"
   ]
 }
