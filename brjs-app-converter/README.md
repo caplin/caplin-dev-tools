@@ -9,7 +9,7 @@ Restructures a BRJS application to a simpler, flatter structure that integrates 
 Given a BRJS application directory this tool will move the contents of the application directory to new locations
 within the application directory.
 
-1. It's first step is to back up the entire folder (except for hidden files) into a `brjs-app` directory. This allows
+1. It's first step is to back up the entire folder (except for hidden files) into a `brjs-app-backup` directory. This allows
 a user to access the old application files.
 2. It then creates a new top level directory for the application packages.
 3. It copies all the application's libs and SDK libs into the packages directory.
@@ -21,7 +21,7 @@ a user to access the old application files.
 	* It also creates a `src` directory for the application `apps/mobile/src` that contains the blades/bladesets and
 	aspects of the application.
 
-This leaves the project with three top level directories, `apps`, `packages`, and `brjs-app` (which can be
+This leaves the project with three top level directories, `apps`, `packages`, and `brjs-app-backup` (which can be
 deleted once the user is satisfied they don't need the old files).
 
 These screenshots contrast before and after:
@@ -127,3 +127,35 @@ module.exports = {
 	}
 };
 ```
+
+## Side effects
+
+The conversion tool moves source files which means that when searching the history of a file in git the `--follow` flag
+will be required to view the pre-move history. Being unable to follow moves also affects tools like `gitk` and stash.
+
+## Tips
+
+To create the `css`/`less`/`sass` imports for the app being converted open the BRJS CSS bundles
+and extract the bundled files with this RegExp in Atom.
+
+`[^]*?/\*\*\* ([./a-z-A-Z\d]*) \*\*\*/`
+
+you can convert the comments to imports with this replacement pattern.
+
+`import '$1';\n`
+
+Then change the file paths to the new structure by removing incorrect prefixes e.g. `libs/` and replace
+`/resources/` with `/_resources/` in file paths. Change `.css` to `.less` if required. `default-aspect/` to
+`./$TRADER-default-aspect/`, `'.*blades/` with `'./`.
+
+To extract the transforms/handlers from a `renderDefinitions.xml` file use this RegExp
+
+`[^]*?<(handler|transform) className="(.*?)"`
+
+`import '$2';\nBehaviorFactory.BEHAVIOUR_CLASSES['$2'] = $2;\n`
+
+To extract the controls from a `renderDefinitions.xml` file use this RegExp
+
+`[^]*?<control className="(.*?)"`
+
+`import '$1';\nControlFactory.CONTROL_CLASSES['$1'] = $1;\n`

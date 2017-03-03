@@ -12,22 +12,33 @@ import parseArgs from 'minimist';
 import {
 	DefinePlugin
 } from 'webpack';
+import {
+	onError
+} from 'karma-caplin-dots-reporter';
 
 const args = parseArgs(process.argv.slice(2));
 // Keeps browser/Karma running after test run.
+const atsOnly = args.ats || args._.includes('--ats') || args._.includes('--ATs') || false;
+const utsOnly = args.uts || args._.includes('--uts') || args._.includes('--UTs') || false;
 const devMode = args.dev || false;
 // Packages user wants to test, if the user specifies none all packages will be tested.
 const requestedPackagesToTest = args._;
-const testEntry = resolve(__dirname, 'test-entry.js');
+const atsTestEntry = resolve(__dirname, 'ats-test-entry.js');
+const utsTestEntry = resolve(__dirname, 'uts-test-entry.js');
 
-export const baseKarmaConfig = {
+const baseKarmaConfig = {
 	browsers: ['Chrome'],
 	logLevel: LOG_ERROR,
-	preprocessors: {
-		[testEntry]: ['webpack', 'sourcemap']
+	caplinDotsReporter: {
+		icon: {
+			success : '.',
+			failure : 'F',
+			ignore  : '-'
+		}
 	},
-	reporters: ['dots'],
+	reporters: ['caplin-dots'],
 	singleRun: !devMode,
+	failOnEmptyTestSuite: true,
 	webpackMiddleware: {
 		noInfo: true,
 		stats: {
@@ -41,12 +52,8 @@ export const baseKarmaConfig = {
 	}
 };
 
-function createPackageKarmaConfig({filesToServe, packageDirectory, webpackConfig, frameworks}) {
-	const files = [testEntry];
-
-	if (filesToServe) {
-		files.push(filesToServe);
-	}
+function createPackageKarmaConfig({files = [], frameworks = [], packageDirectory, webpackConfig}, testEntry) {
+	const karmaFiles = [...files, testEntry];
 
 	const plugins = [
 		new DefinePlugin({PACKAGE_DIRECTORY: `"${packageDirectory}"`})
@@ -58,8 +65,11 @@ function createPackageKarmaConfig({filesToServe, packageDirectory, webpackConfig
 	};
 	const packageKarmaConfig = {
 		...baseKarmaConfig,
+		preprocessors: {
+			[testEntry]: ['webpack', 'sourcemap']
+		},
 		basePath: packageDirectory,
-		files,
+		files: karmaFiles,
 		frameworks,
 		webpack: packageWebpackConfig
 	};
@@ -67,21 +77,27 @@ function createPackageKarmaConfig({filesToServe, packageDirectory, webpackConfig
 	return packageKarmaConfig;
 }
 
-function runPackageTests(packageKarmaConfig, resolvePromise) {
-	console.log('Running tests for: \x1b[35m' + packageKarmaConfig.basePath + '\x1b[0m');
+function getShortPathFromBasePath(basePath) {
+	return basePath.substring(basePath.indexOf('apps'));
+}
+
+function runPackageTests(packageKarmaConfig, resolvePromise, summary, packageName) {
+	console.log('\nRunning tests for: \x1b[35m' + packageName + '\x1b[0m');
 
 	const server = new Server(packageKarmaConfig, (exitCode) => {
-		if (exitCode === 0) {
-			resolvePromise();
-		} else if (!devMode) {
-			process.exit(exitCode); //eslint-disable-line
-		}
+		resolvePromise();
+	});
+
+	server.on('run_complete', (browsers, { success, failed, error, logs }) => {
+		summary.success += success;
+		summary.failed += failed;
+		summary.error = summary.error || error;
 	});
 
 	server.start();
 }
 
-export function createPackagesKarmaConfigs(packagesTestMetadata) {
+function filterPackagesToTestIfFilterIsSpecified(packagesTestMetadata) {
 	return packagesTestMetadata
 		.filter(({packageName}) => {
 			if (requestedPackagesToTest.length === 0) {
@@ -89,23 +105,77 @@ export function createPackagesKarmaConfigs(packagesTestMetadata) {
 			}
 
 			return requestedPackagesToTest.includes(packageName);
-		})
-		.map(createPackageKarmaConfig);
+		});
+}
+
+export function createPackagesKarmaConfigs(packagesTestMetadata) {
+	if (atsOnly) {
+		return [];
+	}
+
+	return filterPackagesToTestIfFilterIsSpecified(packagesTestMetadata)
+		.map((packageTestMetadata) => createPackageKarmaConfig(packageTestMetadata, utsTestEntry));
+}
+
+export function createPackagesATsKarmaConfigs(packagesTestMetadata) {
+	if (utsOnly) {
+		return [];
+	}
+
+	return filterPackagesToTestIfFilterIsSpecified(packagesTestMetadata)
+		.map((packageTestMetadata) => createPackageKarmaConfig(packageTestMetadata, atsTestEntry));
 }
 
 export async function runPackagesTests(packagesKarmaConfigs) {
 	// When the user hits Control-C we want to exit the process even if we have queued test runs.
-	process.on('SIGINT', process.exit);
+	process.on('SIGINT', () => {
+		console.log('\nTesting has been terminated due to the process being exited!\x1b[0m');
+		showSummary(summary);
+		process.exit();
+	});
+	// this might bring up issues if our tests start running concurrently,
+	// but given we currently run package by package, it should be fine
+	let packageName = '';
+	const summary = {
+		success: 0,
+		failed: 0,
+		error: false,
+		errors: []
+	};
+	onError(error => {
+		summary.errors.push({ packageName, error });
+	});
 
 	try {
 		for (const packageKarmaConfig of packagesKarmaConfigs) {
-			await new Promise((resolve) => runPackageTests(packageKarmaConfig, resolve));
+			packageName = getShortPathFromBasePath(packageKarmaConfig.basePath);
+			await new Promise((resolve) => runPackageTests(packageKarmaConfig, resolve, summary, packageName));
 		}
 	} catch (err) {
+		showSummary(summary);
 		console.error(err);
 	}
 
 	if (!devMode) {
+		showSummary(summary);
 		process.exit(0);
+	}
+}
+
+function showSummary({ success, failed, error, errors }) {
+	if (!devMode) {
+		console.log(`\n== Test Report ==`);
+		if (failed > 0 || error) {
+			console.log(`\n\x1b[41m\x1b[30mTesting ended with failures/errors!\x1b[0m`);
+			console.log(errors.map(({packageName, error}) => `\nTest failed in: \x1b[35m${packageName}\n${error}`).join('\n') + '\n');
+		} else {
+			console.log(`\n\x1b[42m\x1b[30mTesting ended with no failures!\x1b[0m`);
+		}
+		console.log(`\x1b[35mPassed:\x1b[0m ${ success }`);
+		console.log(`\x1b[35mFailed:\x1b[0m ${ failed }`);
+		console.log(`\x1b[35mErrors:\x1b[0m ${ error ? 'Yes' : 'No' }`);
+		if (failed > 0 || error) {
+			process.exit(1);
+		}
 	}
 }

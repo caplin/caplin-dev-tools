@@ -1,26 +1,16 @@
 {
   "name": "@caplin/build-tasks",
-  "version": "1.5.0",
+  "version": "2.0.2",
   "description": "Build scripts for creating WARs",
-  "main": "dist-build.js",
-  "scripts": {
-    "build": "babel build.js > dist-build.js"
-  },
+  "main": "build.js",
   "keywords": [],
   "author": "Brian Di Palma <offler@gmail.com> (https://github.com/briandipalma)",
   "license": "ISC",
-  "files": [
-    "dist-build.js"
-  ],
   "dependencies": {
     "archiver": "^1.0.0",
     "fs-extra": "^0.30.0",
     "minimist": "^1.2.0",
     "rimraf": "^2.5.2",
     "webpack": "^1.13.0"
-  },
-  "devDependencies": {
-    "babel-cli": "^6.7.5",
-    "babel-preset-node6": "^11.0.0"
   }
 }

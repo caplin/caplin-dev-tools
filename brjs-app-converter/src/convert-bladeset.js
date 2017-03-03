@@ -1,14 +1,26 @@
-import {join} from 'path';
+import {
+	join
+} from 'path';
 
-import {copySync, readdirSync, removeSync} from 'fs-extra';
+import {
+	copySync,
+	readdirSync,
+	removeSync
+} from 'fs-extra';
 
-import {moveBladeCodeToPackages} from './convert-blade';
-import {createNamespaceDirectoriesIfMissing} from './converter-utils';
+import {
+	moveBladeCodeToPackages
+} from './convert-blade';
+import {
+	createNamespaceDirectoriesIfMissing
+} from './converter-utils';
 
 // Find all blades in a bladeset, move and convert them to packages.
-function moveAndConvertBladesCode(bladesetDir, bladesetName, conversionMetadata) {
+export function moveAndConvertBladesCode(bladesetDir, bladesetName, conversionMetadata) {
 	const bladesetBladesDir = join(bladesetDir, 'blades');
 	const moveBladesPromises = readdirSync(bladesetBladesDir)
+		// `blades` directories can have `.js-style` files in them so filter them out.
+		.filter((possibleBladeName) => possibleBladeName.startsWith('.') === false)
 		.map((bladeName) => {
 			conversionMetadata.packagesThatShouldBeLibs.push(bladeName);
 

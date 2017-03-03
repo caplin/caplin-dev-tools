@@ -1,4 +1,6 @@
-import {join} from 'path';
+import {
+	join
+} from 'path';
 
 import {
 	accessSync,
@@ -10,7 +12,9 @@ import {
 	renameSync,
 	statSync
 } from 'fs-extra';
-import {safeLoad} from 'js-yaml';
+import {
+	safeLoad
+} from 'js-yaml';
 
 // If a directory is present in the `conversion-data` override directory use it else use the template version.
 function getBoilerplateDirLocation(backupDir, conversionDataDirContents, fileName, filePath) {
@@ -23,14 +27,22 @@ function getBoilerplateDirLocation(backupDir, conversionDataDirContents, fileNam
 
 // The user can provide a directory with files that override the boilerplate files what the conversion tool
 // uses by default. We check for the existance of these overrides and use them if present.
-function useConversionDataDirectoryFilesIfPresent(backupDir) {
+function useConversionDataDirectoryFilesIfPresent(backupDir, applicationName) {
 	const conversionDataDirContents = readdirSync(join('..', 'conversion-data'));
-	const sdkJSLibrariesDir = getBoilerplateDirLocation(
+	let sdkJSLibrariesDir = getBoilerplateDirLocation(
 		backupDir, conversionDataDirContents, 'sdk', join('sdk', 'libs', 'javascript')
 	);
-	const privateKeyFileLocation = getBoilerplateDirLocation(
+	let privateKeyFileLocation = getBoilerplateDirLocation(
 		backupDir, conversionDataDirContents, 'privatekey.pem', join('conf', 'keymaster', 'privatekey.pem')
 	);
+
+	if (applicationName === 'ct') {
+		privateKeyFileLocation = join('..', 'conversion-data', 'ct-privatekey.pem');
+		sdkJSLibrariesDir = join(backupDir, 'ct-core', 'sdk', 'libs', 'javascript');
+	} else if (applicationName === 'br') {
+		privateKeyFileLocation = join('..', 'conversion-data', 'ct-privatekey.pem');
+		sdkJSLibrariesDir = join(backupDir, 'brjs-sdk', 'sdk', 'libs', 'javascript');
+	}
 
 	return {
 		privateKeyFileLocation,
@@ -38,22 +50,44 @@ function useConversionDataDirectoryFilesIfPresent(backupDir) {
 	};
 }
 
+function getApplicationFilePath(applicationName) {
+	if (applicationName === 'ct') {
+		return join('ct-core', 'apps', 'fxtrader');
+	} else if (applicationName === 'br') {
+		return join('brjs-sdk', 'apps', 'it-app');
+	}
+
+	return join('apps', applicationName);
+}
+
 // Create all the metadata required for converting an app, directory locations etc.
 export function createConversionMetadataDataType(applicationName) {
-	const appConfFileName = join('apps', applicationName, 'app.conf');
+	const appFilePath = getApplicationFilePath(applicationName);
+	const appConfFileName = join(appFilePath, 'app.conf');
 	let applicationNamespaceRoot = applicationName;
 	// string: Directory that BRJS project is moved to.
-	const backupDir = join('brjs-app');
+	const backupDir = join('brjs-app-backup');
 	// string: Directory that BRJS application is moved to.
-	const brjsApplicationDir = join(backupDir, 'apps', applicationName);
+	const brjsApplicationDir = join(backupDir, appFilePath);
+	let conversionDataApplicationName = '';
 	// string: Name of packages directory.
 	const packagesDirName = 'packages';
-	const conversionData = useConversionDataDirectoryFilesIfPresent(backupDir);
+	const conversionData = useConversionDataDirectoryFilesIfPresent(backupDir, applicationName);
 
 	if (statSync(appConfFileName).isFile()) {
 		const appConfYAML = safeLoad(readFileSync(appConfFileName, 'utf8'));
 
 		applicationNamespaceRoot = appConfYAML.requirePrefix;
+	}
+
+	if (applicationName === 'ct') {
+		// eslint-disable-next-line
+		applicationName = 'fxtrader';
+		conversionDataApplicationName = 'ct';
+	} else if (applicationName === 'br') {
+		// eslint-disable-next-line
+		applicationName = 'it-app';
+		conversionDataApplicationName = 'br';
 	}
 
 	return {
@@ -63,6 +97,7 @@ export function createConversionMetadataDataType(applicationName) {
 		applicationLibsDir: join(brjsApplicationDir, 'libs'),
 		backupDir,
 		brjsApplicationDir,
+		conversionDataApplicationName,
 		packagesDir: join(packagesDirName),
 		packagesDirName,
 		packagesThatShouldBeLibs: [],
@@ -144,7 +179,14 @@ export function verifyCLIArgs(applicationName) {
 		throw new Error(`A conversion-data/${applicationName} directory for the application files must be provided.`);
 	}
 
-	const appFolderName = join('apps', applicationName);
+	let appFolderName = join('apps', applicationName);
+
+	// If we are converting the `ct` repo change the location as it's structured differently.
+	if (applicationName === 'ct') {
+		appFolderName = join('ct-core', 'apps', 'fxtrader');
+	} else if (applicationName === 'br') {
+		appFolderName = join('brjs-sdk', 'apps', 'it-app');
+	}
 
 	try {
 		accessSync(appFolderName);

@@ -6,6 +6,6 @@ module.exports = function i18nLoader(i18nPropertiesSource) {
 
 function createModuleSource(language, result) {
 	return `
-require('br/I18n').registerTranslations('${language}', ${JSON.stringify(result)});
+require('br-i18n/I18nStore').registerTranslations('${language}', ${JSON.stringify(result)});
 `;
 }

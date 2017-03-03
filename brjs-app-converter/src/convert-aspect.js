@@ -1,6 +1,10 @@
-import {join} from 'path';
+import {
+	join
+} from 'path';
 
-import {copySync} from 'fs-extra';
+import {
+	copySync
+} from 'fs-extra';
 
 // Move the application aspect code into the `pkgs` directory.
 export function moveAspectCode(

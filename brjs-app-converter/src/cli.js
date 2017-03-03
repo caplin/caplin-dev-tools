@@ -1,20 +1,18 @@
 #! /usr/bin/env node
 
-/* eslint-disable no-var */
+const path = require('path');
 
-var path = require('path');
+const check = require('check-node-version');
+const parseArgs = require('minimist');
 
-var check = require('check-node-version');
-var parseArgs = require('minimist');
+const packageJson = require(path.join(__dirname, '..', 'package.json'));
 
-var packageJson = require(path.join(__dirname, '..', 'package.json'));
-
-var options = {
+const options = {
 	node: packageJson.engines.node
 };
 
 function versionCheckCallback(versionError, result) {
-	var errorMessage = 'Not compatible with current node version, please update!';
+	let errorMessage = 'Not compatible with current node version, please update!';
 
 	if (result.nodeSatisfied) {
 		convertApplication();
@@ -38,9 +36,8 @@ require('babel-register')({
 });
 
 function convertApplication() {
-	var convertor = require('./converter').default; // eslint-disable-line
-
-	var argv = parseArgs(process.argv.slice(2));
+	const argv = parseArgs(process.argv.slice(2));
+	const convertor = require('./converter').default; // eslint-disable-line
 
 	convertor(argv);
 }

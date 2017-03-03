@@ -1,8 +1,14 @@
-import {join} from 'path';
+import {
+	join
+} from 'path';
 
-import {copySync} from 'fs-extra';
+import {
+	copySync
+} from 'fs-extra';
 
-import {createNamespaceDirectoriesIfMissing} from './converter-utils';
+import {
+	createNamespaceDirectoriesIfMissing
+} from './converter-utils';
 
 // Move a blade to the packages directory.
 export function moveBladeCodeToPackages(bladeName, bladesetName, bladesetBladesDir, conversionMetadata) {

@@ -1,6 +1,10 @@
-import {join} from 'path';
+import {
+	join
+} from 'path';
 
-import {readFileSync} from 'fs-extra';
+import {
+	readFileSync
+} from 'fs-extra';
 import template from 'lodash/string/template';
 
 export const templateDir = join(__dirname, '..', 'templates');

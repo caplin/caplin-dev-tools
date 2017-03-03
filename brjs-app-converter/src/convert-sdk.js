@@ -1,11 +1,15 @@
-import {join} from 'path';
+import {
+	join
+} from 'path';
 
 import {
 	copySync,
 	readdirSync
 } from 'fs-extra';
 
-import {convertLib} from './convert-libs';
+import {
+	convertLib
+} from './convert-libs';
 
 // Copy all SDK libs to packages and convert them to npm packages.
 export function convertSDKToPackages({packagesDir, sdkJSLibrariesDir}) {

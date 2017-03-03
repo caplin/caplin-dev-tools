@@ -4,29 +4,55 @@ import {
 
 import {
 	copySync,
+	existsSync,
 	readdirSync,
 	readJsonSync,
 	statSync,
 	writeJsonSync
 } from 'fs-extra';
 
-import {templateDir} from './converter-data';
+import {
+	templateDir
+} from './converter-data';
 
-function setUpApplicationFiles(applicationName, convertedAppDir, conversionMetadata, defaulAspectDir) {
+function serverDirs(convertedAppDir) {
+	let javaServerDir = join(convertedAppDir, 'scripts');
+	const serverDir = join(convertedAppDir, 'server');
+	let nodeServerDir = serverDir;
+
+	if (existsSync(join(serverDir, 'node'))) {
+		nodeServerDir = join(serverDir, 'node');
+	}
+
+	if (existsSync(join(serverDir, 'java'))) {
+		javaServerDir = join(serverDir, 'java');
+	}
+
+	return {
+		javaServerDir,
+		nodeServerDir
+	};
+}
+
+function setUpApplicationFiles(applicationName, convertedAppDir, conversionMetadata, defaultAspectDir) {
 	copySync(join('..', 'conversion-data', applicationName), join(convertedAppDir));
-
 	copySync(join(templateDir, '.babelrc'), join(convertedAppDir, '.babelrc'));
-	copySync(conversionMetadata.privateKeyFileLocation, join(convertedAppDir, 'server', 'privatekey.pem'));
-	copySync(join(defaulAspectDir, 'unbundled-resources'), join(convertedAppDir, 'public/dev/unbundled-resources'));
-	copySync(join(defaulAspectDir, 'unbundled-resources'), join(convertedAppDir, 'public/dev'));
-	copySync(join(conversionMetadata.brjsApplicationDir, 'WEB-INF'), join(convertedAppDir, 'scripts', 'WEB-INF'));
+	copySync(join(defaultAspectDir, 'unbundled-resources'), join(convertedAppDir, 'public/dev/unbundled-resources'));
+	copySync(join(defaultAspectDir, 'unbundled-resources'), join(convertedAppDir, 'public/dev'));
+
+	const {
+		javaServerDir,
+		nodeServerDir
+	} = serverDirs(convertedAppDir);
+
+	copySync(conversionMetadata.privateKeyFileLocation, join(nodeServerDir, 'privatekey.pem'));
+	copySync(join(conversionMetadata.brjsApplicationDir, 'WEB-INF'), join(javaServerDir, 'WEB-INF'));
 }
 
 // Given an application populate its `package.json` with all the newly created packages as dependencies.
 function populateApplicationPackageJSON(
 	applicationName, convertedAppDir, {packagesDir, packagesDirName, packagesThatShouldBeLibs}
 ) {
-	const appDependencies = {};
 	const appPackageJSON = readJsonSync(join('..', 'conversion-data', applicationName, 'package.json'));
 	const appPackageJSONFileLocation = join(convertedAppDir, 'package.json');
 
@@ -35,26 +61,29 @@ function populateApplicationPackageJSON(
 		const isDirectory = statSync(join(packagesDir, packageDir)).isDirectory();
 
 		if (isNotLib && isDirectory) {
-			appDependencies[packageDir] = `../../${packagesDirName}/${packageDir}`;
+			appPackageJSON.dependencies[packageDir] = `file:../../${packagesDirName}/${packageDir}`;
 		}
 	}
 
-	appPackageJSON.dependencies = appDependencies;
 	writeJsonSync(appPackageJSONFileLocation, appPackageJSON, {spaces: 2});
 }
 
 // Create application variant
-function createApplication(applicationName, conversionMetadata, defaulAspectDir) {
+function createApplication(applicationName, conversionMetadata, defaultAspectDir, conversionDataApplicationName) {
 	const convertedAppDir = join('apps', applicationName);
 
-	setUpApplicationFiles(applicationName, convertedAppDir, conversionMetadata, defaulAspectDir);
-	populateApplicationPackageJSON(applicationName, convertedAppDir, conversionMetadata);
+	setUpApplicationFiles(
+		(conversionDataApplicationName || applicationName), convertedAppDir, conversionMetadata, defaultAspectDir
+	);
+	populateApplicationPackageJSON(
+		(conversionDataApplicationName || applicationName), convertedAppDir, conversionMetadata
+	);
 }
 
 // Create application and application variants directories.
 export function createApplicationAndVariants(conversionMetadata) {
-	const {applicationName, packagesDir} = conversionMetadata;
-	const defaulAspectDir = join(packagesDir, `${applicationName}-default-aspect`);
+	const {applicationName, conversionDataApplicationName, packagesDir} = conversionMetadata;
+	const defaultAspectDir = join(packagesDir, `${applicationName}-default-aspect`);
 
-	createApplication(applicationName, conversionMetadata, defaulAspectDir);
+	createApplication(applicationName, conversionMetadata, defaultAspectDir, conversionDataApplicationName);
 }

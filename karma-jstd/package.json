@@ -1,0 +1,15 @@
+{
+  "name": "@caplin/karma-jstd",
+  "version": "1.0.1",
+  "description": "A package that adds the JSTD adapter to a Karma config",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "Brian Di Palma <offler@gmail.com> (https://github.com/briandipalma)",
+  "license": "ISC",
+  "dependencies": {
+    "karma-jstd-adapter": "0.0.3"
+  }
+}

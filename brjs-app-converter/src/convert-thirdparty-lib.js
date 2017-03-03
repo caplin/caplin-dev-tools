@@ -1,13 +1,19 @@
-import {join} from 'path';
+import {
+	join
+} from 'path';
 
 import {
 	readdirSync,
 	readFileSync,
 	writeFileSync
 } from 'fs-extra';
-import {safeLoad} from 'js-yaml';
+import {
+	safeLoad
+} from 'js-yaml';
 
-import {compiledThirdpartyJSONTemplate} from './converter-data';
+import {
+	compiledThirdpartyJSONTemplate
+} from './converter-data';
 
 // Returns the libraries dependencies as require statements. This way when webpack loads the combined
 // library files it also loads the library's dependencies.
@@ -52,10 +58,10 @@ function getLibrarySource(packageDirectory, manifestJSFiles) {
 function getLibraryModuleExports(manifestExports) {
 	// Certain thirdparty libraries contain UMD boilerplate which checks if `module` exists and exports
 	// library values using `module.exports` instead of putting it on the global/window object.
-	const exportsExist = 'Object.keys(module.exports).length';
+	const exportsExist = '(Object.keys(module.exports).length || typeof module.exports === "function")';
 	const moduleExports = `module.exports = ${exportsExist} ? module.exports : ${manifestExports};`;
 
-	return `\nif (module) ${moduleExports}\n`;
+	return `\nif (typeof module !== "undefined") ${moduleExports}\n`;
 }
 
 function getLibraryWindowExports(packageName, manifestExports) {
@@ -66,15 +72,20 @@ function getLibraryWindowExports(packageName, manifestExports) {
 	// because it doesn't wrap thirdparty libraries in IIFEs like webpack does, which means variables
 	// declared in those libraries can leak to the global scope but in webpack they don't so we must
 	// explictly export them to the global/window.
-	if (manifestExports) {
-		windowExports += `\nwindow.${manifestExports} = (module && module.exports) || ${manifestExports};\n`;
+	if (manifestExports && manifestExports !== '{}') {
+		const windowExport = `(typeof module !== "undefined" && module.exports) || ${manifestExports};\n`;
+
+		windowExports += `\nwindow.${manifestExports} = ${windowExport}`;
 	}
 
 	// If the `exports` value differs to the package name export that too. BRJS would export the module
 	// exports to the `window` at the bottom of the thirdparty JS bundle for the library. The export
 	// identifier used by BRJS is the package name.
 	if (safePackageExports !== manifestExports) {
-		windowExports += `\nwindow.${safePackageExports} = require("${packageName}");\n`;
+		// `require` might be nulled down by webpack configuration so check if it exists.
+		const packageRequire = `typeof require == 'function' && require('${packageName}');\n`;
+
+		windowExports += `\nwindow.${safePackageExports} = ${packageRequire}`;
 	}
 
 	return windowExports;
@@ -88,10 +99,13 @@ export function convertThirdpartyLibraryToPackage(packageDirectory, packageName,
 	const manifestFileLocation = join(packageDirectory, 'thirdparty-lib.manifest');
 	const manifestYAML = safeLoad(readFileSync(manifestFileLocation, 'utf8'));
 
-	combinedLibrarySource += getLibraryDependencyRequires(manifestYAML.depends);
-	combinedLibrarySource += getLibrarySource(packageDirectory, manifestYAML.js);
-	combinedLibrarySource += getLibraryModuleExports(manifestYAML.exports);
-	combinedLibrarySource += getLibraryWindowExports(packageName, manifestYAML.exports);
+	// The `bugfix` library doesn't provide a valid manifest file.
+	if (manifestYAML !== undefined) {
+		combinedLibrarySource += getLibraryDependencyRequires(manifestYAML.depends);
+		combinedLibrarySource += getLibrarySource(packageDirectory, manifestYAML.js);
+		combinedLibrarySource += getLibraryModuleExports(manifestYAML.exports);
+		combinedLibrarySource += getLibraryWindowExports(packageName, manifestYAML.exports);
+	}
 
 	writeFileSync(join(packageDirectory, 'converted_library.js'), combinedLibrarySource);
 

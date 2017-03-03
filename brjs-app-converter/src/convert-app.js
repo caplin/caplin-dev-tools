@@ -1,7 +1,14 @@
-import {readdirSync} from 'fs-extra';
+import {
+	readdirSync
+} from 'fs-extra';
 
-import {moveAspectCode} from './convert-aspect';
-import {moveBladesetCode} from './convert-bladeset';
+import {
+	moveAspectCode
+} from './convert-aspect';
+import {
+	moveAndConvertBladesCode,
+	moveBladesetCode,
+} from './convert-bladeset';
 
 // Move all code in bladesets/blades/aspects into the packages directory.
 export function moveBRJSApplicationCodeToPackages(conversionMetadata) {
@@ -11,6 +18,8 @@ export function moveBRJSApplicationCodeToPackages(conversionMetadata) {
 			return moveBladesetCode(conversionMetadata, fileName);
 		} else if (/^.*-aspect$/.test(fileName)) {
 			moveAspectCode(conversionMetadata, fileName);
+		} else if (fileName === 'blades') {
+			moveAndConvertBladesCode(brjsApplicationDir, '', conversionMetadata);
 		}
 
 		return Promise.resolve();

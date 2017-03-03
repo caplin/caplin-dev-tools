@@ -1,1 +1,8 @@
-console.log("Welcome to the {{componentName}} component");
+export default class {{componentName}} {
+	constructor() {
+		this.message = 'default message';
+	}
+	getMessage() {
+		return this.message;
+	}
+}

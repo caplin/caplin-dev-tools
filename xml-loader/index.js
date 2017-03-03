@@ -1,13 +1,10 @@
 
-module.exports = function patchLoader(xmlText) {
+module.exports = function xmlLoader(xmlSource) {
 	this.cacheable();
 
-	// We need to turn the XML file into one long string as leaving it raw leads to JS parsing errors.
-	const flattenedXMLText = xmlText.replace(/[\r\n]/g, '');
+	// Escape newlines, quotes etc that would cause errors with subsequent parsing of the loader return value.
+	const jsonStringXMLTemplate = JSON.stringify(xmlSource);
 
-	return `
-	var domParser = new DOMParser();
-	var dom = domParser.parseFromString('${flattenedXMLText}', 'text/xml');
-
-	module.exports = dom.documentElement`;
+	return `var ConfigurableXMLResourceService = require('ct-services/xml/ConfigurableXMLResourceService').default;
+	ConfigurableXMLResourceService.registerXMLFileContents(${jsonStringXMLTemplate})`;
 };

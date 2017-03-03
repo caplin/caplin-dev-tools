@@ -1,11 +1,7 @@
-'use strict';
 
-Object.defineProperty(exports, "__esModule", {
-	value: true
-});
-
-exports.default = application => {
+module.exports = (application) => {
 	application.post('/servlet/Poll', (req, res) => {
-		res.send(`keep alive ${ new Date().toUTCString() }`);
+		res
+			.send(`keep alive ${new Date().toUTCString()}`);
 	});
 };

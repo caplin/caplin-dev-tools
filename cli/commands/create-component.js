@@ -52,6 +52,14 @@ module.exports = {
 
 	commandFunction: function(options) {
 		var name = options[0];
+		var typeOfComponent = options[1];
+		var nameIsCapitalised = name[0] == name[0].toUpperCase();
+
+		if(typeOfComponent === 'react' && !nameIsCapitalised) {
+			console.log("Component not created. React component names must begin with capital letter. Please try again with: " + name[0].toUpperCase() + name.slice(1));
+			return;
+		}
+
 		var templateId = "component-" + options[1];
 
 		// check template exists

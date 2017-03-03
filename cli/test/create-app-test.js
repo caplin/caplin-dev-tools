@@ -8,7 +8,7 @@ var fs = require('fs');
 var cleanDirectories = function() {
     try {
         rimraf.sync(path.resolve('apps'));
-        rimraf.sync(path.resolve('packages'));
+        rimraf.sync(path.resolve('caplin-packages'));
     } catch(e) {
         console.log(e);
     };
@@ -17,7 +17,7 @@ var cleanDirectories = function() {
 var initDirectories = function() {
     try {
         fs.mkdirSync(path.resolve('apps'));
-        fs.mkdirSync(path.resolve('packages'));
+        fs.mkdirSync(path.resolve('caplin-packages'));
     } catch(e) {
         console.log(e);
     };
@@ -29,7 +29,7 @@ describe('create-app', function () {
         cleanDirectories();
     });
 
-    it('should throw an error if apps and packages directories are now found', function (errorThrown) {
+    it('should throw an error if apps and caplin-packages directories are now found', function (errorThrown) {
 
         var cp =  execFile('node', ['./index.js', 'create-app', 'newapp']);
         var stdOutput = '',
@@ -47,7 +47,7 @@ describe('create-app', function () {
 
     });
 
-    it('should generate an app folder if apps and packages directories are found', function (allFilesCreated) {
+    it('should generate an app folder if apps and caplin-packages directories are found', function (allFilesCreated) {
         initDirectories();
 
         var cp =  execFile('node', ['./index.js', 'create-app', 'newapp']);
@@ -57,8 +57,8 @@ describe('create-app', function () {
             stdOutput += data;
 
             if(stdOutput.indexOf('Created') > -1) {
-                assert.file('apps/newapp/index.js');
                 assert.file('apps/newapp/index.html');
+                assert.file('apps/newapp/src/index.js');
                 assert.file('apps/newapp/package.json');
                 assert.file('apps/newapp/webpack.config.js');
                 assert.file('apps/newapp/server/server.js');

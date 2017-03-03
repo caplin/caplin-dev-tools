@@ -1,35 +1,60 @@
-import { exec } from 'child_process';
+const exec = require('child_process').exec;
 
-function getHeadCommit() {
-	return Git.Repository
-		.open(process.cwd())
-		.then(repo => repo.getHeadCommit());
-}
-
-function getHash() {
-	return new Promise((resolve, reject) => {
-		exec("git rev-parse HEAD", function (error, stdout, stderr) {
-			resolve(stdout);
-		});
-	})	
+function getHash(hashLength) {
+	return new Promise((resolve) => {
+		exec(
+			'git rev-parse HEAD',
+			(error, stdout) => {
+				const hash = stdout.trim().substr(0, hashLength)
+				resolve(hash);
+			}
+		);
+	});
 }
 
 function getCommitCount() {
-	return new Promise((resolve, reject) => {
-		exec("git rev-list --count HEAD", function (error, stdout, stderr) {
-			resolve(stdout);
-		});
-	})
+	return new Promise((resolve) => {
+		exec(
+			'git rev-list --count HEAD',
+			(error, stdout) => {
+				const count = stdout.trim();
+				resolve(count);
+			}
+		);
+	});
 }
 
-function createFullVersion(semVer) {
-	return Promise.all([getCommitCount(), getHash()])
-		.then(output => new Promise((resolve, reject) => {
-			resolve(`${ semVer }-${ output[0].trim() }-${ output[1].trim().substr(0, 8) }`);
-		}));
+function getBranchDescriptor(defaultBranchName) {
+	return new Promise((resolve) => {
+		exec(
+			'git rev-parse --abbrev-ref HEAD',
+			(error, stdout) => {
+				const currentBranch = stdout.trim();
+				const descriptor = currentBranch === defaultBranchName ? null : currentBranch;
+
+				resolve(descriptor);
+			}
+		);
+	});
 }
 
-export default createFullVersion;
+module.exports = function createFullVersion(semVer, { hashLength = 8, masterBranchName = 'master' } = {}) {
+	return Promise
+		.all([
+			getCommitCount(),
+			getHash(hashLength),
+			getBranchDescriptor(masterBranchName)
+		])
+		.then(
+			(output) => output.reduce(
+				(acc, item) => {
+					if (item !== null) {
+						acc.push(item);
+					}
 
-// Example usage
-// createFullVersion('1.0.0').then(version => console.log(version))
+					return acc;
+				},
+				[semVer]
+			).join('-')
+		);
+}

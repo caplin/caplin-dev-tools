@@ -1,6 +1,6 @@
 {
   "name": "caplin-cli",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "caplin-cli app bootstrapping experiment",
   "main": "index.js",
   "bin": {
