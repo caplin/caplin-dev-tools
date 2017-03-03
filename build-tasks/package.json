@@ -4,7 +4,7 @@
   "description": "Build scripts for creating WARs",
   "main": "build.js",
   "keywords": [],
-  "author": "Brian Di Palma <offler@gmail.com> (https://github.com/briandipalma)",
+  "author": "",
   "license": "ISC",
   "dependencies": {
     "archiver": "^1.0.0",

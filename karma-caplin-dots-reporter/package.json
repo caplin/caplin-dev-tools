@@ -2,7 +2,7 @@
   "name": "karma-caplin-dots-reporter",
   "description": "Caplin's Karma dots reporter plugin.",
   "version": "1.2.4",
-  "author": "Dominic Gannaway",
+  "author": "",
   "keywords": [
     "karma-plugin",
     "karma-reporter",
