@@ -1,14 +1,16 @@
 #! /usr/bin/env node
 
-var cli = require('./cli');
+const args = require("minimist")(process.argv.slice(2));
 
-var args = require('minimist')(process.argv.slice(2));
-var chosenCommandName = args._[0];
-var chosenCommandOptions = args._.slice(1, args.length);
+const cli = require("./cli");
 
-cli.getChosenCommand(chosenCommandName, chosenCommandOptions)
-	.then(cli.getAllOptionValues)
-	.then(cli.runCommand)
-	.catch(function(e) {
-		console.log(e);
-	});
+const chosenCommandName = args._[0];
+const chosenCommandOptions = args._.slice(1, args.length);
+
+cli
+  .getChosenCommand(chosenCommandName, chosenCommandOptions)
+  .then(cli.getAllOptionValues)
+  .then(cli.runCommand)
+  .catch(e => {
+    console.log(e);
+  });

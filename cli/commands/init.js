@@ -1,24 +1,20 @@
-var fs = require('fs');
-var copyTemplate = require('../utils/copyTemplate');
+const fs = require("fs");
+const copyTemplate = require("../utils/copyTemplate");
 
 module.exports = {
+  name: "init",
 
-	name: "init",
+  priority: 5,
 
-	priority: 5,
+  isValidWorkingDirectory(dir) {
+    if (fs.readdirSync(dir).length === 0) {
+      return true;
+    }
 
-	isValidWorkingDirectory: function(dir) {
+    return `'init' needs to be run in an empty directory. Check you don't have any hidden files or folders.`;
+  },
 
-		if (fs.readdirSync(dir).length === 0) {
-			return true;
-		} else {
-			return `'init' needs to be run in an empty directory. Check you don't have any hidden files or folders.`;
-		}
-
-	},
-
-	commandFunction: function() {
-		copyTemplate('workspace', process.cwd(), {});
-	}
-
-}
+  commandFunction() {
+    copyTemplate("workspace", process.cwd(), {});
+  }
+};

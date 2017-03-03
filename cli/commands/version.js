@@ -1,11 +1,11 @@
+const packageJSON = require("../package.json");
+
 module.exports = {
+  name: "version",
 
-	name: "version",
+  priority: 99,
 
-	priority: 99,
-
-	commandFunction: function() {
-		console.log(require('../package.json').version);
-}
-
+  commandFunction() {
+    console.log(packageJSON.version);
+  }
 };
