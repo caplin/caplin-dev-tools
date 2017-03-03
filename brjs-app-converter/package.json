@@ -27,10 +27,7 @@
   },
   "homepage": "https://github.com/caplin/brjs-app-converter#readme",
   "devDependencies": {
-    "@briandipalma/eslint-config-bdp": "^7.0.0",
-    "ava": "^0.15.2",
-    "eslint": "^2.2.0",
-    "eslint-plugin-react": "^4.2.3"
+    "ava": "^0.15.2"
   },
   "dependencies": {
     "babel-preset-node6": "^11.0.0",
