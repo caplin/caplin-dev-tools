@@ -58,10 +58,20 @@ function createBabelLoaderExcludeList(basePath) {
   // https://github.com/zloirock/core-js/issues/189
   const packagesToExclude = ["babel-polyfill"];
   const packagesDir = join(basePath, "../../packages");
-  const rootExclusionDirs = "(node_modules|packages)";
+  const packagesCaplinDir = join(basePath, "../../../packages-caplin");
+  const rootExclusionDirs = "(node_modules|packages|packages-caplin)";
 
+  // Legacy `packages` path.
   for (const packageDir of readdirSync(packagesDir)) {
     if (isPackageToBeExcludedFromBabelCompilation(packagesDir, packageDir)) {
+      packagesToExclude.push(packageDir);
+    }
+  }
+
+  for (const packageDir of readdirSync(packagesCaplinDir)) {
+    if (
+      isPackageToBeExcludedFromBabelCompilation(packagesCaplinDir, packageDir)
+    ) {
       packagesToExclude.push(packageDir);
     }
   }
