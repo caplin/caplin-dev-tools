@@ -68,11 +68,13 @@ function createBabelLoaderExcludeList(basePath) {
     }
   }
 
-  for (const packageDir of readdirSync(packagesCaplinDir)) {
-    if (
-      isPackageToBeExcludedFromBabelCompilation(packagesCaplinDir, packageDir)
-    ) {
-      packagesToExclude.push(packageDir);
+  if (existsSync(packagesCaplinDir)) {
+    for (const packageDir of readdirSync(packagesCaplinDir)) {
+      if (
+        isPackageToBeExcludedFromBabelCompilation(packagesCaplinDir, packageDir)
+      ) {
+        packagesToExclude.push(packageDir);
+      }
     }
   }
 
