@@ -79,10 +79,7 @@ function createBabelLoaderExcludeList(basePath) {
   }
 
   const packagesToExcludeGroup = `(${packagesToExclude.join("|")})`;
-  const packagesToExcludeRegExpString = [
-    rootExclusionDirs,
-    packagesToExcludeGroup
-  ].join(dirSep);
+  const packagesToExcludeRegExpString = `${rootExclusionDirs}${dirSep}${packagesToExcludeGroup}${dirSep}`;
 
   babelLoaderExclude.push(new RegExp(packagesToExcludeRegExpString));
 
