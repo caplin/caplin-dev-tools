@@ -6,6 +6,10 @@
 
 ## Getting started
 
+#### Prerequisites
+
+ * Node v6+
+
 #### Installation
 
     npm install -g caplin/caplin-cli
