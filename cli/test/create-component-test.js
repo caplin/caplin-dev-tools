@@ -8,7 +8,8 @@ var fs = require('fs');
 var cleanDirectories = function() {
     try {
         rimraf.sync(path.resolve('apps'));
-        rimraf.sync(path.resolve('caplin-packages'));
+        rimraf.sync(path.resolve('packages'));
+        rimraf.sync(path.resolve('packages-caplin'));
     } catch(e) {
         console.log(e);
     };
@@ -17,7 +18,7 @@ var cleanDirectories = function() {
 var initDirectories = function() {
     try {
         fs.mkdirSync(path.resolve('apps'));
-        fs.mkdirSync(path.resolve('caplin-packages'));
+        fs.mkdirSync(path.resolve('packages-caplin'));
     } catch(e) {
         console.log(e);
     };

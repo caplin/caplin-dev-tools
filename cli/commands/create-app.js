@@ -40,11 +40,11 @@ module.exports = {
 
     appsFound = fs.lstatSync(path.join(process.cwd(), "apps")).isDirectory();
     packagesFound = fs
-      .lstatSync(path.join(process.cwd(), "caplin-packages"))
+      .lstatSync(path.join(process.cwd(), "packages-caplin"))
       .isDirectory();
 
     if (!appsFound) return workingDirectoryErrorMessage("apps");
-    if (!packagesFound) return workingDirectoryErrorMessage("caplin-packages");
+    if (!packagesFound) return workingDirectoryErrorMessage("packages-caplin");
 
     return true;
   },

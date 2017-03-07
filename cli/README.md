@@ -22,8 +22,8 @@ This will generate the following folder structure:
 
 ```
 apps/
-caplin-packages/
-custom-packages/
+packages/
+packages-caplin/
 ```
 
 #### Create an app
