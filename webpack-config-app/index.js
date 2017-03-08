@@ -57,22 +57,39 @@ function createBabelLoaderExcludeList(basePath) {
   // Exclude `babel-polyfill`, IE11 issues,
   // https://github.com/zloirock/core-js/issues/189
   const packagesToExclude = ["babel-polyfill"];
-  const packagesDir = join(basePath, "../../packages");
-  const packagesCaplinDir = join(basePath, "../../../packages-caplin");
+  const packagesDir = join(basePath, "../../packages-caplin");
+  const legacyPackagesDir = join(basePath, "../../packages");
+  const legacyPackagesCaplinDir = join(basePath, "../../../packages-caplin");
   const rootExclusionDirs = "(node_modules|packages|packages-caplin)";
 
   // Legacy `packages` path.
-  for (const packageDir of readdirSync(packagesDir)) {
-    if (isPackageToBeExcludedFromBabelCompilation(packagesDir, packageDir)) {
-      packagesToExclude.push(packageDir);
+  if (existsSync(legacyPackagesDir)) {
+    for (const packageDir of readdirSync(legacyPackagesDir)) {
+      if (
+        isPackageToBeExcludedFromBabelCompilation(legacyPackagesDir, packageDir)
+      ) {
+        packagesToExclude.push(packageDir);
+      }
     }
   }
 
-  if (existsSync(packagesCaplinDir)) {
-    for (const packageDir of readdirSync(packagesCaplinDir)) {
+  // Legacy `packages-caplin` path.
+  if (existsSync(legacyPackagesCaplinDir)) {
+    for (const packageDir of readdirSync(legacyPackagesCaplinDir)) {
       if (
-        isPackageToBeExcludedFromBabelCompilation(packagesCaplinDir, packageDir)
+        isPackageToBeExcludedFromBabelCompilation(
+          legacyPackagesCaplinDir,
+          packageDir
+        )
       ) {
+        packagesToExclude.push(packageDir);
+      }
+    }
+  }
+
+  if (existsSync(packagesDir)) {
+    for (const packageDir of readdirSync(packagesDir)) {
+      if (isPackageToBeExcludedFromBabelCompilation(packagesDir, packageDir)) {
         packagesToExclude.push(packageDir);
       }
     }
@@ -158,22 +175,26 @@ function configureBuildDependentConfig(webpackConfig, version) {
   if (isBuild) {
     webpackConfig.output.publicPath = "public/";
 
-    webpackConfig.plugins.push(new webpack.DefinePlugin({
-      "process.env": {
-        VERSION: JSON.stringify(version)
-      }
-    }));
+    webpackConfig.plugins.push(
+      new webpack.DefinePlugin({
+        "process.env": {
+          VERSION: JSON.stringify(version)
+        }
+      })
+    );
 
-    webpackConfig.plugins.push(new webpack.optimize.UglifyJsPlugin({
-      exclude: /i18n(.*)\.js/,
-      output: {
-        comments: false
-      },
-      compress: {
-        warnings: false,
-        screw_ie8: true // eslint-disable-line
-      }
-    }));
+    webpackConfig.plugins.push(
+      new webpack.optimize.UglifyJsPlugin({
+        exclude: /i18n(.*)\.js/,
+        output: {
+          comments: false
+        },
+        compress: {
+          warnings: false,
+          screw_ie8: true // eslint-disable-line
+        }
+      })
+    );
   } else {
     webpackConfig.output.publicPath = "/public/";
   }
