@@ -1,7 +1,17 @@
-/* eslint-disable no-process-env */
+/* eslint-disable no-param-reassign */
 const { join } = require("path");
 
 const session = require("express-session");
+
+function jndiTokenReplacer(match, jndiToken) {
+  if (process.env[jndiToken]) {
+    return process.env[jndiToken];
+  }
+
+  console.warn(`A value for JNDI token ${jndiToken} could not be found.`);
+
+  return match;
+}
 
 function indexRequestHandler(indexPage, res) {
   const indexPageHTML = indexPage();
@@ -16,16 +26,6 @@ function indexRequestHandler(indexPage, res) {
 module.exports = (application, indexPage) => {
   application.get("/", (req, res) => indexRequestHandler(indexPage, res));
 };
-
-function jndiTokenReplacer(match, jndiToken) {
-  if (process.env[jndiToken]) {
-    return process.env[jndiToken];
-  }
-
-  console.warn(`A value for JNDI token ${jndiToken} could not be found.`);
-
-  return match;
-}
 
 module.exports.loginProtectedIndexPage = ({ app, appRoot, indexPage }) => {
   // You must register the `express-session` middleware before you register the

@@ -1,5 +1,3 @@
-/* eslint-disable no-process-env */
-
 const dotenv = require("dotenv");
 const express = require("express");
 
