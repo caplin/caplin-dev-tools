@@ -110,8 +110,13 @@ function createBabelLoaderQuery(basePath) {
   const babelRC = JSON.parse(readFileSync(join(basePath, ".babelrc"), "utf8"));
 
   if (babelRC.presets) {
-    babelLoaderQuery.presets = babelRC.presets.map(preset =>
-      require.resolve(`babel-preset-${preset}`));
+    babelLoaderQuery.presets = babelRC.presets.map(preset => {
+      // Presets can be of type string|[string, {}] to allow configuring presets
+      // https://babeljs.io/docs/plugins/#plugin-preset-options
+      const presetName = Array.isArray(preset) ? preset[0] : preset;
+
+      return require.resolve(`babel-preset-${presetName}`);
+    });
   }
 
   if (babelLoaderQuery.plugins) {
