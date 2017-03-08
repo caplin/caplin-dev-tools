@@ -1,6 +1,6 @@
 {
   "name": "@caplin/webpack-config-app",
-  "version": "1.31.4",
+  "version": "1.31.5",
   "description": "webpack config common to Caplin applications",
   "main": "index.js",
   "author": "",
@@ -13,6 +13,7 @@
     "@caplin/patch-loader": "^2.0.2",
     "@caplin/service-loader": "^1.0.0",
     "@caplin/xml-loader": "^2.0.0",
+    "babel-core": "^6.23.1",
     "babel-loader": "^6.2.4",
     "css-loader": "^0.25.0",
     "extract-text-webpack-plugin": "^1.0.1",
