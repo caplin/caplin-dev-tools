@@ -26,8 +26,10 @@ const requestedPackagesToTest = args._;
 const atsTestEntry = resolve(__dirname, 'ats-test-entry.js');
 const utsTestEntry = resolve(__dirname, 'uts-test-entry.js');
 
+const testBrowser = retrieveBrowserNameWithCorrectCasing(args);
+
 const baseKarmaConfig = {
-	browsers: ['Chrome'],
+	browsers: [testBrowser],
 	logLevel: LOG_ERROR,
 	caplinDotsReporter: {
 		icon: {
@@ -51,6 +53,23 @@ const baseKarmaConfig = {
 		}
 	}
 };
+
+function retrieveBrowserNameWithCorrectCasing(commandLineArgs) {
+	let browserArg = commandLineArgs['b'] || commandLineArgs['browser'] || 'chrome';
+	switch (selectedBrowser.toLowerCase()) {
+
+		case 'ie':
+			return 'IE';
+		case 'firefox':
+			return 'Firefox';
+		case 'chrome':
+			return 'Chrome';
+
+		default:
+			console.log(browser + ' is not a supported browser, defaulting to Chrome');
+			return 'Chrome';
+	}
+}
 
 function createPackageKarmaConfig({files = [], frameworks = [], packageDirectory, webpackConfig}, testEntry) {
 	const karmaFiles = [...files, testEntry];
