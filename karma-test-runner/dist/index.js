@@ -82,7 +82,7 @@ const requestedPackagesToTest = args._;
 const atsTestEntry = (0, _path.resolve)(__dirname, 'ats-test-entry.js');
 const utsTestEntry = (0, _path.resolve)(__dirname, 'uts-test-entry.js');
 
-const testBrowser = retrieveBrowserNameWithCorrectCasing(args['browser']);
+const testBrowser = retrieveBrowserNameWithCorrectCasing(args);
 
 const baseKarmaConfig = {
 	browsers: [testBrowser],
@@ -110,8 +110,8 @@ const baseKarmaConfig = {
 	}
 };
 
-function retrieveBrowserNameWithCorrectCasing(browser) {
-	let selectedBrowser = browser || 'chrome';
+function retrieveBrowserNameWithCorrectCasing(commandLineArgs) {
+	let browserArg = commandLineArgs['b'] || commandLineArgs['browser'] || 'chrome';
 	switch (selectedBrowser.toLowerCase()) {
 
 		case 'ie':
