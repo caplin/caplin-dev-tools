@@ -21,6 +21,8 @@
     "karma-caplin-dots-reporter": "^1.1.0",
     "karma": "^0.13.22",
     "karma-chrome-launcher": "^1.0.1",
+    "karma-firefox-launcher": "^1.0.1",
+    "karma-ie-launcher": "^1.0.0",
     "karma-sourcemap-loader": "^0.3.7",
     "karma-webpack": "^1.7.0",
     "minimist": "^1.2.0",
