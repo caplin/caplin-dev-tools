@@ -1,3 +1,7 @@
+const {
+  basename
+} = require("path");
+
 const aliasToModule = {
   "br.app-meta-service$": "@caplin/brjs-services/br.app-meta-service",
   "br.date-picker$": "@caplin/brjs-aliases/br.date-picker",
@@ -168,7 +172,8 @@ module.exports.configureAliases = function configureAliases(
   testAliases = aliases,
   webpackAppAliases = {}
 ) {
-  const isTest = process.env.npm_lifecycle_event.startsWith("test"); // eslint-disable-line
+  const isTest = basename(process.argv[1]) === "tests.js" ||
+    process.env.npm_lifecycle_event.startsWith("test");
   const aliasesToUse = isTest ? testAliases : aliases;
 
   // Attach the AliasRegistry aliases to the app's webpack aliases.

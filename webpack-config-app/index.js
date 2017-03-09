@@ -6,6 +6,7 @@ const {
   readFileSync
 } = require("fs");
 const {
+  basename,
   join,
   sep
 } = require("path");
@@ -22,7 +23,8 @@ const {
   variant
 } = parseArgs(process.argv.slice(2));
 const isBuild = process.env.npm_lifecycle_event === "build";
-const isTest = process.env.npm_lifecycle_event.startsWith("test");
+const isTest = basename(process.argv[1]) === "tests.js" ||
+  process.env.npm_lifecycle_event.startsWith("test");
 
 function configureBundleEntryPoint(webpackConfig, basePath) {
   // Certain apps can have variant entry points e.g. mobile.
