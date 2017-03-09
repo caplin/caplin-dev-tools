@@ -8,7 +8,7 @@ exports.runPackagesTests = undefined;
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
 let runPackagesTests = exports.runPackagesTests = (() => {
-	var ref = _asyncToGenerator(function* (packagesKarmaConfigs) {
+	var _ref = _asyncToGenerator(function* (packagesKarmaConfigs) {
 		// When the user hits Control-C we want to exit the process even if we have queued test runs.
 		process.on('SIGINT', function () {
 			console.log('\nTesting has been terminated due to the process being exited!\x1b[0m');
@@ -47,7 +47,7 @@ let runPackagesTests = exports.runPackagesTests = (() => {
 	});
 
 	return function runPackagesTests(_x) {
-		return ref.apply(this, arguments);
+		return _ref.apply(this, arguments);
 	};
 })();
 
@@ -70,7 +70,7 @@ var _karmaCaplinDotsReporter = require('karma-caplin-dots-reporter');
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { return Promise.resolve(value).then(function (value) { return step("next", value); }, function (err) { return step("throw", err); }); } } return step("next"); }); }; }
+function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { return Promise.resolve(value).then(function (value) { step("next", value); }, function (err) { step("throw", err); }); } } return step("next"); }); }; }
 
 const args = (0, _minimist2.default)(process.argv.slice(2));
 // Keeps browser/Karma running after test run.
@@ -82,8 +82,10 @@ const requestedPackagesToTest = args._;
 const atsTestEntry = (0, _path.resolve)(__dirname, 'ats-test-entry.js');
 const utsTestEntry = (0, _path.resolve)(__dirname, 'uts-test-entry.js');
 
+const testBrowser = retrieveBrowserNameWithCorrectCasing(args['browser']);
+
 const baseKarmaConfig = {
-	browsers: ['Chrome'],
+	browsers: [testBrowser],
 	logLevel: _constants.LOG_ERROR,
 	caplinDotsReporter: {
 		icon: {
@@ -108,10 +110,27 @@ const baseKarmaConfig = {
 	}
 };
 
+function retrieveBrowserNameWithCorrectCasing(browser) {
+	let selectedBrowser = browser || 'chrome';
+	switch (selectedBrowser.toLowerCase()) {
+
+		case 'ie':
+			return 'IE';
+		case 'firefox':
+			return 'Firefox';
+		case 'chrome':
+			return 'Chrome';
+
+		default:
+			console.log(browser + ' is not a supported browser, defaulting to Chrome');
+			return 'Chrome';
+	}
+}
+
 function createPackageKarmaConfig({ files = [], frameworks = [], packageDirectory, webpackConfig }, testEntry) {
 	const karmaFiles = [...files, testEntry];
 
-	const plugins = [new _webpack.DefinePlugin({ PACKAGE_DIRECTORY: `"${ packageDirectory }"` })];
+	const plugins = [new _webpack.DefinePlugin({ PACKAGE_DIRECTORY: `"${packageDirectory}"` })];
 	const packageWebpackConfig = _extends({}, webpackConfig, {
 		entry: testEntry,
 		plugins
@@ -180,13 +199,13 @@ function showSummary({ success, failed, error, errors }) {
 		console.log(`\n== Test Report ==`);
 		if (failed > 0 || error) {
 			console.log(`\n\x1b[41m\x1b[30mTesting ended with failures/errors!\x1b[0m`);
-			console.log(errors.map(({ packageName, error }) => `\nTest failed in: \x1b[35m${ packageName }\n${ error }`).join('\n') + '\n');
+			console.log(errors.map(({ packageName, error }) => `\nTest failed in: \x1b[35m${packageName}\n${error}`).join('\n') + '\n');
 		} else {
 			console.log(`\n\x1b[42m\x1b[30mTesting ended with no failures!\x1b[0m`);
 		}
-		console.log(`\x1b[35mPassed:\x1b[0m ${ success }`);
-		console.log(`\x1b[35mFailed:\x1b[0m ${ failed }`);
-		console.log(`\x1b[35mErrors:\x1b[0m ${ error ? 'Yes' : 'No' }`);
+		console.log(`\x1b[35mPassed:\x1b[0m ${success}`);
+		console.log(`\x1b[35mFailed:\x1b[0m ${failed}`);
+		console.log(`\x1b[35mErrors:\x1b[0m ${error ? 'Yes' : 'No'}`);
 		if (failed > 0 || error) {
 			process.exit(1);
 		}
