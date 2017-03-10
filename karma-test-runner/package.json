@@ -18,6 +18,7 @@
     "babel-preset-stage-3": "^6.5.0"
   },
   "dependencies": {
+    "babel-polyfill": "^6.9.1",
     "karma-caplin-dots-reporter": "^1.1.0",
     "karma": "^0.13.22",
     "karma-chrome-launcher": "^1.0.1",
