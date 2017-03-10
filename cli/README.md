@@ -30,7 +30,7 @@ packages-caplin/
 
     caplin-cli create-app myapp
 
-The newly created app will be placed in an apps folder. To serve the app, cd into the newly created app directory and run `npm run serve`
+The newly created app will be placed in an apps folder. To serve the app, cd into the newly created app directory and run `npm install` followed by `npm run serve`
 
 #### More commands
 
