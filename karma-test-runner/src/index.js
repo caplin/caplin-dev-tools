@@ -55,7 +55,7 @@ const baseKarmaConfig = {
 };
 
 function retrieveBrowserNameWithCorrectCasing(commandLineArgs) {
-	let browserArg = commandLineArgs['b'] || commandLineArgs['browser'] || 'chrome';
+	let selectedBrowser = commandLineArgs['b'] || commandLineArgs['browser'] || 'chrome';
 	switch (selectedBrowser.toLowerCase()) {
 
 		case 'ie':
@@ -66,7 +66,7 @@ function retrieveBrowserNameWithCorrectCasing(commandLineArgs) {
 			return 'Chrome';
 
 		default:
-			console.log(browser + ' is not a supported browser, defaulting to Chrome');
+			console.log(selectedBrowser + ' is not a supported browser, defaulting to Chrome');
 			return 'Chrome';
 	}
 }
