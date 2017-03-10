@@ -1,6 +1,6 @@
 {
   "name": "@caplin/karma-test-runner",
-  "version": "1.10.0",
+  "version": "1.10.1",
   "description": "Package that allows running all the UTs and ATs in a package using Karma",
   "main": "dist/index.js",
   "scripts": {
