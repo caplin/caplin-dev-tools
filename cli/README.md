@@ -8,7 +8,7 @@
 
 #### Prerequisites
 
- * Node v6+
+ * Node v7.6+
 
 #### Installation
 
