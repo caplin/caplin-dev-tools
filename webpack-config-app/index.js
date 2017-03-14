@@ -22,9 +22,10 @@ const {
   sourceMaps,
   variant
 } = parseArgs(process.argv.slice(2));
-const isBuild = process.env.npm_lifecycle_event === "build";
+const lifeCycleEvent = process.env.npm_lifecycle_event || "";
+const isBuild = lifeCycleEvent === "build";
 const isTest = basename(process.argv[1]) === "tests.js" ||
-  process.env.npm_lifecycle_event.startsWith("test");
+  lifeCycleEvent.startsWith("test");
 
 function configureBundleEntryPoint(webpackConfig, basePath) {
   // Certain apps can have variant entry points e.g. mobile.
@@ -230,7 +231,7 @@ module.exports.webpackConfigGenerator = function webpackConfigGenerator(
           loader: "file-loader"
         },
         {
-          test: /\.jsx?$/,
+          test: /\.js$/,
           loader: "@caplin/patch-loader"
         },
         {
