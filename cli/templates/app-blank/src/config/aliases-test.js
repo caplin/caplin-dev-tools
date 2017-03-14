@@ -1,3 +1,6 @@
-module.exports = {
-	//configure test aliases here	
-};
+const aliasesConfig = require('./aliases');
+
+module.exports = Object.assign(
+	aliasesConfig,
+	{} //Overrides
+);
