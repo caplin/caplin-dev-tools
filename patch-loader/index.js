@@ -1,6 +1,5 @@
-
 module.exports = function patchLoader(moduleSource) {
-	this.cacheable();
+  this.cacheable();
 
-	return this.options.patchLoader(this, moduleSource);
+  return this.options.patchLoader(this, moduleSource);
 };

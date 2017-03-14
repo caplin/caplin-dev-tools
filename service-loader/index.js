@@ -1,7 +1,7 @@
-const generateServiceRequireModule = require('./generateServiceRequireModule');
+const generateServiceRequireModule = require("./generateServiceRequireModule");
 
 module.exports = function serviceLoader() {
-	this.cacheable();
+  this.cacheable();
 
-	return generateServiceRequireModule(this._module.rawRequest);
+  return generateServiceRequireModule(this._module.rawRequest);
 };

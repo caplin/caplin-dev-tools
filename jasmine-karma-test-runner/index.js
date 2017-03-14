@@ -1,6 +1,7 @@
+exports.configurePackageTestDatatype = function configurePackageTestDatatype(
+  packageTestDatatype
+) {
+  packageTestDatatype.frameworks = ["jasmine"];
 
-exports.configurePackageTestDatatype = function configurePackageTestDatatype(packageTestDatatype) {
-	packageTestDatatype.frameworks = ['jasmine'];
-
-	return packageTestDatatype;
+  return packageTestDatatype;
 };
