@@ -172,8 +172,9 @@ module.exports.configureAliases = function configureAliases(
   testAliases = aliases,
   webpackAppAliases = {}
 ) {
+  const lifeCycleEvent = process.env.npm_lifecycle_event || "";
   const isTest = basename(process.argv[1]) === "tests.js" ||
-    process.env.npm_lifecycle_event.startsWith("test");
+    lifeCycleEvent.startsWith("test");
   const aliasesToUse = isTest ? testAliases : aliases;
 
   // Attach the AliasRegistry aliases to the app's webpack aliases.

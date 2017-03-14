@@ -1,6 +1,6 @@
 {
   "name": "@caplin/alias-loader",
-  "version": "1.5.15",
+  "version": "1.5.16",
   "description": "Webpack loader used for loading Caplin aliases",
   "main": "index.js",
   "scripts": {
