@@ -131,7 +131,7 @@ function createBabelLoaderQuery(basePath) {
 
 function configureBabelLoader(webpackConfig, basePath) {
   const babelLoaderConfig = {
-    test: /\.js$/,
+    test: /\.jsx?$/,
     loader: "babel-loader",
     exclude: createBabelLoaderExcludeList(basePath),
     query: createBabelLoaderQuery(basePath)
@@ -230,7 +230,7 @@ module.exports.webpackConfigGenerator = function webpackConfigGenerator(
           loader: "file-loader"
         },
         {
-          test: /\.js$/,
+          test: /\.jsx?$/,
           loader: "@caplin/patch-loader"
         },
         {
@@ -259,6 +259,7 @@ module.exports.webpackConfigGenerator = function webpackConfigGenerator(
         "ct-core/BRJSClassUtility$": join(__dirname, "null.js"),
         "br/dynamicRefRequire$": join(__dirname, "null.js")
       },
+      extensions: ["", ".js", ".jsx"],
       // Module requires are resolved relative to the resource that is requiring
       // them. When symlinking during development modules will not be resolved
       // unless we specify their parent directory.
