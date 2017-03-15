@@ -6,6 +6,7 @@ const {
   create
 } = require("archiver");
 const {
+  existsSync,
   mkdir
 } = require("fs");
 const {
@@ -28,17 +29,18 @@ const warDir = join(buildDir, "exported-wars");
 function createWAR(indexPage, version, webInfLocation, buildCallback, warName) {
   const variant = parseArgs(process.argv.slice(2)).variant;
   const indexFile = indexPage({ variant, version });
+  const publicStaticFilesDir = join(process.cwd(), "public", "dev");
 
-  try {
-    copySync(
-      join(process.cwd(), "public", "dev"),
-      join(distDir, "public", version)
-    );
-  } catch (err) {
-    // Certain apps bundle all their static assets.
+  // Move static files that are in the `dev` directory to one named after the
+  // version as they can't be cached if the URL never changes (the version makes
+  // the files unique and thus allows them to be safely cached).
+  if (existsSync(publicStaticFilesDir)) {
+    copySync(publicStaticFilesDir, join(distDir, "public", version));
   }
 
-  copySync(webInfLocation, join(distDir, "WEB-INF"));
+  if (existsSync(webInfLocation)) {
+    copySync(webInfLocation, join(distDir, "WEB-INF"));
+  }
 
   writeFileSync(join(distDir, "index.html"), indexFile, "utf8");
   // Allows the user of this package to attach their own post build/pre WAR
