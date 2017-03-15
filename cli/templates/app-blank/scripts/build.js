@@ -1,6 +1,6 @@
 import getFullVersion from '@caplin/versioning';
 import {cleanDistAndBuildWAR} from '@caplin/build-tasks';
-import config from '../webpack.config';
+import createWebpackConfig from '../webpack.config.js';
 import {readFileSync} from 'fs';
 import {join} from 'path';
 
@@ -17,8 +17,8 @@ function versionCalculatedCallback(version) {
 		buildCallback,
 		indexPage: getIndexPage,
 		version,
-		warName: 'untitled',
-		webpackConfig: config
+		warName: `myapp-${version}`,
+		webpackConfig: createWebpackConfig(version)
 	});
 }
 
