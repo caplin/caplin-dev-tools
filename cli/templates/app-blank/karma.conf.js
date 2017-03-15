@@ -1,3 +1,13 @@
+const { join } = require("path");
+
+const createWebpackConfig = require("./webpack.config");
+const webpackConfig = createWebpackConfig();
+
+webpackConfig.resolve.alias["$aliases-data$"] = join(
+  __dirname,
+  "src/config/aliases-test.js"
+);
+
 module.exports = function(config) {
 	config.set({
 		files: [
@@ -16,23 +26,7 @@ module.exports = function(config) {
 				chunks: false
 			}
 		},
-		webpack: {
-			devtool: 'inline-source-map',
-			module: {
-				loaders: [
-					{
-						exclude: /node_modules/,
-						loader: 'babel-loader',
-						test: /\.js?$/
-					},
-					{
-						test: /\.json$/,
-						include: /node_modules/,
-						loader: 'json-loader'
-					}
-				]
-			}
-		},
+		webpack: webpackConfig,
 		plugins : [
 			require("karma-mocha"),
 			require("karma-webpack"),

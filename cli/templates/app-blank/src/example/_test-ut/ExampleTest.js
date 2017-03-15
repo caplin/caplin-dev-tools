@@ -1,7 +1,7 @@
 import Example from '../Example';
 import chai from 'chai';
 
-const expect = chai.expect;
+const assert = chai.assert;
 
 describe('Testing Example class', () => {
 	let exampleClass = null;
@@ -15,6 +15,6 @@ describe('Testing Example class', () => {
 	});
 
 	it('should say hello', () => {
-		expect(exampleClass.sayHello()).to.equal('Hello world!');
+		assert.equal(exampleClass.sayHello(), 'Hello world!', 'The world did not receive a welcoming hello.');
 	})
 });
