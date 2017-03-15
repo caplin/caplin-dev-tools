@@ -1,55 +1,33 @@
-const exec = require("child_process").exec;
+const { execSync } = require("child_process");
 
-function getHash(hashLength) {
-  return new Promise(resolve => {
-    exec("git rev-parse HEAD", (error, stdout) => {
-      const hash = stdout.trim().substr(0, hashLength);
-      resolve(hash);
-    });
-  });
+const execOptions = {
+  encoding: "utf8"
+};
+
+function getHash(hashLength = 8) {
+  return execSync("git rev-parse HEAD", execOptions)
+    .trim()
+    .substr(0, hashLength);
 }
 
 function getCommitCount() {
-  return new Promise(resolve => {
-    exec("git rev-list --count HEAD", (error, stdout) => {
-      const count = stdout.trim();
-      resolve(count);
-    });
-  });
+  return execSync("git rev-list --count HEAD", execOptions).trim();
 }
 
-function getBranchDescriptor(defaultBranchName) {
-  return new Promise(resolve => {
-    exec("git rev-parse --abbrev-ref HEAD", (error, stdout) => {
-      const currentBranch = stdout.trim();
-      const descriptor = currentBranch === defaultBranchName
-        ? null
-        : currentBranch;
+function getBranchDescriptor(defaultBranchName = "master") {
+  const stdout = execSync("git rev-parse --abbrev-ref HEAD", execOptions);
+  const currentBranch = stdout.trim();
 
-      resolve(descriptor);
-    });
-  });
+  // To prevent a trailing `-` being suffixed to the version if a
+  // `branchDescriptor` is available we prefix the descriptor with `-` if it
+  // exists else return a blank string.
+  return currentBranch === defaultBranchName ? "" : `-${currentBranch}`;
 }
 
-module.exports = function createFullVersion(
-  semVer,
-  { hashLength = 8, masterBranchName = "master" } = {}
-) {
-  return Promise.all([
-    getCommitCount(),
-    getHash(hashLength),
-    getBranchDescriptor(masterBranchName)
-  ]).then(output =>
-    output
-      .reduce(
-        (acc, item) => {
-          if (item !== null) {
-            acc.push(item);
-          }
+module.exports = (semVer, { hashLength, masterBranchName } = {}) => {
+  const branchDescriptor = getBranchDescriptor(masterBranchName);
+  const commitCount = getCommitCount();
+  const hash = getHash(hashLength);
 
-          return acc;
-        },
-        [semVer]
-      )
-      .join("-"));
+  return `${semVer}-${commitCount}-${hash}${branchDescriptor}`;
 };
