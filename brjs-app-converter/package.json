@@ -5,7 +5,6 @@
   "main": "index.js",
   "bin": "./src/cli.js",
   "scripts": {
-    "lint": "eslint .",
     "test": "ava"
   },
   "ava": {
