@@ -26,7 +26,7 @@ var initDirectories = function() {
 describe('create-app', function () {
 
     beforeEach(function() {
-        cleanDirectories();
+       cleanDirectories();
     });
 
     it('should throw an error if apps and packages-caplin directories are now found', function (errorThrown) {
@@ -38,7 +38,7 @@ describe('create-app', function () {
         cp.stdout.on('data', function (data) {
             stdOutput += data;
 
-            if (stdOutput.indexOf('directory not found') !== -1 && !done) {
+            if (stdOutput.indexOf('no such file or directory') !== -1 && !done) {
                 done = true;
                 errorThrown();
             }
@@ -64,12 +64,11 @@ describe('create-app', function () {
                 assert.file('apps/newapp/server/server.js');
                 assert.file('apps/newapp/server/webpack.js');
 
-                if(stdOutput.indexOf('Created') > -1 && stdOutput.indexOf('webpack.js') > -1) { //last file to be added
-                    allFilesCreated();
+                if(stdOutput.indexOf('Now cd into apps/newapp and run npm install') > -1) { //last message displayed
+                   allFilesCreated();
                 }
             }
         });
-
     });
 
     it('should prompt for an app name', function (prompted) {
