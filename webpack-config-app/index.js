@@ -26,6 +26,7 @@ const lifeCycleEvent = process.env.npm_lifecycle_event || "";
 const isBuild = lifeCycleEvent === "build";
 const isTest = basename(process.argv[1]) === "tests.js" ||
   lifeCycleEvent.startsWith("test");
+const STATIC_DIR = "static";
 
 function configureBundleEntryPoint(webpackConfig, basePath) {
   // Certain apps can have variant entry points e.g. mobile.
@@ -99,7 +100,12 @@ function createBabelLoaderExcludeList(basePath) {
   }
 
   const packagesToExcludeGroup = `(${packagesToExclude.join("|")})`;
-  const packagesToExcludeRegExpString = `${rootExclusionDirs}${dirSep}${packagesToExcludeGroup}${dirSep}`;
+  const packagesToExcludeRegExpString = [
+    rootExclusionDirs,
+    dirSep,
+    packagesToExcludeGroup,
+    dirSep
+  ].join("");
 
   babelLoaderExclude.push(new RegExp(packagesToExcludeRegExpString));
 
@@ -181,7 +187,7 @@ function configureDevtool(webpackConfig) {
 
 function configureBuildDependentConfig(webpackConfig, version) {
   if (isBuild) {
-    webpackConfig.output.publicPath = "public/";
+    webpackConfig.output.publicPath = `${STATIC_DIR}/`;
 
     webpackConfig.plugins.push(
       new webpack.DefinePlugin({
@@ -204,7 +210,7 @@ function configureBuildDependentConfig(webpackConfig, version) {
       })
     );
   } else {
-    webpackConfig.output.publicPath = "/public/";
+    webpackConfig.output.publicPath = `/${STATIC_DIR}/`;
   }
 }
 
@@ -218,7 +224,7 @@ module.exports.webpackConfigGenerator = function webpackConfigGenerator(
   const webpackConfig = {
     output: {
       filename: `bundle-${version}.js`,
-      path: join(basePath, "build", "dist", "public")
+      path: join(basePath, "build", "dist", `${STATIC_DIR}`)
     },
     module: {
       loaders: [

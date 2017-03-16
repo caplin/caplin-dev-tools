@@ -23,19 +23,20 @@ const distDir = join(buildDir, "dist");
 const NO_OP = () => {
   // Called after app is built.
 };
+const STATIC_DIR = "static";
 const warDir = join(buildDir, "exported-wars");
 
 // When we've built the application add any required WAR files.
 function createWAR(indexPage, version, webInfLocation, buildCallback, warName) {
   const variant = parseArgs(process.argv.slice(2)).variant;
   const indexFile = indexPage({ variant, version });
-  const publicStaticFilesDir = join(process.cwd(), "public", "dev");
+  const staticFilesDir = join(process.cwd(), `${STATIC_DIR}`, "dev");
 
   // Move static files that are in the `dev` directory to one named after the
   // version as they can't be cached if the URL never changes (the version makes
   // the files unique and thus allows them to be safely cached).
-  if (existsSync(publicStaticFilesDir)) {
-    copySync(publicStaticFilesDir, join(distDir, "public", version));
+  if (existsSync(staticFilesDir)) {
+    copySync(staticFilesDir, join(distDir, `${STATIC_DIR}`, version));
   }
 
   if (existsSync(webInfLocation)) {

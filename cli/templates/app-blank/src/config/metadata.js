@@ -1,10 +1,10 @@
-const APP_VERSION = process.env.VERSION || 'dev';
+const APP_VERSION = process.env.VERSION || "dev";
 
 module.exports = {
   APP_VERSION,
-  VERSIONED_BUNDLE_PATH: `public/${APP_VERSION}`,
-  LOCALE_COOKIE_NAME: 'BRJS.LOCALE',
+  VERSIONED_BUNDLE_PATH: `static/${APP_VERSION}`,
+  LOCALE_COOKIE_NAME: "BRJS.LOCALE",
   APP_LOCALES: {
-    en: true,
-  },
+    en: true
+  }
 };

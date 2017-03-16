@@ -65,7 +65,8 @@ function setUpApplicationFiles(
   );
 }
 
-// Given an application populate its `package.json` with all the newly created packages as dependencies.
+// Given an application populate its `package.json` with all the newly created
+// packages as dependencies.
 function populateApplicationPackageJSON(
   applicationName,
   convertedAppDir,

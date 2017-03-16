@@ -1,27 +1,20 @@
-import getFullVersion from '@caplin/versioning';
-import {cleanDistAndBuildWAR} from '@caplin/build-tasks';
-import config from '../webpack.config';
-import {readFileSync} from 'fs';
-import {join} from 'path';
+const { readFileSync } = require("fs");
+const { join } = require("path");
 
-function buildCallback() {
-	// add your own callback here
-}
+const calculateVersion = require("@caplin/versioning");
+const { cleanDistAndBuildWAR } = require("@caplin/build-tasks");
+
+const config = require("../webpack.config");
+
+const version = calculateVersion(process.env.npm_package_version);
 
 function getIndexPage() {
-	return readFileSync(join(__dirname, '..', 'index.html'), 'utf8');
+  return readFileSync(join(__dirname, "..", "index.html"), "utf8");
 }
 
-function versionCalculatedCallback(version) {
-	cleanDistAndBuildWAR({
-		buildCallback,
-		indexPage: getIndexPage,
-		version,
-		warName: 'untitled',
-		webpackConfig: config
-	});
-}
-
-getFullVersion(process.env.npm_package_version)
-	.then(versionCalculatedCallback)
-	.catch(console.error);
+cleanDistAndBuildWAR({
+  indexPage: getIndexPage,
+  version,
+  warName: "untitled",
+  webpackConfig: config
+});
