@@ -1,6 +1,6 @@
-'use strict';
+"use strict";
 
-require('babel-polyfill');
+require("babel-polyfill");
 
 const testsContext = require.context(PACKAGE_DIRECTORY, true, /.*_test-at.*\.js$/);
 

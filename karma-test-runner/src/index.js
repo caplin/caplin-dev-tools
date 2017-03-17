@@ -1,10 +1,10 @@
-import { resolve } from "path";
+const { resolve } = require("path");
 
-import { Server } from "karma";
-import { LOG_ERROR } from "karma/lib/constants";
-import parseArgs from "minimist";
-import { DefinePlugin } from "webpack";
-import { onError } from "karma-caplin-dots-reporter";
+const { Server } = require("karma");
+const { LOG_ERROR } = require("karma/lib/constants");
+const parseArgs = require("minimist");
+const { DefinePlugin } = require("webpack");
+const { onError } = require("karma-caplin-dots-reporter");
 
 const args = parseArgs(process.argv.slice(2));
 // Keeps browser/Karma running after test run.
@@ -17,10 +17,31 @@ const utsOnly = args.uts ||
   args._.includes("--UTs") ||
   false;
 const devMode = args.dev || false;
-// Packages user wants to test, if the user specifies none all packages will be tested.
+// Packages user wants to test, if the user specifies none all packages will be
+// tested.
 const requestedPackagesToTest = args._;
 const atsTestEntry = resolve(__dirname, "ats-test-entry.js");
 const utsTestEntry = resolve(__dirname, "uts-test-entry.js");
+
+function retrieveBrowserNameWithCorrectCasing(commandLineArgs) {
+  const selectedBrowser = commandLineArgs.b ||
+    commandLineArgs.browser ||
+    "chrome";
+  switch (selectedBrowser.toLowerCase()) {
+    case "ie":
+      return "IE";
+    case "firefox":
+      return "Firefox";
+    case "chrome":
+      return "Chrome";
+
+    default:
+      console.log(
+        `${selectedBrowser} is not a supported browser, defaulting to Chrome`
+      );
+      return "Chrome";
+  }
+}
 
 const testBrowser = retrieveBrowserNameWithCorrectCasing(args);
 
@@ -49,26 +70,6 @@ const baseKarmaConfig = {
     }
   }
 };
-
-function retrieveBrowserNameWithCorrectCasing(commandLineArgs) {
-  let selectedBrowser = commandLineArgs.b ||
-    commandLineArgs.browser ||
-    "chrome";
-  switch (selectedBrowser.toLowerCase()) {
-    case "ie":
-      return "IE";
-    case "firefox":
-      return "Firefox";
-    case "chrome":
-      return "Chrome";
-
-    default:
-      console.log(
-        `${selectedBrowser  } is not a supported browser, defaulting to Chrome`
-      );
-      return "Chrome";
-  }
-}
 
 function createPackageKarmaConfig(
   { files = [], frameworks = [], packageDirectory, webpackConfig },
@@ -108,13 +109,13 @@ function runPackageTests(
   summary,
   packageName
 ) {
-  console.log(`\nRunning tests for: \x1b[35m${  packageName  }\x1b[0m`);
+  console.log(`\nRunning tests for: \x1b[35m${packageName}\x1b[0m`);
 
-  const server = new Server(packageKarmaConfig, exitCode => {
+  const server = new Server(packageKarmaConfig, () => {
     resolvePromise();
   });
 
-  server.on("run_complete", (browsers, { success, failed, error, logs }) => {
+  server.on("run_complete", (browsers, { success, failed, error }) => {
     summary.success += success;
     summary.failed += failed;
     summary.error = summary.error || error;
@@ -155,16 +156,38 @@ export function createPackagesATsKarmaConfigs(packagesTestMetadata) {
     createPackageKarmaConfig(packageTestMetadata, atsTestEntry));
 }
 
+function showSummary({ success, failed, error, errors }) {
+  if (!devMode) {
+    console.log("\n== Test Report ==");
+
+    if (failed > 0 || error) {
+      console.log(
+        "\n\x1b[41m\x1b[30mTesting ended with failures/errors!\x1b[0m"
+      );
+      console.log(
+        `${errors
+          .map(
+            ({ packageName, error }) =>
+              `\nTest failed in: \x1b[35m${packageName}\n${error}`
+          )
+          .join("\n")}\n`
+      );
+    } else {
+      console.log("\n\x1b[42m\x1b[30mTesting ended with no failures!\x1b[0m");
+    }
+
+    console.log(`\x1b[35mPassed:\x1b[0m ${success}`);
+    console.log(`\x1b[35mFailed:\x1b[0m ${failed}`);
+    console.log(`\x1b[35mErrors:\x1b[0m ${error ? "Yes" : "No"}`);
+
+    if (failed > 0 || error) {
+      process.exit(1);
+    }
+  }
+}
+
 export async function runPackagesTests(packagesKarmaConfigs) {
-  // When the user hits Control-C we want to exit the process even if we have queued test runs.
-  process.on("SIGINT", () => {
-    console.log(
-      "\nTesting has been terminated due to the process being exited!\x1b[0m"
-    );
-    showSummary(summary);
-    process.exit();
-  });
-  // this might bring up issues if our tests start running concurrently,
+  // This might cause issues if our tests start running concurrently,
   // but given we currently run package by package, it should be fine
   let packageName = "";
   const summary = {
@@ -173,6 +196,14 @@ export async function runPackagesTests(packagesKarmaConfigs) {
     error: false,
     errors: []
   };
+  // When the user hits Control-C we want to exit the process even if we have
+  // queued test runs.
+  process.on("SIGINT", () => {
+    console.log("\nTesting stopped due to the process termination\x1b[0m");
+
+    showSummary(summary);
+    process.exit();
+  });
   onError(error => {
     summary.errors.push({ packageName, error });
   });
@@ -191,32 +222,5 @@ export async function runPackagesTests(packagesKarmaConfigs) {
   if (!devMode) {
     showSummary(summary);
     process.exit(0);
-  }
-}
-
-function showSummary({ success, failed, error, errors }) {
-  if (!devMode) {
-    console.log("\n== Test Report ==");
-    if (failed > 0 || error) {
-      console.log(
-        "\n\x1b[41m\x1b[30mTesting ended with failures/errors!\x1b[0m"
-      );
-      console.log(
-        `${errors
-          .map(
-            ({ packageName, error }) =>
-              `\nTest failed in: \x1b[35m${packageName}\n${error}`
-          )
-          .join("\n")  }\n`
-      );
-    } else {
-      console.log("\n\x1b[42m\x1b[30mTesting ended with no failures!\x1b[0m");
-    }
-    console.log(`\x1b[35mPassed:\x1b[0m ${success}`);
-    console.log(`\x1b[35mFailed:\x1b[0m ${failed}`);
-    console.log(`\x1b[35mErrors:\x1b[0m ${error ? "Yes" : "No"}`);
-    if (failed > 0 || error) {
-      process.exit(1);
-    }
   }
 }
