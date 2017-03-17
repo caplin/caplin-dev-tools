@@ -1,22 +1,21 @@
 const {
-	configureAliases
+  configureAliases
 } = require("@caplin/alias-loader/alias-configuration");
 const {
-	webpackConfigGenerator
+  webpackConfigGenerator
 } = require("@caplin/webpack-config-app");
 
 const aliases = require("./src/config/aliases");
 const testAliases = require("./src/config/aliases-test");
 
-const webpackAppAliases = {	
+const webpackAppAliases = {};
+
+module.exports = function createWebpackConfig() {
+  const webpackConfig = webpackConfigGenerator({
+    basePath: __dirname
+  });
+
+  configureAliases(aliases, webpackConfig, testAliases, webpackAppAliases);
+
+  return webpackConfig;
 };
-
-module.exports = function createWebpackConfig(version) {
-	const webpackConfig = webpackConfigGenerator({
-		basePath: __dirname
-	});
-
-	configureAliases(aliases, webpackConfig, testAliases, webpackAppAliases);
-
-	return webpackConfig;
-}

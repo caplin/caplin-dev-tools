@@ -205,7 +205,7 @@ function configureBuildDependentConfig(webpackConfig, version) {
         },
         compress: {
           warnings: false,
-          screw_ie8: true // eslint-disable-line
+          screw_ie8: true
         }
       })
     );

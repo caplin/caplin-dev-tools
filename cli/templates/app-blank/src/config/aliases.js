@@ -1,5 +1,3 @@
-//require aliasProvider here, add to the object list
+// require aliasProvider here, add to the Object.assign list.
 
-module.exports = Object.assign(
-	{}
-);
+module.exports = Object.assign({});
