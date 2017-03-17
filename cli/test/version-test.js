@@ -1,16 +1,16 @@
-'use strict';
-var execFile = require('child_process').execFile;
-var assert = require('yeoman-assert');
-var pkg = require('../package.json');
 
-describe('version', function () {
-    it('should display correct version', function (isDisplayed) {
-        var cp = execFile('node', ['./index.js', 'version']);
+var execFile = require("child_process").execFile;
+var assert = require("yeoman-assert");
+var pkg = require("../package.json");
 
-        cp.stdout.on('data', function (data) {
-            var expected = pkg.version;
-            assert.equal(data.replace(/\r\n|\n/g, ''), expected);
-            isDisplayed();
-        });
+describe("version", () => {
+  it("should display correct version", (isDisplayed) => {
+    var cp = execFile("node", ["./index.js", "version"]);
+
+    cp.stdout.on("data", (data) => {
+      var expected = pkg.version;
+      assert.equal(data.replace(/\r\n|\n/g, ""), expected);
+      isDisplayed();
     });
+  });
 });
