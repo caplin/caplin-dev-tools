@@ -27,6 +27,16 @@ const isBuild = lifeCycleEvent === "build";
 const isTest = basename(process.argv[1]) === "tests.js" ||
   lifeCycleEvent.startsWith("test");
 const STATIC_DIR = "static";
+const UGLIFY_OPTIONS = {
+  exclude: /i18n(.*)\.js/,
+  output: {
+    comments: false
+  },
+  compress: {
+    warnings: false,
+    screw_ie8: true
+  }
+};
 
 function configureBundleEntryPoint(webpackConfig, basePath) {
   // Certain apps can have variant entry points e.g. mobile.
@@ -185,7 +195,7 @@ function configureDevtool(webpackConfig) {
   }
 }
 
-function configureBuildDependentConfig(webpackConfig, version) {
+function configureBuildDependentConfig(webpackConfig, version, uglifyOptions) {
   if (isBuild) {
     webpackConfig.output.publicPath = `${STATIC_DIR}/`;
 
@@ -198,16 +208,7 @@ function configureBuildDependentConfig(webpackConfig, version) {
     );
 
     webpackConfig.plugins.push(
-      new webpack.optimize.UglifyJsPlugin({
-        exclude: /i18n(.*)\.js/,
-        output: {
-          comments: false
-        },
-        compress: {
-          warnings: false,
-          screw_ie8: true
-        }
-      })
+      new webpack.optimize.UglifyJsPlugin(uglifyOptions)
     );
   } else {
     webpackConfig.output.publicPath = `/${STATIC_DIR}/`;
@@ -218,7 +219,8 @@ module.exports.webpackConfigGenerator = function webpackConfigGenerator(
   {
     basePath,
     version = "dev",
-    i18nFileName = `i18n-${version}.js`
+    i18nFileName = `i18n-${version}.js`,
+    uglifyOptions = UGLIFY_OPTIONS
   }
 ) {
   const webpackConfig = {
@@ -290,7 +292,7 @@ module.exports.webpackConfigGenerator = function webpackConfigGenerator(
   configureI18nLoading(webpackConfig, i18nFileName);
   configureServiceLoader(webpackConfig);
   configureDevtool(webpackConfig);
-  configureBuildDependentConfig(webpackConfig, version);
+  configureBuildDependentConfig(webpackConfig, version, uglifyOptions);
 
   return webpackConfig;
 };
