@@ -1,8 +1,8 @@
-import notFound from "@caplin/express-dev-server/not-found";
-import resources from "@caplin/express-dev-server/resources";
-import server from "@caplin/express-dev-server/server";
+const notFound = require("@caplin/express-dev-server/not-found");
+const resources = require("@caplin/express-dev-server/resources");
+const server = require("@caplin/express-dev-server/server");
 
-import createWebpackConfig from "../webpack.config";
+const createWebpackConfig = require("../../webpack.config");
 
 const app = server({
   webpackConfig: createWebpackConfig()

@@ -4,7 +4,7 @@ const { join } = require("path");
 const calculateVersion = require("@caplin/versioning");
 const { cleanDistAndBuildWAR } = require("@caplin/build-tasks");
 
-const config = require("../webpack.config");
+const createWebpackConfig = require("../webpack.config");
 
 const version = calculateVersion(process.env.npm_package_version);
 
@@ -15,6 +15,6 @@ function getIndexPage() {
 cleanDistAndBuildWAR({
   indexPage: getIndexPage,
   version,
-  warName: "untitled",
-  webpackConfig: config
+  warName: "{{appName}}",
+  webpackConfig: createWebpackConfig(version)
 });
