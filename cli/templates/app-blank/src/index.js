@@ -1,4 +1,4 @@
-import Example from './example/Example';
-import './index.scss'
+import Example from "./example/Example";
+import "./index.scss";
 
-console.log((new Example()).sayHello());
+console.log(new Example().sayHello());
