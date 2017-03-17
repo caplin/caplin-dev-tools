@@ -71,6 +71,8 @@ const baseKarmaConfig = {
   }
 };
 
+module.exports.baseKarmaConfig = baseKarmaConfig;
+
 function createPackageKarmaConfig(
   { files = [], frameworks = [], packageDirectory, webpackConfig },
   testEntry
@@ -98,6 +100,8 @@ function createPackageKarmaConfig(
 
   return packageKarmaConfig;
 }
+
+module.exports.createPackageKarmaConfig = createPackageKarmaConfig;
 
 function getShortPathFromBasePath(basePath) {
   return basePath.substring(basePath.indexOf("apps"));
@@ -134,7 +138,9 @@ function filterPackagesToTestIfFilterIsSpecified(packagesTestMetadata) {
   });
 }
 
-export function createPackagesKarmaConfigs(packagesTestMetadata) {
+module.exports.createPackagesKarmaConfigs = function createPackagesKarmaConfigs(
+  packagesTestMetadata
+) {
   if (atsOnly) {
     return [];
   }
@@ -143,9 +149,11 @@ export function createPackagesKarmaConfigs(packagesTestMetadata) {
     packagesTestMetadata
   ).map(packageTestMetadata =>
     createPackageKarmaConfig(packageTestMetadata, utsTestEntry));
-}
+};
 
-export function createPackagesATsKarmaConfigs(packagesTestMetadata) {
+module.exports.createPackagesATsKarmaConfigs = function createPackagesATsKarmaConfigs(
+  packagesTestMetadata
+) {
   if (utsOnly) {
     return [];
   }
@@ -154,7 +162,7 @@ export function createPackagesATsKarmaConfigs(packagesTestMetadata) {
     packagesTestMetadata
   ).map(packageTestMetadata =>
     createPackageKarmaConfig(packageTestMetadata, atsTestEntry));
-}
+};
 
 function showSummary({ success, failed, error, errors }) {
   if (!devMode) {
@@ -186,7 +194,9 @@ function showSummary({ success, failed, error, errors }) {
   }
 }
 
-export async function runPackagesTests(packagesKarmaConfigs) {
+module.exports.runPackagesTests = async function runPackagesTests(
+  packagesKarmaConfigs
+) {
   // This might cause issues if our tests start running concurrently,
   // but given we currently run package by package, it should be fine
   let packageName = "";
@@ -223,4 +233,4 @@ export async function runPackagesTests(packagesKarmaConfigs) {
     showSummary(summary);
     process.exit(0);
   }
-}
+};

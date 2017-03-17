@@ -1,59 +1,6 @@
 "use strict";
 
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
-
-let runPackagesTests = exports.runPackagesTests = (() => {
-  var _ref = _asyncToGenerator(function* (packagesKarmaConfigs) {
-    // This might cause issues if our tests start running concurrently,
-    // but given we currently run package by package, it should be fine
-    let packageName = "";
-    const summary = {
-      success: 0,
-      failed: 0,
-      error: false,
-      errors: []
-    };
-    // When the user hits Control-C we want to exit the process even if we have
-    // queued test runs.
-    process.on("SIGINT", function () {
-      console.log("\nTesting stopped due to the process termination\x1b[0m");
-
-      showSummary(summary);
-      process.exit();
-    });
-    onError(function (error) {
-      summary.errors.push({ packageName, error });
-    });
-
-    try {
-      for (const packageKarmaConfig of packagesKarmaConfigs) {
-        packageName = getShortPathFromBasePath(packageKarmaConfig.basePath);
-        yield new Promise(function (resolve) {
-          return runPackageTests(packageKarmaConfig, resolve, summary, packageName);
-        });
-      }
-    } catch (err) {
-      showSummary(summary);
-      console.error(err);
-    }
-
-    if (!devMode) {
-      showSummary(summary);
-      process.exit(0);
-    }
-  });
-
-  return function runPackagesTests(_x) {
-    return _ref.apply(this, arguments);
-  };
-})();
-
-exports.createPackagesKarmaConfigs = createPackagesKarmaConfigs;
-exports.createPackagesATsKarmaConfigs = createPackagesATsKarmaConfigs;
 
 function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { return Promise.resolve(value).then(function (value) { step("next", value); }, function (err) { step("throw", err); }); } } return step("next"); }); }; }
 
@@ -120,6 +67,8 @@ const baseKarmaConfig = {
   }
 };
 
+module.exports.baseKarmaConfig = baseKarmaConfig;
+
 function createPackageKarmaConfig({ files = [], frameworks = [], packageDirectory, webpackConfig }, testEntry) {
   const karmaFiles = [...files, testEntry];
 
@@ -140,6 +89,8 @@ function createPackageKarmaConfig({ files = [], frameworks = [], packageDirector
 
   return packageKarmaConfig;
 }
+
+module.exports.createPackageKarmaConfig = createPackageKarmaConfig;
 
 function getShortPathFromBasePath(basePath) {
   return basePath.substring(basePath.indexOf("apps"));
@@ -171,21 +122,21 @@ function filterPackagesToTestIfFilterIsSpecified(packagesTestMetadata) {
   });
 }
 
-function createPackagesKarmaConfigs(packagesTestMetadata) {
+module.exports.createPackagesKarmaConfigs = function createPackagesKarmaConfigs(packagesTestMetadata) {
   if (atsOnly) {
     return [];
   }
 
   return filterPackagesToTestIfFilterIsSpecified(packagesTestMetadata).map(packageTestMetadata => createPackageKarmaConfig(packageTestMetadata, utsTestEntry));
-}
+};
 
-function createPackagesATsKarmaConfigs(packagesTestMetadata) {
+module.exports.createPackagesATsKarmaConfigs = function createPackagesATsKarmaConfigs(packagesTestMetadata) {
   if (utsOnly) {
     return [];
   }
 
   return filterPackagesToTestIfFilterIsSpecified(packagesTestMetadata).map(packageTestMetadata => createPackageKarmaConfig(packageTestMetadata, atsTestEntry));
-}
+};
 
 function showSummary({ success, failed, error, errors }) {
   if (!devMode) {
@@ -207,3 +158,51 @@ function showSummary({ success, failed, error, errors }) {
     }
   }
 }
+
+module.exports.runPackagesTests = (() => {
+  var _ref = _asyncToGenerator(function* (packagesKarmaConfigs) {
+    // This might cause issues if our tests start running concurrently,
+    // but given we currently run package by package, it should be fine
+    let packageName = "";
+    const summary = {
+      success: 0,
+      failed: 0,
+      error: false,
+      errors: []
+    };
+    // When the user hits Control-C we want to exit the process even if we have
+    // queued test runs.
+    process.on("SIGINT", function () {
+      console.log("\nTesting stopped due to the process termination\x1b[0m");
+
+      showSummary(summary);
+      process.exit();
+    });
+    onError(function (error) {
+      summary.errors.push({ packageName, error });
+    });
+
+    try {
+      for (const packageKarmaConfig of packagesKarmaConfigs) {
+        packageName = getShortPathFromBasePath(packageKarmaConfig.basePath);
+        yield new Promise(function (resolve) {
+          return runPackageTests(packageKarmaConfig, resolve, summary, packageName);
+        });
+      }
+    } catch (err) {
+      showSummary(summary);
+      console.error(err);
+    }
+
+    if (!devMode) {
+      showSummary(summary);
+      process.exit(0);
+    }
+  });
+
+  function runPackagesTests(_x) {
+    return _ref.apply(this, arguments);
+  }
+
+  return runPackagesTests;
+})();
