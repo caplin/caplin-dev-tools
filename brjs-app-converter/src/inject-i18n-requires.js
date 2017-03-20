@@ -12,41 +12,6 @@ const globOptions = {
   ]
 };
 
-export function injectI18nRequires(
-  { applicationName, packagesDirName = "packages" } = {}
-) {
-  const appJSFilePaths = sync(`apps/${applicationName}/src/**/*.js`);
-  const appPropertiesFilePaths = sync(
-    `apps/${applicationName}/src/**/en.properties`,
-    globOptions
-  );
-  const propertiesToFilePath = new Map();
-  const packageJSFilePaths = sync(`${packagesDirName}/**/*.js`);
-  const packagePropertiesFilePaths = sync(
-    `${packagesDirName}/**/en.properties`,
-    globOptions
-  );
-
-  // Firstly add package to package requires.
-  registerI18nProperties(packagePropertiesFilePaths, propertiesToFilePath);
-  packageJSFilePaths.forEach(jsFilePath =>
-    addI18nRequires(
-      jsFilePath,
-      propertiesToFilePath,
-      isRelativePackage(),
-      dirPrefixRemover(`${packagesDirName}/`)
-    ));
-  // Then add requires to app source code.
-  registerI18nProperties(appPropertiesFilePaths, propertiesToFilePath);
-  appJSFilePaths.forEach(jsFilePath =>
-    addI18nRequires(
-      jsFilePath,
-      propertiesToFilePath,
-      isRelativeApp(applicationName),
-      dirPrefixRemover(`${packagesDirName}/`)
-    ));
-}
-
 // Read the provided properties and register their file location to allow
 // `require`s pointing toward the file that contains them to be added.
 function registerI18nProperties(propertiesFilePaths, propertiesToFilePath) {
@@ -62,6 +27,35 @@ function registerI18nProperties(propertiesFilePaths, propertiesToFilePath) {
       }
     });
   });
+}
+
+function resolveI18nRequirePaths(
+  jsFilePath,
+  propertiesFilesToRequire,
+  isRelative,
+  removeDirPrefix
+) {
+  const jsFileDir = dirname(jsFilePath);
+  const requirePaths = new Set();
+
+  for (const propertyFileToRequire of propertiesFilesToRequire) {
+    let requirePath = removeDirPrefix(propertyFileToRequire);
+
+    if (isRelative(propertyFileToRequire, jsFileDir)) {
+      requirePath = relative(jsFileDir, propertyFileToRequire)
+        // Convert Windows separator to Unix style for module URIs.
+        .split(sep)
+        .join("/");
+
+      if (requirePath.startsWith("..") === false) {
+        requirePath = `./${requirePath}`;
+      }
+    }
+
+    requirePaths.add(requirePath);
+  }
+
+  return [...requirePaths];
 }
 
 // Scans the provided file to find i18n tokens used within.
@@ -87,73 +81,6 @@ function discoverI18nProperties(jsFilePath, propertiesToFilePath) {
   }
 
   return discoveredTokens;
-}
-
-// If a file uses i18n tokens add requires to the properties files it needs.
-function addI18nRequires(
-  jsFilePath,
-  propertiesToFilePath,
-  isRelative,
-  removeDirPrefix
-) {
-  const discoveredTokens = discoverI18nProperties(
-    jsFilePath,
-    propertiesToFilePath
-  );
-
-  if (discoveredTokens.size > 0) {
-    const propertiesFilesToRequire = new Set();
-
-    discoveredTokens.forEach(discoveredToken => {
-      calculatePropertiesFileToRequire(
-        propertiesToFilePath,
-        discoveredToken,
-        propertiesFilesToRequire,
-        jsFilePath
-      );
-    });
-    const requirePaths = resolveI18nRequirePaths(
-      jsFilePath,
-      propertiesFilesToRequire,
-      isRelative,
-      removeDirPrefix
-    );
-    const requireStatements = requirePaths.map(
-      requirePath => `require('${requirePath}');`
-    );
-    const jsFile = readFileSync(jsFilePath);
-
-    writeFileSync(jsFilePath, `${requireStatements.join("\n")}\n${jsFile}`);
-  }
-}
-
-// Attempt to find a single properties file that provides the `discoveredToken`.
-function calculatePropertiesFileToRequire(
-  propertiesToFilePath,
-  discoveredToken,
-  propertiesFilesToRequire,
-  jsFilePath
-) {
-  if (propertiesToFilePath.has(discoveredToken)) {
-    const propertiesFilePaths = propertiesToFilePath.get(discoveredToken);
-
-    selectPropertyFileToRequire(
-      propertiesFilePaths,
-      jsFilePath,
-      propertiesFilesToRequire
-    );
-  } else if (discoveredToken.endsWith(".")) {
-    searchForPropertiesPrefix(
-      propertiesToFilePath,
-      discoveredToken,
-      jsFilePath,
-      propertiesFilesToRequire
-    );
-  } else {
-    console.warn(
-      `In ${jsFilePath} token ${discoveredToken} has no possible require.`
-    );
-  }
 }
 
 function selectPropertyFileToRequire(
@@ -203,37 +130,71 @@ function searchForPropertiesPrefix(
   }
 }
 
-function resolveI18nRequirePaths(
-  jsFilePath,
+// Attempt to find a single properties file that provides the `discoveredToken`.
+function calculatePropertiesFileToRequire(
+  propertiesToFilePath,
+  discoveredToken,
   propertiesFilesToRequire,
+  jsFilePath
+) {
+  if (propertiesToFilePath.has(discoveredToken)) {
+    const propertiesFilePaths = propertiesToFilePath.get(discoveredToken);
+
+    selectPropertyFileToRequire(
+      propertiesFilePaths,
+      jsFilePath,
+      propertiesFilesToRequire
+    );
+  } else if (discoveredToken.endsWith(".")) {
+    searchForPropertiesPrefix(
+      propertiesToFilePath,
+      discoveredToken,
+      jsFilePath,
+      propertiesFilesToRequire
+    );
+  } else {
+    console.warn(
+      `In ${jsFilePath} token ${discoveredToken} has no possible require.`
+    );
+  }
+}
+
+// If a file uses i18n tokens add requires to the properties files it needs.
+function addI18nRequires(
+  jsFilePath,
+  propertiesToFilePath,
   isRelative,
   removeDirPrefix
 ) {
-  const jsFileDir = dirname(jsFilePath);
-  const requirePaths = new Set();
+  const discoveredTokens = discoverI18nProperties(
+    jsFilePath,
+    propertiesToFilePath
+  );
 
-  for (const propertyFileToRequire of propertiesFilesToRequire) {
-    let requirePath = removeDirPrefix(propertyFileToRequire);
+  if (discoveredTokens.size > 0) {
+    const propertiesFilesToRequire = new Set();
 
-    if (isRelative(propertyFileToRequire, jsFileDir)) {
-      requirePath = relative(jsFileDir, propertyFileToRequire)
-        // Convert Windows separator to Unix style for module URIs.
-        .split(sep)
-        .join("/");
+    discoveredTokens.forEach(discoveredToken => {
+      calculatePropertiesFileToRequire(
+        propertiesToFilePath,
+        discoveredToken,
+        propertiesFilesToRequire,
+        jsFilePath
+      );
+    });
+    const requirePaths = resolveI18nRequirePaths(
+      jsFilePath,
+      propertiesFilesToRequire,
+      isRelative,
+      removeDirPrefix
+    );
+    const requireStatements = requirePaths.map(
+      requirePath => `require('${requirePath}');`
+    );
+    const jsFile = readFileSync(jsFilePath);
 
-      if (requirePath.startsWith("..") === false) {
-        requirePath = `./${requirePath}`;
-      }
-    }
-
-    requirePaths.add(requirePath);
+    writeFileSync(jsFilePath, `${requireStatements.join("\n")}\n${jsFile}`);
   }
-
-  return [...requirePaths];
-}
-
-function dirPrefixRemover(prefix) {
-  return jsFilePath => jsFilePath.replace(prefix, "");
 }
 
 function isRelativePackage() {
@@ -242,7 +203,46 @@ function isRelativePackage() {
     propertyFileToRequire.split("/")[1] === jsFileDir.split("/")[1];
 }
 
+function dirPrefixRemover(prefix) {
+  return jsFilePath => jsFilePath.replace(prefix, "");
+}
+
 function isRelativeApp(applicationName) {
   return propertyFileToRequire =>
     propertyFileToRequire.startsWith(`apps/${applicationName}/`);
+}
+
+export function injectI18nRequires(
+  { applicationName, packagesDirName = "packages" } = {}
+) {
+  const appJSFilePaths = sync(`apps/${applicationName}/src/**/*.js`);
+  const appPropertiesFilePaths = sync(
+    `apps/${applicationName}/src/**/en.properties`,
+    globOptions
+  );
+  const propertiesToFilePath = new Map();
+  const packageJSFilePaths = sync(`${packagesDirName}/**/*.js`);
+  const packagePropertiesFilePaths = sync(
+    `${packagesDirName}/**/en.properties`,
+    globOptions
+  );
+
+  // Firstly add package to package requires.
+  registerI18nProperties(packagePropertiesFilePaths, propertiesToFilePath);
+  packageJSFilePaths.forEach(jsFilePath =>
+    addI18nRequires(
+      jsFilePath,
+      propertiesToFilePath,
+      isRelativePackage(),
+      dirPrefixRemover(`${packagesDirName}/`)
+    ));
+  // Then add requires to app source code.
+  registerI18nProperties(appPropertiesFilePaths, propertiesToFilePath);
+  appJSFilePaths.forEach(jsFilePath =>
+    addI18nRequires(
+      jsFilePath,
+      propertiesToFilePath,
+      isRelativeApp(applicationName),
+      dirPrefixRemover(`${packagesDirName}/`)
+    ));
 }
