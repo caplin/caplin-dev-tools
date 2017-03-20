@@ -23,11 +23,11 @@ function getBranchDescriptor(defaultBranchName = "master") {
   try {
     stdout = execSync("git rev-parse --abbrev-ref HEAD", execOptions);
   } catch (err) {
-    console.error(err);
+    console.warn("\n", err.stack, "\n\n");
 
-    console.warn("Exception while generating application version.");
+    console.warn("**** Exception while generating application version. ****");
     console.warn("The application may not be stored in a git repository.");
-    console.warn("If that is the case please chose another approach to");
+    console.warn("If that is the case please select another approach to");
     console.warn("generating application versions.");
 
     process.exit(1);

@@ -1,6 +1,6 @@
 {
   "name": "@caplin/versioning",
-  "version": "2.0.1",
+  "version": "2.0.2",
   "description": "Caplin's standard versioning schema",
   "license": "MIT"
 }
