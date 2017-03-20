@@ -138,14 +138,14 @@ export function createNamespaceDirectoriesIfMissing(namespacedDir, packageDir) {
       return new Promise((resolve, reject) => {
         function removeCallback(removeError) {
           if (removeError) {
-            console.error(removeError); // eslint-disable-line
+            console.error(removeError);
           }
 
           resolve();
         }
         function copyCallback(copyError) {
           if (copyError) {
-            console.error(copyError); // eslint-disable-line
+            console.error(copyError);
             reject(copyError);
           } else {
             remove(join(packageDir, "src-bck"), removeCallback);
