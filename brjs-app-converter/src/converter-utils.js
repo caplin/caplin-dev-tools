@@ -12,7 +12,8 @@ import {
 } from "fs-extra";
 import { safeLoad } from "js-yaml";
 
-// If a directory is present in the `conversion-data` override directory use it else use the template version.
+// If a directory is present in the `conversion-data` override directory use it
+// else use the template version.
 function getBoilerplateDirLocation(
   backupDir,
   conversionDataDirContents,
@@ -26,8 +27,9 @@ function getBoilerplateDirLocation(
   return join(backupDir, filePath);
 }
 
-// The user can provide a directory with files that override the boilerplate files what the conversion tool
-// uses by default. We check for the existance of these overrides and use them if present.
+// The user can provide a directory with files that override the boilerplate
+// files the conversion tool uses by default. We check for the existance of
+// these overrides and use them if present.
 function useConversionDataDirectoryFilesIfPresent(backupDir, applicationName) {
   const conversionDataDirContents = readdirSync(join("..", "conversion-data"));
   let sdkJSLibrariesDir = getBoilerplateDirLocation(
@@ -73,7 +75,7 @@ function getApplicationFilePath(applicationName) {
   return join("apps", applicationName);
 }
 
-// Create all the metadata required for converting an app, directory locations etc.
+// Create all the metadata required for converting an app, dir locations etc.
 export function createConversionMetadataDataType(applicationName) {
   const appFilePath = getApplicationFilePath(applicationName);
   const appConfFileName = join(appFilePath, "app.conf");
@@ -97,11 +99,9 @@ export function createConversionMetadataDataType(applicationName) {
   }
 
   if (applicationName === "ct") {
-    // eslint-disable-next-line
     applicationName = "fxtrader";
     conversionDataApplicationName = "ct";
   } else if (applicationName === "br") {
-    // eslint-disable-next-line
     applicationName = "it-app";
     conversionDataApplicationName = "br";
   }
@@ -122,15 +122,16 @@ export function createConversionMetadataDataType(applicationName) {
   };
 }
 
-// Certain libs/blades/bladesets don't have a complete namespaced directory structure inside them.
-// This is something BRJS supports but bundlers like webpack don't, so we need to create these
-// directories to allow them to load the required modules.
+// Certain libs/blades/bladesets don't have a complete namespaced directory
+// structure inside them. This is something BRJS supports but bundlers like
+// webpack don't, so we need to create these directories to allow them to load
+// the required modules.
 export function createNamespaceDirectoriesIfMissing(namespacedDir, packageDir) {
   try {
     accessSync(namespacedDir);
   } catch (namespacedDirectoryDoesNotExistError) {
-    // We are either using BR's short directory feature, where the source is directly
-    // inside a `src` directory, or there is no source code at all.
+    // We are either using BR's short directory feature, where the source is
+    // directly inside a `src` directory, or there is no source code at all.
     const packageDirContents = readdirSync(packageDir);
 
     if (packageDirContents.includes("src")) {
@@ -151,11 +152,12 @@ export function createNamespaceDirectoriesIfMissing(namespacedDir, packageDir) {
           }
         }
 
-        // webpack will need a complete namespaced directory structure to load modules.
+        // webpack will need a complete namespaced directory structure to load
+        // modules.
         renameSync(join(packageDir, "src"), join(packageDir, "src-bck"));
         mkdirsSync(namespacedDir);
-        // This nested async mess is required to work around errors in Windows, it doesn't
-        // like renaming a directory that has just been created.
+        // This nested async mess is required to work around errors in Windows,
+        // it doesn't like renaming a directory that has just been created.
         copy(join(packageDir, "src-bck"), namespacedDir, copyCallback);
       });
     }
@@ -164,7 +166,7 @@ export function createNamespaceDirectoriesIfMissing(namespacedDir, packageDir) {
   return Promise.resolve();
 }
 
-// Put the current codebase in a new top level folder to clean up the project directory.
+// Put the current codebase in a new top level dir to clean up the project dir.
 export function moveCurrentCodebase({ backupDir }) {
   // Filter out hidden files, skips files like `.git`.
   const projectFiles = readdirSync(".").filter(
@@ -193,14 +195,13 @@ export function verifyCLIArgs(applicationName) {
   const conversionDataDirContents = readdirSync(join("..", "conversion-data"));
 
   if (conversionDataDirContents.includes(applicationName) === false) {
-    throw new Error(
-      `A conversion-data/${applicationName} directory for the application files must be provided.`
-    );
+    throw new Error(`Provide a conversion-data/${applicationName} directory.`);
   }
 
   let appFolderName = join("apps", applicationName);
 
-  // If we are converting the `ct` repo change the location as it's structured differently.
+  // If we are converting the `ct` repo change the location as it's structured
+  // differently.
   if (applicationName === "ct") {
     appFolderName = join("ct-core", "apps", "fxtrader");
   } else if (applicationName === "br") {
