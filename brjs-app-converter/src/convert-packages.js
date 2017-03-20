@@ -28,6 +28,16 @@ export function deleteUnusedFiles(packagePath) {
   rimraf.sync(`${packagePath}/**/src-test`);
 }
 
+function fileExists(filePath) {
+  try {
+    lstatSync(filePath);
+  } catch (err) {
+    return false;
+  }
+
+  return true;
+}
+
 // Should this package use relative imports if importing an application level
 // (in `src` directory) module.
 function isPackageInApplication(
@@ -111,38 +121,6 @@ function createModuleSourceProcessor(
   };
 }
 
-// Returns a function that updates all the import module sources to their new
-// values and makes application `src` to application `src` imports relative.
-function createPackageImportsUpdater(
-  packagesDir,
-  packagesThatShouldBeLibs,
-  moduleSources
-) {
-  // Function that converts an absolute module source to a relative one.
-  const makeModuleSourceRelative = createModuleSourceProcessor(
-    packagesThatShouldBeLibs,
-    "/packages/"
-  );
-
-  return packagePath => {
-    const isApplicationPackage = isPackageInApplication(
-      packagePath,
-      packagesDir,
-      packagesThatShouldBeLibs
-    );
-
-    if (isApplicationPackage) {
-      updateAllImportsInPackage(
-        packagePath,
-        moduleSources,
-        makeModuleSourceRelative
-      );
-    } else {
-      updateAllImportsInPackage(packagePath, moduleSources);
-    }
-  };
-}
-
 // If a relative conversion function isn't provided use the module source as is.
 const modulesAreNotRelative = moduleSource => moduleSource;
 
@@ -198,6 +176,38 @@ function updateAllImportsInPackage(
 
   packageJSFiles.forEach(jsFilePath =>
     updateMappings(jsFilePath, moduleSources, makeModuleSourceRelative));
+}
+
+// Returns a function that updates all the import module sources to their new
+// values and makes application `src` to application `src` imports relative.
+function createPackageImportsUpdater(
+  packagesDir,
+  packagesThatShouldBeLibs,
+  moduleSources
+) {
+  // Function that converts an absolute module source to a relative one.
+  const makeModuleSourceRelative = createModuleSourceProcessor(
+    packagesThatShouldBeLibs,
+    "/packages/"
+  );
+
+  return packagePath => {
+    const isApplicationPackage = isPackageInApplication(
+      packagePath,
+      packagesDir,
+      packagesThatShouldBeLibs
+    );
+
+    if (isApplicationPackage) {
+      updateAllImportsInPackage(
+        packagePath,
+        moduleSources,
+        makeModuleSourceRelative
+      );
+    } else {
+      updateAllImportsInPackage(packagePath, moduleSources);
+    }
+  };
 }
 
 function getPackageSrcCommonPath(packageSrcFiles, commonRoot) {
@@ -319,16 +329,6 @@ function copyPackageSrcTestToNewLocations(
     copySync(packageSrcTestFile, newSrcFilePath);
     moduleSources.set(currentModuleSource, newModuleSource);
   });
-}
-
-function fileExists(filePath) {
-  try {
-    lstatSync(filePath);
-  } catch (err) {
-    return false;
-  }
-
-  return true;
 }
 
 export function copyPackageFoldersToNewLocations(packagePath) {
