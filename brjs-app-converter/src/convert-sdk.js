@@ -1,8 +1,8 @@
-import { join } from "path";
+const { join } = require("path");
 
-import { copySync, readdirSync } from "fs-extra";
+const { copySync, readdirSync } = require("fs-extra");
 
-import { convertLib } from "./convert-libs";
+const { convertLib } = require("./convert-libs");
 
 // Copy all SDK libs to packages and convert them to npm packages.
 export function convertSDKToPackages({ packagesDir, sdkJSLibrariesDir }) {
@@ -16,7 +16,7 @@ export function convertSDKToPackages({ packagesDir, sdkJSLibrariesDir }) {
     if (packagesContentsFileNames.includes(packageName)) {
       console.log(
         `Skipping conversion of '${packageName}' as the package already exists`
-      ); //eslint-disable-line
+      );
     } else {
       const packageDir = join(packagesDir, packageName);
 

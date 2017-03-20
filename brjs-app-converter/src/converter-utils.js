@@ -1,6 +1,6 @@
-import { join } from "path";
+const { join } = require("path");
 
-import {
+const {
   accessSync,
   copy,
   mkdirsSync,
@@ -9,8 +9,8 @@ import {
   remove,
   renameSync,
   statSync
-} from "fs-extra";
-import { safeLoad } from "js-yaml";
+} = require("fs-extra");
+const { safeLoad } = require("js-yaml");
 
 // If a directory is present in the `conversion-data` override directory use it
 // else use the template version.

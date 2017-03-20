@@ -1,7 +1,9 @@
-import { readdirSync } from "fs-extra";
+const { readdirSync } = require("fs-extra");
 
-import { moveAspectCode } from "./convert-aspect";
-import { moveAndConvertBladesCode, moveBladesetCode } from "./convert-bladeset";
+const { moveAspectCode } = require("./convert-aspect");
+const { moveAndConvertBladesCode, moveBladesetCode } = require(
+  "./convert-bladeset"
+);
 
 // Move all code in bladesets/blades/aspects into the packages directory.
 export function moveBRJSApplicationCodeToPackages(conversionMetadata) {

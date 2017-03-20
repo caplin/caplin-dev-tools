@@ -1,14 +1,14 @@
-import { dirname, join, relative, sep } from "path";
+const { dirname, join, relative, sep } = require("path");
 
-import {
+const {
   copySync,
   lstatSync,
   readdirSync,
   readFileSync,
   writeFileSync
-} from "fs-extra";
-import glob from "glob";
-import rimraf from "rimraf";
+} = require("fs-extra");
+const glob = require("glob");
+const rimraf = require("rimraf");
 
 export function deleteUnusedFiles(packagePath) {
   rimraf.sync(`${packagePath}/resources`);
