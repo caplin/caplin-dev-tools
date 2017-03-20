@@ -1,40 +1,25 @@
-import { join } from "path";
+const { join } = require("path");
 
-import { parse as babylonParse } from "babylon";
-import {
+const { parse: babylonParse } = require("babylon");
+const {
   readdirSync,
   readFileSync,
   readJsonSync,
   statSync,
   writeJsonSync
-} from "fs-extra";
-import { sync } from "glob";
-import { parse, visit } from "recast";
+} = require("fs-extra");
+const { sync } = require("glob");
+const { parse, visit } = require("recast");
 
-export default function({ packagesDir }) {
-  const possiblePackages = readdirSync(packagesDir);
-  const availablePackages = new Map();
-
-  for (const packageName of possiblePackages) {
-    const packageDir = join(packagesDir, packageName);
-
-    if (statSync(packageDir).isDirectory()) {
-      availablePackages.set(packageName, {
-        packageName,
-        packageDir
-      });
-    }
+const babylonParseOptions = {
+  sourceType: "module",
+  plugins: ["*"]
+};
+const recastParseOptions = {
+  parser: {
+    parse: sourceCode => babylonParse(sourceCode, babylonParseOptions)
   }
-
-  for (const [, { packageDir }] of availablePackages) {
-    const dependenciesDataType = findDependencies(
-      packageDir,
-      availablePackages
-    );
-
-    updatePackageJSON(dependenciesDataType);
-  }
-}
+};
 
 function isAPackageImport(astNode) {
   return astNode.callee.name === "require" &&
@@ -91,16 +76,6 @@ function createImportsVisitor(dependencies, availablePackages) {
   };
 }
 
-const babylonParseOptions = {
-  sourceType: "module",
-  plugins: ["*"]
-};
-const recastParseOptions = {
-  parser: {
-    parse: sourceCode => babylonParse(sourceCode, babylonParseOptions)
-  }
-};
-
 function extractPackagesFromJSFile(jsFile, importsVisitor) {
   try {
     const ast = parse(readFileSync(jsFile, "utf8"), recastParseOptions);
@@ -151,3 +126,28 @@ function updatePackageJSON({ devDependencies, dependencies, packageDir }) {
 
   writeJsonSync(packageJSONFileLocation, packageJSON, { spaces: 2 });
 }
+
+module.exports = ({ packagesDir }) => {
+  const possiblePackages = readdirSync(packagesDir);
+  const availablePackages = new Map();
+
+  for (const packageName of possiblePackages) {
+    const packageDir = join(packagesDir, packageName);
+
+    if (statSync(packageDir).isDirectory()) {
+      availablePackages.set(packageName, {
+        packageName,
+        packageDir
+      });
+    }
+  }
+
+  for (const [, { packageDir }] of availablePackages) {
+    const dependenciesDataType = findDependencies(
+      packageDir,
+      availablePackages
+    );
+
+    updatePackageJSON(dependenciesDataType);
+  }
+};
