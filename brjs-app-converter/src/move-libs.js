@@ -1,30 +1,27 @@
-import {
-	join
-} from 'path';
+import { join } from "path";
 
-import {
-	move
-} from 'fs-extra';
+import { move } from "fs-extra";
 
-export function moveApplicationPackagesToLibs({applicationName, packagesThatShouldBeLibs, packagesDir}) {
-	const convertedAppDir = join('apps', applicationName);
+export function moveApplicationPackagesToLibs(
+  { applicationName, packagesThatShouldBeLibs, packagesDir }
+) {
+  const convertedAppDir = join("apps", applicationName);
 
-	const movePromises = packagesThatShouldBeLibs
-		.map((packageThatIsLib) => {
-			return new Promise((resolve, reject) => {
-				move(
-					join(packagesDir, packageThatIsLib),
-					join(convertedAppDir, 'src', packageThatIsLib),
-					(err) => {
-						if (err) {
-							reject(err);
-						} else {
-							resolve();
-						}
-					}
-				);
-			});
-		});
+  const movePromises = packagesThatShouldBeLibs.map(
+    packageThatIsLib => new Promise((resolve, reject) => {
+      move(
+        join(packagesDir, packageThatIsLib),
+        join(convertedAppDir, "src", packageThatIsLib),
+        err => {
+          if (err) {
+            reject(err);
+          } else {
+            resolve();
+          }
+        }
+      );
+    })
+  );
 
-	return Promise.all(movePromises);
+  return Promise.all(movePromises);
 }
