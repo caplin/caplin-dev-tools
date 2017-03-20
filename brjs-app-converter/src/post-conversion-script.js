@@ -1,12 +1,12 @@
-import { sep } from "path";
+const { sep } = require("path");
 
-import { copySync } from "fs-extra";
-import glob from "glob";
+const { copySync } = require("fs-extra");
+const glob = require("glob");
 
-import {
+const {
   copyPackageFoldersToNewLocations,
   deleteUnusedFiles
-} from "./convert-packages";
+} = require("./convert-packages");
 
 export function runPostConversionScript(conversionMetadata, convertPackages) {
   let postConversionScript = () => {

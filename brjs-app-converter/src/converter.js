@@ -2,21 +2,21 @@ const {
   join
 } = require("path");
 
-import addPackageDependencies from "./add-package-dependencies";
-import { moveBRJSApplicationCodeToPackages } from "./convert-app";
-import { createPackagesFromLibs } from "./convert-libs";
-import { convertSDKToPackages } from "./convert-sdk";
-import convertPackagesToNewFormat from "./convert-packages";
-import {
+const addPackageDependencies = require("./add-package-dependencies");
+const { moveBRJSApplicationCodeToPackages } = require("./convert-app");
+const { createPackagesFromLibs } = require("./convert-libs");
+const { convertSDKToPackages } = require("./convert-sdk");
+const convertPackagesToNewFormat = require("./convert-packages");
+const {
   createConversionMetadataDataType,
   moveCurrentCodebase,
   verifyCLIArgs
-} from "./converter-utils";
-import { createApplicationAndVariants } from "./create-applications";
-import { moveApplicationPackagesToLibs } from "./move-libs";
-import { injectI18nRequires } from "./inject-i18n-requires";
-import { injectHTMLRequires } from "./inject-html-requires";
-import { runPostConversionScript } from "./post-conversion-script";
+} = require("./converter-utils");
+const { createApplicationAndVariants } = require("./create-applications");
+const { moveApplicationPackagesToLibs } = require("./move-libs");
+const { injectI18nRequires } = require("./inject-i18n-requires");
+const { injectHTMLRequires } = require("./inject-html-requires");
+const { runPostConversionScript } = require("./post-conversion-script");
 
 // Provide the name of the app to convert.
 export default function({ app }) {

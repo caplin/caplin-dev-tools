@@ -1,7 +1,7 @@
-import { join } from "path";
+const { join } = require("path");
 
-import { readFileSync } from "fs-extra";
-import template from "lodash/string/template";
+const { readFileSync } = require("fs-extra");
+const template = require("lodash/string/template");
 
 export const templateDir = join(__dirname, "..", "templates");
 

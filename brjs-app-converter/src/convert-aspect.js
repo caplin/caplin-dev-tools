@@ -1,6 +1,6 @@
-import { join } from "path";
+const { join } = require("path");
 
-import { copySync } from "fs-extra";
+const { copySync } = require("fs-extra");
 
 // Move the application aspect code into the `pkgs` directory.
 export function moveAspectCode(

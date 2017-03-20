@@ -1,8 +1,8 @@
-import { join } from "path";
+const { join } = require("path");
 
-import { copySync } from "fs-extra";
+const { copySync } = require("fs-extra");
 
-import { createNamespaceDirectoriesIfMissing } from "./converter-utils";
+const { createNamespaceDirectoriesIfMissing } = require("./converter-utils");
 
 // Move a blade to the packages directory.
 export function moveBladeCodeToPackages(

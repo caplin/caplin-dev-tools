@@ -1,9 +1,9 @@
-import { join } from "path";
+const { join } = require("path");
 
-import { copySync, readdirSync, removeSync } from "fs-extra";
+const { copySync, readdirSync, removeSync } = require("fs-extra");
 
-import { moveBladeCodeToPackages } from "./convert-blade";
-import { createNamespaceDirectoriesIfMissing } from "./converter-utils";
+const { moveBladeCodeToPackages } = require("./convert-blade");
+const { createNamespaceDirectoriesIfMissing } = require("./converter-utils");
 
 // Find all blades in a bladeset, move and convert them to packages.
 export function moveAndConvertBladesCode(

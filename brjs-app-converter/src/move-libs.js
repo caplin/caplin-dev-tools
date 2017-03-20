@@ -1,6 +1,6 @@
-import { join } from "path";
+const { join } = require("path");
 
-import { move } from "fs-extra";
+const { move } = require("fs-extra");
 
 export function moveApplicationPackagesToLibs(
   { applicationName, packagesThatShouldBeLibs, packagesDir }

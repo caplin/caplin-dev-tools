@@ -388,7 +388,7 @@ function findAllPackagesThatRequireConversion(packagesDir) {
     );
 }
 
-export default function convertPackagesToNewFormat(
+module.exports = function convertPackagesToNewFormat(
   {
     applicationName,
     backupDir,
@@ -446,4 +446,4 @@ export default function convertPackagesToNewFormat(
       srcPathModifier(makeAppModulesRelative)
     );
   };
-}
+};

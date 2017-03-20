@@ -1,15 +1,15 @@
-import { join } from "path";
+const { join } = require("path");
 
-import {
+const {
   copySync,
   existsSync,
   readdirSync,
   readJsonSync,
   statSync,
   writeJsonSync
-} from "fs-extra";
+} = require("fs-extra");
 
-import { templateDir } from "./converter-data";
+const { templateDir } = require("./converter-data");
 
 function serverDirs(convertedAppDir) {
   let javaServerDir = join(convertedAppDir, "scripts");
