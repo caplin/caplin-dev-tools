@@ -15,7 +15,24 @@ function getCommitCount() {
 }
 
 function getBranchDescriptor(defaultBranchName = "master") {
-  const stdout = execSync("git rev-parse --abbrev-ref HEAD", execOptions);
+  let stdout;
+
+  // This approach to generating a version relies on the project being stored
+  // in a git repository, if it's not the user should seek an alternate way of
+  // generating versions.
+  try {
+    stdout = execSync("git rev-parse --abbrev-ref HEAD", execOptions);
+  } catch (err) {
+    console.error(err);
+
+    console.warn("Exception while generating application version.");
+    console.warn("The application may not be stored in a git repository.");
+    console.warn("If that is the case please chose another approach to");
+    console.warn("generating application versions.");
+
+    process.exit(1);
+  }
+
   const currentBranch = stdout.trim();
 
   // To prevent a trailing `-` being suffixed to the version if a
