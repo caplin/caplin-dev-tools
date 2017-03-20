@@ -278,9 +278,7 @@ function addRequires(
   });
 }
 
-export function injectHTMLRequires(
-  { applicationName = "fxtrader", packagesDirName = "packages" } = {}
-) {
+export function injectHTMLRequires({ applicationName, packagesDirName }) {
   const appJSFilePaths = sync(
     `apps/${applicationName}/src/**/*.js`,
     jsGlobOptions

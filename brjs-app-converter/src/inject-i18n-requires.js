@@ -1,8 +1,8 @@
-import { readFileSync, writeFileSync } from "fs";
-import { dirname, relative, sep } from "path";
+const { readFileSync, writeFileSync } = require("fs");
+const { dirname, relative, sep } = require("path");
 
-import { sync } from "glob";
-import { parse } from "properties";
+const { sync } = require("glob");
+const { parse } = require("properties");
 
 const globOptions = {
   ignore: [
@@ -212,9 +212,7 @@ function isRelativeApp(applicationName) {
     propertyFileToRequire.startsWith(`apps/${applicationName}/`);
 }
 
-export function injectI18nRequires(
-  { applicationName, packagesDirName = "packages" } = {}
-) {
+export function injectI18nRequires({ applicationName, packagesDirName }) {
   const appJSFilePaths = sync(`apps/${applicationName}/src/**/*.js`);
   const appPropertiesFilePaths = sync(
     `apps/${applicationName}/src/**/en.properties`,
