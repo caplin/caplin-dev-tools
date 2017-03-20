@@ -28,7 +28,8 @@ export function deleteUnusedFiles(packagePath) {
   rimraf.sync(`${packagePath}/**/src-test`);
 }
 
-// Should this package use relative imports if importing an application level (in `src` directory) module.
+// Should this package use relative imports if importing an application level
+// (in `src` directory) module.
 function isPackageInApplication(
   packagePath,
   packagesDir,
@@ -40,16 +41,20 @@ function isPackageInApplication(
   return packagesThatShouldBeLibs.includes(packageName);
 }
 
-// importerPathName -> Path to file doing the importing e.g. 'apps/mobile/src/config/aliases.js'
-// moduleSourceToPathNamePrefix -> Prefix that converts the module source into file path e.g. '/packages/'
-// moduleSource -> Import statement module e.g. 'mobile-blotter/screens/orders/bulk_orders/BulkOrderStateManager'
+// importerPathName -> Path to file doing the importing
+//   e.g. 'apps/mobile/src/config/aliases.js'
+// moduleSourceToPathNamePrefix -> Prefix that converts the module source into
+//   file path e.g. '/packages/'
+// moduleSource -> Import statement module e.g.
+//   'mobile-blotter/screens/orders/bulk_orders/BulkOrderStateManager'
 export function createRelativeModuleSource(
   importerPathName,
   moduleSourceToPathNamePrefix,
   moduleSource
 ) {
   // For `relative` to work it must be provided with absolute file paths.
-  // So we convert the importer and imported file paths/module sources to absolute file paths.
+  // So we convert the importer and imported file paths/module sources to
+  // absolute file paths.
   const absoluteImporterFileName = `/${importerPathName}`;
   const absoluteImportedFileName = moduleSourceToPathNamePrefix + moduleSource;
   const directoryOfImporterFile = dirname(absoluteImporterFileName);
@@ -65,8 +70,9 @@ export function createRelativeModuleSource(
     return relativeFilePathToImportedModule;
   }
 
-  // A file path to a child directory can start without `./` for file system operations but webpack and
-  // ES Modules require `./` to distinguish relative imports from package requires so we must add it,
+  // A file path to a child directory can start without `./` for file system
+  // operations but webpack and ES Modules require `./` to distinguish relative
+  // imports from package requires so we must add it,
   // i.e. 'child_directory/File' is converted to './child_directory/File'.
   return `./${relativeFilePathToImportedModule}`;
 }
@@ -79,8 +85,9 @@ function shouldModuleBeRelative(moduleSource, applicationPackages) {
   return applicationPackages.includes(packageOfImportedModule);
 }
 
-// Returns a function that checks if a given module source is for a module in the application `src` directory,
-// if it is it will convert the module source to be relative.
+// Returns a function that checks if a given module source is for a module in
+// the application `src` directory, if it is it will convert the module source
+// to be relative.
 function createModuleSourceProcessor(
   applicationPackages,
   moduleSourceToPathNamePrefix
@@ -91,7 +98,7 @@ function createModuleSourceProcessor(
       applicationPackages
     );
 
-    // Is the module you are importing located in the application's `src` directory.
+    // Is the module you are importing located in the application's `src` dir.
     if (isImportedModuleFromRelativePackage) {
       return createRelativeModuleSource(
         importerPathName,
@@ -104,8 +111,8 @@ function createModuleSourceProcessor(
   };
 }
 
-// Returns a function that updates all the import module sources to their new values and makes application `src` to
-// application `src` imports relative.
+// Returns a function that updates all the import module sources to their new
+// values and makes application `src` to application `src` imports relative.
 function createPackageImportsUpdater(
   packagesDir,
   packagesThatShouldBeLibs,
@@ -136,7 +143,7 @@ function createPackageImportsUpdater(
   };
 }
 
-// If a relative conversion function is not provided use the module source as is.
+// If a relative conversion function isn't provided use the module source as is.
 const modulesAreNotRelative = moduleSource => moduleSource;
 
 function updateMappings(
@@ -155,7 +162,8 @@ function updateMappings(
       const value = moduleSources.get(mapping);
 
       if (value && mapping && value !== mapping) {
-        // Importing from the application's `src` directory another module in `src` must be a relative import.
+        // Importing from the application's `src` directory another module in
+        // `src` must be a relative import.
         const relativeModuleSource = makeModuleSourceRelative(value, srcPath);
 
         fileContents = fileContents.replace(
@@ -230,7 +238,8 @@ function getPackageSrcCommonPath(packageSrcFiles, commonRoot) {
   return commonPath;
 }
 
-// If the copied source has a patch; move the patch to the `js-patches` folder in its new location.
+// If the copied source has a patch; move the patch to the `js-patches` folder
+// in its new location.
 function copyJSPatch(
   backupDir,
   currentModuleSource,
@@ -423,12 +432,14 @@ export default function convertPackagesToNewFormat(
   // Delete all the old folders and files.
   packagesToConvert.forEach(deleteUnusedFiles);
 
-  // Return a function that allows post conversion scripts to perform import path updates.
+  // Return a function that allows post conversion scripts to perform import
+  // path updates.
   return (packagePath, srcPathModifier) => {
-    // It's possible that the `srcPath` value provided to `makeAppModulesRelative` will be for a file outside the
-    // application root, this would result in incorrect relative paths if the module is moved later as part of a
-    // build step. Allowing the post conversion script to wrap the call to `makeAppModulesRelative`
-    // lets it modify `srcPath`.
+    // It's possible that the `srcPath` value provided to
+    // `makeAppModulesRelative` will be for a file outside the application root,
+    // this would result in incorrect relative paths if the module is moved
+    // later as part of a build step. Allowing the post conversion script to
+    // wrap the call to `makeAppModulesRelative` lets it modify `srcPath`.
     updateAllImportsInPackage(
       packagePath,
       moduleSources,
