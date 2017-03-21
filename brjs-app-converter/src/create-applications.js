@@ -43,11 +43,11 @@ function setUpApplicationFiles(
   copySync(join(templateDir, ".babelrc"), join(convertedAppDir, ".babelrc"));
   copySync(
     join(defaultAspectDir, "unbundled-resources"),
-    join(convertedAppDir, "public/dev/unbundled-resources")
+    join(convertedAppDir, "static/dev/unbundled-resources")
   );
   copySync(
     join(defaultAspectDir, "unbundled-resources"),
-    join(convertedAppDir, "public/dev")
+    join(convertedAppDir, "static/dev")
   );
 
   const {
