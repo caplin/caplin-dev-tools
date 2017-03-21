@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html manifest="appcache-disabled">
+<html>
 
 <head>
 	<title>{{appName}}</title>
@@ -12,7 +12,10 @@
 		window.$_brjsI18nProperties = {};
 	</script>
 
+	<!-- uncomment if using i18n, must come before the js bundle -->
+	<!-- script src="static/i18n-dev.js"></script -->
 	<script src="static/bundle-dev.js"></script>
+
 </body>
 
 </html>
