@@ -394,14 +394,14 @@ function findAllPackagesThatRequireConversion(packagesDir) {
     );
 }
 
-module.exports = function convertPackagesToNewFormat(
+module.exports.convertPackagesToNewFormat = (
   {
     applicationName,
     backupDir,
     packagesDir,
     packagesThatShouldBeLibs
   }
-) {
+) => {
   const applicationModuleToPathPrefix = `/apps/${applicationName}/src/`;
   const makeAppModulesRelative = createModuleSourceProcessor(
     packagesThatShouldBeLibs,

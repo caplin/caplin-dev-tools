@@ -6,7 +6,7 @@ const addPackageDependencies = require("./add-package-dependencies");
 const { moveBRJSApplicationCodeToPackages } = require("./convert-app");
 const { createPackagesFromLibs } = require("./convert-libs");
 const { convertSDKToPackages } = require("./convert-sdk");
-const convertPackagesToNewFormat = require("./convert-packages");
+const { convertPackagesToNewFormat } = require("./convert-packages");
 const {
   createConversionMetadataDataType,
   moveCurrentCodebase,
