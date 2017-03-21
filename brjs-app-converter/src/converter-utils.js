@@ -86,7 +86,7 @@ module.exports.createConversionMetadataDataType = applicationName => {
   const brjsApplicationDir = join(backupDir, appFilePath);
   let conversionDataApplicationName = "";
   // string: Name of packages directory.
-  const packagesDirName = "packages";
+  const packagesDirName = "packages-caplin";
   const conversionData = useConversionDataDirectoryFilesIfPresent(
     backupDir,
     applicationName

@@ -47,7 +47,8 @@ function isPackageInApplication(
   packagesDir,
   packagesThatShouldBeLibs
 ) {
-  // `packagePath` is in the format `packages/workbench` so remove `packages/`.
+  // `packagePath` is in the format `packages-caplin/workbench` so remove
+  // `packages-caplin/`.
   const packageName = packagePath.replace(`${packagesDir}/`, "");
 
   return packagesThatShouldBeLibs.includes(packageName);
@@ -56,7 +57,7 @@ function isPackageInApplication(
 // importerPathName -> Path to file doing the importing
 //   e.g. 'apps/mobile/src/config/aliases.js'
 // moduleSourceToPathNamePrefix -> Prefix that converts the module source into
-//   file path e.g. '/packages/'
+//   file path e.g. '/packages-caplin/'
 // moduleSource -> Import statement module e.g.
 //   'mobile-blotter/screens/orders/bulk_orders/BulkOrderStateManager'
 function createRelativeModuleSource(
@@ -192,7 +193,7 @@ function createPackageImportsUpdater(
   // Function that converts an absolute module source to a relative one.
   const makeModuleSourceRelative = createModuleSourceProcessor(
     packagesThatShouldBeLibs,
-    "/packages/"
+    `/${packagesDir}/`
   );
 
   return packagePath => {

@@ -4,7 +4,7 @@ const { copySync, readdirSync } = require("fs-extra");
 
 const { convertLib } = require("./convert-libs");
 
-// Copy all SDK libs to packages and convert them to npm packages.
+// Copy all SDK libs to packages-caplin and convert them to npm packages.
 module.exports.convertSDKToPackages = function convertSDKToPackages(
   { packagesDir, sdkJSLibrariesDir }
 ) {

@@ -21,7 +21,7 @@ a user to access the old application files.
 	* It also creates a `src` directory for the application `apps/mobile/src` that contains the blades/bladesets and
 	aspects of the application.
 
-This leaves the project with three top level directories, `apps`, `packages`, and `brjs-app-backup` (which can be
+This leaves the project with three top level directories, `apps`, `packages-caplin`, and `brjs-app-backup` (which can be
 deleted once the user is satisfied they don't need the old files).
 
 These screenshots contrast before and after:
