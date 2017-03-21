@@ -56,9 +56,7 @@ module.exports = {
 
     if (typeOfComponent === "react" && !nameIsCapitalised) {
       console.log(
-        `Component not created. React component names must begin with capital letter. Please try again with: ${name[
-          0
-        ].toUpperCase() + name.slice(1)}`
+        `Component not created. React component names must begin with capital letter. Please try again with: ${name[0].toUpperCase() + name.slice(1)}`
       );
       return;
     }
@@ -72,11 +70,6 @@ module.exports = {
     })
       .then(() => {
         console.log(`New component '${name}' created!`);
-        console.log(
-          `Now cd into components/${name} and run ${chalk.blue(
-            "npm run workbench"
-          )}`
-        );
       })
       .catch(e => {
         console.log(e);

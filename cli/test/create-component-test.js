@@ -1,4 +1,3 @@
-
 var path = require("path");
 var execFile = require("child_process").execFile;
 var rimraf = require("rimraf");
@@ -29,11 +28,11 @@ describe("create-component", () => {
     cleanDirectories();
   });
 
-  it("should prompt for a component name", (prompted) => {
+  it("should prompt for a component name", prompted => {
     var cp = execFile("node", ["./index.js", "create-component"]);
     var expected = "What do you want to name your component:";
 
-    cp.stdout.on("data", (data) => {
+    cp.stdout.on("data", data => {
       if (data.indexOf(expected) > -1) {
         prompted();
       }
