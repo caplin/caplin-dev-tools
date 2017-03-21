@@ -76,7 +76,7 @@ function getApplicationFilePath(applicationName) {
 }
 
 // Create all the metadata required for converting an app, dir locations etc.
-export function createConversionMetadataDataType(applicationName) {
+module.exports.createConversionMetadataDataType = applicationName => {
   const appFilePath = getApplicationFilePath(applicationName);
   const appConfFileName = join(appFilePath, "app.conf");
   let applicationNamespaceRoot = applicationName;
@@ -120,13 +120,16 @@ export function createConversionMetadataDataType(applicationName) {
     privateKeyFileLocation: conversionData.privateKeyFileLocation,
     sdkJSLibrariesDir: conversionData.sdkJSLibrariesDir
   };
-}
+};
 
 // Certain libs/blades/bladesets don't have a complete namespaced directory
 // structure inside them. This is something BRJS supports but bundlers like
 // webpack don't, so we need to create these directories to allow them to load
 // the required modules.
-export function createNamespaceDirectoriesIfMissing(namespacedDir, packageDir) {
+module.exports.createNamespaceDirectoriesIfMissing = (
+  namespacedDir,
+  packageDir
+) => {
   try {
     accessSync(namespacedDir);
   } catch (namespacedDirectoryDoesNotExistError) {
@@ -164,10 +167,12 @@ export function createNamespaceDirectoriesIfMissing(namespacedDir, packageDir) {
   }
 
   return Promise.resolve();
-}
+};
 
 // Put the current codebase in a new top level dir to clean up the project dir.
-export function moveCurrentCodebase({ backupDir }) {
+module.exports.moveCurrentCodebase = function moveCurrentCodebase(
+  { backupDir }
+) {
   // Filter out hidden files, skips files like `.git`.
   const projectFiles = readdirSync(".").filter(
     fileName => !/^\./.test(fileName)
@@ -178,10 +183,10 @@ export function moveCurrentCodebase({ backupDir }) {
   for (const fileName of projectFiles) {
     renameSync(fileName, join(backupDir, fileName));
   }
-}
+};
 
 // Fail fast if some of the CLI arguments are missing.
-export function verifyCLIArgs(applicationName) {
+module.exports.verifyCLIArgs = function verifyCLIArgs(applicationName) {
   if (applicationName === undefined) {
     throw new Error("An application name must be provided.");
   }
@@ -213,4 +218,4 @@ export function verifyCLIArgs(applicationName) {
   } catch (appFolderInaccesibleError) {
     throw new Error(`The folder ${appFolderName} could not be found.`);
   }
-}
+};

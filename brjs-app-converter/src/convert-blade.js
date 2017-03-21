@@ -5,7 +5,7 @@ const { copySync } = require("fs-extra");
 const { createNamespaceDirectoriesIfMissing } = require("./converter-utils");
 
 // Move a blade to the packages directory.
-export function moveBladeCodeToPackages(
+module.exports.moveBladeCodeToPackages = function moveBladeCodeToPackages(
   bladeName,
   bladesetName,
   bladesetBladesDir,
@@ -28,4 +28,4 @@ export function moveBladeCodeToPackages(
     bladeNamespaceDir,
     bladePackageDir
   );
-}
+};

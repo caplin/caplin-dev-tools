@@ -278,7 +278,9 @@ function addRequires(
   });
 }
 
-export function injectHTMLRequires({ applicationName, packagesDirName }) {
+module.exports.injectHTMLRequires = function injectHTMLRequires(
+  { applicationName, packagesDirName }
+) {
   const appJSFilePaths = sync(
     `apps/${applicationName}/src/**/*.js`,
     jsGlobOptions
@@ -323,4 +325,4 @@ export function injectHTMLRequires({ applicationName, packagesDirName }) {
     isRelativeApp(applicationName),
     stripPackagePrefix
   );
-}
+};

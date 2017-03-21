@@ -212,7 +212,9 @@ function isRelativeApp(applicationName) {
     propertyFileToRequire.startsWith(`apps/${applicationName}/`);
 }
 
-export function injectI18nRequires({ applicationName, packagesDirName }) {
+module.exports.injectI18nRequires = function injectI18nRequires(
+  { applicationName, packagesDirName }
+) {
   const appJSFilePaths = sync(`apps/${applicationName}/src/**/*.js`);
   const appPropertiesFilePaths = sync(
     `apps/${applicationName}/src/**/en.properties`,
@@ -243,4 +245,4 @@ export function injectI18nRequires({ applicationName, packagesDirName }) {
       isRelativeApp(applicationName),
       dirPrefixRemover(`${packagesDirName}/`)
     ));
-}
+};

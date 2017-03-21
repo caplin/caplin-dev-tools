@@ -38,7 +38,7 @@ require("babel-register")({
 
 function convertApplication() {
   const argv = parseArgs(process.argv.slice(2));
-  const convertor = require("./converter").default;
+  const convertor = require("./converter");
 
   convertor(argv);
 }

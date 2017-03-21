@@ -19,7 +19,7 @@ const { injectHTMLRequires } = require("./inject-html-requires");
 const { runPostConversionScript } = require("./post-conversion-script");
 
 // Provide the name of the app to convert.
-export default function({ app }) {
+module.exports = ({ app }) => {
   verifyCLIArgs(app);
 
   let convertPackagesFunction = () => {
@@ -77,4 +77,4 @@ export default function({ app }) {
   });
 
   postConversionScript.catch(console.error);
-}
+};

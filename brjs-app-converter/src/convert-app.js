@@ -6,7 +6,7 @@ const { moveAndConvertBladesCode, moveBladesetCode } = require(
 );
 
 // Move all code in bladesets/blades/aspects into the packages directory.
-export function moveBRJSApplicationCodeToPackages(conversionMetadata) {
+module.exports.moveBRJSApplicationCodeToPackages = conversionMetadata => {
   const brjsApplicationDir = conversionMetadata.brjsApplicationDir;
   const moveBRJSAppCodePromises = readdirSync(
     brjsApplicationDir
@@ -23,4 +23,4 @@ export function moveBRJSApplicationCodeToPackages(conversionMetadata) {
   });
 
   return Promise.all(moveBRJSAppCodePromises);
-}
+};

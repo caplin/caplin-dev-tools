@@ -2,9 +2,9 @@ const { join } = require("path");
 
 const { move } = require("fs-extra");
 
-export function moveApplicationPackagesToLibs(
+module.exports.moveApplicationPackagesToLibs = (
   { applicationName, packagesThatShouldBeLibs, packagesDir }
-) {
+) => {
   const convertedAppDir = join("apps", applicationName);
 
   const movePromises = packagesThatShouldBeLibs.map(
@@ -24,4 +24,4 @@ export function moveApplicationPackagesToLibs(
   );
 
   return Promise.all(movePromises);
-}
+};

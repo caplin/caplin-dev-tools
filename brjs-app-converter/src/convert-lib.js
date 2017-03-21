@@ -17,7 +17,7 @@ function getNamespacedLibSrcDirName(packageDir) {
   return join(packageDir, "src", brLibYAML.requirePrefix);
 }
 
-export function createBRLibPackageJSON(
+function createBRLibPackageJSON(
   packageDirectory,
   packageName,
   createPackageJSON
@@ -29,9 +29,11 @@ export function createBRLibPackageJSON(
   }
 }
 
+module.exports.createBRLibPackageJSON = createBRLibPackageJSON;
+
 // Given a BR lib with a `br-lib.conf` and a `src` directory make sure the lib
 // has a complete namespaced directory structure.
-export function convertBRLibToPackage(
+module.exports.convertBRLibToPackage = function convertBRLibToPackage(
   packageDirectory,
   packageName,
   createPackageJSON
@@ -47,11 +49,11 @@ export function convertBRLibToPackage(
     namespacedLibSrcDir,
     packageDirectory
   );
-}
+};
 
 // Given a BR lib that lacks a `br-lib.conf` make sure the lib has a complete
 // namespaced directory.
-export function convertLibToPackage(
+module.exports.convertLibToPackage = function convertLibToPackage(
   packageDirectory,
   packageName,
   createPackageJSON
@@ -65,4 +67,4 @@ export function convertLibToPackage(
     namespacedLibSrcDir,
     packageDirectory
   );
-}
+};

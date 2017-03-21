@@ -6,7 +6,7 @@ const { moveBladeCodeToPackages } = require("./convert-blade");
 const { createNamespaceDirectoriesIfMissing } = require("./converter-utils");
 
 // Find all blades in a bladeset, move and convert them to packages.
-export function moveAndConvertBladesCode(
+function moveAndConvertBladesCode(
   bladesetDir,
   bladesetName,
   conversionMetadata
@@ -29,9 +29,14 @@ export function moveAndConvertBladesCode(
   return Promise.all(moveBladesPromises);
 }
 
+module.exports.moveAndConvertBladesCode = moveAndConvertBladesCode;
+
 // Given a bladeset move all the bladeset code and blades into the packages
 // directory.
-export function moveBladesetCode(conversionMetadata, bladesetDirName) {
+module.exports.moveBladesetCode = function moveBladesetCode(
+  conversionMetadata,
+  bladesetDirName
+) {
   const {
     applicationName,
     applicationNamespaceRoot,
@@ -71,4 +76,4 @@ export function moveBladesetCode(conversionMetadata, bladesetDirName) {
   }
 
   return Promise.all([convertedBlades, createdNamespace]);
-}
+};

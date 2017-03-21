@@ -13,7 +13,7 @@ const { convertThirdpartyLibraryToPackage } = require(
   "./convert-thirdparty-lib"
 );
 
-export function convertLib(packageDir, packageName, createPackageJSON = true) {
+function convertLib(packageDir, packageName, createPackageJSON = true) {
   const packageContentsFileNames = readdirSync(packageDir);
   const hasSrcDirectory = packageContentsFileNames.includes("src") ||
     packageContentsFileNames.includes("src-es6");
@@ -42,9 +42,13 @@ export function convertLib(packageDir, packageName, createPackageJSON = true) {
   return Promise.resolve();
 }
 
+module.exports.convertLib = convertLib;
+
 // Move BRJS application's libs to packages directory and convert them to
 // something webpack can load.
-export function createPackagesFromLibs({ applicationLibsDir, packagesDir }) {
+module.exports.createPackagesFromLibs = function createPackagesFromLibs(
+  { applicationLibsDir, packagesDir }
+) {
   // Firstly create a packages directory with all the application's `libs`.
   copySync(applicationLibsDir, packagesDir);
 
@@ -57,4 +61,4 @@ export function createPackagesFromLibs({ applicationLibsDir, packagesDir }) {
     .map(({ packageDir, packageName }) => convertLib(packageDir, packageName));
 
   return Promise.all(convertLibsPromises);
-}
+};

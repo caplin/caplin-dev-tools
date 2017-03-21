@@ -114,7 +114,7 @@ function createApplication(
 }
 
 // Create application and application variants directories.
-export function createApplicationAndVariants(conversionMetadata) {
+module.exports.createApplicationAndVariants = conversionMetadata => {
   const {
     applicationName,
     conversionDataApplicationName,
@@ -131,4 +131,4 @@ export function createApplicationAndVariants(conversionMetadata) {
     defaultAspectDir,
     conversionDataApplicationName
   );
-}
+};

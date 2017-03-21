@@ -3,7 +3,9 @@ const { join } = require("path");
 const { readFileSync } = require("fs-extra");
 const template = require("lodash/string/template");
 
-export const templateDir = join(__dirname, "..", "templates");
+const templateDir = join(__dirname, "..", "templates");
+
+module.exports.templateDir = templateDir;
 
 const brPkgPackageJSONTemplate = readFileSync(
   join(templateDir, "_brpkg-package.json")
@@ -12,9 +14,9 @@ const thirdpartyPackageJSONTemplate = readFileSync(
   join(templateDir, "_thirdparty-package.json")
 );
 
-export const compiledBRLibPackageJSONTemplate = template(
+module.exports.compiledBRLibPackageJSONTemplate = template(
   brPkgPackageJSONTemplate
 );
-export const compiledThirdpartyJSONTemplate = template(
+module.exports.compiledThirdpartyJSONTemplate = template(
   thirdpartyPackageJSONTemplate
 );

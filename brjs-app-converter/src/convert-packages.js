@@ -10,7 +10,7 @@ const {
 const glob = require("glob");
 const rimraf = require("rimraf");
 
-export function deleteUnusedFiles(packagePath) {
+function deleteUnusedFiles(packagePath) {
   rimraf.sync(`${packagePath}/resources`);
   rimraf.sync(`${packagePath}/tests`);
   rimraf.sync(`${packagePath}/test-unit`);
@@ -27,6 +27,8 @@ export function deleteUnusedFiles(packagePath) {
   rimraf.sync(`${packagePath}/_resources-test-at/aliasDefinitions.xml`);
   rimraf.sync(`${packagePath}/**/src-test`);
 }
+
+module.exports.deleteUnusedFiles = deleteUnusedFiles;
 
 function fileExists(filePath) {
   try {
@@ -57,7 +59,7 @@ function isPackageInApplication(
 //   file path e.g. '/packages/'
 // moduleSource -> Import statement module e.g.
 //   'mobile-blotter/screens/orders/bulk_orders/BulkOrderStateManager'
-export function createRelativeModuleSource(
+function createRelativeModuleSource(
   importerPathName,
   moduleSourceToPathNamePrefix,
   moduleSource
@@ -86,6 +88,8 @@ export function createRelativeModuleSource(
   // i.e. 'child_directory/File' is converted to './child_directory/File'.
   return `./${relativeFilePathToImportedModule}`;
 }
+
+module.exports.createRelativeModuleSource = createRelativeModuleSource;
 
 function shouldModuleBeRelative(moduleSource, applicationPackages) {
   // The `moduleSource` is of the format `br-component/Component`.
@@ -331,7 +335,7 @@ function copyPackageSrcTestToNewLocations(
   });
 }
 
-export function copyPackageFoldersToNewLocations(packagePath) {
+function copyPackageFoldersToNewLocations(packagePath) {
   const packageFoldersThatMustBeMoved = [
     { src: `${packagePath}/resources`, dest: `${packagePath}/_resources` },
     {
@@ -374,6 +378,8 @@ export function copyPackageFoldersToNewLocations(packagePath) {
     .filter(({ src }) => fileExists(src))
     .forEach(({ src, dest }) => copySync(src, dest));
 }
+
+module.exports.copyPackageFoldersToNewLocations = copyPackageFoldersToNewLocations;
 
 // Every package except thirdparty ones.
 function findAllPackagesThatRequireConversion(packagesDir) {

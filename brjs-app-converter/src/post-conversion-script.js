@@ -8,7 +8,10 @@ const {
   deleteUnusedFiles
 } = require("./convert-packages");
 
-export function runPostConversionScript(conversionMetadata, convertPackages) {
+module.exports.runPostConversionScript = function runPostConversionScript(
+  conversionMetadata,
+  convertPackages
+) {
   let postConversionScript = () => {
     // The default post conversion script does nothing.
   };
@@ -32,4 +35,4 @@ export function runPostConversionScript(conversionMetadata, convertPackages) {
     deleteUnusedFiles,
     glob
   });
-}
+};

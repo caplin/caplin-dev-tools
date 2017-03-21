@@ -3,7 +3,7 @@ const { join } = require("path");
 const { copySync } = require("fs-extra");
 
 // Move the application aspect code into the `pkgs` directory.
-export function moveAspectCode(
+module.exports.moveAspectCode = function moveAspectCode(
   {
     applicationName,
     brjsApplicationDir,
@@ -17,4 +17,4 @@ export function moveAspectCode(
 
   copySync(join(brjsApplicationDir, aspectName), aspectPackageDir);
   packagesThatShouldBeLibs.push(packageName);
-}
+};
