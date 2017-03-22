@@ -38,6 +38,8 @@ const UGLIFY_OPTIONS = {
   }
 };
 
+module.exports.UGLIFY_OPTIONS = UGLIFY_OPTIONS;
+
 function configureBundleEntryPoint(webpackConfig, basePath) {
   // Certain apps can have variant entry points e.g. mobile.
   const entryFile = variant ? `index-${variant}.js` : "index.js";
