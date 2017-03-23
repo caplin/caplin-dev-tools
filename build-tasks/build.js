@@ -7,6 +7,7 @@ const {
 } = require("archiver");
 const {
   existsSync,
+  renameSync,
   mkdir
 } = require("fs");
 const {
@@ -30,13 +31,20 @@ const warDir = join(buildDir, "exported-wars");
 function createWAR(indexPage, version, webInfLocation, buildCallback, warName) {
   const variant = parseArgs(process.argv.slice(2)).variant;
   const indexFile = indexPage({ variant, version });
-  const staticFilesDir = join(process.cwd(), `${STATIC_DIR}`, "dev");
+  const staticDistDir = join(distDir, `${STATIC_DIR}`);
+  const staticFilesDir = join(process.cwd(), `${STATIC_DIR}`);
+  const versionedStaticDistDir = join(staticDistDir, "dev");
+
+  // Move the `static` directory into the root of the built app.
+  if (existsSync(staticFilesDir)) {
+    copySync(staticFilesDir, staticDistDir);
+  }
 
   // Move static files that are in the `dev` directory to one named after the
   // version as they can't be cached if the URL never changes (the version makes
   // the files unique and thus allows them to be safely cached).
-  if (existsSync(staticFilesDir)) {
-    copySync(staticFilesDir, join(distDir, `${STATIC_DIR}`, version));
+  if (existsSync(versionedStaticDistDir)) {
+    renameSync(versionedStaticDistDir, join(staticDistDir, version));
   }
 
   if (existsSync(webInfLocation)) {
