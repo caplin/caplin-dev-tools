@@ -1,11 +1,11 @@
 import chai from 'chai';
 import React from 'react';
 import {
-			renderIntoDocument,
-			findRenderedDOMComponentWithClass,
-			findRenderedDOMComponentWithTag,
-			Simulate
-		} from 'react-addons-test-utils';
+	renderIntoDocument,
+	findRenderedDOMComponentWithClass,
+	findRenderedDOMComponentWithTag,
+	Simulate
+} from 'react-addons-test-utils';
 import {{componentName}} from '../react-component';
 
 describe('Testing {{componentName}} Initial', () => {
