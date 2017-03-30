@@ -11,6 +11,7 @@ const { BASE_WEBPACK_CONFIG, STATIC_DIR } = require("./config");
 const configureDevtool = require("./devtool");
 const configureBundleEntryPoint = require("./entry");
 const configureI18nLoading = require("./i18n");
+const configureOutput = require("./output");
 const configureServiceLoader = require("./service");
 
 const {
@@ -34,10 +35,7 @@ module.exports.webpackConfigGenerator = function webpackConfigGenerator(
   // Object.create won't work as webpack only uses enumerable own properties.
   const webpackConfig = Object.assign({}, BASE_WEBPACK_CONFIG);
 
-  webpackConfig.output = {
-    filename: `bundle-${version}.js`,
-    path: join(basePath, "build", "dist", `${STATIC_DIR}`)
-  };
+  configureOutput(webpackConfig, version, basePath);
 
   // `AliasRegistry` requires `alias!$aliases-data` loaded with `alias-loader`.
   webpackConfig.resolve.alias["$aliases-data$"] = join(configDir, "aliases.js");
