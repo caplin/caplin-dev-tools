@@ -12,6 +12,7 @@ const parseArgs = require("minimist");
 const webpack = require("webpack");
 
 const configureBabelLoader = require("./babel");
+const configureDevtool = require("./devtool");
 const configureBundleEntryPoint = require("./entry");
 const configureI18nLoading = require("./i18n");
 const configureServiceLoader = require("./service");
@@ -83,12 +84,6 @@ const UGLIFY_OPTIONS = {
 
 module.exports.UGLIFY_OPTIONS = UGLIFY_OPTIONS;
 
-function configureDevtool(webpackConfig) {
-  if (sourceMaps) {
-    webpackConfig.devtool = "inline-source-map";
-  }
-}
-
 function configureBuildDependentConfig(webpackConfig, version, uglifyOptions) {
   if (isBuild) {
     webpackConfig.output.publicPath = `${STATIC_DIR}/`;
@@ -149,7 +144,7 @@ module.exports.webpackConfigGenerator = function webpackConfigGenerator(
   configureBabelLoader(webpackConfig, basePath);
   configureI18nLoading(webpackConfig, i18nFileName, isTest);
   configureServiceLoader(webpackConfig, isTest);
-  configureDevtool(webpackConfig);
+  configureDevtool(webpackConfig, sourceMaps);
   configureBuildDependentConfig(webpackConfig, version, uglifyOptions);
 
   return webpackConfig;
