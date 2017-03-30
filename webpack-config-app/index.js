@@ -26,6 +26,51 @@ const lifeCycleEvent = process.env.npm_lifecycle_event || "";
 const isBuild = lifeCycleEvent === "build";
 const isTest = basename(process.argv[1]) === "tests.js" ||
   lifeCycleEvent.startsWith("test");
+const BASE_WEBPACK_CONFIG = {
+  module: {
+    loaders: [
+      {
+        test: /\.html$/,
+        loaders: ["@caplin/html-loader"]
+      },
+      {
+        test: /\.(gif|jpg|png|svg|woff|woff2)$/,
+        loader: "file-loader"
+      },
+      {
+        test: /\.js$/,
+        loader: "@caplin/patch-loader"
+      },
+      {
+        test: /\.scss$/,
+        loaders: ["style-loader", "css-loader", "sass-loader"]
+      },
+      {
+        test: /\.css$/,
+        loaders: ["style-loader", "css-loader"]
+      },
+      {
+        test: /\.xml$/,
+        loader: "@caplin/xml-loader"
+      }
+    ]
+  },
+  patchLoader: appendModulePatch(),
+  resolve: {
+    alias: {
+      "ct-core/BRJSClassUtility$": join(__dirname, "null.js"),
+      "br/dynamicRefRequire$": join(__dirname, "null.js")
+    },
+    extensions: ["", ".js", ".jsx"]
+  },
+  resolveLoader: {
+    alias: {
+      alias: "@caplin/alias-loader",
+      "app-meta": "@caplin/app-meta-loader"
+    }
+  },
+  plugins: []
+};
 const STATIC_DIR = "static";
 const UGLIFY_OPTIONS = {
   exclude: /i18n(.*)\.js/,
@@ -225,69 +270,33 @@ module.exports.webpackConfigGenerator = function webpackConfigGenerator(
     uglifyOptions = UGLIFY_OPTIONS
   }
 ) {
-  const webpackConfig = {
-    output: {
-      filename: `bundle-${version}.js`,
-      path: join(basePath, "build", "dist", `${STATIC_DIR}`)
-    },
-    module: {
-      loaders: [
-        {
-          test: /\.html$/,
-          loaders: ["@caplin/html-loader"]
-        },
-        {
-          test: /\.(gif|jpg|png|svg|woff|woff2)$/,
-          loader: "file-loader"
-        },
-        {
-          test: /\.js$/,
-          loader: "@caplin/patch-loader"
-        },
-        {
-          test: /\.scss$/,
-          loaders: ["style-loader", "css-loader", "sass-loader"]
-        },
-        {
-          test: /\.css$/,
-          loaders: ["style-loader", "css-loader"]
-        },
-        {
-          test: /\.xml$/,
-          loader: "@caplin/xml-loader"
-        }
-      ]
-    },
-    patchLoader: appendModulePatch(),
-    resolve: {
-      alias: {
-        // `alias!$aliases-data` required in `AliasRegistry`, loaded with
-        // `alias-loader`.
-        "$aliases-data$": join(basePath, "src", "config", "aliases.js"),
-        // `app-meta!$app-metadata` required in `BRAppMetaService`, loaded with
-        // `app-meta-loader`.
-        "$app-metadata$": join(basePath, "src", "config", "metadata.js"),
-        "ct-core/BRJSClassUtility$": join(__dirname, "null.js"),
-        "br/dynamicRefRequire$": join(__dirname, "null.js")
-      },
-      extensions: ["", ".js", ".jsx"],
-      // Module requires are resolved relative to the resource that is requiring
-      // them. When symlinking during development modules will not be resolved
-      // unless we specify their parent directory.
-      root: join(basePath, "node_modules")
-    },
-    resolveLoader: {
-      alias: {
-        alias: "@caplin/alias-loader",
-        "app-meta": "@caplin/app-meta-loader"
-      },
-      // Loaders are resolved relative to the resource they are applied to. So
-      // when symlinking packages during development loaders will not be
-      // resolved unless we specify the directory that contains the loaders.
-      root: join(basePath, "node_modules")
-    },
-    plugins: []
+  const configDir = join(basePath, "src", "config");
+  // Object.create won't work as webpack only uses enumerable own properties.
+  const webpackConfig = Object.assign({}, BASE_WEBPACK_CONFIG);
+
+  webpackConfig.output = {
+    filename: `bundle-${version}.js`,
+    path: join(basePath, "build", "dist", `${STATIC_DIR}`)
   };
+
+  // `AliasRegistry` requires `alias!$aliases-data` loaded with `alias-loader`.
+  webpackConfig.resolve.alias["$aliases-data$"] = join(configDir, "aliases.js");
+  // `BRAppMetaService` requires `app-meta!$app-metadata` loaded with
+  // `app-meta-loader`.
+  webpackConfig.resolve.alias["$app-metadata$"] = join(
+    configDir,
+    "metadata.js"
+  );
+
+  // Module requires are resolved relative to the resource that is requiring
+  // them. When symlinking during development modules will not be resolved
+  // unless we specify their parent directory.
+  webpackConfig.resolve.root = join(basePath, "node_modules");
+
+  // Loaders are resolved relative to the resource they are applied to. So
+  // when symlinking packages during development loaders will not be
+  // resolved unless we specify the directory that contains the loaders.
+  webpackConfig.resolveLoader.root = join(basePath, "node_modules");
 
   configureBundleEntryPoint(webpackConfig, basePath);
   configureBabelLoader(webpackConfig, basePath);
