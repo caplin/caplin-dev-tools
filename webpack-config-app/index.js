@@ -3,13 +3,11 @@ const {
   join
 } = require("path");
 
-const {
-  appendModulePatch
-} = require("@caplin/patch-loader/patchesStore");
 const parseArgs = require("minimist");
 
 const configureBabelLoader = require("./babel");
 const configureBuildDependentConfig = require("./build");
+const { BASE_WEBPACK_CONFIG, STATIC_DIR } = require("./config");
 const configureDevtool = require("./devtool");
 const configureBundleEntryPoint = require("./entry");
 const configureI18nLoading = require("./i18n");
@@ -23,71 +21,13 @@ const lifeCycleEvent = process.env.npm_lifecycle_event || "";
 const isBuild = lifeCycleEvent === "build";
 const isTest = basename(process.argv[1]) === "tests.js" ||
   lifeCycleEvent.startsWith("test");
-const BASE_WEBPACK_CONFIG = {
-  module: {
-    loaders: [
-      {
-        test: /\.html$/,
-        loaders: ["@caplin/html-loader"]
-      },
-      {
-        test: /\.(gif|jpg|png|svg|woff|woff2)$/,
-        loader: "file-loader"
-      },
-      {
-        test: /\.js$/,
-        loader: "@caplin/patch-loader"
-      },
-      {
-        test: /\.scss$/,
-        loaders: ["style-loader", "css-loader", "sass-loader"]
-      },
-      {
-        test: /\.css$/,
-        loaders: ["style-loader", "css-loader"]
-      },
-      {
-        test: /\.xml$/,
-        loader: "@caplin/xml-loader"
-      }
-    ]
-  },
-  patchLoader: appendModulePatch(),
-  resolve: {
-    alias: {
-      "ct-core/BRJSClassUtility$": join(__dirname, "null.js"),
-      "br/dynamicRefRequire$": join(__dirname, "null.js")
-    },
-    extensions: ["", ".js", ".jsx"]
-  },
-  resolveLoader: {
-    alias: {
-      alias: "@caplin/alias-loader",
-      "app-meta": "@caplin/app-meta-loader"
-    }
-  },
-  plugins: []
-};
-const STATIC_DIR = "static";
-const UGLIFY_OPTIONS = {
-  exclude: /i18n(.*)\.js/,
-  output: {
-    comments: false
-  },
-  compress: {
-    warnings: false,
-    screw_ie8: true
-  }
-};
-
-module.exports.UGLIFY_OPTIONS = UGLIFY_OPTIONS;
 
 module.exports.webpackConfigGenerator = function webpackConfigGenerator(
   {
     basePath,
     version = "dev",
     i18nFileName = `i18n-${version}.js`,
-    uglifyOptions = UGLIFY_OPTIONS
+    uglifyOptions
   }
 ) {
   const configDir = join(basePath, "src", "config");
@@ -123,13 +63,7 @@ module.exports.webpackConfigGenerator = function webpackConfigGenerator(
   configureI18nLoading(webpackConfig, i18nFileName, isTest);
   configureServiceLoader(webpackConfig, isTest);
   configureDevtool(webpackConfig, sourceMaps);
-  configureBuildDependentConfig(
-    webpackConfig,
-    version,
-    uglifyOptions,
-    isBuild,
-    STATIC_DIR
-  );
+  configureBuildDependentConfig(webpackConfig, version, uglifyOptions, isBuild);
 
   return webpackConfig;
 };

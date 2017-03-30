@@ -2,12 +2,13 @@
 
 const webpack = require("webpack");
 
+const { STATIC_DIR, UGLIFY_OPTIONS } = require("./config");
+
 module.exports = function configureBuildDependentConfig(
   webpackConfig,
   version,
-  uglifyOptions,
-  isBuild,
-  STATIC_DIR
+  uglifyOptions = UGLIFY_OPTIONS,
+  isBuild
 ) {
   if (isBuild) {
     webpackConfig.output.publicPath = `${STATIC_DIR}/`;
