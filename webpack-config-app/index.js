@@ -5,9 +5,10 @@ const {
 
 const parseArgs = require("minimist");
 
+const configureAliases = require("./aliases");
 const configureBabelLoader = require("./babel");
 const configureBuildDependentConfig = require("./build");
-const { BASE_WEBPACK_CONFIG, STATIC_DIR } = require("./config");
+const { BASE_WEBPACK_CONFIG } = require("./config");
 const configureDevtool = require("./devtool");
 const configureBundleEntryPoint = require("./entry");
 const configureI18nLoading = require("./i18n");
@@ -31,20 +32,11 @@ module.exports.webpackConfigGenerator = function webpackConfigGenerator(
     uglifyOptions
   }
 ) {
-  const configDir = join(basePath, "src", "config");
   // Object.create won't work as webpack only uses enumerable own properties.
   const webpackConfig = Object.assign({}, BASE_WEBPACK_CONFIG);
 
   configureOutput(webpackConfig, version, basePath);
-
-  // `AliasRegistry` requires `alias!$aliases-data` loaded with `alias-loader`.
-  webpackConfig.resolve.alias["$aliases-data$"] = join(configDir, "aliases.js");
-  // `BRAppMetaService` requires `app-meta!$app-metadata` loaded with
-  // `app-meta-loader`.
-  webpackConfig.resolve.alias["$app-metadata$"] = join(
-    configDir,
-    "metadata.js"
-  );
+  configureAliases(webpackConfig, basePath);
 
   // Module requires are resolved relative to the resource that is requiring
   // them. When symlinking during development modules will not be resolved
