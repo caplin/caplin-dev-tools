@@ -1,7 +1,4 @@
-const {
-  basename,
-  join
-} = require("path");
+const { basename } = require("path");
 
 const parseArgs = require("minimist");
 
@@ -13,16 +10,14 @@ const configureDevtool = require("./devtool");
 const configureBundleEntryPoint = require("./entry");
 const configureI18nLoading = require("./i18n");
 const configureOutput = require("./output");
+const configureResolve = require("./resolve");
 const configureServiceLoader = require("./service");
 
-const {
-  sourceMaps,
-  variant
-} = parseArgs(process.argv.slice(2));
+const { sourceMaps, variant } = parseArgs(process.argv.slice(2));
 const lifeCycleEvent = process.env.npm_lifecycle_event || "";
 const isBuild = lifeCycleEvent === "build";
-const isTest = basename(process.argv[1]) === "tests.js" ||
-  lifeCycleEvent.startsWith("test");
+const testsScriptRunning = basename(process.argv[1]) === "tests.js";
+const isTest = testsScriptRunning || lifeCycleEvent.startsWith("test");
 
 module.exports.webpackConfigGenerator = function webpackConfigGenerator(
   {
@@ -37,17 +32,7 @@ module.exports.webpackConfigGenerator = function webpackConfigGenerator(
 
   configureOutput(webpackConfig, version, basePath);
   configureAliases(webpackConfig, basePath);
-
-  // Module requires are resolved relative to the resource that is requiring
-  // them. When symlinking during development modules will not be resolved
-  // unless we specify their parent directory.
-  webpackConfig.resolve.root = join(basePath, "node_modules");
-
-  // Loaders are resolved relative to the resource they are applied to. So
-  // when symlinking packages during development loaders will not be
-  // resolved unless we specify the directory that contains the loaders.
-  webpackConfig.resolveLoader.root = join(basePath, "node_modules");
-
+  configureResolve(webpackConfig, basePath);
   configureBundleEntryPoint(variant, webpackConfig, basePath);
   configureBabelLoader(webpackConfig, basePath);
   configureI18nLoading(webpackConfig, i18nFileName, isTest);
