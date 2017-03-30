@@ -18,6 +18,8 @@ const ExtractTextPlugin = require("extract-text-webpack-plugin");
 const parseArgs = require("minimist");
 const webpack = require("webpack");
 
+const configureBundleEntryPoint = require("./entry");
+
 const {
   sourceMaps,
   variant
@@ -84,14 +86,6 @@ const UGLIFY_OPTIONS = {
 };
 
 module.exports.UGLIFY_OPTIONS = UGLIFY_OPTIONS;
-
-function configureBundleEntryPoint(webpackConfig, basePath) {
-  // Certain apps can have variant entry points e.g. mobile.
-  const entryFile = variant ? `index-${variant}.js` : "index.js";
-  const appEntryPoint = join(basePath, "src", entryFile);
-
-  webpackConfig.entry = appEntryPoint;
-}
 
 function isPackageToBeExcludedFromBabelCompilation(packagesDir, packageDir) {
   // The new HTML/XML services are written in ES2015.
@@ -298,7 +292,7 @@ module.exports.webpackConfigGenerator = function webpackConfigGenerator(
   // resolved unless we specify the directory that contains the loaders.
   webpackConfig.resolveLoader.root = join(basePath, "node_modules");
 
-  configureBundleEntryPoint(webpackConfig, basePath);
+  configureBundleEntryPoint(variant, webpackConfig, basePath);
   configureBabelLoader(webpackConfig, basePath);
   configureI18nLoading(webpackConfig, i18nFileName);
   configureServiceLoader(webpackConfig);
