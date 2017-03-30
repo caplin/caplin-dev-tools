@@ -1,5 +1,3 @@
-/* eslint no-param-reassign: "off" */
-
 const {
   basename,
   join
@@ -9,9 +7,9 @@ const {
   appendModulePatch
 } = require("@caplin/patch-loader/patchesStore");
 const parseArgs = require("minimist");
-const webpack = require("webpack");
 
 const configureBabelLoader = require("./babel");
+const configureBuildDependentConfig = require("./build");
 const configureDevtool = require("./devtool");
 const configureBundleEntryPoint = require("./entry");
 const configureI18nLoading = require("./i18n");
@@ -84,26 +82,6 @@ const UGLIFY_OPTIONS = {
 
 module.exports.UGLIFY_OPTIONS = UGLIFY_OPTIONS;
 
-function configureBuildDependentConfig(webpackConfig, version, uglifyOptions) {
-  if (isBuild) {
-    webpackConfig.output.publicPath = `${STATIC_DIR}/`;
-
-    webpackConfig.plugins.push(
-      new webpack.DefinePlugin({
-        "process.env": {
-          VERSION: JSON.stringify(version)
-        }
-      })
-    );
-
-    webpackConfig.plugins.push(
-      new webpack.optimize.UglifyJsPlugin(uglifyOptions)
-    );
-  } else {
-    webpackConfig.output.publicPath = `/${STATIC_DIR}/`;
-  }
-}
-
 module.exports.webpackConfigGenerator = function webpackConfigGenerator(
   {
     basePath,
@@ -145,7 +123,13 @@ module.exports.webpackConfigGenerator = function webpackConfigGenerator(
   configureI18nLoading(webpackConfig, i18nFileName, isTest);
   configureServiceLoader(webpackConfig, isTest);
   configureDevtool(webpackConfig, sourceMaps);
-  configureBuildDependentConfig(webpackConfig, version, uglifyOptions);
+  configureBuildDependentConfig(
+    webpackConfig,
+    version,
+    uglifyOptions,
+    isBuild,
+    STATIC_DIR
+  );
 
   return webpackConfig;
 };
