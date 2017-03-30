@@ -8,12 +8,12 @@ const {
 const {
   appendModulePatch
 } = require("@caplin/patch-loader/patchesStore");
-const ExtractTextPlugin = require("extract-text-webpack-plugin");
 const parseArgs = require("minimist");
 const webpack = require("webpack");
 
 const configureBabelLoader = require("./babel");
 const configureBundleEntryPoint = require("./entry");
+const configureI18nLoading = require("./i18n");
 
 const {
   sourceMaps,
@@ -81,28 +81,6 @@ const UGLIFY_OPTIONS = {
 };
 
 module.exports.UGLIFY_OPTIONS = UGLIFY_OPTIONS;
-
-function configureI18nLoading(webpackConfig, i18nFileName) {
-  const i18nLoaderConfig = {
-    test: /\.properties$/
-  };
-
-  if (isTest) {
-    i18nLoaderConfig.loader = "@caplin/i18n-loader/inline";
-  } else {
-    const i18nExtractorPlugin = new ExtractTextPlugin(i18nFileName, {
-      allChunks: true
-    });
-
-    i18nLoaderConfig.loader = i18nExtractorPlugin.extract([
-      "raw-loader",
-      "@caplin/i18n-loader"
-    ]);
-    webpackConfig.plugins.push(i18nExtractorPlugin);
-  }
-
-  webpackConfig.module.loaders.push(i18nLoaderConfig);
-}
 
 function configureServiceLoader(webpackConfig) {
   const loaderAliases = webpackConfig.resolveLoader.alias;
@@ -178,7 +156,7 @@ module.exports.webpackConfigGenerator = function webpackConfigGenerator(
 
   configureBundleEntryPoint(variant, webpackConfig, basePath);
   configureBabelLoader(webpackConfig, basePath);
-  configureI18nLoading(webpackConfig, i18nFileName);
+  configureI18nLoading(webpackConfig, i18nFileName, isTest);
   configureServiceLoader(webpackConfig);
   configureDevtool(webpackConfig);
   configureBuildDependentConfig(webpackConfig, version, uglifyOptions);

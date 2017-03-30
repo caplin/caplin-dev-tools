@@ -1,6 +1,6 @@
 {
   "name": "@caplin/webpack-config-app",
-  "version": "2.2.3",
+  "version": "2.2.4",
   "description": "webpack config common to Caplin applications",
   "main": "index.js",
   "author": "",
