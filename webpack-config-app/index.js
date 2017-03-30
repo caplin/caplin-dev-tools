@@ -14,6 +14,7 @@ const webpack = require("webpack");
 const configureBabelLoader = require("./babel");
 const configureBundleEntryPoint = require("./entry");
 const configureI18nLoading = require("./i18n");
+const configureServiceLoader = require("./service");
 
 const {
   sourceMaps,
@@ -82,16 +83,6 @@ const UGLIFY_OPTIONS = {
 
 module.exports.UGLIFY_OPTIONS = UGLIFY_OPTIONS;
 
-function configureServiceLoader(webpackConfig) {
-  const loaderAliases = webpackConfig.resolveLoader.alias;
-
-  if (isTest) {
-    loaderAliases.service = "@caplin/service-loader/cache-deletion-loader";
-  } else {
-    loaderAliases.service = "@caplin/service-loader";
-  }
-}
-
 function configureDevtool(webpackConfig) {
   if (sourceMaps) {
     webpackConfig.devtool = "inline-source-map";
@@ -157,7 +148,7 @@ module.exports.webpackConfigGenerator = function webpackConfigGenerator(
   configureBundleEntryPoint(variant, webpackConfig, basePath);
   configureBabelLoader(webpackConfig, basePath);
   configureI18nLoading(webpackConfig, i18nFileName, isTest);
-  configureServiceLoader(webpackConfig);
+  configureServiceLoader(webpackConfig, isTest);
   configureDevtool(webpackConfig);
   configureBuildDependentConfig(webpackConfig, version, uglifyOptions);
 
