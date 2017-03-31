@@ -46,7 +46,8 @@ module.exports.BASE_WEBPACK_CONFIG = {
   resolveLoader: {
     alias: {
       alias: "@caplin/alias-loader",
-      "app-meta": "@caplin/app-meta-loader"
+      "app-meta": "@caplin/app-meta-loader",
+      service: "@caplin/service-loader"
     }
   },
   plugins: []
