@@ -24,7 +24,5 @@ module.exports = function configureBuildDependentConfig(
     webpackConfig.plugins.push(
       new webpack.optimize.UglifyJsPlugin(uglifyOptions)
     );
-  } else {
-    webpackConfig.output.publicPath = `/${STATIC_DIR}/`;
   }
 };

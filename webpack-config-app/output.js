@@ -9,6 +9,7 @@ const { STATIC_DIR } = require("./config");
 module.exports = function configureOutput(webpackConfig, version, basePath) {
   webpackConfig.output = {
     filename: `bundle-${version}.js`,
-    path: join(basePath, "build", "dist", `${STATIC_DIR}`)
+    path: join(basePath, "build", "dist", `${STATIC_DIR}`),
+    publicPath: `/${STATIC_DIR}/`
   };
 };
