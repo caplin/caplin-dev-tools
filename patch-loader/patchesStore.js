@@ -23,6 +23,19 @@ const pathPrefix = new RegExp(
   `(?:${esc(applicationNodeModulesPath)}|${esc(packagesPath)})${esc(sep)}`
 );
 
+function appendPatchToPatchedModules(loaderAPI, moduleSource) {
+  // Remove the absolute path prefix to the application's `node_modules` or
+  // `packages` from the `resourcePath` to calculate the `importedModule`.
+  const [, importedModule] = loaderAPI.resourcePath.split(pathPrefix);
+  const patchEntry = patches.get(importedModule);
+
+  if (patchEntry) {
+    return moduleSource + patchEntry;
+  }
+
+  return moduleSource;
+}
+
 module.exports.appendModulePatch = function appendModulePatch(options) {
   const patchesOptions = options || GLOB_OPTIONS;
   const patchFiles = sync("**/*.js", patchesOptions);
@@ -44,16 +57,3 @@ module.exports.appendModulePatch = function appendModulePatch(options) {
 
   return appendPatchToPatchedModules;
 };
-
-function appendPatchToPatchedModules(loaderAPI, moduleSource) {
-  // Remove the absolute path prefix to the application's `node_modules` or
-  // `packages` from the `resourcePath` to calculate the `importedModule`.
-  const [, importedModule] = loaderAPI.resourcePath.split(pathPrefix);
-  const patchEntry = patches.get(importedModule);
-
-  if (patchEntry) {
-    return moduleSource + patchEntry;
-  }
-
-  return moduleSource;
-}
