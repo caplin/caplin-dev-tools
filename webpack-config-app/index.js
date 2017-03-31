@@ -30,12 +30,12 @@ module.exports.webpackConfigGenerator = function webpackConfigGenerator(
   // Object.create won't work as webpack only uses enumerable own properties.
   const webpackConfig = Object.assign({}, BASE_WEBPACK_CONFIG);
 
-  configureOutput(webpackConfig, version, basePath);
-  configureAliases(webpackConfig, basePath);
-  configureResolve(webpackConfig, basePath);
   configureBundleEntryPoint(variant, webpackConfig, basePath);
+  configureOutput(webpackConfig, version, basePath);
   configureBabelLoader(webpackConfig, basePath);
   configureI18nLoading(webpackConfig, i18nFileName, isTest);
+  configureAliases(webpackConfig, basePath);
+  configureResolve(webpackConfig, basePath);
   configureServiceLoader(webpackConfig, isTest);
   configureDevtool(webpackConfig, sourceMaps);
   configureBuildDependentConfig(webpackConfig, version, uglifyOptions, isBuild);
