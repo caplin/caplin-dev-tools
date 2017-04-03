@@ -84,7 +84,7 @@ function createBabelLoaderExcludeList(basePath) {
   return babelLoaderExclude;
 }
 
-function createBabelLoaderQuery(basePath) {
+function createBabelLoaderOptions(basePath) {
   const babelLoaderQuery = {
     cacheDirectory: true
   };
@@ -109,12 +109,12 @@ function createBabelLoaderQuery(basePath) {
 }
 
 module.exports = function configureBabelLoader(webpackConfig, basePath) {
-  const babelLoaderConfig = {
+  const babelModulesRule = {
     test: /\.jsx?$/,
     loader: "babel-loader",
     exclude: createBabelLoaderExcludeList(basePath),
-    query: createBabelLoaderQuery(basePath)
+    options: createBabelLoaderOptions(basePath)
   };
 
-  webpackConfig.module.loaders.push(babelLoaderConfig);
+  webpackConfig.module.rules.push(babelModulesRule);
 };

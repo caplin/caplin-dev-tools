@@ -1,6 +1,7 @@
 /* eslint no-param-reassign: "off" */
 
-const webpack = require("webpack");
+const UglifyJSPlugin = require("uglifyjs-webpack-plugin");
+const { DefinePlugin } = require("webpack");
 
 const { STATIC_DIR, UGLIFY_OPTIONS } = require("./config");
 
@@ -11,18 +12,14 @@ module.exports = function configureBuildDependentConfig(
   isBuild
 ) {
   if (isBuild) {
+    const definitions = {
+      "process.env": {
+        VERSION: JSON.stringify(version)
+      }
+    };
+
     webpackConfig.output.publicPath = `${STATIC_DIR}/`;
-
-    webpackConfig.plugins.push(
-      new webpack.DefinePlugin({
-        "process.env": {
-          VERSION: JSON.stringify(version)
-        }
-      })
-    );
-
-    webpackConfig.plugins.push(
-      new webpack.optimize.UglifyJsPlugin(uglifyOptions)
-    );
+    webpackConfig.plugins.push(new DefinePlugin(definitions));
+    webpackConfig.plugins.push(new UglifyJSPlugin(uglifyOptions));
   }
 };

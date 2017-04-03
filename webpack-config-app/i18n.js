@@ -5,23 +5,25 @@ module.exports = function configureI18nLoading(
   i18nFileName,
   isTest
 ) {
-  const i18nLoaderConfig = {
+  const i18nModulesRule = {
     test: /\.properties$/
   };
 
   if (isTest) {
-    i18nLoaderConfig.loader = "@caplin/i18n-loader/inline";
+    i18nModulesRule.loader = "@caplin/i18n-loader/inline";
   } else {
-    const i18nExtractorPlugin = new ExtractTextPlugin(i18nFileName, {
-      allChunks: true
+    const i18nExtractTextPlugin = new ExtractTextPlugin({
+      allChunks: true,
+      filename: i18nFileName
     });
-
-    i18nLoaderConfig.loader = i18nExtractorPlugin.extract([
+    const i18nExtractingLoader = i18nExtractTextPlugin.extract([
       "raw-loader",
       "@caplin/i18n-loader"
     ]);
-    webpackConfig.plugins.push(i18nExtractorPlugin);
+
+    i18nModulesRule.use = i18nExtractingLoader;
+    webpackConfig.plugins.push(i18nExtractTextPlugin);
   }
 
-  webpackConfig.module.loaders.push(i18nLoaderConfig);
+  webpackConfig.module.rules.push(i18nModulesRule);
 };

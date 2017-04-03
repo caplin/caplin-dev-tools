@@ -1,6 +1,6 @@
 {
   "name": "@caplin/express-dev-server",
-  "version": "1.10.0",
+  "version": "2.0.0",
   "description": "Express.js server modules for developing Caplin applications",
   "license": "ISC",
   "dependencies": {
@@ -8,7 +8,7 @@
     "express": "^4.13.4",
     "express-session": "^1.14.2",
     "http-proxy": "^1.14.0",
-    "webpack": "^1.13.0",
+    "webpack": "^2.3.2",
     "webpack-dev-middleware": "^1.6.1"
   }
 }

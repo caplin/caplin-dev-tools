@@ -8,10 +8,10 @@ const {
 
 module.exports.BASE_WEBPACK_CONFIG = {
   module: {
-    loaders: [
+    rules: [
       {
         test: /\.html$/,
-        loaders: ["@caplin/html-loader"]
+        loader: "@caplin/html-loader"
       },
       {
         test: /\.(gif|jpg|png|svg|woff|woff2)$/,
@@ -19,15 +19,18 @@ module.exports.BASE_WEBPACK_CONFIG = {
       },
       {
         test: /\.js$/,
-        loader: "@caplin/patch-loader"
+        loader: "@caplin/patch-loader",
+        options: {
+          appendModulePatch: appendModulePatch()
+        }
       },
       {
         test: /\.scss$/,
-        loaders: ["style-loader", "css-loader", "sass-loader"]
+        use: ["style-loader", "css-loader", "sass-loader"]
       },
       {
         test: /\.css$/,
-        loaders: ["style-loader", "css-loader"]
+        use: ["style-loader", "css-loader"]
       },
       {
         test: /\.xml$/,
@@ -35,22 +38,23 @@ module.exports.BASE_WEBPACK_CONFIG = {
       }
     ]
   },
-  patchLoader: appendModulePatch(),
   resolve: {
     alias: {
+      // We can't dynamically require using the module names in webpack, module
+      // names are converted to IDs by webpack.
       "ct-core/BRJSClassUtility$": join(__dirname, "null.js"),
       "br/dynamicRefRequire$": join(__dirname, "null.js")
     },
-    extensions: ["", ".js", ".jsx"]
+    extensions: [".js", ".json", ".jsx"]
   },
+  plugins: [],
   resolveLoader: {
     alias: {
       alias: "@caplin/alias-loader",
       "app-meta": "@caplin/app-meta-loader",
       service: "@caplin/service-loader"
     }
-  },
-  plugins: []
+  }
 };
 
 module.exports.STATIC_DIR = "static";

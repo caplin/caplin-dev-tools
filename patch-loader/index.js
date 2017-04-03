@@ -1,5 +1,7 @@
-module.exports = function patchLoader(moduleSource) {
-  this.cacheable();
+const loaderUtils = require("loader-utils");
 
-  return this.options.patchLoader(this, moduleSource);
+module.exports = function patchLoader(moduleSource) {
+  const options = loaderUtils.getOptions(this);
+
+  return options.appendModulePatch(this, moduleSource);
 };

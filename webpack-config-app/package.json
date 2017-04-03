@@ -1,6 +1,6 @@
 {
   "name": "@caplin/webpack-config-app",
-  "version": "2.2.17",
+  "version": "3.0.0",
   "description": "webpack config common to Caplin applications",
   "main": "index.js",
   "author": "",
@@ -10,19 +10,21 @@
     "@caplin/app-meta-loader": "^1.0.0",
     "@caplin/html-loader": "^1.0.2",
     "@caplin/i18n-loader": "^1.0.0",
-    "@caplin/patch-loader": "^2.0.2",
+    "@caplin/patch-loader": "^3.0.0",
     "@caplin/service-loader": "^1.0.0",
     "@caplin/xml-loader": "^2.0.0",
     "babel-core": "^6.23.1",
-    "babel-loader": "^6.2.4",
+    "babel-loader": "^7.0.0-beta.1",
     "css-loader": "^0.28.0",
-    "extract-text-webpack-plugin": "^1.0.1",
+    "extract-text-webpack-plugin": "^2.1.0",
     "file-loader": "^0.10.0",
     "minimist": "^1.2.0",
     "node-sass": "^3.6.0",
     "raw-loader": "^0.5.1",
     "sass-loader": "^3.1.2",
     "style-loader": "^0.16.1",
-    "webpack": "^1.13.0"
+    "uglify-js": "^2.8.20",
+    "uglifyjs-webpack-plugin": "^0.4.0",
+    "webpack": "^2.3.2"
   }
 }
