@@ -50,9 +50,9 @@ module.exports.BASE_WEBPACK_CONFIG = {
   plugins: [],
   resolveLoader: {
     alias: {
-      alias: "@caplin/alias-loader",
-      "app-meta": "@caplin/app-meta-loader",
-      service: "@caplin/service-loader"
+      alias: require.resolve("@caplin/alias-loader"),
+      "app-meta": require.resolve("@caplin/app-meta-loader"),
+      service: require.resolve("@caplin/service-loader")
     }
   }
 };
