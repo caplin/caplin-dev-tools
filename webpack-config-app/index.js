@@ -10,7 +10,6 @@ const configureDevtool = require("./devtool");
 const configureBundleEntryPoint = require("./entry");
 const configureI18nLoading = require("./i18n");
 const configureOutput = require("./output");
-const configureResolve = require("./resolve");
 const configureServiceLoader = require("./service");
 
 const { sourceMaps, variant } = parseArgs(process.argv.slice(2));
@@ -35,7 +34,6 @@ module.exports.webpackConfigGenerator = function webpackConfigGenerator(
   configureBabelLoader(webpackConfig, basePath);
   configureI18nLoading(webpackConfig, i18nFileName, isTest);
   configureAliases(webpackConfig, basePath);
-  configureResolve(webpackConfig, basePath);
   configureServiceLoader(webpackConfig, isTest);
   configureDevtool(webpackConfig, sourceMaps);
   configureBuildDependentConfig(webpackConfig, version, uglifyOptions, isBuild);
