@@ -11,7 +11,9 @@ module.exports = (application, webpackConfig) => {
     stats: {
       assets: false,
       colors: true,
-      chunks: false
+      chunks: false,
+      // Turn console output from the extract text plugin off.
+      children: false
     }
   };
   const devMiddleware = webpackDevMiddleware(compiler, devMiddlewareOptions);
