@@ -36,9 +36,11 @@ function dirPrefixRemover(prefix) {
 }
 
 function isRelativePackage() {
-  return (fileToRequire, jsFileDir) =>
+  return (
+    fileToRequire,
+    jsFileDir
     // Are we requiring a properties file from the same package.
-    fileToRequire.split("/")[1] === jsFileDir.split("/")[1];
+  ) => fileToRequire.split("/")[1] === jsFileDir.split("/")[1];
 }
 
 function isRelativeApp(applicationName) {
@@ -172,9 +174,24 @@ function addReferencedTemplates(
   discoveredTemplateIDs,
   templateIDsToFileInfo
 ) {
-  const referencedTemplateIDs = templateIDsToFileInfo.get(
-    templateID
-  ).referencedTemplateIDs;
+  const templateFileInfo = templateIDsToFileInfo.get(templateID);
+  // The template `caplinx.motf.orderticket.message-overlay` is referenced in
+  // `cps-motf` via `MotfConfirmationBootstrap` but that's wrong, you shouldn't
+  // have library templates directly depend on application template IDs. Given
+  // we add package to package requires first there will not be any application
+  // template knowledge in the converter so use an empty Array.
+  if (templateFileInfo === undefined) {
+    console.log(
+      `
+    Couldn't fine template file info for ${templateID}.
+    It might be an application level template incorrectly referenced at the
+    package level.
+    `
+    );
+  }
+  const referencedTemplateIDs = templateFileInfo
+    ? templateFileInfo.referencedTemplateIDs
+    : [];
 
   referencedTemplateIDs.forEach(referencedTemplateID => {
     if (discoveredTemplateIDs.has(referencedTemplateID) === false) {
@@ -241,7 +258,16 @@ function discoverHTMLFilePaths(jsFilePath, templateIDsToFileInfo) {
   });
 
   discoveredTemplateIDs.forEach(templateID => {
-    discoveredHTMLFilePaths.add(templateIDsToFileInfo.get(templateID).filePath);
+    const templateFileInfo = templateIDsToFileInfo.get(templateID);
+
+    // The template `caplinx.motf.orderticket.message-overlay` is referenced in
+    // `cps-motf` via `MotfConfirmationBootstrap` but that's wrong, you
+    // shouldn't have library templates directly depend on application template
+    // IDs. Given we add package to package requires first there will not be any
+    // application template file info in the converter so skip.
+    if (templateFileInfo) {
+      discoveredHTMLFilePaths.add(templateFileInfo.filePath);
+    }
   });
 
   return [...discoveredHTMLFilePaths];
