@@ -1,0 +1,8 @@
+{
+  "name": "@caplin/aliases-plugin",
+  "version": "1.0.0",
+  "description": "webpack plugin that creates modules for aliases and services",
+  "main": "index.js",
+  "keywords": [],
+  "license": "ISC"
+}
