@@ -72,7 +72,7 @@ module.exports.baseKarmaConfig = baseKarmaConfig;
 function createPackageKarmaConfig({ files = [], frameworks = [], packageDirectory, webpackConfig }, testEntry) {
   const karmaFiles = [...files, testEntry];
 
-  const plugins = [new DefinePlugin({ PACKAGE_DIRECTORY: `"${packageDirectory}"` })];
+  const plugins = [...webpackConfig.plugins, new DefinePlugin({ PACKAGE_DIRECTORY: `"${packageDirectory}"` })];
   const packageWebpackConfig = _extends({}, webpackConfig, {
     entry: testEntry,
     plugins

@@ -80,6 +80,7 @@ function createPackageKarmaConfig(
   const karmaFiles = [...files, testEntry];
 
   const plugins = [
+    ...webpackConfig.plugins,
     new DefinePlugin({ PACKAGE_DIRECTORY: `"${packageDirectory}"` })
   ];
   const packageWebpackConfig = {
