@@ -2,6 +2,7 @@ const {
   join
 } = require("path");
 
+const AliasesPlugin = require("@caplin/aliases-plugin");
 const {
   appendModulePatch
 } = require("@caplin/patch-loader/patchesStore");
@@ -47,12 +48,11 @@ module.exports.BASE_WEBPACK_CONFIG = {
     },
     extensions: [".js", ".json", ".jsx"]
   },
-  plugins: [],
+  plugins: [new AliasesPlugin()],
   resolveLoader: {
     alias: {
-      alias: require.resolve("@caplin/alias-loader"),
-      "app-meta": require.resolve("@caplin/app-meta-loader"),
-      service: require.resolve("@caplin/service-loader")
+      // This alias can be removed by changing the metadata require in CT libs.
+      "app-meta": require.resolve("@caplin/app-meta-loader")
     }
   }
 };

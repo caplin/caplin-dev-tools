@@ -10,7 +10,6 @@ const configureDevtool = require("./devtool");
 const configureBundleEntryPoint = require("./entry");
 const configureI18nLoading = require("./i18n");
 const configureOutput = require("./output");
-const configureServiceLoader = require("./service");
 
 const { sourceMaps, variant } = parseArgs(process.argv.slice(2));
 const lifeCycleEvent = process.env.npm_lifecycle_event || "";
@@ -34,7 +33,6 @@ module.exports.webpackConfigGenerator = function webpackConfigGenerator(
   configureBabelLoader(webpackConfig, basePath);
   configureI18nLoading(webpackConfig, i18nFileName, isTest);
   configureAliases(webpackConfig, basePath);
-  configureServiceLoader(webpackConfig, isTest);
   configureDevtool(webpackConfig, sourceMaps);
   configureBuildDependentConfig(webpackConfig, version, uglifyOptions, isBuild);
 
