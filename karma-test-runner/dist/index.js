@@ -13,9 +13,9 @@ const { DefinePlugin } = require("webpack");
 const { onError } = require("karma-caplin-dots-reporter");
 
 const args = parseArgs(process.argv.slice(2));
+const atsOnly = args.ats || args.ATs || args._.includes("--ats") || args._.includes("--ATs") || args._.includes("ats") || args._.includes("ATs") || false;
+const utsOnly = args.uts || args.UTs || args._.includes("--uts") || args._.includes("--UTs") || args._.includes("uts") || args._.includes("UTs") || false;
 // Keeps browser/Karma running after test run.
-const atsOnly = args.ats || args._.includes("--ats") || args._.includes("--ATs") || false;
-const utsOnly = args.uts || args._.includes("--uts") || args._.includes("--UTs") || false;
 const devMode = args.dev || false;
 // Packages user wants to test, if the user specifies none all packages will be
 // tested.
