@@ -13,8 +13,9 @@ const configureOutput = require("./output");
 
 const { sourceMaps, variant } = parseArgs(process.argv.slice(2));
 const lifeCycleEvent = process.env.npm_lifecycle_event || "";
-const isBuild = lifeCycleEvent === "build";
+const buildScriptRunning = basename(process.argv[1]) === "build.js";
 const testsScriptRunning = basename(process.argv[1]) === "tests.js";
+const isBuild = buildScriptRunning || lifeCycleEvent === "build";
 const isTest = testsScriptRunning || lifeCycleEvent.startsWith("test");
 
 module.exports.webpackConfigGenerator = function webpackConfigGenerator(
