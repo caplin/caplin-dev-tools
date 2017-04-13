@@ -13,6 +13,8 @@ const configureOutput = require("./output");
 
 const { sourceMaps, variant } = parseArgs(process.argv.slice(2));
 const lifeCycleEvent = process.env.npm_lifecycle_event || "";
+// Check the name of the running script as well as the npm life cycle event as
+// when debugging npm isn't used so there is no life cycle event set.
 const buildScriptRunning = basename(process.argv[1]) === "build.js";
 const testsScriptRunning = basename(process.argv[1]) === "tests.js";
 const isBuild = buildScriptRunning || lifeCycleEvent === "build";
