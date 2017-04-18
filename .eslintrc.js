@@ -11,6 +11,7 @@ module.exports = {
     "no-restricted-syntax": [
       2,
       ...restricted.filter(r => r !== "ForOfStatement")
-    ]
+    ],
+    "no-underscore-dangle": ["error", { allowAfterThis: true }]
   }
 };
