@@ -12,6 +12,7 @@ const lifeCycleEvent = process.env.npm_lifecycle_event || "";
 const stubFileStats = new Stats();
 const testsScriptRunning = basename(process.argv[1]) === "tests.js";
 const isTest = testsScriptRunning || lifeCycleEvent.startsWith("test");
+const isWin = /^win/.test(process.platform);
 
 // Helps trick webpack into believing there is a file for the alias.
 stubFileStats.isFile = () => true;
@@ -37,8 +38,8 @@ function createCommonAliasFileData(aliasType, moduleCreator, result, compiler) {
   const { context, inputFileSystem } = compiler;
   const alias = result.request.replace(`${aliasType}!`, "");
   const aliasModule = moduleCreator(alias);
-  const aliasRequest = `@caplin/${aliasType}/${alias}.js`;
-  const aliasFilePath = `${context}/node_modules/${aliasRequest}`;
+  const aliasRequest = isWin ? `@caplin\\${aliasType}\\${alias}.js` : `@caplin/${aliasType}/${alias}.js`;
+  const aliasFilePath = isWin ? `${context}\\node_modules\\${aliasRequest}` : `${context}/node_modules/${aliasRequest}`;
   const fileBuffer = Buffer.from(aliasModule);
 
   importedAliases.add(alias);
