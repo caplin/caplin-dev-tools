@@ -1,7 +1,7 @@
 /* eslint no-param-reassign: 0, no-underscore-dangle: 0, global-require: 0,
    import/no-dynamic-require: 0, class-methods-use-this: 0 */
 const { Stats } = require("fs");
-const { basename } = require("path");
+const { basename, join } = require("path");
 
 // Record all aliases inside the `$aliases-data` module i.e. `aliases.js` or
 // `aliases-test.js`.
@@ -37,8 +37,8 @@ function createCommonAliasFileData(aliasType, moduleCreator, result, compiler) {
   const { context, inputFileSystem } = compiler;
   const alias = result.request.replace(`${aliasType}!`, "");
   const aliasModule = moduleCreator(alias);
-  const aliasRequest = `@caplin/${aliasType}/${alias}.js`;
-  const aliasFilePath = `${context}/node_modules/${aliasRequest}`;
+  const aliasRequest = join(`@caplin/${aliasType}/${alias}.js`);
+  const aliasFilePath = join(`${context}/node_modules/${aliasRequest}`);
   const fileBuffer = Buffer.from(aliasModule);
 
   importedAliases.add(alias);
