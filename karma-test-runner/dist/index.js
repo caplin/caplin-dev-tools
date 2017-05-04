@@ -70,6 +70,7 @@ const baseKarmaConfig = {
 module.exports.baseKarmaConfig = baseKarmaConfig;
 
 function createPackageKarmaConfig({ files = [], frameworks = [], packageDirectory, webpackConfig }, testEntry) {
+  const isForUTs = testEntry === utsTestEntry;
   const karmaFiles = [...files, testEntry];
 
   const plugins = [...webpackConfig.plugins, new DefinePlugin({ PACKAGE_DIRECTORY: `"${packageDirectory}"` })];
@@ -84,7 +85,8 @@ function createPackageKarmaConfig({ files = [], frameworks = [], packageDirector
     basePath: packageDirectory,
     files: karmaFiles,
     frameworks,
-    webpack: packageWebpackConfig
+    webpack: packageWebpackConfig,
+    isForUTs
   });
 
   return packageKarmaConfig;
@@ -97,7 +99,9 @@ function getShortPathFromBasePath(basePath) {
 }
 
 function runPackageTests(packageKarmaConfig, resolvePromise, summary, packageName) {
-  console.log(`\nRunning tests for: \x1b[35m${packageName}\x1b[0m`);
+  const testType = packageKarmaConfig.isForUTs ? "UTs" : "ATs";
+
+  console.log(`\nRunning ${testType} for: \x1b[35m${packageName}\x1b[0m`);
 
   const server = new Server(packageKarmaConfig, () => {
     resolvePromise();

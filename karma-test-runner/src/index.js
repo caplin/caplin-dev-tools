@@ -7,13 +7,17 @@ const { DefinePlugin } = require("webpack");
 const { onError } = require("karma-caplin-dots-reporter");
 
 const args = parseArgs(process.argv.slice(2));
-const atsOnly = args.ats || args.ATs ||
+const atsOnly =
+  args.ats ||
+  args.ATs ||
   args._.includes("--ats") ||
   args._.includes("--ATs") ||
   args._.includes("ats") ||
   args._.includes("ATs") ||
   false;
-const utsOnly = args.uts || args.UTs ||
+const utsOnly =
+  args.uts ||
+  args.UTs ||
   args._.includes("--uts") ||
   args._.includes("--UTs") ||
   args._.includes("uts") ||
@@ -28,9 +32,8 @@ const atsTestEntry = resolve(__dirname, "ats-test-entry.js");
 const utsTestEntry = resolve(__dirname, "uts-test-entry.js");
 
 function retrieveBrowserNameWithCorrectCasing(commandLineArgs) {
-  const selectedBrowser = commandLineArgs.b ||
-    commandLineArgs.browser ||
-    "chrome";
+  const selectedBrowser =
+    commandLineArgs.b || commandLineArgs.browser || "chrome";
   switch (selectedBrowser.toLowerCase()) {
     case "ie":
       return "IE";
@@ -81,6 +84,7 @@ function createPackageKarmaConfig(
   { files = [], frameworks = [], packageDirectory, webpackConfig },
   testEntry
 ) {
+  const isForUTs = testEntry === utsTestEntry;
   const karmaFiles = [...files, testEntry];
 
   const plugins = [
@@ -100,7 +104,8 @@ function createPackageKarmaConfig(
     basePath: packageDirectory,
     files: karmaFiles,
     frameworks,
-    webpack: packageWebpackConfig
+    webpack: packageWebpackConfig,
+    isForUTs
   };
 
   return packageKarmaConfig;
@@ -118,7 +123,9 @@ function runPackageTests(
   summary,
   packageName
 ) {
-  console.log(`\nRunning tests for: \x1b[35m${packageName}\x1b[0m`);
+  const testType = packageKarmaConfig.isForUTs ? "UTs" : "ATs";
+
+  console.log(`\nRunning ${testType} for: \x1b[35m${packageName}\x1b[0m`);
 
   const server = new Server(packageKarmaConfig, () => {
     resolvePromise();
@@ -153,7 +160,8 @@ module.exports.createPackagesKarmaConfigs = function createPackagesKarmaConfigs(
   return filterPackagesToTestIfFilterIsSpecified(
     packagesTestMetadata
   ).map(packageTestMetadata =>
-    createPackageKarmaConfig(packageTestMetadata, utsTestEntry));
+    createPackageKarmaConfig(packageTestMetadata, utsTestEntry)
+  );
 };
 
 module.exports.createPackagesATsKarmaConfigs = function createPackagesATsKarmaConfigs(
@@ -166,7 +174,8 @@ module.exports.createPackagesATsKarmaConfigs = function createPackagesATsKarmaCo
   return filterPackagesToTestIfFilterIsSpecified(
     packagesTestMetadata
   ).map(packageTestMetadata =>
-    createPackageKarmaConfig(packageTestMetadata, atsTestEntry));
+    createPackageKarmaConfig(packageTestMetadata, atsTestEntry)
+  );
 };
 
 function showSummary({ success, failed, error, errors }) {
@@ -227,7 +236,8 @@ module.exports.runPackagesTests = async function runPackagesTests(
     for (const packageKarmaConfig of packagesKarmaConfigs) {
       packageName = getShortPathFromBasePath(packageKarmaConfig.basePath);
       await new Promise(resolve =>
-        runPackageTests(packageKarmaConfig, resolve, summary, packageName));
+        runPackageTests(packageKarmaConfig, resolve, summary, packageName)
+      );
     }
   } catch (err) {
     showSummary(summary);
