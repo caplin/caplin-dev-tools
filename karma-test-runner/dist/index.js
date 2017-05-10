@@ -24,8 +24,7 @@ const atsTestEntry = resolve(__dirname, "ats-test-entry.js");
 const utsTestEntry = resolve(__dirname, "uts-test-entry.js");
 
 function retrieveBrowserNameWithCorrectCasing(commandLineArgs) {
-  const selectedBrowser = isBrowserSelectedinArray(commandLineArgs._) ||
-    commandLineArgs.b || commandLineArgs.browser || "chrome";
+  const selectedBrowser = isBrowserSelectedinArray(commandLineArgs._) || commandLineArgs.b || commandLineArgs.browser || "chrome";
   switch (selectedBrowser.toLowerCase()) {
     case "ie":
       return "IE";
