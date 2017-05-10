@@ -7,14 +7,16 @@ const { DefinePlugin } = require("webpack");
 const { onError } = require("karma-caplin-dots-reporter");
 
 const args = parseArgs(process.argv.slice(2));
-const atsOnly = args.ats ||
+const atsOnly =
+  args.ats ||
   args.ATs ||
   args._.includes("--ats") ||
   args._.includes("--ATs") ||
   args._.includes("ats") ||
   args._.includes("ATs") ||
   false;
-const utsOnly = args.uts ||
+const utsOnly =
+  args.uts ||
   args.UTs ||
   args._.includes("--uts") ||
   args._.includes("--UTs") ||
@@ -29,8 +31,21 @@ const requestedPackagesToTest = args._;
 const atsTestEntry = resolve(__dirname, "ats-test-entry.js");
 const utsTestEntry = resolve(__dirname, "uts-test-entry.js");
 
+function getSelectedBrowser(commandLineArgs) {
+  let browser = commandLineArgs.b || commandLineArgs.browser || "chrome";
+  const optionlessArgs = commandLineArgs._;
+  const browserIndex = optionlessArgs.indexOf("--browser");
+
+  if (browserIndex !== -1) {
+    browser = optionlessArgs[browserIndex + 1];
+  }
+
+  return browser.toLowerCase();
+}
+
 function retrieveBrowserNameWithCorrectCasing(commandLineArgs) {
   const selectedBrowser = getSelectedBrowser(commandLineArgs);
+
   switch (selectedBrowser) {
     case "ie":
       return "IE";
@@ -45,18 +60,6 @@ function retrieveBrowserNameWithCorrectCasing(commandLineArgs) {
       );
       return "Chrome";
   }
-}
-
-function getSelectedBrowser(commandLineArgs) {
-  let browser = commandLineArgs.b || commandLineArgs.browser || "chrome";
-  const optionlessArgs = commandLineArgs._;
-  const browserIndex = optionlessArgs.indexOf("--browser");
-
-  if (browserIndex !== -1) {
-    browser = optionlessArgs[browserIndex + 1];
-  }
-
-  return browser.toLowerCase();
 }
 
 const testBrowser = retrieveBrowserNameWithCorrectCasing(args);
@@ -169,7 +172,8 @@ module.exports.createPackagesKarmaConfigs = function createPackagesKarmaConfigs(
   return filterPackagesToTestIfFilterIsSpecified(
     packagesTestMetadata
   ).map(packageTestMetadata =>
-    createPackageKarmaConfig(packageTestMetadata, utsTestEntry));
+    createPackageKarmaConfig(packageTestMetadata, utsTestEntry)
+  );
 };
 
 module.exports.createPackagesATsKarmaConfigs = function createPackagesATsKarmaConfigs(
@@ -182,7 +186,8 @@ module.exports.createPackagesATsKarmaConfigs = function createPackagesATsKarmaCo
   return filterPackagesToTestIfFilterIsSpecified(
     packagesTestMetadata
   ).map(packageTestMetadata =>
-    createPackageKarmaConfig(packageTestMetadata, atsTestEntry));
+    createPackageKarmaConfig(packageTestMetadata, atsTestEntry)
+  );
 };
 
 function showSummary({ success, failed, error, errors }) {
@@ -243,7 +248,8 @@ module.exports.runPackagesTests = async function runPackagesTests(
     for (const packageKarmaConfig of packagesKarmaConfigs) {
       packageName = getShortPathFromBasePath(packageKarmaConfig.basePath);
       await new Promise(resolve =>
-        runPackageTests(packageKarmaConfig, resolve, summary, packageName));
+        runPackageTests(packageKarmaConfig, resolve, summary, packageName)
+      );
     }
   } catch (err) {
     showSummary(summary);
