@@ -1,29 +1,15 @@
+"use strict";
+
 const { Server } = require("karma");
 
 function runOnlyATs(args) {
-  return (
-    args.ats ||
-    args.ATs ||
-    args._.includes("--ats") ||
-    args._.includes("--ATs") ||
-    args._.includes("ats") ||
-    args._.includes("ATs") ||
-    false
-  );
+  return args.ats || args.ATs || args._.includes("--ats") || args._.includes("--ATs") || args._.includes("ats") || args._.includes("ATs") || false;
 }
 
 module.exports.runOnlyATs = runOnlyATs;
 
 function runOnlyUTs(args) {
-  return (
-    args.uts ||
-    args.UTs ||
-    args._.includes("--uts") ||
-    args._.includes("--UTs") ||
-    args._.includes("uts") ||
-    args._.includes("UTs") ||
-    false
-  );
+  return args.uts || args.UTs || args._.includes("--uts") || args._.includes("--UTs") || args._.includes("uts") || args._.includes("UTs") || false;
 }
 
 module.exports.runOnlyUTs = runOnlyUTs;
@@ -52,9 +38,7 @@ function getTestBrowser(commandLineArgs) {
       return "Chrome";
 
     default:
-      console.log(
-        `${selectedBrowser} is not a supported browser, defaulting to Chrome`
-      );
+      console.log(`${selectedBrowser} is not a supported browser, defaulting to Chrome`);
       return "Chrome";
   }
 }
@@ -66,17 +50,8 @@ function showSummary({ success, failed, error, errors }, devMode) {
     console.log("\n== Test Report ==");
 
     if (failed > 0 || error) {
-      console.log(
-        "\n\x1b[41m\x1b[30mTesting ended with failures/errors!\x1b[0m"
-      );
-      console.log(
-        `${errors
-          .map(
-            ({ packageName, error }) =>
-              `\nTest failed in: \x1b[35m${packageName}\n${error}`
-          )
-          .join("\n")}\n`
-      );
+      console.log("\n\x1b[41m\x1b[30mTesting ended with failures/errors!\x1b[0m");
+      console.log(`${errors.map(({ packageName, error }) => `\nTest failed in: \x1b[35m${packageName}\n${error}`).join("\n")}\n`);
     } else {
       console.log("\n\x1b[42m\x1b[30mTesting ended with no failures!\x1b[0m");
     }
@@ -104,17 +79,13 @@ function filterPackagesToTest(packagesTestMetadata, packagesToTest) {
     return packagesTestMetadata;
   }
 
-  return packagesTestMetadata.filter(({ packageName }) =>
-    packagesToTest.includes(packageName)
-  );
+  return packagesTestMetadata.filter(({ packageName }) => packagesToTest.includes(packageName));
 }
 
 module.exports.filterPackagesToTest = filterPackagesToTest;
 
 function runPackageTests(karmaConfig, resolve, summary, packageName) {
-  console.log(
-    `\nRunning ${karmaConfig.testsType} for: \x1b[35m${packageName}\x1b[0m`
-  );
+  console.log(`\nRunning ${karmaConfig.testsType} for: \x1b[35m${packageName}\x1b[0m`);
 
   const server = new Server(karmaConfig, () => {
     resolve();

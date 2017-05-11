@@ -1,13 +1,15 @@
 const { resolve } = require("path");
 
-const { Server } = require("karma");
 const { LOG_ERROR } = require("karma/lib/constants");
 const parseArgs = require("minimist");
 const { DefinePlugin } = require("webpack");
 const { onError } = require("karma-caplin-dots-reporter");
 
 const {
-  retrieveBrowserNameWithCorrectCasing,
+  filterPackagesToTest,
+  getShortPathFromBasePath,
+  getTestBrowser,
+  runPackageTests,
   runOnlyATs,
   runOnlyUTs,
   showSummary
@@ -16,13 +18,13 @@ const {
 const args = parseArgs(process.argv.slice(2));
 const atsOnly = runOnlyATs(args);
 const utsOnly = runOnlyUTs(args);
-// Keeps browser/Karma running after test run.
+// If true keep browser open after test run.
 const devMode = args.dev || false;
 // Packages to test, if the user specifies none all packages will be tested.
-const requestedPackagesToTest = args._;
+const packagesToTest = args._;
 const atsTestEntry = resolve(__dirname, "ats-test-entry.js");
 const utsTestEntry = resolve(__dirname, "uts-test-entry.js");
-const testBrowser = retrieveBrowserNameWithCorrectCasing(args);
+const testBrowser = getTestBrowser(args);
 
 const baseKarmaConfig = {
   browsers: [testBrowser],
@@ -56,9 +58,7 @@ function createPackageKarmaConfig(
   { files = [], frameworks = [], packageDirectory, webpackConfig },
   testEntry
 ) {
-  const testsType = testEntry === utsTestEntry ? "UTs" : "ATs";
   const karmaFiles = [...files, testEntry];
-
   const plugins = [
     ...webpackConfig.plugins,
     new DefinePlugin({ PACKAGE_DIRECTORY: `"${packageDirectory}"` })
@@ -67,7 +67,9 @@ function createPackageKarmaConfig(
     entry: testEntry,
     plugins
   });
-  const packageKarmaConfig = Object.assign({}, baseKarmaConfig, {
+  const testsType = testEntry === utsTestEntry ? "UTs" : "ATs";
+
+  return Object.assign({}, baseKarmaConfig, {
     preprocessors: {
       [testEntry]: ["webpack", "sourcemap"]
     },
@@ -77,80 +79,41 @@ function createPackageKarmaConfig(
     webpack: packageWebpackConfig,
     testsType
   });
-
-  return packageKarmaConfig;
 }
 
 module.exports.createPackageKarmaConfig = createPackageKarmaConfig;
 
-function getShortPathFromBasePath(basePath) {
-  return basePath.substring(basePath.indexOf("apps"));
-}
-
-function runPackageTests(
-  packageKarmaConfig,
-  resolvePromise,
-  summary,
-  packageName
-) {
-  console.log(
-    `\nRunning ${packageKarmaConfig.testsType} for: \x1b[35m${packageName}\x1b[0m`
-  );
-
-  const server = new Server(packageKarmaConfig, () => {
-    resolvePromise();
-  });
-
-  server.on("run_complete", (browsers, { success, failed, error }) => {
-    summary.success += success;
-    summary.failed += failed;
-    summary.error = summary.error || error;
-  });
-
-  server.start();
-}
-
-function filterPackagesToTestIfFilterIsSpecified(packagesTestMetadata) {
-  return packagesTestMetadata.filter(({ packageName }) => {
-    if (requestedPackagesToTest.length === 0) {
-      return true;
-    }
-
-    return requestedPackagesToTest.includes(packageName);
-  });
-}
-
-module.exports.createPackagesKarmaConfigs = function createPackagesKarmaConfigs(
-  packagesTestMetadata
-) {
+function createPackagesKarmaConfigs(packagesTestMetadata) {
   if (atsOnly) {
     return [];
   }
 
-  return filterPackagesToTestIfFilterIsSpecified(
-    packagesTestMetadata
+  return filterPackagesToTest(
+    packagesTestMetadata,
+    packagesToTest
   ).map(packageTestMetadata =>
     createPackageKarmaConfig(packageTestMetadata, utsTestEntry)
   );
-};
+}
 
-module.exports.createPackagesATsKarmaConfigs = function createPackagesATsKarmaConfigs(
-  packagesTestMetadata
-) {
+module.exports.createPackagesKarmaConfigs = createPackagesKarmaConfigs;
+
+function createPackagesATsKarmaConfigs(packagesTestMetadata) {
   if (utsOnly) {
     return [];
   }
 
-  return filterPackagesToTestIfFilterIsSpecified(
-    packagesTestMetadata
+  return filterPackagesToTest(
+    packagesTestMetadata,
+    packagesToTest
   ).map(packageTestMetadata =>
     createPackageKarmaConfig(packageTestMetadata, atsTestEntry)
   );
-};
+}
 
-module.exports.runPackagesTests = async function runPackagesTests(
-  packagesKarmaConfigs
-) {
+module.exports.createPackagesATsKarmaConfigs = createPackagesATsKarmaConfigs;
+
+async function runPackagesTests(packagesKarmaConfigs) {
   // This might cause issues if our tests start running concurrently,
   // but given we currently run package by package, it should be fine
   let packageName = "";
@@ -188,4 +151,6 @@ module.exports.runPackagesTests = async function runPackagesTests(
     showSummary(summary, devMode);
     process.exit(0);
   }
-};
+}
+
+module.exports.runPackagesTests = runPackagesTests;
