@@ -1,12 +1,5 @@
-const {
-  existsSync,
-  readdirSync,
-  readFileSync
-} = require("fs");
-const {
-  join,
-  sep
-} = require("path");
+const { existsSync, readdirSync, readFileSync } = require("fs");
+const { join, sep } = require("path");
 
 function isPackageToBeExcludedFromBabelCompilation(packagesDir, packageDir) {
   // The new HTML/XML services are written in ES2015.
@@ -94,15 +87,19 @@ function createBabelLoaderOptions(basePath) {
     babelLoaderQuery.presets = babelRC.presets.map(preset => {
       // Presets can be of type string|[string, {}] to allow configuring presets
       // https://babeljs.io/docs/plugins/#plugin-preset-options
-      const presetName = Array.isArray(preset) ? preset[0] : preset;
+      if (Array.isArray(preset)) {
+        // Include the preset configuration `preset[1]` in returned value.
+        return [require.resolve(`babel-preset-${preset[0]}`), preset[1]];
+      }
 
-      return require.resolve(`babel-preset-${presetName}`);
+      return require.resolve(`babel-preset-${preset}`);
     });
   }
 
   if (babelLoaderQuery.plugins) {
     babelLoaderQuery.plugins = babelRC.plugins.map(plugin =>
-      require.resolve(`babel-plugin-${plugin}`));
+      require.resolve(`babel-plugin-${plugin}`)
+    );
   }
 
   return babelLoaderQuery;
