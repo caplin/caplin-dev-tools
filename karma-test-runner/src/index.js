@@ -1,9 +1,9 @@
 const { resolve } = require("path");
 
 const { LOG_ERROR } = require("karma/lib/constants");
+const { onError } = require("karma-caplin-dots-reporter");
 const parseArgs = require("minimist");
 const { DefinePlugin } = require("webpack");
-const { onError } = require("karma-caplin-dots-reporter");
 
 const {
   filterPackagesToTest,
@@ -83,32 +83,27 @@ function createPackageKarmaConfig(
 
 module.exports.createPackageKarmaConfig = createPackageKarmaConfig;
 
-function createPackagesKarmaConfigs(packagesTestMetadata) {
-  if (atsOnly) {
+function createConfig(skipTests, packagesMetadata, testEntry) {
+  if (skipTests) {
     return [];
   }
 
   return filterPackagesToTest(
-    packagesTestMetadata,
+    packagesMetadata,
     packagesToTest
   ).map(packageTestMetadata =>
-    createPackageKarmaConfig(packageTestMetadata, utsTestEntry)
+    createPackageKarmaConfig(packageTestMetadata, testEntry)
   );
+}
+
+function createPackagesKarmaConfigs(packagesMetadata) {
+  return createConfig(atsOnly, packagesMetadata, utsTestEntry);
 }
 
 module.exports.createPackagesKarmaConfigs = createPackagesKarmaConfigs;
 
-function createPackagesATsKarmaConfigs(packagesTestMetadata) {
-  if (utsOnly) {
-    return [];
-  }
-
-  return filterPackagesToTest(
-    packagesTestMetadata,
-    packagesToTest
-  ).map(packageTestMetadata =>
-    createPackageKarmaConfig(packageTestMetadata, atsTestEntry)
-  );
+function createPackagesATsKarmaConfigs(packagesMetadata) {
+  return createConfig(utsOnly, packagesMetadata, atsTestEntry);
 }
 
 module.exports.createPackagesATsKarmaConfigs = createPackagesATsKarmaConfigs;
@@ -147,7 +142,7 @@ async function runPackagesTests(packagesKarmaConfigs) {
     console.error(err);
   }
 
-  if (!devMode) {
+  if (devMode === false) {
     showSummary(summary, devMode);
     process.exit(0);
   }

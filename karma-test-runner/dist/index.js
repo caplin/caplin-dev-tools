@@ -35,7 +35,7 @@ let runPackagesTests = (() => {
       console.error(err);
     }
 
-    if (!devMode) {
+    if (devMode === false) {
       showSummary(summary, devMode);
       process.exit(0);
     }
@@ -51,9 +51,9 @@ function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, a
 const { resolve } = require("path");
 
 const { LOG_ERROR } = require("karma/lib/constants");
+const { onError } = require("karma-caplin-dots-reporter");
 const parseArgs = require("minimist");
 const { DefinePlugin } = require("webpack");
-const { onError } = require("karma-caplin-dots-reporter");
 
 const {
   filterPackagesToTest,
@@ -127,22 +127,22 @@ function createPackageKarmaConfig({ files = [], frameworks = [], packageDirector
 
 module.exports.createPackageKarmaConfig = createPackageKarmaConfig;
 
-function createPackagesKarmaConfigs(packagesTestMetadata) {
-  if (atsOnly) {
+function createConfig(skipTests, packagesMetadata, testEntry) {
+  if (skipTests) {
     return [];
   }
 
-  return filterPackagesToTest(packagesTestMetadata, packagesToTest).map(packageTestMetadata => createPackageKarmaConfig(packageTestMetadata, utsTestEntry));
+  return filterPackagesToTest(packagesMetadata, packagesToTest).map(packageTestMetadata => createPackageKarmaConfig(packageTestMetadata, testEntry));
+}
+
+function createPackagesKarmaConfigs(packagesMetadata) {
+  return createConfig(atsOnly, packagesMetadata, utsTestEntry);
 }
 
 module.exports.createPackagesKarmaConfigs = createPackagesKarmaConfigs;
 
-function createPackagesATsKarmaConfigs(packagesTestMetadata) {
-  if (utsOnly) {
-    return [];
-  }
-
-  return filterPackagesToTest(packagesTestMetadata, packagesToTest).map(packageTestMetadata => createPackageKarmaConfig(packageTestMetadata, atsTestEntry));
+function createPackagesATsKarmaConfigs(packagesMetadata) {
+  return createConfig(utsOnly, packagesMetadata, atsTestEntry);
 }
 
 module.exports.createPackagesATsKarmaConfigs = createPackagesATsKarmaConfigs;
