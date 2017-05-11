@@ -12,7 +12,6 @@
 						"ie >= 11"
 					]
 				},
-				"modules": false,
 				"useBuiltIns": true
 			}
 		],
