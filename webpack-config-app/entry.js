@@ -13,5 +13,8 @@ module.exports = function configureBundleEntryPoint(
   const entryFile = variant ? `index-${variant}.js` : "index.js";
   const appEntryPoint = join(basePath, "src", entryFile);
 
-  webpackConfig.entry = appEntryPoint;
+  webpackConfig.entry = [
+    "webpack-hot-middleware/client?path=/__webpack_hmr&timeout=20000",
+    appEntryPoint
+  ];
 };

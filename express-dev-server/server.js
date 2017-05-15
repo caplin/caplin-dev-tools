@@ -4,6 +4,10 @@ const express = require("express");
 const poll = require("./poll");
 const webpackMiddleware = require("./webpack");
 
+const webpack = require("webpack");
+const webpackDevMiddleware = require("webpack-dev-middleware");
+const webpackHotMiddleware = require("webpack-hot-middleware");
+
 module.exports = ({ webpackConfig }) => {
   const app = express();
   const appRoot = process.cwd();
@@ -14,6 +18,28 @@ module.exports = ({ webpackConfig }) => {
 
   // Serve static files (HTML, XML, CSS), contained in application directory.
   app.use(express.static(appRoot));
+
+  const compiler = webpack(webpackConfig);
+
+  app.use(
+    webpackDevMiddleware(compiler, {
+      hot: true,
+      filename: "bundle.js",
+      publicPath: "/assets/",
+      stats: {
+        colors: true
+      },
+      historyApiFallback: true
+    })
+  );
+
+  app.use(
+    webpackHotMiddleware(compiler, {
+      log: console.log,
+      path: "/__webpack_hmr",
+      heartbeat: 10 * 1000
+    })
+  );
 
   poll(app);
   // Handlers/middleware for webpack.

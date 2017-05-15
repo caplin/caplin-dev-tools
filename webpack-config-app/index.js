@@ -10,6 +10,7 @@ const configureDevtool = require("./devtool");
 const configureBundleEntryPoint = require("./entry");
 const configureI18nLoading = require("./i18n");
 const configureOutput = require("./output");
+const configureBundlePlugins = require("./plugins");
 
 const { sourceMaps, variant } = parseArgs(process.argv.slice(2));
 const lifeCycleEvent = process.env.npm_lifecycle_event || "";
@@ -31,6 +32,7 @@ module.exports.webpackConfigGenerator = function webpackConfigGenerator(
   // Object.create won't work as webpack only uses enumerable own properties.
   const webpackConfig = Object.assign({}, BASE_WEBPACK_CONFIG);
 
+  configureBundlePlugins(webpackConfig);
   configureBundleEntryPoint(variant, webpackConfig, basePath);
   configureOutput(webpackConfig, version, basePath);
   configureBabelLoader(webpackConfig, basePath);

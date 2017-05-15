@@ -9,6 +9,7 @@
     "express-session": "^1.14.2",
     "http-proxy": "^1.14.0",
     "webpack": "^2.3.2",
-    "webpack-dev-middleware": "^1.6.1"
+    "webpack-dev-middleware": "^1.6.1",
+    "webpack-hot-middleware": "^2.18.0"
   }
 }
