@@ -13,7 +13,7 @@
     "@caplin/patch-loader": "^3.0.0",
     "@caplin/xml-loader": "^2.0.0",
     "babel-core": "^6.23.1",
-    "babel-loader": "^7.0.0-beta.1",
+    "babel-loader": "^7.0.0",
     "css-loader": "^0.28.0",
     "extract-text-webpack-plugin": "^2.1.0",
     "file-loader": "^0.10.0",
