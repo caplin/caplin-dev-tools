@@ -1,8 +1,6 @@
 /* eslint no-param-reassign: "off" */
 
-const {
-  join
-} = require("path");
+const { join } = require("path");
 
 module.exports = function configureBundleEntryPoint(
   variant,

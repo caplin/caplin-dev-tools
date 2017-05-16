@@ -3,9 +3,6 @@
   "version": "1.0.2",
   "description": "A package that adds the JSTD adapter to a Karma config",
   "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
   "keywords": [],
   "author": "",
   "license": "ISC",

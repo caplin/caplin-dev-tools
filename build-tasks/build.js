@@ -1,20 +1,8 @@
-const {
-  join
-} = require("path");
+const { existsSync, renameSync, mkdir } = require("fs");
+const { join } = require("path");
 
-const {
-  create
-} = require("archiver");
-const {
-  existsSync,
-  renameSync,
-  mkdir
-} = require("fs");
-const {
-  copySync,
-  createWriteStream,
-  writeFileSync
-} = require("fs-extra");
+const { create } = require("archiver");
+const { copySync, createWriteStream, writeFileSync } = require("fs-extra");
 const parseArgs = require("minimist");
 const rimraf = require("rimraf");
 const webpack = require("webpack");
@@ -66,7 +54,7 @@ function createWAR(indexPage, version, webInfLocation, buildCallback, warName) {
   });
 }
 
-// Called once the webpack build finishes in either the succes or failure case.
+// Called once the webpack build finishes.
 function webpackBuildCallback(
   error,
   stats,
@@ -93,7 +81,8 @@ function webpackBuildCallback(
 function rimrafCallback(config) {
   return () =>
     webpack(config.webpackConfig, (error, stats) =>
-      webpackBuildCallback(error, stats, config));
+      webpackBuildCallback(error, stats, config)
+    );
 }
 
 exports.buildDir = buildDir;

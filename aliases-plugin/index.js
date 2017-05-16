@@ -115,7 +115,8 @@ function verifyImportedAliasesAreRegistered() {
 function nmfCreated(nmf, compiler) {
   // Called inside `NormalModuleFactory` during module creation.
   nmf.plugin("before-resolve", (result, callback) =>
-    handleAliasImports(result, callback, compiler));
+    handleAliasImports(result, callback, compiler)
+  );
 }
 
 class AliasesPlugin {

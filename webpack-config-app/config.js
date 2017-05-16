@@ -1,11 +1,7 @@
-const {
-  join
-} = require("path");
+const { join } = require("path");
 
 const AliasesPlugin = require("@caplin/aliases-plugin");
-const {
-  appendModulePatch
-} = require("@caplin/patch-loader/patchesStore");
+const { appendModulePatch } = require("@caplin/patch-loader/patchesStore");
 
 module.exports.BASE_WEBPACK_CONFIG = {
   module: {
