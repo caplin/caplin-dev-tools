@@ -10,6 +10,7 @@ const configureDevtool = require("./devtool");
 const configureBundleEntryPoint = require("./entry");
 const configureI18nLoading = require("./i18n");
 const configureOutput = require("./output");
+const configureBundlePlugins = require("./plugins");
 
 const { sourceMaps, variant } = parseArgs(process.argv.slice(2));
 const lifeCycleEvent = process.env.npm_lifecycle_event || "";
@@ -19,17 +20,21 @@ const buildScriptRunning = basename(process.argv[1]) === "build.js";
 const testsScriptRunning = basename(process.argv[1]) === "tests.js";
 const isBuild = buildScriptRunning || lifeCycleEvent === "build";
 const isTest = testsScriptRunning || lifeCycleEvent.startsWith("test");
+const { HMR } = require("./config");
 
-module.exports.webpackConfigGenerator = function webpackConfigGenerator({
-  basePath,
-  version = "dev",
-  i18nFileName = `i18n-${version}.js`,
-  uglifyOptions
-}) {
+module.exports.webpackConfigGenerator = function webpackConfigGenerator(
+  {
+    basePath,
+    version = "dev",
+    i18nFileName = `i18n-${version}.js`,
+    uglifyOptions
+  }
+) {
   // Object.create won't work as webpack only uses enumerable own properties.
   const webpackConfig = Object.assign({}, BASE_WEBPACK_CONFIG);
 
-  configureBundleEntryPoint(variant, webpackConfig, basePath);
+  configureBundlePlugins(webpackConfig, HMR);
+  configureBundleEntryPoint(variant, webpackConfig, basePath, HMR);
   configureOutput(webpackConfig, version, basePath);
   configureBabelLoader(webpackConfig, basePath);
   configureI18nLoading(webpackConfig, i18nFileName, isTest);

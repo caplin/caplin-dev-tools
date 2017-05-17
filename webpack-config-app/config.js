@@ -65,3 +65,6 @@ module.exports.UGLIFY_OPTIONS = {
     screw_ie8: true
   }
 };
+
+// Change to true for HMR
+module.exports.HMR = false;
