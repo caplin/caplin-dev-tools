@@ -21,6 +21,8 @@ const testsScriptRunning = basename(process.argv[1]) === "tests.js";
 const isBuild = buildScriptRunning || lifeCycleEvent === "build";
 const isTest = testsScriptRunning || lifeCycleEvent.startsWith("test");
 
+const { HMR } = require("./config");
+
 module.exports.webpackConfigGenerator = function webpackConfigGenerator(
   {
     basePath,
@@ -32,8 +34,8 @@ module.exports.webpackConfigGenerator = function webpackConfigGenerator(
   // Object.create won't work as webpack only uses enumerable own properties.
   const webpackConfig = Object.assign({}, BASE_WEBPACK_CONFIG);
 
-  configureBundlePlugins(webpackConfig);
-  configureBundleEntryPoint(variant, webpackConfig, basePath);
+  configureBundlePlugins(webpackConfig, HMR);
+  configureBundleEntryPoint(variant, webpackConfig, basePath, HMR);
   configureOutput(webpackConfig, version, basePath);
   configureBabelLoader(webpackConfig, basePath);
   configureI18nLoading(webpackConfig, i18nFileName, isTest);

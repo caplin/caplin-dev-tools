@@ -1,10 +1,23 @@
 /* eslint no-param-reassign: "off" */
 const webpack = require("webpack");
+const webpackVersion = require("../../webpack/package.json").version;
 
-module.exports = function configureBundlePlugins(webpackConfig) {
-  webpackConfig.plugins = [
-    new webpack.optimize.OccurenceOrderPlugin(),
-    new webpack.HotModuleReplacementPlugin(),
-    new webpack.NoErrorsPlugin()
-  ];
+module.exports = function configureBundlePlugins(
+  webpackConfig,
+  isHotRealoadingActivated
+) {
+  if (isHotRealoadingActivated) {
+    if (webpackVersion !== "1.15.0") {
+      webpackConfig.plugins.push(
+        new webpack.optimize.OccurrenceOrderPlugin(),
+        new webpack.NoEmitOnErrorsPlugin()
+      );
+    } else {
+      webpackConfig.plugins.push(
+        new webpack.optimize.OccurenceOrderPlugin(),
+        new webpack.NoErrorsPlugin()
+      );
+    }
+    webpackConfig.plugins.push(new webpack.HotModuleReplacementPlugin());
+  }
 };
