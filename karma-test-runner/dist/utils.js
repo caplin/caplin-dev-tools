@@ -36,6 +36,8 @@ function getTestBrowser(commandLineArgs) {
       return "Firefox";
     case "chrome":
       return "Chrome";
+    case "chrome-headless":
+      return "ChromeHeadless";
 
     default:
       console.log(`${selectedBrowser} is not a supported browser, defaulting to Chrome`);
