@@ -47,7 +47,9 @@ module.exports.BASE_WEBPACK_CONFIG = {
   },
   plugins: [
     new AliasesPlugin(),
-    new WebpackErrorNotificationPlugin(msg => console.log(msg), {})
+    new WebpackErrorNotificationPlugin({
+      notifyWarnings: false
+    })
   ],
   resolveLoader: {
     alias: {
