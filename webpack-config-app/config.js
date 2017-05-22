@@ -47,7 +47,7 @@ module.exports.BASE_WEBPACK_CONFIG = {
   },
   plugins: [
     new AliasesPlugin(),
-    new WebpackErrorNotificationPlugin({
+    new WebpackErrorNotificationPlugin(undefined, {
       notifyWarnings: false
     })
   ],
