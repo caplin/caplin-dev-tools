@@ -27,7 +27,7 @@ module.exports = (application, webpackConfig) => {
       historyApiFallback: true
     };
 
-    app.use(
+    application.use(
       webpackHotMiddleware(compiler, {
         log: console.log,
         path: "/__webpack_hmr",
