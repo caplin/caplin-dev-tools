@@ -37,8 +37,7 @@ function getSelectedBrowser(commandLineArgs) {
   const isWin = /^win/.test(process.platform);
   if (browser === "headless" && isWin) {
     browser = "phantom-js";
-  }
-  else {
+  } else {
     browser = "chrome-headless";
   }
 
