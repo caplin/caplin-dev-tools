@@ -113,5 +113,5 @@ module.exports = function configureBabelLoader(webpackConfig, basePath) {
     options: createBabelLoaderOptions(basePath)
   };
 
-  webpackConfig.module.rules.push(babelModulesRule);
+  webpackConfig.module.rules.unshift(babelModulesRule);
 };
