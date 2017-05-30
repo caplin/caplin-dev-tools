@@ -1,29 +1,25 @@
 const { Server } = require("karma");
 
 function runOnlyATs(args) {
-  return (
-    args.ats ||
+  return args.ats ||
     args.ATs ||
     args._.includes("--ats") ||
     args._.includes("--ATs") ||
     args._.includes("ats") ||
     args._.includes("ATs") ||
-    false
-  );
+    false;
 }
 
 module.exports.runOnlyATs = runOnlyATs;
 
 function runOnlyUTs(args) {
-  return (
-    args.uts ||
+  return args.uts ||
     args.UTs ||
     args._.includes("--uts") ||
     args._.includes("--UTs") ||
     args._.includes("uts") ||
     args._.includes("UTs") ||
-    false
-  );
+    false;
 }
 
 module.exports.runOnlyUTs = runOnlyUTs;
@@ -50,6 +46,8 @@ function getTestBrowser(commandLineArgs) {
       return "Firefox";
     case "chrome":
       return "Chrome";
+    case "chrome-headless":
+      return "ChromeHeadless";
 
     default:
       console.log(
@@ -105,8 +103,7 @@ function filterPackagesToTest(packagesTestMetadata, packagesToTest) {
   }
 
   return packagesTestMetadata.filter(({ packageName }) =>
-    packagesToTest.includes(packageName)
-  );
+    packagesToTest.includes(packageName));
 }
 
 module.exports.filterPackagesToTest = filterPackagesToTest;

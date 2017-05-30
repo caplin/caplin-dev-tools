@@ -53,15 +53,15 @@ function CaplinDotsReporter(formatError, hasColors, options, adapter) {
 
   this.specFailure = function(browser, result) {
     var msg = chalk.red(
-      browser.name +
-        " " +
-        result.suite.join(" ") +
-        " " +
-        result.description +
-        "\n"
+      `${browser.name 
+        } ${ 
+        result.suite.join(" ") 
+        } ${ 
+        result.description 
+        }\n`
     );
 
-    result.log.forEach(function(log) {
+    result.log.forEach((log) => {
       msg += formatError(log, "\t");
     });
     msg += "\n";
@@ -103,13 +103,13 @@ function CaplinDotsReporter(formatError, hasColors, options, adapter) {
       msg += util.format(" (skipped %d)", results.skipped);
     }
 
-    msg += " (" + results.totalTime / 1000 + " secs)";
+    msg += ` (${  results.totalTime / 1000  } secs)`;
 
     if (this.TOTAL_FAILED > 0) {
-      this.FAILED.forEach(msg => write("\n" + msg));
+      this.FAILED.forEach(msg => write(`\n${  msg}`));
       this.FAILED = [];
     }
-    write(msg + "\n");
+    write(`${msg  }\n`);
   };
 
   this._writeCharacter = function(character) {
