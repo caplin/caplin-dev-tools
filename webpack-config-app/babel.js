@@ -113,5 +113,6 @@ module.exports = function configureBabelLoader(webpackConfig, basePath) {
     options: createBabelLoaderOptions(basePath)
   };
 
+  // Babel loader must be first for source maps to be shown in ES6
   webpackConfig.module.rules.unshift(babelModulesRule);
 };
