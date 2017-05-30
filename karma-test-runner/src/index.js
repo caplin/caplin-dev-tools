@@ -6,6 +6,7 @@ const parseArgs = require("minimist");
 const { DefinePlugin } = require("webpack");
 
 const {
+  getRequestedPackages,
   filterPackagesToTest,
   getShortPathFromBasePath,
   getTestBrowser,
@@ -21,7 +22,7 @@ const utsOnly = runOnlyUTs(args);
 // If true keep browser open after test run.
 const devMode = args.dev || false;
 // Packages to test, if the user specifies none all packages will be tested.
-const packagesToTest = args._;
+const packagesToTest = getRequestedPackages(args._);
 const atsTestEntry = resolve(__dirname, "ats-test-entry.js");
 const utsTestEntry = resolve(__dirname, "uts-test-entry.js");
 const testBrowser = getTestBrowser(args);
