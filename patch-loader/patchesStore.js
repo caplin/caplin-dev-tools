@@ -1,14 +1,7 @@
-const {
-  readFileSync
-} = require("fs");
-const {
-  join,
-  sep
-} = require("path");
+const { readFileSync } = require("fs");
+const { join, sep } = require("path");
 
-const {
-  sync
-} = require("glob");
+const { sync } = require("glob");
 
 const applicationNodeModulesPath = join(process.cwd(), "node_modules");
 const GLOB_OPTIONS = {

@@ -1,8 +1,6 @@
 /* eslint no-param-reassign: "off" */
 
-const {
-  join
-} = require("path");
+const { join } = require("path");
 
 module.exports = function configureAliases(webpackConfig, basePath) {
   const configDir = join(basePath, "src", "config");

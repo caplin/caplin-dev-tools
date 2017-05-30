@@ -24,7 +24,8 @@ module.exports = ({ webpackConfig }) => {
   // Don't bind to `localhost` as that will mean the server won't be accessible
   // by other machines on the LAN.
   app.listen(APP_PORT, err =>
-    console.log(err || `Listening on port ${APP_PORT}`));
+    console.log(err || `Listening on port ${APP_PORT}`)
+  );
 
   return app;
 };
