@@ -114,5 +114,6 @@ module.exports = function configureBabelLoader(webpackConfig, basePath) {
   };
 
   // Babel loader must be first for source maps to be shown in ES6
+  // See https://github.com/webpack-contrib/transform-loader/issues/9
   webpackConfig.module.rules.unshift(babelModulesRule);
 };
