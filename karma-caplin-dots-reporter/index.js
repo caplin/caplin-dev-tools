@@ -3,6 +3,18 @@ const logSymbols = require("log-symbols");
 const util = require("util");
 
 const onErrorCallbacks = [];
+const onFailureCallbacks = [];
+const ERROR_TYPES = [
+  "EvalError",
+  "InternalError",
+  "RangeError",
+  "ReferenceError",
+  "SyntaxError",
+  "TypeError",
+  "URIError"
+];
+let TOTAL_TIME = 0;
+let TOTAL_TESTS_SKIPPED = 0;
 
 function CaplinDotsReporter(formatError, hasColors, options, adapter) {
   this.adapters = [adapter || process.stdout.write.bind(process.stdout)];
@@ -15,8 +27,10 @@ function CaplinDotsReporter(formatError, hasColors, options, adapter) {
   options.icon.failure = options.icon.failure || logSymbols.error;
   options.icon.success = options.icon.success || logSymbols.success;
   options.icon.ignore = options.icon.ignore || logSymbols.info;
+  options.icon.error = options.icon.error || "E";
   options.color = options.color || {};
   options.color.failure = options.color.failure || "red";
+  options.color.error = options.color.error || "red";
   options.color.success = options.color.success || "green";
   options.color.ignore = options.color.ignore || "blue";
 
@@ -26,6 +40,7 @@ function CaplinDotsReporter(formatError, hasColors, options, adapter) {
       options.color.failure,
       options.icon.failure
     );
+    options.icon.error = colorInto(options.color.error, options.icon.error);
     options.icon.success = colorInto(
       options.color.success,
       options.icon.success
@@ -34,12 +49,14 @@ function CaplinDotsReporter(formatError, hasColors, options, adapter) {
   } else {
     this.USE_COLORS = false;
     options.icon.failure = noColor(options.icon.failure);
+    options.icon.error = noColor(options.icon.error);
     options.icon.success = noColor(options.icon.success);
     options.icon.ignore = noColor(options.icon.ignore);
   }
 
   this.TOTAL_SUCCESS = 0;
   this.TOTAL_FAILED = 0;
+  this.TOTAL_ERRORS = 0;
   this.FAILED = [];
 
   this.onRunStart = function() {
@@ -53,23 +70,30 @@ function CaplinDotsReporter(formatError, hasColors, options, adapter) {
 
   this.specFailure = function(browser, result) {
     var msg = chalk.red(
-      `${browser.name 
-        } ${ 
-        result.suite.join(" ") 
-        } ${ 
-        result.description 
-        }\n`
+      browser.name +
+        " " +
+        result.suite.join(" ") +
+        " " +
+        result.description +
+        "\n"
     );
 
-    result.log.forEach((log) => {
+    result.log.forEach(function(log) {
       msg += formatError(log, "\t");
     });
     msg += "\n";
 
-    this._writeCharacter(options.icon.failure);
+    const failureType = result.log[0].split(":")[0];
+    if (ERROR_TYPES.indexOf(failureType) !== -1) {
+      this._writeCharacter(options.icon.error);
+      this.TOTAL_ERRORS++;
+      triggerOnErrorCallbacks(msg);
+    } else {
+      this._writeCharacter(options.icon.failure);
+      triggerOnFailureCallbacks(msg);
+    }
     this.TOTAL_FAILED++;
     this.FAILED.push(msg);
-    triggerOnErrorCallbacks(msg);
   };
 
   this.specSkipped = function() {
@@ -97,19 +121,23 @@ function CaplinDotsReporter(formatError, hasColors, options, adapter) {
     );
 
     if (results.failed) {
-      msg += chalk.red(` (${results.failed} FAILED)`);
+      msg += chalk.red(
+        ` (${this.TOTAL_FAILED - this.TOTAL_ERRORS} FAILED) (${this.TOTAL_ERRORS} ERRORED)`
+      );
     }
     if (results.skipped) {
       msg += util.format(" (skipped %d)", results.skipped);
     }
 
-    msg += ` (${  results.totalTime / 1000  } secs)`;
+    msg += " (" + results.totalTime / 1000 + " secs)";
+    TOTAL_TIME = TOTAL_TIME + results.totalTime;
+    TOTAL_TESTS_SKIPPED = results.skipped;
 
     if (this.TOTAL_FAILED > 0) {
-      this.FAILED.forEach(msg => write(`\n${  msg}`));
+      this.FAILED.forEach(msg => write("\n" + msg));
       this.FAILED = [];
     }
-    write(`${msg  }\n`);
+    write(msg + "\n");
   };
 
   this._writeCharacter = function(character) {
@@ -128,10 +156,23 @@ function triggerOnErrorCallbacks(error) {
   onErrorCallbacks.forEach(callback => callback(error));
 }
 
+function triggerOnFailureCallbacks(failure) {
+  onFailureCallbacks.forEach(callback => callback(failure));
+}
+
 module.exports = {
   "reporter:caplin-dots": ["type", CaplinDotsReporter],
   onError(callback) {
     onErrorCallbacks.push(callback);
+  },
+  onFailure(callback) {
+    onFailureCallbacks.push(callback);
+  },
+  getTotalTime() {
+    return TOTAL_TIME;
+  },
+  getTotalTestsSkipped() {
+    return TOTAL_TESTS_SKIPPED;
   }
 };
 

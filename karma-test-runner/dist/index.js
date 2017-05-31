@@ -9,7 +9,8 @@ let runPackagesTests = (() => {
       success: 0,
       failed: 0,
       error: false,
-      errors: []
+      errors: [],
+      failures: []
     };
     // When the user hits Control-C we want to exit the process even if we have
     // queued test runs.
@@ -21,6 +22,9 @@ let runPackagesTests = (() => {
     });
     onError(function (error) {
       summary.errors.push({ packageName, error });
+    });
+    onFailure(function (failure) {
+      summary.failures.push({ packageName, failure });
     });
 
     try {
@@ -52,6 +56,7 @@ const { resolve } = require("path");
 
 const { LOG_ERROR } = require("karma/lib/constants");
 const { onError } = require("karma-caplin-dots-reporter");
+const { onFailure } = require("karma-caplin-dots-reporter");
 const parseArgs = require("minimist");
 const { DefinePlugin } = require("webpack");
 
