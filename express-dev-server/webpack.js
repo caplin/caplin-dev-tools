@@ -7,8 +7,7 @@ const { hot } = parseArgs(process.argv.slice(2));
 
 module.exports = (application, webpackConfig) => {
   const compiler = webpack(webpackConfig);
-
-  let devMiddlewareOptions = {
+  const devMiddlewareOptions = {
     // Required, path to bind the middleware to.
     publicPath: webpackConfig.output.publicPath,
     noInfo: false,
