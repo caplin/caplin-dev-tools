@@ -10,6 +10,5 @@ module.exports = function configureBundleEntryPoint(
   // Certain apps can have variant entry points e.g. mobile.
   const entryFile = variant ? `index-${variant}.js` : "index.js";
   const appEntryPoint = join(basePath, "src", entryFile);
-
-  webpackConfig.entry = appEntryPoint;
+  webpackConfig.entry = [appEntryPoint];
 };

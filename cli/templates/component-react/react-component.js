@@ -30,4 +30,8 @@ export class {{componentName}} extends React.Component {
   }
 }
 
+if (module.hot) {
+    module.hot.accept();
+}
+
 export default {{componentName}};
