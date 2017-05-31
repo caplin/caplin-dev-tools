@@ -1,0 +1,15 @@
+{
+  "name": "@caplin/karma-log-update-reporter",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "keywords": [
+    "karma-reporter",
+    "karma",
+    "karma reporter"
+  ],
+  "license": "ISC",
+  "dependencies": {
+    "log-update": "^2.0.0"
+  }
+}
