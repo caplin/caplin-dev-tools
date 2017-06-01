@@ -38,7 +38,7 @@ function printTestServeErrorMessage() {
   process.exit();
 }
 
-function getSelectedBrowser(commandLineArgs) {
+function getSelectedBrowser(commandLineArgs, watchMode) {
   let browser = commandLineArgs.b || commandLineArgs.browser || "chrome";
   const optionlessArgs = commandLineArgs._;
   const browserIndex = optionlessArgs.indexOf("--browser");
@@ -64,8 +64,8 @@ function getSelectedBrowser(commandLineArgs) {
   return browser.toLowerCase();
 }
 
-function getTestBrowser(commandLineArgs) {
-  const selectedBrowser = getSelectedBrowser(commandLineArgs);
+function getTestBrowser(commandLineArgs, watchMode) {
+  const selectedBrowser = getSelectedBrowser(commandLineArgs, watchMode);
 
   switch (selectedBrowser) {
     case "ie":
@@ -147,7 +147,7 @@ function filterPackagesToTest(packagesTestMetadata, packagesToTest) {
 
 module.exports.filterPackagesToTest = filterPackagesToTest;
 
-function runPackageTests(karmaConfig, resolve, summary, packageName) {
+function runPackageTests(karmaConfig, resolve, summary, packageName, watchMode) {
   console.log(
     `\nRunning ${karmaConfig.testsType} for: \x1b[35m${packageName}\x1b[0m`
   );
@@ -160,6 +160,10 @@ function runPackageTests(karmaConfig, resolve, summary, packageName) {
     summary.success += success;
     summary.failed += failed;
     summary.error = summary.error || error;
+
+    if (watchMode) {
+      resolve();
+    }
   });
 
   server.start();

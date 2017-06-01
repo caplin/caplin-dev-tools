@@ -20,12 +20,12 @@ const args = parseArgs(process.argv.slice(2));
 const atsOnly = runOnlyATs(args);
 const utsOnly = runOnlyUTs(args);
 // If true keep browser open after test run.
-const devMode = args.dev || false;
+const watchMode = args.watch || false;
 // Packages to test, if the user specifies none all packages will be tested.
 const packagesToTest = args._;
 const atsTestEntry = resolve(__dirname, "ats-test-entry.js");
 const utsTestEntry = resolve(__dirname, "uts-test-entry.js");
-const testBrowser = getTestBrowser(args);
+const testBrowser = getTestBrowser(args, watchMode);
 
 const baseKarmaConfig = {
   browsers: [testBrowser],
@@ -38,7 +38,7 @@ const baseKarmaConfig = {
     }
   },
   reporters: ["caplin-dots"],
-  singleRun: !devMode,
+  singleRun: !watchMode,
   failOnEmptyTestSuite: true,
   webpackMiddleware: {
     noInfo: true,
@@ -125,7 +125,7 @@ async function runPackagesTests(packagesKarmaConfigs) {
   process.on("SIGINT", () => {
     console.log("\nTesting stopped due to the process termination\x1b[0m");
 
-    showSummary(summary, devMode);
+    showSummary(summary, watchMode);
     process.exit();
   });
   onError(error => {
@@ -139,16 +139,16 @@ async function runPackagesTests(packagesKarmaConfigs) {
     for (const packageKarmaConfig of packagesKarmaConfigs) {
       packageName = getShortPathFromBasePath(packageKarmaConfig.basePath);
       await new Promise(resolve =>
-        runPackageTests(packageKarmaConfig, resolve, summary, packageName)
+        runPackageTests(packageKarmaConfig, resolve, summary, packageName, watchMode)
       );
     }
   } catch (err) {
-    showSummary(summary, devMode);
+    showSummary(summary, watchMode);
     console.error(err);
   }
 
-  if (devMode === false) {
-    showSummary(summary, devMode);
+  if (watchMode === false) {
+    showSummary(summary, watchMode);
     process.exit(0);
   }
 }
