@@ -1,9 +1,9 @@
-// Karma DI doesn't support classes hence the function + prototype funcs.
+// Karma DI doesn't support classes hence the constructor + prototype funcs.
 /* eslint func-names: 0 */
 
 const logUpdate = require("log-update");
 
-// Create a string outlining the current tests status (passed, failed, etc...)
+// Outline the current tests run status (no. passed, no. failed, etc...)
 function testsStatus(
   { specsInfo: { total } },
   { success, failed, error, skipped }
@@ -63,6 +63,7 @@ LogUpdateReporter.prototype.onBrowserStart = function(browser, specsInfo) {
   logMessage(this, testsStatus(this, this.results));
 };
 
+// Error during parsing/building JS bundle.
 LogUpdateReporter.prototype.onBrowserError = function(browser, error) {
   this.errorMessage = error;
 };
