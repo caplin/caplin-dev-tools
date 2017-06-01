@@ -33,6 +33,8 @@ function logMessage({ testsType, packageDir, browser }, message) {
 
 function LogUpdateReporter(karmaConfig) {
   this.browser = karmaConfig.browsers[0];
+  this.errorMessage = "";
+  this.failedResults = [];
   this.results = {
     success: 0,
     skipped: 0,
@@ -40,15 +42,23 @@ function LogUpdateReporter(karmaConfig) {
     error: false
   };
   this.packageDir = karmaConfig.packageDir;
+  // Initialize in case of `onBrowserError` being called instead of
+  // `onBrowserStart`. `testsStatus` will then have data to destructure.
+  this.specsInfo = { total: 0 };
   this.testsType = karmaConfig.testsType;
-
-  logUpdate.done();
 
   logMessage(this, "Creating log update reporter.");
 }
 
 LogUpdateReporter.prototype.onRunComplete = function(browsers, results) {
   logMessage(this, testsStatus(this, results));
+
+  // Persist the logged output. The next test run will use a new log session.
+  logUpdate.done();
+
+  if (this.errorMessage !== "") {
+    console.error("\n", this.errorMessage, "\n");
+  }
 };
 
 LogUpdateReporter.prototype.onBrowserStart = function(browser, specsInfo) {
@@ -56,6 +66,10 @@ LogUpdateReporter.prototype.onBrowserStart = function(browser, specsInfo) {
   this.specsInfo = specsInfo;
 
   logMessage(this, testsStatus(this, this.results));
+};
+
+LogUpdateReporter.prototype.onBrowserError = function(browser, error) {
+  this.errorMessage = error;
 };
 
 LogUpdateReporter.prototype.onRunStart = function() {
@@ -67,6 +81,7 @@ LogUpdateReporter.prototype.onSpecComplete = function(browser, result) {
     this.results.success = this.results.success + 1;
   } else if (result.success === false) {
     this.results.failed = this.results.failed + 1;
+    this.failedResults.push(result);
   } else if (result.skipped === true) {
     this.results.skipped = this.results.skipped + 1;
   }
