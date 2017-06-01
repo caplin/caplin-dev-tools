@@ -5,11 +5,12 @@ const {
   readdirSync,
   readFileSync,
   readJsonSync,
-  statSync,
   writeJsonSync
 } = require("fs-extra");
 const { sync } = require("glob");
 const { parse, visit } = require("recast");
+
+const { isPackageDirectory } = require("./converter-utils");
 
 const babylonParseOptions = {
   sourceType: "module",
@@ -22,8 +23,9 @@ const recastParseOptions = {
 };
 
 function isAPackageImport(astNode) {
-  return astNode.callee.name === "require" &&
-    astNode.callee.type === "Identifier";
+  return (
+    astNode.callee.name === "require" && astNode.callee.type === "Identifier"
+  );
 }
 
 // Certain `require` calls don't have string values e.g. `dynamicRefRequire.js`.
@@ -95,7 +97,8 @@ function findDependencies(packageDir, availablePackages) {
   const packageJSFilePaths = sync(`${packageDir}/**/*.js`);
 
   packageJSFilePaths.forEach(jsFile =>
-    extractPackagesFromJSFile(jsFile, importsVisitor));
+    extractPackagesFromJSFile(jsFile, importsVisitor)
+  );
 
   return {
     devDependencies,
@@ -132,9 +135,10 @@ module.exports = ({ packagesDir }) => {
   const availablePackages = new Map();
 
   for (const packageName of possiblePackages) {
+    const isPackage = isPackageDirectory(packagesDir, packageName);
     const packageDir = join(packagesDir, packageName);
 
-    if (statSync(packageDir).isDirectory()) {
+    if (isPackage) {
       availablePackages.set(packageName, {
         packageName,
         packageDir

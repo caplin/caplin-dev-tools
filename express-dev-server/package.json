@@ -8,7 +8,9 @@
     "express": "^4.13.4",
     "express-session": "^1.14.2",
     "http-proxy": "^1.14.0",
+    "minimist": "^1.2.0",
     "webpack": "2.3.3",
-    "webpack-dev-middleware": "^1.6.1"
+    "webpack-dev-middleware": "^1.6.1",
+    "webpack-hot-middleware": "^2.18.0"
   }
 }

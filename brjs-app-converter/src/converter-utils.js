@@ -170,9 +170,9 @@ module.exports.createNamespaceDirectoriesIfMissing = (
 };
 
 // Put the current codebase in a new top level dir to clean up the project dir.
-module.exports.moveCurrentCodebase = function moveCurrentCodebase(
-  { backupDir }
-) {
+module.exports.moveCurrentCodebase = function moveCurrentCodebase({
+  backupDir
+}) {
   // Filter out hidden files, skips files like `.git`.
   const projectFiles = readdirSync(".").filter(
     fileName => !/^\./.test(fileName)
@@ -218,4 +218,14 @@ module.exports.verifyCLIArgs = function verifyCLIArgs(applicationName) {
   } catch (appFolderInaccesibleError) {
     throw new Error(`The folder ${appFolderName} could not be found.`);
   }
+};
+
+module.exports.isPackageDirectory = function isPackageDirectory(
+  packagesDir,
+  packageName
+) {
+  const isFileVisible = packageName.startsWith(".") === false;
+  const isDirectory = statSync(join(packagesDir, packageName)).isDirectory();
+
+  return isFileVisible && isDirectory;
 };

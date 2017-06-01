@@ -5,11 +5,11 @@ const {
   existsSync,
   readdirSync,
   readJsonSync,
-  statSync,
   writeJsonSync
 } = require("fs-extra");
 
 const { templateDir } = require("./converter-data");
+const { isPackageDirectory } = require("./converter-utils");
 
 function serverDirs(convertedAppDir) {
   let javaServerDir = join(convertedAppDir, "scripts");
@@ -50,10 +50,7 @@ function setUpApplicationFiles(
     join(convertedAppDir, "static/dev")
   );
 
-  const {
-    javaServerDir,
-    nodeServerDir
-  } = serverDirs(convertedAppDir);
+  const { javaServerDir, nodeServerDir } = serverDirs(convertedAppDir);
 
   copySync(
     conversionMetadata.privateKeyFileLocation,
@@ -79,9 +76,9 @@ function populateApplicationPackageJSON(
 
   for (const packageDir of readdirSync(packagesDir)) {
     const isNotLib = packagesThatShouldBeLibs.includes(packageDir) === false;
-    const isDirectory = statSync(join(packagesDir, packageDir)).isDirectory();
+    const isPackage = isPackageDirectory(packagesDir, packageDir);
 
-    if (isNotLib && isDirectory) {
+    if (isNotLib && isPackage) {
       appPackageJSON.dependencies[
         packageDir
       ] = `file:../../${packagesDirName}/${packageDir}`;
