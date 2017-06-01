@@ -1,6 +1,6 @@
 {
   "name": "@caplin/webpack-config-app",
-  "version": "4.0.4",
+  "version": "4.1.4",
   "description": "webpack config common to Caplin applications",
   "main": "index.js",
   "author": "",
@@ -24,6 +24,7 @@
     "style-loader": "^0.16.1",
     "uglify-js": "^2.8.20",
     "uglifyjs-webpack-plugin": "^0.4.0",
-    "webpack": "2.3.3"
+    "webpack": "2.3.3",
+    "react-error-overlay": "^1.0.7"
   }
 }
