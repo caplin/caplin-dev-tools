@@ -2,7 +2,6 @@ const { join } = require("path");
 
 const AliasesPlugin = require("@caplin/aliases-plugin");
 const { appendModulePatch } = require("@caplin/patch-loader/patchesStore");
-const WebpackErrorNotificationPlugin = require("webpack-error-notification");
 
 module.exports.BASE_WEBPACK_CONFIG = {
   module: {
@@ -46,10 +45,7 @@ module.exports.BASE_WEBPACK_CONFIG = {
     extensions: [".js", ".json", ".jsx"]
   },
   plugins: [
-    new AliasesPlugin(),
-    new WebpackErrorNotificationPlugin(undefined, {
-      notifyWarnings: false
-    })
+    new AliasesPlugin()
   ],
   resolveLoader: {
     alias: {

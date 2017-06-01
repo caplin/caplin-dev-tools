@@ -11,5 +11,6 @@ module.exports = function configureBundleEntryPoint(
   const entryFile = variant ? `index-${variant}.js` : "index.js";
   const appEntryPoint = join(basePath, "src", entryFile);
 
-  webpackConfig.entry = appEntryPoint;
+  const reactErrorOverlay = require.resolve("react-error-overlay");
+  webpackConfig.entry = [reactErrorOverlay, appEntryPoint];
 };

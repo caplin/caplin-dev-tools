@@ -25,6 +25,6 @@
     "uglify-js": "^2.8.20",
     "uglifyjs-webpack-plugin": "^0.4.0",
     "webpack": "2.3.3",
-    "webpack-error-notification": "^0.1.7"
+    "react-error-overlay": "^1.0.7"
   }
 }
