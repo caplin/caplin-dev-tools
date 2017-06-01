@@ -38,7 +38,7 @@ function printTestServeErrorMessage() {
   process.exit();
 }
 
-function getSelectedBrowser(commandLineArgs, watchMode) {
+function getSelectedBrowser(commandLineArgs, packagesToTestLength, watchMode) {
   let browser = commandLineArgs.b || commandLineArgs.browser || "chrome";
   const optionlessArgs = commandLineArgs._;
   const browserIndex = optionlessArgs.indexOf("--browser");
@@ -48,7 +48,7 @@ function getSelectedBrowser(commandLineArgs, watchMode) {
   }
 
   if (
-    watchMode && requestedPackagesToTest.length === 0 && browser !== "headless"
+    watchMode && packagesToTestLength === 0 && browser !== "headless"
   ) {
     printTestServeErrorMessage();
   }
@@ -64,8 +64,8 @@ function getSelectedBrowser(commandLineArgs, watchMode) {
   return browser.toLowerCase();
 }
 
-function getTestBrowser(commandLineArgs, watchMode) {
-  const selectedBrowser = getSelectedBrowser(commandLineArgs, watchMode);
+function getTestBrowser(commandLineArgs, packagesToTestLength, watchMode) {
+  const selectedBrowser = getSelectedBrowser(commandLineArgs, packagesToTestLength, watchMode);
 
   switch (selectedBrowser) {
     case "ie":

@@ -79,7 +79,7 @@ const watchMode = args.watch || false;
 const packagesToTest = args._;
 const atsTestEntry = resolve(__dirname, "ats-test-entry.js");
 const utsTestEntry = resolve(__dirname, "uts-test-entry.js");
-const testBrowser = getTestBrowser(args, watchMode);
+const testBrowser = getTestBrowser(args, packagesToTest.length, watchMode);
 
 const baseKarmaConfig = {
   browsers: [testBrowser],
