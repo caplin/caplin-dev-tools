@@ -2,11 +2,18 @@
 /* eslint func-names: 0 */
 const logUpdate = require("log-update");
 
-function testsStatus({ specsInfo: { total } }, { success, failed, error }) {
+function testsStatus(
+  { specsInfo: { total } },
+  { success, failed, error, skipped }
+) {
   let status = `specs: ${total}`;
 
   if (success > 0) {
     status = `${status}, pass: ${success}`;
+  }
+
+  if (skipped > 0) {
+    status = `${status}, skip: ${skipped}`;
   }
 
   if (failed > 0) {
@@ -28,6 +35,7 @@ function LogUpdateReporter(karmaConfig) {
   this.browser = karmaConfig.browsers[0];
   this.results = {
     success: 0,
+    skipped: 0,
     failed: 0,
     error: false
   };
@@ -57,21 +65,13 @@ LogUpdateReporter.prototype.onRunStart = function() {
 LogUpdateReporter.prototype.onSpecComplete = function(browser, result) {
   if (result.success === true) {
     this.results.success = this.results.success + 1;
+  } else if (result.success === false) {
+    this.results.failed = this.results.failed + 1;
+  } else if (result.skipped === true) {
+    this.results.skipped = this.results.skipped + 1;
   }
 
   logMessage(this, testsStatus(this, this.results));
-};
-
-LogUpdateReporter.prototype.specSuccess = function() {
-  debugger;
-};
-
-LogUpdateReporter.prototype.specSkipped = function() {
-  debugger;
-};
-
-LogUpdateReporter.prototype.specFailure = function() {
-  debugger;
 };
 
 LogUpdateReporter.$inject = ["config"];
