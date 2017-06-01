@@ -1,5 +1,6 @@
-// Karma DI doesn't handle classes so we can't export a class directly.
+// Karma DI doesn't support classes hence the function + prototype funcs.
 /* eslint func-names: 0 */
+
 const logUpdate = require("log-update");
 
 function testsStatus(
@@ -42,23 +43,16 @@ function LogUpdateReporter(karmaConfig) {
     error: false
   };
   this.packageDir = karmaConfig.packageDir;
-  // Initialize in case of `onBrowserError` being called instead of
-  // `onBrowserStart`. `testsStatus` will then have data to destructure.
+  // Initialize so `testsStatus` has data to destructure in case of
+  // `onBrowserError` instead of `onBrowserStart`.
   this.specsInfo = { total: 0 };
   this.testsType = karmaConfig.testsType;
 
   logMessage(this, "Creating log update reporter.");
 }
 
-LogUpdateReporter.prototype.onRunComplete = function(browsers, results) {
-  logMessage(this, testsStatus(this, results));
-
-  // Persist the logged output. The next test run will use a new log session.
-  logUpdate.done();
-
-  if (this.errorMessage !== "") {
-    console.error("\n", this.errorMessage, "\n");
-  }
+LogUpdateReporter.prototype.onRunStart = function() {
+  logMessage(this, "Test run starting, compiling webpack bundle...");
 };
 
 LogUpdateReporter.prototype.onBrowserStart = function(browser, specsInfo) {
@@ -70,10 +64,6 @@ LogUpdateReporter.prototype.onBrowserStart = function(browser, specsInfo) {
 
 LogUpdateReporter.prototype.onBrowserError = function(browser, error) {
   this.errorMessage = error;
-};
-
-LogUpdateReporter.prototype.onRunStart = function() {
-  logMessage(this, "Test run starting, compiling webpack bundle...");
 };
 
 LogUpdateReporter.prototype.onSpecComplete = function(browser, result) {
@@ -89,6 +79,18 @@ LogUpdateReporter.prototype.onSpecComplete = function(browser, result) {
   logMessage(this, testsStatus(this, this.results));
 };
 
+LogUpdateReporter.prototype.onRunComplete = function(browsers, results) {
+  logMessage(this, testsStatus(this, results));
+
+  // Persist the logged output. The next test run will use a new log session.
+  logUpdate.done();
+
+  if (this.errorMessage !== "") {
+    console.error("\n", this.errorMessage, "\n");
+  }
+};
+
+// Tell Karma's DI to provide the karma config to `LogUpdateReporter`.
 LogUpdateReporter.$inject = ["config"];
 
 // PUBLISH DI MODULE
