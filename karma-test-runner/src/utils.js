@@ -37,10 +37,12 @@ function getSelectedBrowser(commandLineArgs) {
 
   // To be removed once Chrome Headless supports Windows
   const isWin = /^win/.test(process.platform);
-  if (browser === "headless" && isWin) {
-    browser = "phantom-js";
-  } else {
-    browser = "chrome-headless";
+  if (browser === "headless") {
+    if (isWin) {
+      browser = "phantom-js";
+    } else {
+      browser = "chrome-headless";
+    }
   }
 
   return browser.toLowerCase();
