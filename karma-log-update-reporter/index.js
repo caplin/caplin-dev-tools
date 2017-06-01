@@ -3,6 +3,7 @@
 
 const logUpdate = require("log-update");
 
+// Create a string outlining the current tests status (passed, failed, etc...)
 function testsStatus(
   { specsInfo: { total } },
   { success, failed, error, skipped }
