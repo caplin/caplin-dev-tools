@@ -16,6 +16,12 @@ function runOnlyUTs(args) {
 
 module.exports.runOnlyUTs = runOnlyUTs;
 
+function printTestServeErrorMessage() {
+  console.log(`To use test:serve for multiple packages, please run in headless mode: `, `\n\n \x1b[35m npm run test:serve -- --browser headless\x1b[0m \n`);
+  console.log(`Alternatively, to run in a browser for a single package, you can use: `, ` \n\n \x1b[35m npm run test:serve packageName\x1b[0m \n`);
+  process.exit();
+}
+
 function getSelectedBrowser(commandLineArgs) {
   let browser = commandLineArgs.b || commandLineArgs.browser || "chrome";
   const optionlessArgs = commandLineArgs._;
@@ -23,6 +29,10 @@ function getSelectedBrowser(commandLineArgs) {
 
   if (browserIndex !== -1) {
     browser = optionlessArgs[browserIndex + 1];
+  }
+
+  if (watchMode && requestedPackagesToTest.length === 0 && browser !== "headless") {
+    printTestServeErrorMessage();
   }
 
   // To be removed once Chrome Headless supports Windows
