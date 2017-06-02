@@ -16,13 +16,40 @@ function runOnlyUTs(args) {
 
 module.exports.runOnlyUTs = runOnlyUTs;
 
-function getSelectedBrowser(commandLineArgs) {
+function printTestWatchErrorMessage() {
+  console.log(`To use test:watch for multiple packages, please include the appropriate flag: `, `\n\n \x1b[35m npm run test:watch -- --all\x1b[0m \n`);
+  console.log(`Alternatively, to run in a browser for a single package, you can use: `, ` \n\n \x1b[35m npm run test:watch <package-name> --browser <browser-name>\x1b[0m \n`);
+  process.exit();
+}
+
+function printTestInspectErrorMessage() {
+  console.log(`To run test:inspect in a browser for a single package, you can use: `, ` \n\n \x1b[35m npm run test:inspect <package-name> --browser <browser-name>\x1b[0m \n`);
+  process.exit();
+}
+
+function getSelectedBrowser(commandLineArgs, packagesToTestLength, watchMode, inspectMode, allTests) {
   let browser = commandLineArgs.b || commandLineArgs.browser || "chrome";
   const optionlessArgs = commandLineArgs._;
   const browserIndex = optionlessArgs.indexOf("--browser");
 
   if (browserIndex !== -1) {
     browser = optionlessArgs[browserIndex + 1];
+    if (watchMode && browser !== "headless" && packagesToTestLength === 0) {
+      printTestWatchErrorMessage();
+    }
+    if (inspectMode && packagesToTestLength === 0) {
+      printTestInspectErrorMessage();
+    }
+  } else {
+    if (watchMode && !allTests && packagesToTestLength === 0) {
+      printTestWatchErrorMessage();
+    } else if (watchMode) {
+      browser = "headless";
+    }
+
+    if (inspectMode && packagesToTestLength === 0) {
+      printTestInspectErrorMessage();
+    }
   }
 
   // To be removed once Chrome Headless supports Windows
@@ -38,8 +65,8 @@ function getSelectedBrowser(commandLineArgs) {
   return browser.toLowerCase();
 }
 
-function getTestBrowser(commandLineArgs) {
-  const selectedBrowser = getSelectedBrowser(commandLineArgs);
+function getTestBrowser(commandLineArgs, packagesToTestLength, watchMode, inspectMode, allTests) {
+  const selectedBrowser = getSelectedBrowser(commandLineArgs, packagesToTestLength, watchMode, inspectMode, allTests);
 
   switch (selectedBrowser) {
     case "ie":
@@ -61,8 +88,8 @@ function getTestBrowser(commandLineArgs) {
 
 module.exports.getTestBrowser = getTestBrowser;
 
-function showSummary({ success, failed, error, errors, failures }, devMode) {
-  if (!devMode) {
+function showSummary({ success, failed, error, errors, failures }, watchMode) {
+  if (!watchMode) {
     console.log("\n====== Test Report ======");
 
     if (failed > 0 || error) {
@@ -118,7 +145,7 @@ function filterPackagesToTest(packagesTestMetadata, packagesToTest) {
 
 module.exports.filterPackagesToTest = filterPackagesToTest;
 
-function runPackageTests(karmaConfig, resolve, summary, packageName) {
+function runPackageTests(karmaConfig, resolve, summary, packageName, watchMode, allTests) {
   console.log(`\nRunning ${karmaConfig.testsType} for: \x1b[35m${packageName}\x1b[0m`);
 
   const server = new Server(karmaConfig, () => {
@@ -129,6 +156,10 @@ function runPackageTests(karmaConfig, resolve, summary, packageName) {
     summary.success += success;
     summary.failed += failed;
     summary.error = summary.error || error;
+
+    if (watchMode && allTests) {
+      resolve();
+    }
   });
 
   server.start();
