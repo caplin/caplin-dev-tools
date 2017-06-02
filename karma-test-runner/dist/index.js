@@ -31,7 +31,7 @@ let runPackagesTests = (() => {
       for (const packageKarmaConfig of packagesKarmaConfigs) {
         packageName = getShortPathFromBasePath(packageKarmaConfig.basePath);
         yield new Promise(function (resolve) {
-          return runPackageTests(packageKarmaConfig, resolve, summary, packageName, watchMode);
+          return runPackageTests(packageKarmaConfig, resolve, summary, packageName, watchMode, allTests);
         });
       }
     } catch (err) {
@@ -75,6 +75,8 @@ const atsOnly = runOnlyATs(args);
 const utsOnly = runOnlyUTs(args);
 // If true keep browser open after test run.
 const watchMode = args.watch || false;
+const inspectMode = args.inspect || false;
+const allTests = args.all || args._.includes("--all") || false;
 // Packages to test, if the user specifies none all packages will be tested.
 const packagesToTest = args._;
 const atsTestEntry = resolve(__dirname, "ats-test-entry.js");
@@ -92,7 +94,7 @@ const baseKarmaConfig = {
     }
   },
   reporters: ["caplin-dots"],
-  singleRun: !watchMode,
+  singleRun: !watchMode && !inspectMode,
   failOnEmptyTestSuite: true,
   webpackMiddleware: {
     noInfo: true,
