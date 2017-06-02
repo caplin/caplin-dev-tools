@@ -2,6 +2,28 @@ const { Server } = require("karma");
 const { getTotalTime } = require("karma-caplin-dots-reporter");
 const { getTotalTestsSkipped } = require("karma-caplin-dots-reporter");
 
+function getRequestedPackages(commandLineArgs) {
+  const requestedPackages = [...commandLineArgs];
+
+  // if browser is specified remove the flag from the list
+  const browserIdx = requestedPackages.indexOf("--browser");
+  if (browserIdx !== -1) {
+    requestedPackages.splice(browserIdx, 2);
+  }
+
+  const possibleFlags = ["--uts", "--UTs", "--ats", "--ATs"];
+  possibleFlags.forEach(flag => {
+    const idx = requestedPackages.indexOf(flag);
+    if (idx !== -1) {
+      requestedPackages.splice(idx, 1);
+    }
+  });
+
+  return requestedPackages;
+}
+
+module.exports.getRequestedPackages = getRequestedPackages;
+
 function runOnlyATs(args) {
   return args.ats ||
     args.ATs ||
