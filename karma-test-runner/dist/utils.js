@@ -17,18 +17,23 @@ function runOnlyUTs(args) {
 module.exports.runOnlyUTs = runOnlyUTs;
 
 function printTestWatchErrorMessage() {
-  console.log(`To use test:watch for multiple packages, please include the appropriate flag: `, `\n\n \x1b[35m npm run test:watch -- --all\x1b[0m \n`);
-  console.log(`Alternatively, to run in a browser for a single package, you can use: `, ` \n\n \x1b[35m npm run test:watch <package-name> --browser <browser-name>\x1b[0m \n`);
+  console.log(`To use test:watch it is advised to specify a single package: `, `\n\n \x1b[35m npm run test:watch <package-name> --browser <browser-name> \x1b[0m \n`);
+  console.log(`Alternatively, to run all tests (headless mode only) please use: `, ` \n\n \x1b[35m npm run test:watch -- --all \x1b[0m \n`);
   process.exit();
 }
 
-function printTestInspectErrorMessage() {
-  console.log(`To run test:inspect in a browser for a single package, you can use: `, ` \n\n \x1b[35m npm run test:inspect <package-name> --browser <browser-name>\x1b[0m \n`);
-  process.exit();
+// To be removed once Chrome Headless supports Windows
+function getCorrectHeadlessBrowser() {
+  const isWin = /^win/.test(process.platform);
+  if (isWin) {
+    return "PhantomJS";
+  } else {
+    return "ChromeHeadless";
+  }
 }
 
-function getSelectedBrowser(commandLineArgs, packagesToTestLength, watchMode, inspectMode, allTests) {
-  let browser = commandLineArgs.b || commandLineArgs.browser || "chrome";
+function getSelectedBrowser(commandLineArgs, packagesToTestLength, watchMode, allTests) {
+  let browser = commandLineArgs.b || commandLineArgs.browser || "headless";
   const optionlessArgs = commandLineArgs._;
   const browserIndex = optionlessArgs.indexOf("--browser");
 
@@ -37,34 +42,17 @@ function getSelectedBrowser(commandLineArgs, packagesToTestLength, watchMode, in
     if (watchMode && browser !== "headless" && packagesToTestLength === 0) {
       printTestWatchErrorMessage();
     }
-    if (inspectMode && packagesToTestLength === 0) {
-      printTestInspectErrorMessage();
-    }
   } else {
     if (watchMode && !allTests && packagesToTestLength === 0) {
       printTestWatchErrorMessage();
-    } else if (watchMode) {
-      browser = "headless";
     }
-
-    if (inspectMode && packagesToTestLength === 0) {
-      printTestInspectErrorMessage();
-    }
-  }
-
-  // To be removed once Chrome Headless supports Windows
-  const isWin = /^win/.test(process.platform);
-  if (browser === "headless" && isWin) {
-    browser = "phantom-js";
-  } else {
-    browser = "chrome-headless";
   }
 
   return browser.toLowerCase();
 }
 
-function getTestBrowser(commandLineArgs, packagesToTestLength, watchMode, inspectMode, allTests) {
-  const selectedBrowser = getSelectedBrowser(commandLineArgs, packagesToTestLength, watchMode, inspectMode, allTests);
+function getTestBrowser(commandLineArgs, packagesToTestLength, watchMode, allTests) {
+  const selectedBrowser = getSelectedBrowser(commandLineArgs, packagesToTestLength, watchMode, allTests);
 
   switch (selectedBrowser) {
     case "ie":
@@ -73,14 +61,12 @@ function getTestBrowser(commandLineArgs, packagesToTestLength, watchMode, inspec
       return "Firefox";
     case "chrome":
       return "Chrome";
-    case "chrome-headless":
-      return "ChromeHeadless";
-    case "phantom-js":
-      return "PhantomJS";
+    case "headless":
+      return getCorrectHeadlessBrowser();
 
     default:
-      console.log(`${selectedBrowser} is not a supported browser, defaulting to Chrome`);
-      return "Chrome";
+      console.log(`${selectedBrowser} is not a supported browser, defaulting to a headless one`);
+      return getCorrectHeadlessBrowser();
   }
 }
 

@@ -21,7 +21,6 @@ const atsOnly = runOnlyATs(args);
 const utsOnly = runOnlyUTs(args);
 // If true keep browser open after test run.
 const watchMode = args.watch || false;
-const inspectMode = args.inspect || false;
 const allTests = args.all || args._.includes("--all") || false;
 // Packages to test, if the user specifies none all packages will be tested.
 const packagesToTest = args._;
@@ -40,7 +39,7 @@ const baseKarmaConfig = {
     }
   },
   reporters: ["caplin-dots"],
-  singleRun: !watchMode && !inspectMode,
+  singleRun: !watchMode,
   failOnEmptyTestSuite: true,
   webpackMiddleware: {
     noInfo: true,
