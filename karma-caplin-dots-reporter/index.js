@@ -4,6 +4,7 @@ const util = require("util");
 
 const onErrorCallbacks = [];
 const onFailureCallbacks = [];
+const onBrowserErrorCallbacks = [];
 const ERROR_TYPES = [
   "EvalError",
   "InternalError",
@@ -120,6 +121,10 @@ function CaplinDotsReporter(formatError, hasColors, options, adapter) {
       results.total
     );
 
+    if (results.error) {
+      triggerOnBrowserErrorCallbacks();
+    }
+
     if (results.failed) {
       msg += chalk.red(
         ` (${this.TOTAL_FAILED - this.TOTAL_ERRORS} FAILED) (${this.TOTAL_ERRORS} ERRORED)`
@@ -160,6 +165,10 @@ function triggerOnFailureCallbacks(failure) {
   onFailureCallbacks.forEach(callback => callback(failure));
 }
 
+function triggerOnBrowserErrorCallbacks() {
+  onBrowserErrorCallbacks.forEach(callback => callback());
+}
+
 module.exports = {
   "reporter:caplin-dots": ["type", CaplinDotsReporter],
   onError(callback) {
@@ -167,6 +176,9 @@ module.exports = {
   },
   onFailure(callback) {
     onFailureCallbacks.push(callback);
+  },
+  onBrowserError(callback) {
+    onBrowserErrorCallbacks.push(callback);
   },
   getTotalTime() {
     return TOTAL_TIME;
