@@ -1,25 +1,24 @@
 {
   "name": "caplin-cli",
-  "version": "1.0.1",
-  "description": "caplin-cli app bootstrapping experiment",
+  "version": "1.1.0",
+  "description": "caplin-cli app scaffolding",
   "main": "index.js",
   "bin": {
     "caplin-cli": "./index.js"
   },
   "scripts": {
-    "test": "./node_modules/.bin/mocha",
-    "generateDocs": "./node_modules/.bin/jsdoc cli.js -c jsdoc.json"
+    "test": "mocha",
+    "generateDocs": "jsdoc cli.js -c jsdoc.json"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/caplin/caplin-cli.git"
+    "url": "git+https://github.com/caplin/caplin-dev-tools.git"
   },
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/caplin/caplin-cli/issues"
+    "url": "https://github.com/caplin/caplin-dev-tools/issues"
   },
-  "homepage": "https://github.com/caplin/caplin-cli#readme",
   "devDependencies": {
     "jsdoc": "^3.4.0",
     "minami": "^1.1.1"
