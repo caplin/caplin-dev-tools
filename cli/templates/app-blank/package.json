@@ -6,7 +6,8 @@
     "build": "node scripts/build.js",
     "serve": "node server/node/server.js",
     "serve:debug": "node --debug-brk server/node/server.js",
-    "test": "karma start",
+    "test": "jest",
+    "test-karma": "karma start",
     "test:serve": "karma start --no-single-run"
   },
   "dependencies": {
@@ -23,5 +24,14 @@
     "karma-mocha": "^0.2.2",
     "karma-webpack": "^1.7.0",
     "mocha": "^2.5.3"
-  }
+  },
+
+  "devDependencies": {
+   "babel-jest": "*",
+   "jest-cli": "*"
+ },
+
+ "jest": {
+   "roots": ["src"]
+ }
 }
