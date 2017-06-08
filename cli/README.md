@@ -12,7 +12,7 @@
 
 #### Installation
 
-    npm install -g caplin/caplin-cli
+    npm install -g caplin-cli
 
 #### Initialising the Workspace
 
@@ -30,7 +30,8 @@ packages-caplin/
 
     caplin-cli create-app myapp
 
-The newly created app will be placed in an apps folder. To serve the app, cd into the newly created app directory and run `npm install` followed by `npm run serve`
+The newly created app will be placed in an apps folder. To start the app, `cd`
+into the newly created app directory run `npm install` and `npm start`
 
 #### More commands
 
