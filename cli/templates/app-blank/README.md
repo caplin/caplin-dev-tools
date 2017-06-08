@@ -1,4 +1,4 @@
-## Building a scalable Application with Caplin dev-tools and packages 
+## Building a scalable Application with Caplin dev-tools and packages
 
 Below we document some of the common commands you will use as you build your application using the caplin packages.
 
@@ -28,7 +28,7 @@ new-app/
 
 ## Initial Scripts
 
-Once you have installed your applciation, by running `npm i` from the app root, you can use the default scripts:
+Once you have installed your application, by running `npm i` from the app root, you can use the default scripts:
 
 ### `npm run serve`
 
@@ -42,3 +42,41 @@ This will launch a browser and run the tests, for further test configuration ple
 
 This will generate a war file ready to be deployed on the Web server of your choice.
 
+## Creating Component Scripts
+
+### `caplin-cli create-component <component-name>`
+
+This will prompt you to choose between a blank and a React component.
+
+#### Blank Component
+
+This will result in this folder structure.
+
+```
+new-app/
+  new-component/
+    _test-ut/
+      component-test.js
+    component.js
+  scripts/
+  server/
+  src/
+```
+
+#### React Component
+
+React component names must start with a capital letter. Don't forget neither the component nor the
+sass file are imported by default. Once you're ready, you have to import them.
+This will result in this folder structure.
+
+```
+new-app/
+  new-component/
+    _test-ut/
+      react-component-test.js
+    react-component.js
+    react-component.scss
+  scripts/
+  server/
+  src/
+```
