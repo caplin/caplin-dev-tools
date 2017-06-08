@@ -4,11 +4,9 @@
   "description": "",
   "scripts": {
     "build": "node scripts/build.js",
-    "serve": "node server/node/server.js",
-    "serve:debug": "node --inspect-brk server/node/server.js",
-    "test": "jest",
     "start": "node server/node/server.js",
-    "start:debug": "node --inspect-brk server/node/server.js"
+    "start:debug": "node --inspect-brk server/node/server.js",
+    "test": "jest"
   },
   "dependencies": {
     "@caplin/build-tasks": "^4.0.0",
