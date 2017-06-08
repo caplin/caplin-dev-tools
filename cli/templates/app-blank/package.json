@@ -4,8 +4,8 @@
   "description": "",
   "scripts": {
     "build": "node scripts/build.js",
-    "serve": "node server/node/server.js",
-    "serve:debug": "node --inspect-brk server/node/server.js",
+    "start": "node server/node/server.js",
+    "start:debug": "node --inspect-brk server/node/server.js",
     "test": "karma start",
     "test:serve": "karma start --no-single-run"
   },

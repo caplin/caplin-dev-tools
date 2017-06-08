@@ -32,18 +32,16 @@ new-app/
 Once you have installed your applciation, by running `npm i` from the app root,
 you can use the default scripts:
 
-### `npm run serve`
+### `npm start`
 
-This will serve the app in dev mode, the app will be served at
+This will start the app in dev mode, the app is available at
 http://localhost:8080 (unless you specify a different port in the .env file)
 
-### `npm run test`
+### `npm test` or `npm t`
 
 This will launch a browser and run the tests, for further test configuration
 please see the karma.conf.js file in the app root.
 
 ### `npm run build`
 
-This will generate a war file ready to be deployed on the Web server of your
-choice.
-
+This will generate a war file ready to be deployed on your Web server.
