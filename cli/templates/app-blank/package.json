@@ -25,13 +25,11 @@
     "karma-webpack": "^1.7.0",
     "mocha": "^2.5.3"
   },
-
   "devDependencies": {
    "babel-jest": "*",
    "jest-cli": "*"
- },
-
- "jest": {
-   "roots": ["src"]
- }
+  },
+  "jest": {
+    "roots": ["src"]
+  }
 }
