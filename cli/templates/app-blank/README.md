@@ -1,6 +1,7 @@
 ## Building a scalable Application with Caplin dev-tools and packages 
 
-Below we document some of the common commands you will use as you build your application using the caplin packages.
+Below we document some of the common commands you will use as you build your
+application using the caplin packages.
 
 ### Folder Structure
 
@@ -28,17 +29,21 @@ new-app/
 
 ## Initial Scripts
 
-Once you have installed your applciation, by running `npm i` from the app root, you can use the default scripts:
+Once you have installed your applciation, by running `npm i` from the app root,
+you can use the default scripts:
 
 ### `npm run serve`
 
-This will serve the app in dev mode, the app will be served at http://localhost:8080 (unless you have specified a different port in the .env file)
+This will serve the app in dev mode, the app will be served at
+http://localhost:8080 (unless you specify a different port in the .env file)
 
 ### `npm run test`
 
-This will launch a browser and run the tests, for further test configuration please see the karma.conf.js file in the app root.
+This will launch a browser and run the tests, for further test configuration
+please see the karma.conf.js file in the app root.
 
 ### `npm run build`
 
-This will generate a war file ready to be deployed on the Web server of your choice.
+This will generate a war file ready to be deployed on the Web server of your
+choice.
 

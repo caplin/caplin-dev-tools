@@ -5,23 +5,22 @@
   "scripts": {
     "build": "node scripts/build.js",
     "serve": "node server/node/server.js",
-    "serve:debug": "node --debug-brk server/node/server.js",
+    "serve:debug": "node --inspect-brk server/node/server.js",
     "test": "karma start",
     "test:serve": "karma start --no-single-run"
   },
   "dependencies": {
-    "@caplin/alias-loader": "^1.5.16",
-    "@caplin/build-tasks": "^3.0.0",
-    "@caplin/express-dev-server": "^1.10.0",
+    "@caplin/build-tasks": "^4.0.0",
+    "@caplin/express-dev-server": "^2.0.0",
     "@caplin/versioning": "^2.0.0",
-    "@caplin/webpack-config-app": "^2.1.0",
+    "@caplin/webpack-config-app": "^4.0.0",
     "babel-preset-env": "^1.2.2",
     "babel-preset-react": "^6.23.0",
-    "chai": "3.5.0",
-    "karma": "^0.13.22",
-    "karma-chrome-launcher": "^0.2.3",
-    "karma-mocha": "^0.2.2",
-    "karma-webpack": "^1.7.0",
-    "mocha": "^2.5.3"
+    "chai": "^4.0.0",
+    "karma": "^1.0.0",
+    "karma-chrome-launcher": "^2.0.0",
+    "karma-mocha": "^1.0.0",
+    "karma-webpack": "^2.0.0",
+    "mocha": "^3.0.0"
   }
 }
