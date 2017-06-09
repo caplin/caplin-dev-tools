@@ -5,19 +5,10 @@ const {
   statSync,
   writeFileSync
 } = require("fs");
-const {
-  dirname,
-  join,
-  relative,
-  sep
-} = require("path");
+const { dirname, join, relative, sep } = require("path");
 
-const {
-  load
-} = require("cheerio");
-const {
-  sync
-} = require("glob");
+const { load } = require("cheerio");
+const { sync } = require("glob");
 
 const jsGlobOptions = {
   ignore: ["**/config/aliases.js"]
@@ -55,9 +46,8 @@ function findReferencedTemplateIDs(parsedDOM) {
     const dataValue = parsedDOM(element).data("bind");
     // Some template names are code to be executed as opposed to a simple string
     // e.g. `template: {name: amount.getTemplateName()}`, we want to skip these.
-    const templateNameMatchArray = dataValue.match(
-      /.*name\s*:\s*['|"](.*?)['|"]/
-    ) ||
+    const templateNameMatchArray =
+      dataValue.match(/.*name\s*:\s*['|"](.*?)['|"]/) ||
       // Some template names are strings instead of being wrapped in an object
       // e.g. `template: 'caplin.orderticket.amount'`.
       dataValue.match(/.*template\s*:\s*['|"](.*?)['|"]/);
@@ -292,7 +282,8 @@ function addRequires(
           jsFilePath,
           isRelative,
           removeDirPrefix
-        ))
+        )
+      )
       .map(requirePath => `require('${requirePath}');`)
       .join("\n");
 
@@ -304,9 +295,10 @@ function addRequires(
   });
 }
 
-module.exports.injectHTMLRequires = function injectHTMLRequires(
-  { applicationName, packagesDirName }
-) {
+module.exports.injectHTMLRequires = function injectHTMLRequires({
+  applicationName,
+  packagesDirName
+}) {
   const appJSFilePaths = sync(
     `apps/${applicationName}/src/**/*.js`,
     jsGlobOptions
@@ -317,7 +309,8 @@ module.exports.injectHTMLRequires = function injectHTMLRequires(
   );
   const devPackages = readdirSync(packagesDirName)
     .filter(packageDir =>
-      statSync(join(packagesDirName, packageDir)).isDirectory())
+      statSync(join(packagesDirName, packageDir)).isDirectory()
+    )
     .filter(
       packageDir =>
         existsSync(
@@ -327,7 +320,8 @@ module.exports.injectHTMLRequires = function injectHTMLRequires(
   const packageJSFilePaths = sync(
     `${packagesDirName}/{${devPackages.join()}}/**/*.js`
   ).filter(packageJSFilePath =>
-    shouldFileBeSkipped(packageJSFilePath, applicationName));
+    shouldFileBeSkipped(packageJSFilePath, applicationName)
+  );
   const packageHTMLFilePaths = sync(
     `${packagesDirName}/**/{_resources,_resources-test-[au]t}/**/*.html`,
     htmlGlobOptions
