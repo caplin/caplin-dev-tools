@@ -10,7 +10,7 @@ const GLOB_OPTIONS = {
 // Windows backslashes have to be escaped or else they are treated as special
 // characters in the `RegExp`.
 const esc = path => path.replace(/\\/g, "\\\\");
-const packagesPath = join(process.cwd(), "..", "..", "packages");
+const packagesPath = join(process.cwd(), "..", "..", "packages-caplin");
 const patches = new Map();
 const pathPrefix = new RegExp(
   `(?:${esc(applicationNodeModulesPath)}|${esc(packagesPath)})${esc(sep)}`
