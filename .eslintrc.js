@@ -10,7 +10,7 @@ module.exports = {
     // Let's allow for..in https://github.com/airbnb/javascript/issues/1122
     "no-restricted-syntax": [
       2,
-      ...restricted.filter(r => r !== "ForOfStatement")
+      ...restricted.filter(r => r.selector !== "ForOfStatement")
     ],
     "no-underscore-dangle": ["error", { allowAfterThis: true }]
   }
