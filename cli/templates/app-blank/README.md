@@ -11,17 +11,16 @@ Your initial app structure should look like this:
 new-app/
   scripts/
   server/
-    server.js
-    webpack.js
+    node/
+      server.js
   src/
     config/
     example/
-    index.css
     index.js
-  .babelrx
+    index.scss
+  .babelrc
   .env
   index.html
-  karma.conf
   package.json
   README.md
   webpack.config.js  
@@ -41,7 +40,7 @@ http://localhost:8080 (unless you specify a different port in the .env file)
 ### `npm test` or `npm t`
 
 This will launch a browser and run the tests, for further test configuration
-please see the karma.conf.js file in the app root.
+please see the package.json file in the app root to configure jest.
 
 ### `npm run build`
 
@@ -59,13 +58,21 @@ This will result in this folder structure.
 
 ```
 new-app/
-  new-component/
-    _test-ut/
-      component-test.js
-    component.js
   scripts/
   server/
   src/
+    config/
+    example/
+      __tests__/
+      Example.js
+    index.js
+    index.scss
+  .babelrc
+  .env
+  index.html
+  package.json
+  README.md
+  webpack.config.js
 ```
 
 #### React Component
