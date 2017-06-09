@@ -1,4 +1,4 @@
-const { basename } = require("path");
+const { basename, join } = require("path");
 
 const parseArgs = require("minimist");
 
@@ -21,14 +21,12 @@ const testsScriptRunning = basename(process.argv[1]) === "tests.js";
 const isBuild = buildScriptRunning || lifeCycleEvent === "build";
 const isTest = testsScriptRunning || lifeCycleEvent.startsWith("test");
 
-module.exports.webpackConfigGenerator = function webpackConfigGenerator(
-  {
-    basePath,
-    version = "dev",
-    i18nFileName = `i18n-${version}.js`,
-    uglifyOptions
-  }
-) {
+module.exports.webpackConfigGenerator = function webpackConfigGenerator({
+  basePath,
+  version = "dev",
+  i18nFileName = `i18n-${version}.js`,
+  uglifyOptions
+}) {
   // Object.create won't work as webpack only uses enumerable own properties.
   const webpackConfig = Object.assign({}, BASE_WEBPACK_CONFIG);
 
@@ -40,6 +38,16 @@ module.exports.webpackConfigGenerator = function webpackConfigGenerator(
   configureAliases(webpackConfig, basePath);
   configureDevtool(webpackConfig, sourceMaps);
   configureBuildDependentConfig(webpackConfig, version, uglifyOptions, isBuild);
+
+  // With npm 5 `file:` dependencies are symlinked to instead of copied into
+  // `node_modules`. webpack follows the node algorithm for resolving modules;
+  // it resolves required modules relative to the requiring module. It searches
+  // for the required package inside `node_modules` directories all the way to
+  // the root of the file system. So a module inside `packages-caplin` that
+  // requires another `packages-caplin` based module will fail to find it.
+  // Given that we must configure webpack to search for packages within the
+  // app's `node_modules`.
+  webpackConfig.resolve.modules = [join(basePath, "node_modules")];
 
   return webpackConfig;
 };
