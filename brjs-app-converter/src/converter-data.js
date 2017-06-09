@@ -1,7 +1,7 @@
 const { join } = require("path");
 
 const { readFileSync } = require("fs-extra");
-const template = require("lodash/string/template");
+const template = require("lodash/template");
 
 const templateDir = join(__dirname, "..", "templates");
 

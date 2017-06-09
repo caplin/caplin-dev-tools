@@ -30,7 +30,7 @@
     "fs-extra": "^0.26.3",
     "glob": "^7.0.3",
     "js-yaml": "^3.4.6",
-    "lodash": "^3.10.1",
+    "lodash": "^4.0.0",
     "minimist": "^1.2.0",
     "properties": "^1.2.1",
     "recast": "^0.11.17",
