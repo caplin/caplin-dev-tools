@@ -6,8 +6,7 @@
     "build": "node scripts/build.js",
     "start": "node server/node/server.js",
     "start:debug": "node --inspect-brk server/node/server.js",
-    "test": "karma start",
-    "test:serve": "karma start --no-single-run"
+    "test": "jest"
   },
   "dependencies": {
     "@caplin/build-tasks": "^4.0.0",
@@ -15,12 +14,13 @@
     "@caplin/versioning": "^2.0.0",
     "@caplin/webpack-config-app": "^4.0.0",
     "babel-preset-env": "^1.2.2",
-    "babel-preset-react": "^6.23.0",
-    "chai": "^4.0.0",
-    "karma": "^1.0.0",
-    "karma-chrome-launcher": "^2.0.0",
-    "karma-mocha": "^1.0.0",
-    "karma-webpack": "^2.0.0",
-    "mocha": "^3.0.0"
+    "babel-preset-react": "^6.23.0"
+  },
+  "devDependencies": {
+   "babel-jest": "*",
+   "jest-cli": "*"
+  },
+  "jest": {
+    "roots": ["src"]
   }
 }
