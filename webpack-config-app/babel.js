@@ -96,7 +96,7 @@ function createBabelLoaderOptions(basePath) {
     });
   }
 
-  if (babelLoaderQuery.plugins) {
+  if (babelRC.plugins) {
     babelLoaderQuery.plugins = babelRC.plugins.map(plugin =>
       require.resolve(`babel-plugin-${plugin}`)
     );
