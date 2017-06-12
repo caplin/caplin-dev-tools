@@ -180,7 +180,8 @@ function updateAllImportsInPackage(
   const packageJSFiles = glob.sync(`${packagePath}/**/*.js`);
 
   packageJSFiles.forEach(jsFilePath =>
-    updateMappings(jsFilePath, moduleSources, makeModuleSourceRelative));
+    updateMappings(jsFilePath, moduleSources, makeModuleSourceRelative)
+  );
 }
 
 // Returns a function that updates all the import module sources to their new
@@ -219,23 +220,17 @@ function getPackageSrcCommonPath(packageSrcFiles, commonRoot) {
   const directoryTree = packageSrcFiles
     .map(packageSrcFilePath => packageSrcFilePath.replace(commonRoot, ""))
     .map(packageSrcFilePath => packageSrcFilePath.split("/"))
-    .reduce(
-      (partialDirectoryTree, filePaths) => {
-        filePaths.reduce(
-          (currentTreeNode, filePath) => {
-            if (currentTreeNode[filePath] === undefined) {
-              currentTreeNode[filePath] = {};
-            }
+    .reduce((partialDirectoryTree, filePaths) => {
+      filePaths.reduce((currentTreeNode, filePath) => {
+        if (currentTreeNode[filePath] === undefined) {
+          currentTreeNode[filePath] = {};
+        }
 
-            return currentTreeNode[filePath];
-          },
-          partialDirectoryTree
-        );
+        return currentTreeNode[filePath];
+      }, partialDirectoryTree);
 
-        return partialDirectoryTree;
-      },
-      {}
-    );
+      return partialDirectoryTree;
+    }, {});
 
   let commonPath = "";
   let currentDirectory = directoryTree;
@@ -387,7 +382,8 @@ function findAllPackagesThatRequireConversion(packagesDir) {
   return readdirSync(packagesDir)
     .map(packagesDirContent => `${packagesDir}/${packagesDirContent}`)
     .filter(packagesDirContentPath =>
-      lstatSync(packagesDirContentPath).isDirectory())
+      lstatSync(packagesDirContentPath).isDirectory()
+    )
     .filter(
       packagesDirContentPath =>
         fileExists(`${packagesDirContentPath}/thirdparty-lib.manifest`) ===
@@ -420,10 +416,12 @@ module.exports.convertPackagesToNewFormat = (
       packagesDir,
       moduleSources,
       backupDir
-    ));
+    )
+  );
   // Copy all the src-test modules to their new locations.
   packagesToConvert.forEach(packagePath =>
-    copyPackageSrcTestToNewLocations(packagePath, packagesDir, moduleSources));
+    copyPackageSrcTestToNewLocations(packagePath, packagesDir, moduleSources)
+  );
   // Copy all the tests to their new locations.
   // Update all the require statements.
   packagesToConvert.forEach(
