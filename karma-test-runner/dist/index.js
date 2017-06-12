@@ -10,7 +10,8 @@ let runPackagesTests = (() => {
       failed: 0,
       error: false,
       errors: [],
-      failures: []
+      failures: [],
+      browserError: []
     };
     // When the user hits Control-C we want to exit the process even if we have
     // queued test runs.
@@ -25,6 +26,10 @@ let runPackagesTests = (() => {
     });
     onFailure(function (failure) {
       summary.failures.push({ packageName, failure });
+    });
+    onBrowserError(function () {
+      console.log("\n\x1b[41m\x1b[30mTesting ended with Karma Error! A bundle error may have occured in your package.\x1b[0m");
+      summary.browserError.push(packageName);
     });
 
     try {
@@ -57,6 +62,7 @@ const { resolve } = require("path");
 const { LOG_ERROR } = require("karma/lib/constants");
 const { onError } = require("karma-caplin-dots-reporter");
 const { onFailure } = require("karma-caplin-dots-reporter");
+const { onBrowserError } = require("karma-caplin-dots-reporter");
 const parseArgs = require("minimist");
 const { DefinePlugin } = require("webpack");
 
