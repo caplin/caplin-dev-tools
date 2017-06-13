@@ -1,6 +1,6 @@
 {
   "name": "caplin-cli",
-  "version": "1.4.0",
+  "version": "1.5.1",
   "description": "caplin-cli app scaffolding",
   "main": "index.js",
   "bin": {
@@ -21,9 +21,8 @@
   },
   "devDependencies": {
     "jsdoc": "^3.4.0",
-    "minami": "^1.1.1",
-    "babel-jest": "*",
-    "jest-cli": "*"
+    "babel-jest": "^20.0.4",
+    "jest-cli": "^20.0.4"
   },
   "dependencies": {
     "auto-load": "^2.1.0",
