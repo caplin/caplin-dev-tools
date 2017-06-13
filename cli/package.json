@@ -21,8 +21,8 @@
   },
   "devDependencies": {
     "jsdoc": "^3.4.0",
-    "babel-jest": "^20.0.4",
-    "jest-cli": "^20.0.4"
+    "babel-jest": "*",
+    "jest-cli": "*"
   },
   "dependencies": {
     "auto-load": "^2.1.0",
