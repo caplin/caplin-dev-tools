@@ -1,5 +1,4 @@
 import {{componentName}} from '../component';
-import chai from 'chai';
 
 describe('Testing {{componentName}}', () => {
 	let testComponent = null;
@@ -12,7 +11,10 @@ describe('Testing {{componentName}}', () => {
 		testComponent = null;
 	});
 
-	it('should initially have default message', () => {
-		chai.assert.equal(testComponent.getMessage(),'default message');
-	});
+  test("it should initially have default message", () => {
+    expect(
+      testComponent.getMessage(),
+      'default message'
+    );
+  });
 });
