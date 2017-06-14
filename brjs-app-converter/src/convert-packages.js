@@ -64,28 +64,33 @@ function createImportSourceProcessor(
   shouldImportBeRelative,
   importSourcePathPrefix
 ) {
-  // `importDeclarationSource` Import module e.g. `br-component/Component` or
+  // `importSource` Imported module e.g. `br-component/Component` or
   // `mobile-blotter/screens/orders/bulk_orders/BulkOrderStateManager`
   // `importingModulePath` Path to file doing the importing
   //  e.g. 'apps/mobile/src/config/aliases.js'
-  return (importDeclarationSource, importingModulePath) => {
-    const packageOfImportedModule = importDeclarationSource.split("/")[0];
+  return (importSource, importingModulePath) => {
+    const packageOfImportedModule = importSource.split("/")[0];
     const shouldBeRelative = shouldImportBeRelative(packageOfImportedModule);
 
     if (shouldBeRelative === false) {
-      return importDeclarationSource;
+      return importSource;
     }
 
     // `relative` requires absolute file paths.
     const importerFileDirectory = dirname(`/${importingModulePath}`);
-    const importedFilePath = importSourcePathPrefix + importDeclarationSource;
+    // Append `.js` as in Windows file paths are not case sensitive so
+    // `relative("/p-c/ct-e/renderer", "/p-c/ct-e/Renderer")` returns “”
+    // those paths are seen as the same in Windows.
+    const importedFilePath = `${importSourcePathPrefix + importSource}.js`;
     const relativePathToImportedModule = relative(
       importerFileDirectory,
       importedFilePath
     )
       // Convert Windows separator to Unix style for module URIs.
       .split(sep)
-      .join("/");
+      .join("/")
+      // Remove appended `.js`.
+      .slice(0, -3);
 
     if (relativePathToImportedModule.startsWith(".")) {
       return relativePathToImportedModule;
