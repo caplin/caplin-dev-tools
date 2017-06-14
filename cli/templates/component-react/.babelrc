@@ -1,3 +1,11 @@
 {
-  "presets": ["env", "react"]
+  "presets": [
+    "env",
+    "react", {
+      "targets": {
+        "browsers": ["last 2 versions"]
+      },
+      "useBuiltIns": true,
+    }
+  ]
 }
