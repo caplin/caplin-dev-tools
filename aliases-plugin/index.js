@@ -37,8 +37,9 @@ function createCommonAliasFileData(aliasType, moduleCreator, result, compiler) {
   const { context, inputFileSystem } = compiler;
   const alias = result.request.replace(`${aliasType}!`, "");
   const aliasModule = moduleCreator(alias);
-  const aliasRequest = join(`@caplin/${aliasType}/${alias}.js`);
-  const aliasFilePath = join(`${context}/node_modules/${aliasRequest}`);
+  const aliasFilePath = join(
+    `${context}/node_modules/@caplin/${aliasType}/${alias}.js`
+  );
   const fileBuffer = Buffer.from(aliasModule);
 
   importedAliases.add(alias);
@@ -46,7 +47,7 @@ function createCommonAliasFileData(aliasType, moduleCreator, result, compiler) {
   // stat and file data for that file into webpack's `inputFileStorage`.
   // So when webpack goes to look for that file it a) believes it exists and
   // b) finds contents for the file.
-  result.request = aliasRequest;
+  result.request = aliasFilePath;
   inputFileSystem._statStorage.data[aliasFilePath] = [null, stubFileStats];
   inputFileSystem._readFileStorage.data[aliasFilePath] = [null, fileBuffer];
 }
