@@ -34,6 +34,8 @@ module.exports.BASE_WEBPACK_CONFIG = {
     ]
   },
   resolve: {
+    // Empty object required for `aliases` module
+    alias: {},
     extensions: [".js", ".json", ".jsx"]
   },
   plugins: [new AliasesPlugin()],
