@@ -76,7 +76,9 @@ const packagesToConvert = readdirSync(".").filter(
 );
 
 packagesToConvert.forEach(packageName => {
-  const packageJSFiles = sync(`${packageName}/**/*.js`);
+  const packageJSFiles = sync(`${packageName}/**/*.js`, {
+    ignore: ["**/node_modules/**"]
+  });
   const packageJSON = readJsonSync(join(packageName, "package.json"));
 
   packageJSFiles.forEach(jsFile => {
