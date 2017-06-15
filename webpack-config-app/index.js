@@ -1,4 +1,4 @@
-const { basename, join } = require("path");
+const { basename } = require("path");
 
 const parseArgs = require("minimist");
 
@@ -45,9 +45,9 @@ module.exports.webpackConfigGenerator = function webpackConfigGenerator({
   // for the required package inside `node_modules` directories all the way to
   // the root of the file system. So a module inside `packages-caplin` that
   // requires another `packages-caplin` based module will fail to find it.
-  // Given that we must configure webpack to search for packages within the
-  // app's `node_modules`.
-  webpackConfig.resolve.modules = [join(basePath, "node_modules")];
+  // Given that we must configure webpack to search for packages within
+  // `node_modules` and `packages-caplin`.
+  webpackConfig.resolve.modules = ["node_modules", "packages-caplin"];
 
   return webpackConfig;
 };
