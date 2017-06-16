@@ -3,23 +3,21 @@ const { join, sep } = require("path");
 
 const { sync } = require("glob");
 
-const applicationNodeModulesPath = join(process.cwd(), "node_modules");
 const GLOB_OPTIONS = {
   cwd: join(process.cwd(), "..", "js-patches")
 };
 // Windows backslashes have to be escaped or else they are treated as special
 // characters in the `RegExp`.
 const esc = path => path.replace(/\\/g, "\\\\");
-const packagesPath = join(process.cwd(), "..", "..", "packages-caplin");
 const patches = new Map();
 const pathPrefix = new RegExp(
-  `(?:${esc(applicationNodeModulesPath)}|${esc(packagesPath)})${esc(sep)}`
+  `node_modules${esc(sep)}|packages-caplin${esc(sep)}`
 );
 
 function appendPatchToPatchedModules(loaderAPI, moduleSource) {
-  // Remove the absolute path prefix to the application's `node_modules` or
-  // `packages` from the `resourcePath` to calculate the `importedModule`.
-  const [, importedModule] = loaderAPI.resourcePath.split(pathPrefix);
+  // Remove the absolute `node_modules` or `packages-caplin` path prefix from
+  // `resourcePath` to calculate `importedModule` path.
+  const importedModule = loaderAPI.resourcePath.split(pathPrefix).pop();
   const patchEntry = patches.get(importedModule);
 
   if (patchEntry) {
