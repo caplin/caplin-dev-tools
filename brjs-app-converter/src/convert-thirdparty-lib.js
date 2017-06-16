@@ -51,7 +51,8 @@ function getLibraryModuleExports(manifestExports) {
   // Certain thirdparty libraries contain UMD boilerplate which checks if
   // `module` exists and exports library values using `module.exports` instead
   // of putting it on the global/window object.
-  const exportsExist = "(Object.keys(module.exports).length || typeof module.exports === \"function\")";
+  const exportsExist =
+    '(Object.keys(module.exports).length || typeof module.exports === "function")';
   const moduleExports = `module.exports = ${exportsExist} ? module.exports : ${manifestExports};`;
 
   return `\nif (typeof module !== "undefined") ${moduleExports}\n`;
@@ -77,9 +78,9 @@ function getLibraryWindowExports(packageName, manifestExports) {
   // thirdparty JS bundle for the library. The export identifier used by BRJS is
   // the package name.
   if (safePackageExports !== manifestExports) {
-    // `require` might be nulled down by webpack configuration so check if it
+    // `module` might be nulled down by webpack configuration so check if it
     // exists.
-    const packageRequire = `typeof require == 'function' && require('${packageName}');\n`;
+    const packageRequire = `typeof module !== "undefined" && module.exports;\n`;
 
     windowExports += `\nwindow.${safePackageExports} = ${packageRequire}`;
   }
