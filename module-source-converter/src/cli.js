@@ -88,7 +88,10 @@ packagesToConvert.forEach(packageName => {
     );
   });
 
-  // clear from the package.json any reference to itself.
-  delete packageJSON.dependencies[packageName];
+  if (packageJSON.dependencies) {
+    // clear from the package.json any reference to itself.
+    delete packageJSON.dependencies[packageName];
+  }
+
   writeJsonSync(join(packageName, "package.json"), packageJSON, { spaces: 2 });
 });
