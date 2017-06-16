@@ -46,8 +46,12 @@ module.exports.webpackConfigGenerator = function webpackConfigGenerator({
   // the root of the file system. So a module inside `packages-caplin` that
   // requires another `packages-caplin` based module will fail to find it.
   // Given that we must configure webpack to search for packages within
-  // `node_modules` and `packages-caplin`.
-  webpackConfig.resolve.modules = ["node_modules", "packages-caplin"];
+  // `node_modules`, `packages-caplin` and `packages`.
+  webpackConfig.resolve.modules = [
+    "node_modules",
+    "packages-caplin",
+    "packages"
+  ];
 
   return webpackConfig;
 };
