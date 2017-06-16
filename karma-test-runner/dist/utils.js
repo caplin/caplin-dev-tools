@@ -61,57 +61,41 @@ function getTestBrowser(commandLineArgs) {
 
 module.exports.getTestBrowser = getTestBrowser;
 
-function showSummary({ success, failed, error, errors, failures, browserError }, devMode) {
+function showSummary({ success, failed, error, errors, failures }, devMode) {
   if (!devMode) {
     console.log("\n====== Test Report ======");
 
-    printErrors(errors, failures);
-    printBrowserErrors(browserError);
-    printNoTestRan();
-    printSummaryStats(success, failures, errors, browserError);
+    if (failed > 0 || error) {
+      console.log("\n\x1b[41m\x1b[30mTesting ended with failures/errors!\x1b[0m");
 
-    if (failed > 0 || browserError.length !== 0) {
+      if (errors.length > 0) {
+        console.log(`${errors.map(({ packageName, error }) => `\nTest errored in: \x1b[35m${packageName}\n${error}`).join("\n")}\n`);
+      }
+
+      if (failures.length > 0) {
+        console.log(`${failures.map(({ packageName, failure }) => `\nTest failed in: \x1b[35m${packageName}\n${failure}`).join("\n")}\n`);
+      }
+    }
+
+    if (getTotalTime() === 0) {
+      console.log("\n\x1b[41m\x1b[30mNo tests were ran, please check your package name is correct.\x1b[0m");
       process.exit(1);
     }
-  }
-}
 
-function printNoTestRan() {
-  if (getTotalTime() === 0) {
-    console.log("\n\x1b[41m\x1b[30mNo tests were ran, please check your package name is correct.\x1b[0m");
-    process.exit(1);
-  }
-}
-
-function printSummaryStats(success, failures, errors, browserError) {
-  if (failures.length === 0 && errors.length === 0 && browserError.length === 0) {
-    console.log("\n\x1b[42m\x1b[30mTesting ended with no failures!\x1b[0m");
-  }
-
-  console.log(`\x1b[35mPassed:\x1b[0m ${success}`);
-  console.log(`\x1b[35mFailed:\x1b[0m ${failures.length}`);
-  console.log(`\x1b[35mErrors:\x1b[0m ${errors.length}`);
-  console.log(`\x1b[35mTotal Tests Skipped:\x1b[0m ${getTotalTestsSkipped()}`);
-  console.log(`\x1b[35mTotal Time:\x1b[0m ${getTotalTime() / 1000 + " secs"}`);
-}
-
-function printBrowserErrors(browserError) {
-  if (browserError.length !== 0) {
-    console.log("\n\x1b[41m\x1b[30mTesting ended with Karma Error! A bundle error may have occured in your package.\x1b[0m");
-    console.log(`${browserError.map(packageName => `\nTest Errored in: \x1b[35m${packageName}\n`).join("\n")}\n`);
-  }
-}
-
-function printErrors(errors, failures) {
-  if (failed > 0) {
-    console.log("\n\x1b[41m\x1b[30mTesting ended with failures/errors!\x1b[0m");
-
-    if (errors.length > 0) {
-      console.log(`${errors.map(({ packageName, error }) => `\nTest errored in: \x1b[35m${packageName}\n${error}`).join("\n")}\n`);
+    if (failures.length === 0 && errors.length === 0) {
+      console.log("\n\x1b[42m\x1b[30mTesting ended with no failures!\x1b[0m");
     }
 
-    if (failures.length > 0) {
-      console.log(`${failures.map(({ packageName, failure }) => `\nTest failed in: \x1b[35m${packageName}\n${failure}`).join("\n")}\n`);
+    if (!error) {
+      console.log(`\x1b[35mPassed:\x1b[0m ${success}`);
+      console.log(`\x1b[35mFailed:\x1b[0m ${failures.length}`);
+      console.log(`\x1b[35mErrors:\x1b[0m ${errors.length}`);
+      console.log(`\x1b[35mTotal Tests Skipped:\x1b[0m ${getTotalTestsSkipped()}`);
+      console.log(`\x1b[35mTotal Time:\x1b[0m ${getTotalTime() / 1000 + ' secs'}`);
+    }
+
+    if (failed > 0 || error) {
+      process.exit(1);
     }
   }
 }
