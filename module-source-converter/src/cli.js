@@ -70,6 +70,17 @@ function extractPackagesFromJSFile(jsFile, importsVisitor) {
   }
 }
 
+function removePackageDependency(packageName) {
+  const packageJSON = readJsonSync(join(packageName, "package.json"));
+
+  if (packageJSON.dependencies) {
+    // clear from the package.json any reference to itself.
+    delete packageJSON.dependencies[packageName];
+  }
+
+  writeJsonSync(join(packageName, "package.json"), packageJSON, { spaces: 2 });
+}
+
 // Run this script from the `packages-caplin` directory.
 const packagesToConvert = readdirSync(".").filter(
   name => existsSync(join(name, "converted_library.js")) === false
@@ -79,7 +90,6 @@ packagesToConvert.forEach(packageName => {
   const packageJSFiles = sync(`${packageName}/**/*.js`, {
     ignore: ["**/node_modules/**"]
   });
-  const packageJSON = readJsonSync(join(packageName, "package.json"));
 
   packageJSFiles.forEach(jsFile => {
     extractPackagesFromJSFile(
@@ -88,10 +98,39 @@ packagesToConvert.forEach(packageName => {
     );
   });
 
-  if (packageJSON.dependencies) {
-    // clear from the package.json any reference to itself.
-    delete packageJSON.dependencies[packageName];
-  }
+  removePackageDependency(packageName);
+});
 
-  writeJsonSync(join(packageName, "package.json"), packageJSON, { spaces: 2 });
+const thirdPartyLibsToConvert = readdirSync(".").filter(name =>
+  existsSync(join(name, "converted_library.js"))
+);
+
+thirdPartyLibsToConvert.forEach(packageName => {
+  const thirdPartyLibPath = join(packageName, "converted_library.js");
+  const thirdPartyLib = readFileSync(thirdPartyLibPath, "utf8");
+  const safeExport = packageName.replace(/-/g, "_");
+
+  // Using RegExp's didn't work, probably a mistake in the RegExp, as this is
+  // throw away code it will do as is.
+  writeFileSync(
+    thirdPartyLibPath,
+    thirdPartyLib
+      .replace(
+        `window.${safeExport} = typeof require == 'function' && require('${packageName}');`,
+        `window.${safeExport} = typeof module !== "undefined" && module.exports;`
+      )
+      .replace(
+        `window.${safeExport} = typeof require == "function" && require("${packageName}");`,
+        `window.${safeExport} = typeof module !== "undefined" && module.exports;`
+      )
+      .replace(
+        `window.${safeExport} = require('${packageName}');`,
+        `window.${safeExport} = typeof module !== "undefined" && module.exports;`
+      )
+      .replace(
+        `window.${safeExport} = require("${packageName}");`,
+        `window.${safeExport} = typeof module !== "undefined" && module.exports;`
+      )
+  );
+  removePackageDependency(packageName);
 });
