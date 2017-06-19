@@ -20,8 +20,6 @@
     "url": "https://github.com/caplin/caplin-dev-tools/issues"
   },
   "devDependencies": {
-    "babel-jest": "*",
-    "jest-cli": "*",
     "jsdoc": "^3.4.0",
     "minami": "^1.1.1"
   },
@@ -35,8 +33,5 @@
     "mocha": "^2.4.5",
     "rimraf": "^2.5.2",
     "yeoman-assert": "^2.1.2"
-  },
-  "jest": {
-    "roots": ["src"]
   }
 }
