@@ -22,7 +22,7 @@ function convertApplication() {
 function versionCheckCallback(versionError, result) {
   let errorMessage = "Not compatible with current node version, please update!";
 
-  if (result.nodeSatisfied) {
+  if (result.isSatisfied) {
     convertApplication();
   } else {
     if (versionError) {

@@ -1,5 +1,3 @@
-const { join } = require("path");
-
 const AliasesPlugin = require("@caplin/aliases-plugin");
 const { appendModulePatch } = require("@caplin/patch-loader/patchesStore");
 
@@ -36,17 +34,11 @@ module.exports.BASE_WEBPACK_CONFIG = {
     ]
   },
   resolve: {
-    alias: {
-      // We can't dynamically require using the module names in webpack, module
-      // names are converted to IDs by webpack.
-      "ct-core/BRJSClassUtility$": join(__dirname, "null.js"),
-      "br/dynamicRefRequire$": join(__dirname, "null.js")
-    },
+    // Empty object required for `aliases` module
+    alias: {},
     extensions: [".js", ".json", ".jsx"]
   },
-  plugins: [
-    new AliasesPlugin()
-  ],
+  plugins: [new AliasesPlugin()],
   resolveLoader: {
     alias: {
       // This alias can be removed by changing the metadata require in CT libs.

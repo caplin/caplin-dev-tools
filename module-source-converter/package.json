@@ -1,0 +1,13 @@
+{
+  "name": "module-source-converter",
+  "version": "1.0.0",
+  "description": "",
+  "bin": "./src/cli.js",
+  "license": "ISC",
+  "dependencies": {
+    "babylon": "^6.17.3",
+    "fs-extra": "^3.0.1",
+    "glob": "^7.1.2",
+    "recast": "^0.12.5"
+  }
+}

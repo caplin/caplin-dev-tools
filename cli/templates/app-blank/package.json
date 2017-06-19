@@ -12,7 +12,7 @@
     "@caplin/build-tasks": "^4.0.0",
     "@caplin/express-dev-server": "^2.0.0",
     "@caplin/versioning": "^2.0.0",
-    "@caplin/webpack-config-app": "^4.0.0",
+    "@caplin/webpack-config-app": "^5.0.0",
     "babel-preset-env": "^1.2.2",
     "babel-preset-react": "^6.23.0"
   },
