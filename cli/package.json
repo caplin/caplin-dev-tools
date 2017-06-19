@@ -7,7 +7,7 @@
     "caplin-cli": "./index.js"
   },
   "scripts": {
-    "test": "jest",
+    "test": "mocha",
     "generateDocs": "jsdoc cli.js -c jsdoc.json"
   },
   "repository": {
@@ -32,6 +32,7 @@
     "fmt": "^0.5.0",
     "inquirer": "^1.0.0",
     "minimist": "^1.2.0",
+    "mocha": "^2.4.5",
     "rimraf": "^2.5.2",
     "yeoman-assert": "^2.1.2"
   },
