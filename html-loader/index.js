@@ -5,6 +5,6 @@ module.exports = function htmlLoader(htmlSource) {
   // of the loader return value.
   const jsonStringHTMLTemplate = JSON.stringify(htmlSource);
 
-  return `var HTMLResourceService = require('br/AliasRegistry').getClass('br.html-service');
-	HTMLResourceService.registerHTMLFileContents(${jsonStringHTMLTemplate})`;
+  return `var HTMLResourceService = require('alias!br.html-service');
+  HTMLResourceService.registerHTMLFileContents(${jsonStringHTMLTemplate})`;
 };

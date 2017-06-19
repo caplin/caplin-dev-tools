@@ -1,6 +1,6 @@
 {
   "name": "@caplin/patch-loader",
-  "version": "3.0.0",
+  "version": "3.0.2",
   "description": "A js module patch loader for webpack",
   "main": "index.js",
   "author": "",

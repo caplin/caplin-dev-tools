@@ -40,89 +40,66 @@ function fileExists(filePath) {
   return true;
 }
 
-// Should this package use relative imports if importing an application level
-// (in `src` directory) module.
-function isPackageInApplication(
-  packagePath,
-  packagesDir,
-  packagesThatShouldBeLibs
-) {
-  // `packagePath` is in the format `packages-caplin/workbench` so remove
-  // `packages-caplin/`.
-  const packageName = packagePath.replace(`${packagesDir}/`, "");
-
-  return packagesThatShouldBeLibs.includes(packageName);
+// Is the module you are importing located in the same package as the importer.
+// For each import in a package `importingPackage` we check which
+// package `importedModulePackage` is located inside.
+function isImportIntraPackage(importingPackage) {
+  return importedModulePackage => importedModulePackage === importingPackage;
 }
 
-// importerPathName -> Path to file doing the importing
-//   e.g. 'apps/mobile/src/config/aliases.js'
-// moduleSourceToPathNamePrefix -> Prefix that converts the module source into
-//   file path e.g. '/packages-caplin/'
-// moduleSource -> Import statement module e.g.
-//   'mobile-blotter/screens/orders/bulk_orders/BulkOrderStateManager'
-function createRelativeModuleSource(
-  importerPathName,
-  moduleSourceToPathNamePrefix,
-  moduleSource
-) {
-  // For `relative` to work it must be provided with absolute file paths.
-  // So we convert the importer and imported file paths/module sources to
-  // absolute file paths.
-  const absoluteImporterFileName = `/${importerPathName}`;
-  const absoluteImportedFileName = moduleSourceToPathNamePrefix + moduleSource;
-  const directoryOfImporterFile = dirname(absoluteImporterFileName);
-  const relativeFilePathToImportedModule = relative(
-    directoryOfImporterFile,
-    absoluteImportedFileName
-  )
-    // Convert Windows separator to Unix style for module URIs.
-    .split(sep)
-    .join("/");
-
-  if (relativeFilePathToImportedModule.startsWith(".")) {
-    return relativeFilePathToImportedModule;
-  }
-
-  // A file path to a child directory can start without `./` for file system
-  // operations but webpack and ES Modules require `./` to distinguish relative
-  // imports from package requires so we must add it,
-  // i.e. 'child_directory/File' is converted to './child_directory/File'.
-  return `./${relativeFilePathToImportedModule}`;
+// Is the module you are importing located in the application's `src` dir.
+function isImportIntraApp(appPackages) {
+  return importedModulePackage => appPackages.includes(importedModulePackage);
 }
 
-module.exports.createRelativeModuleSource = createRelativeModuleSource;
-
-function shouldModuleBeRelative(moduleSource, applicationPackages) {
-  // The `moduleSource` is of the format `br-component/Component`.
-  const packageOfImportedModule = moduleSource.split("/")[0];
-
-  // Should the module import be relative.
-  return applicationPackages.includes(packageOfImportedModule);
-}
-
-// Returns a function that checks if a given module source is for a module in
-// the application `src` directory, if it is it will convert the module source
-// to be relative.
-function createModuleSourceProcessor(
-  applicationPackages,
-  moduleSourceToPathNamePrefix
+// Returns a function that checks if a given module source should be relative
+// and if so convert it to relative. A module source should be relative if the
+// import is for another module in the application `src` directory or if it's an
+// import for a module in the same package as the importer.
+// e.g. in `ct-caplin/func`, `ct-caplin/namespace` converts to `./namespace`.
+//
+// `importSourcePathPrefix` Prefix that converts the module source into
+// absolute file path e.g. '/packages-caplin/', '/apps/fxtrader/src/'
+function createImportSourceProcessor(
+  shouldImportBeRelative,
+  importSourcePathPrefix
 ) {
-  return (moduleSource, importerPathName) => {
-    const isImportedModuleFromRelativePackage = shouldModuleBeRelative(
-      moduleSource,
-      applicationPackages
-    );
+  // `importSource` Imported module e.g. `br-component/Component` or
+  // `mobile-blotter/screens/orders/bulk_orders/BulkOrderStateManager`
+  // `importingModulePath` Path to file doing the importing
+  //  e.g. 'apps/mobile/src/config/aliases.js'
+  return (importSource, importingModulePath) => {
+    const packageOfImportedModule = importSource.split("/")[0];
+    const shouldBeRelative = shouldImportBeRelative(packageOfImportedModule);
 
-    // Is the module you are importing located in the application's `src` dir.
-    if (isImportedModuleFromRelativePackage) {
-      return createRelativeModuleSource(
-        importerPathName,
-        moduleSourceToPathNamePrefix,
-        moduleSource
-      );
+    if (shouldBeRelative === false) {
+      return importSource;
     }
 
-    return moduleSource;
+    // `relative` requires absolute file paths.
+    const importerFileDirectory = dirname(`/${importingModulePath}`);
+    // Append `.js` as in Windows file paths are not case sensitive so
+    // `relative("/p-c/ct-e/renderer", "/p-c/ct-e/Renderer")` returns “”
+    // those paths are seen as the same in Windows.
+    const importedFilePath = `${importSourcePathPrefix + importSource}.js`;
+    const relativePathToImportedModule = relative(
+      importerFileDirectory,
+      importedFilePath
+    )
+      // Convert Windows separator to Unix style for module URIs.
+      .split(sep)
+      .join("/")
+      // Remove appended `.js`.
+      .slice(0, -3);
+
+    if (relativePathToImportedModule.startsWith(".")) {
+      return relativePathToImportedModule;
+    }
+
+    // A file system path to a child directory can start without `./` but
+    // modules require `./` to distinguish relative from package imports
+    // i.e. 'child_directory/File' is converted to './child_directory/File'.
+    return `./${relativePathToImportedModule}`;
   };
 }
 
@@ -132,7 +109,7 @@ const modulesAreNotRelative = moduleSource => moduleSource;
 function updateMappings(
   srcPath,
   moduleSources,
-  makeModuleSourceRelative = modulesAreNotRelative
+  makeImportSourceRelative = modulesAreNotRelative
 ) {
   let fileContents = readFileSync(srcPath, "utf8");
   const strings = fileContents.match(/(["'])(?:(?=(\\?))\2.)*?\1/g);
@@ -144,17 +121,20 @@ function updateMappings(
       const mapping = string.replace(/'/g, "").replace(/"/g, "");
       const value = moduleSources.get(mapping);
 
-      if (value && mapping && value !== mapping) {
-        // Importing from the application's `src` directory another module in
-        // `src` must be a relative import.
-        const relativeModuleSource = makeModuleSourceRelative(value, srcPath);
+      if (mapping && value) {
+        // Intra app and package imports should be relative.
+        const relativeModuleSource = makeImportSourceRelative(value, srcPath);
 
-        fileContents = fileContents.replace(
-          new RegExp(`['"]${mapping}['"]`, "g"),
-          `'${relativeModuleSource}'`
-        );
-        needsWrite = true;
-      } else if (mapping.indexOf("/src-test/") !== -1) {
+        if (relativeModuleSource !== mapping) {
+          fileContents = fileContents.replace(
+            new RegExp(`['"]${mapping}['"]`, "g"),
+            `'${relativeModuleSource}'`
+          );
+          needsWrite = true;
+        }
+      }
+
+      if (mapping.indexOf("/src-test/") !== -1) {
         // a quick fix to relative "src-test" urls
         const fixedSrcTestSource = mapping.replace("/src-test/", "/_test-src/");
 
@@ -180,38 +160,36 @@ function updateAllImportsInPackage(
   const packageJSFiles = glob.sync(`${packagePath}/**/*.js`);
 
   packageJSFiles.forEach(jsFilePath =>
-    updateMappings(jsFilePath, moduleSources, makeModuleSourceRelative));
+    updateMappings(jsFilePath, moduleSources, makeModuleSourceRelative)
+  );
 }
 
 // Returns a function that updates all the import module sources to their new
-// values and makes application `src` to application `src` imports relative.
-function createPackageImportsUpdater(
-  packagesDir,
-  packagesThatShouldBeLibs,
-  moduleSources
-) {
-  // Function that converts an absolute module source to a relative one.
-  const makeModuleSourceRelative = createModuleSourceProcessor(
-    packagesThatShouldBeLibs,
-    `/${packagesDir}/`
-  );
-
+// values and makes intra app `src` and intra package imports relative.
+function createPackageImportsUpdater(packagesDir, appPackages, moduleSources) {
+  // `packagePath` is in the format `packages-caplin/workbench`.
   return packagePath => {
-    const isApplicationPackage = isPackageInApplication(
-      packagePath,
-      packagesDir,
-      packagesThatShouldBeLibs
-    );
+    let importRelativeChecker;
+    const packageName = packagePath.replace(`${packagesDir}/`, "");
+    // Use relative imports if importing app level (in `src` directory) module.
+    const isApplicationPackage = appPackages.includes(packageName);
 
     if (isApplicationPackage) {
-      updateAllImportsInPackage(
-        packagePath,
-        moduleSources,
-        makeModuleSourceRelative
-      );
+      importRelativeChecker = isImportIntraApp(appPackages);
     } else {
-      updateAllImportsInPackage(packagePath, moduleSources);
+      importRelativeChecker = isImportIntraPackage(packageName);
     }
+
+    const importSourceProcessor = createImportSourceProcessor(
+      importRelativeChecker,
+      `/${packagesDir}/`
+    );
+
+    updateAllImportsInPackage(
+      packagePath,
+      moduleSources,
+      importSourceProcessor
+    );
   };
 }
 
@@ -219,23 +197,17 @@ function getPackageSrcCommonPath(packageSrcFiles, commonRoot) {
   const directoryTree = packageSrcFiles
     .map(packageSrcFilePath => packageSrcFilePath.replace(commonRoot, ""))
     .map(packageSrcFilePath => packageSrcFilePath.split("/"))
-    .reduce(
-      (partialDirectoryTree, filePaths) => {
-        filePaths.reduce(
-          (currentTreeNode, filePath) => {
-            if (currentTreeNode[filePath] === undefined) {
-              currentTreeNode[filePath] = {};
-            }
+    .reduce((partialDirectoryTree, filePaths) => {
+      filePaths.reduce((currentTreeNode, filePath) => {
+        if (currentTreeNode[filePath] === undefined) {
+          currentTreeNode[filePath] = {};
+        }
 
-            return currentTreeNode[filePath];
-          },
-          partialDirectoryTree
-        );
+        return currentTreeNode[filePath];
+      }, partialDirectoryTree);
 
-        return partialDirectoryTree;
-      },
-      {}
-    );
+      return partialDirectoryTree;
+    }, {});
 
   let commonPath = "";
   let currentDirectory = directoryTree;
@@ -387,7 +359,8 @@ function findAllPackagesThatRequireConversion(packagesDir) {
   return readdirSync(packagesDir)
     .map(packagesDirContent => `${packagesDir}/${packagesDirContent}`)
     .filter(packagesDirContentPath =>
-      lstatSync(packagesDirContentPath).isDirectory())
+      lstatSync(packagesDirContentPath).isDirectory()
+    )
     .filter(
       packagesDirContentPath =>
         fileExists(`${packagesDirContentPath}/thirdparty-lib.manifest`) ===
@@ -395,18 +368,16 @@ function findAllPackagesThatRequireConversion(packagesDir) {
     );
 }
 
-module.exports.convertPackagesToNewFormat = (
-  {
-    applicationName,
-    backupDir,
-    packagesDir,
-    packagesThatShouldBeLibs
-  }
-) => {
-  const applicationModuleToPathPrefix = `/apps/${applicationName}/src/`;
-  const makeAppModulesRelative = createModuleSourceProcessor(
-    packagesThatShouldBeLibs,
-    applicationModuleToPathPrefix
+module.exports.convertPackagesToNewFormat = ({
+  applicationName,
+  backupDir,
+  packagesDir,
+  packagesThatShouldBeLibs
+}) => {
+  const importSourcePathPrefix = `/apps/${applicationName}/src/`;
+  const makeAppModulesRelative = createImportSourceProcessor(
+    isImportIntraApp(packagesThatShouldBeLibs),
+    importSourcePathPrefix
   );
   const moduleSources = new Map();
   const packagesToConvert = findAllPackagesThatRequireConversion(packagesDir);
@@ -420,10 +391,12 @@ module.exports.convertPackagesToNewFormat = (
       packagesDir,
       moduleSources,
       backupDir
-    ));
+    )
+  );
   // Copy all the src-test modules to their new locations.
   packagesToConvert.forEach(packagePath =>
-    copyPackageSrcTestToNewLocations(packagePath, packagesDir, moduleSources));
+    copyPackageSrcTestToNewLocations(packagePath, packagesDir, moduleSources)
+  );
   // Copy all the tests to their new locations.
   // Update all the require statements.
   packagesToConvert.forEach(
