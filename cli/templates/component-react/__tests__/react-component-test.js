@@ -1,47 +1,23 @@
-import chai from 'chai';
-import React from 'react';
-import {
-	renderIntoDocument,
-	findRenderedDOMComponentWithClass,
-	findRenderedDOMComponentWithTag,
-	Simulate
-} from 'react-addons-test-utils';
-import {{componentName}} from '../react-component';
+import React from "react";
+import { shallow, mount, render } from "enzyme";
 
-describe('Testing {{componentName}} Initial', () => {
-	let componentWrapper = null;
+import {{componentName}} from "../react-component";
 
-	afterEach(() => {
-		componentWrapper = null;
-	});
-
-	it('should have count of zero and assigned owner when first loaded', () => {
-		//given
-		componentWrapper = renderIntoDocument(
-		   <{{componentName}} owner="Bob"/>
-		);
-
-		//then
-		const counter = findRenderedDOMComponentWithClass(componentWrapper, 'counter');
-		const counterText = counter.textContent;
-		chai.assert.equal(counterText, 'count:0');
-
-		const heading = findRenderedDOMComponentWithClass(componentWrapper, 'heading');
-		const headingText = heading.textContent;
-		chai.assert.equal(headingText, 'This {{componentName}} Component belongs to Bob');
-	})
-
-	it('should increment count when button is clicked', () => {
-		//given
-		componentWrapper = renderIntoDocument(
-		   <{{componentName}} />
-		);
-		//when
-		const counterButton = findRenderedDOMComponentWithTag(componentWrapper, 'button');
-		Simulate.click(counterButton);
-		//then
-		const counter = findRenderedDOMComponentWithClass(componentWrapper, 'counter');
-		const counterText = counter.textContent;
-		chai.assert.equal(counterText, 'count:1');
-	})
+describe("example tests", function() {
+  test("should have correct header when passed owner with props", () => {
+    const wrapper = shallow(<{{componentName}} owner="Bob" />);
+    const headerText = wrapper.find(".heading").first().text();
+    expect(headerText).toEqual("This {{componentName}} Component belongs to Bob");
+  });
+  test("should have count of zero when first loaded", () => {
+    const wrapper = shallow(<{{componentName}} />);
+    const counterText = wrapper.find(".counter").first().text();
+    expect(counterText).toEqual("count:0");
+  });
+  test("should update counter when button pressed", () => {
+    const wrapper = shallow(<{{componentName}} />);
+    wrapper.find("button").first().simulate("click");
+    const counterText = wrapper.find(".counter").first().text();
+    expect(counterText).toEqual("count:1");
+  });
 });
