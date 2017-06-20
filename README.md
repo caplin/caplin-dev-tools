@@ -1,15 +1,14 @@
 # caplin-dev-tools
-
-**Tools for caplin development of Node Js apps**
+## Packages for developing Caplin applications using node.js tooling
 
 [![Build Status](https://api.travis-ci.org/caplin/caplin-dev-tools.svg)](https://api.travis-ci.org/caplin/caplin-cli)
 
 ## Setup
 
-npm install -g https://github.com/caplin/caplin-dev-tools
+This monorepo contains tens of packages, they are designed to be used as part of
+a Caplin development environment. They are not designed for usage in generic web
+applications.
 
-## Running the cli
+## caplin-cli
 
-caplin-cli
-
-To get started building apps please see [Building Apps with Caplin-cli](https://github.com/caplin/caplin-dev-tools/blob/master/cli/README.md)
+For information on the `caplin-cli` tool [read its README.md](https://github.com/caplin/caplin-dev-tools/blob/master/cli/README.md).
