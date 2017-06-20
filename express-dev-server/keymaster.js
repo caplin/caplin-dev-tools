@@ -3,6 +3,7 @@ const { join } = require("path");
 
 const { hex2b64, Signature } = require("jsrsasign");
 
+let defaultCustomerID;
 let index = 0;
 let privateKey;
 const SEPARATOR = "~";
@@ -82,7 +83,7 @@ function getToken(username, customerId) {
 }
 
 function keymasterHandler(req, res) {
-  const customerId = req.query.customerId || "";
+  const customerId = req.query.customerId || defaultCustomerID;
   const username = req.query.username || "user1@caplin.com";
 
   if (req.query.type) {
@@ -94,7 +95,8 @@ function keymasterHandler(req, res) {
   }
 }
 
-module.exports = (application, keyDirectory) => {
+module.exports = (application, { keyDirectory, customerID = "" }) => {
+  defaultCustomerID = customerID;
   privateKey = readFileSync(join(keyDirectory, "privatekey.pem"), "utf8");
   application.post("/servlet/StandardKeyMaster", keymasterHandler);
 };
