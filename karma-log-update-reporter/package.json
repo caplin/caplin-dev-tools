@@ -1,5 +1,5 @@
 {
-  "name": "@caplin/karma-log-update-reporter",
+  "name": "karma-log-update-reporter",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",

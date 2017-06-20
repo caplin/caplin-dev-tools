@@ -33,6 +33,15 @@ function logMessage({ testsType, packageDir, browser }, message) {
   return logUpdate(`${packageDir} ${testsType} in ${browser}: ${message}`);
 }
 
+function logFailedResult(failedResult) {
+  const description = failedResult.description || "Undefined test description";
+  // Make failure message appear as child of test description by indenting.
+  const failure = failedResult.log[0].replace(/\n/g, "\n\t");
+  const suite = failedResult.suite[0] || "Undefined test suite";
+
+  console.error("\n", suite, "->", description, "\n\n\t", failure, "\n");
+}
+
 function LogUpdateReporter(karmaConfig) {
   this.browser = karmaConfig.browsers[0];
   this.errorMessage = "";
@@ -86,6 +95,8 @@ LogUpdateReporter.prototype.onRunComplete = function(browsers, results) {
 
   // Persist the logged output. The next test run will use a new log session.
   logUpdate.done();
+
+  this.failedResults.forEach(logFailedResult);
 
   if (this.errorMessage !== "") {
     console.error("\n", this.errorMessage, "\n");
