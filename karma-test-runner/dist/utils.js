@@ -69,7 +69,8 @@ function showSummary(results, watching) {
   for (const result of results) {
     error = error || result.error;
     failed += result.failed;
-    skipped += result.skipped;
+    // `skipped` is only set to a number if there are skipped tests.
+    skipped += result.skipped || 0;
     success += result.success;
   }
 
