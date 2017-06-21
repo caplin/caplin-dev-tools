@@ -1,8 +1,6 @@
 "use strict";
 
 const { Server } = require("karma");
-const { getTotalTime } = require("karma-caplin-dots-reporter");
-const { getTotalTestsSkipped } = require("karma-caplin-dots-reporter");
 
 function runOnlyATs(args) {
   return args.ats || args.ATs || args._.includes("--ats") || args._.includes("--ATs") || args._.includes("ats") || args._.includes("ATs") || false;
@@ -61,52 +59,50 @@ function getTestBrowser(commandLineArgs) {
 
 module.exports.getTestBrowser = getTestBrowser;
 
-function showSummary({ success, failed, error, errors, failures }, devMode) {
-  if (!devMode) {
-    console.log("\n====== Test Report ======");
+function showSummary(results, watching) {
+  let error = false;
+  let exitCode = 0;
+  let failed = 0;
+  let skipped = 0;
+  let success = 0;
 
-    if (failed > 0 || error) {
-      console.log("\n\x1b[41m\x1b[30mTesting ended with failures/errors!\x1b[0m");
+  for (const result of results) {
+    error = error || result.error;
+    failed += result.failed;
+    skipped += result.skipped;
+    success += result.success;
+  }
 
-      if (errors.length > 0) {
-        console.log(`${errors.map(({ packageName, error }) => `\nTest errored in: \x1b[35m${packageName}\n${error}`).join("\n")}\n`);
-      }
+  let status = `\nspecs: ${failed + skipped + success}`;
 
-      if (failures.length > 0) {
-        console.log(`${failures.map(({ packageName, failure }) => `\nTest failed in: \x1b[35m${packageName}\n${failure}`).join("\n")}\n`);
-      }
-    }
+  if (success > 0) {
+    status = `${status}, pass: ${success}`;
+  }
 
-    if (getTotalTime() === 0) {
-      console.log("\n\x1b[41m\x1b[30mNo tests were ran, please check your package name is correct.\x1b[0m");
-      process.exit(1);
-    }
+  if (skipped > 0) {
+    status = `${status}, skip: ${skipped}`;
+  }
 
-    if (failures.length === 0 && errors.length === 0) {
-      console.log("\n\x1b[42m\x1b[30mTesting ended with no failures!\x1b[0m");
-    }
+  if (failed > 0) {
+    status = `${status}, fail: ${failed}`;
+  }
 
-    if (!error) {
-      console.log(`\x1b[35mPassed:\x1b[0m ${success}`);
-      console.log(`\x1b[35mFailed:\x1b[0m ${failures.length}`);
-      console.log(`\x1b[35mErrors:\x1b[0m ${errors.length}`);
-      console.log(`\x1b[35mTotal Tests Skipped:\x1b[0m ${getTotalTestsSkipped()}`);
-      console.log(`\x1b[35mTotal Time:\x1b[0m ${getTotalTime() / 1000 + ' secs'}`);
-    }
+  if (error === true) {
+    status = `${status}, error: true`;
+  }
 
-    if (failed > 0 || error) {
-      process.exit(1);
-    }
+  if (failed > 0 || error) {
+    exitCode = 1;
+  }
+
+  console.log(status);
+
+  if (watching === false) {
+    process.exit(exitCode);
   }
 }
 
 module.exports.showSummary = showSummary;
-
-function getShortPathFromBasePath(basePath) {
-  return basePath.substring(basePath.indexOf("apps"));
-}
-
-module.exports.getShortPathFromBasePath = getShortPathFromBasePath;
 
 function filterPackagesToTest(packagesTestMetadata, packagesToTest) {
   if (packagesToTest.length === 0) {
@@ -118,20 +114,21 @@ function filterPackagesToTest(packagesTestMetadata, packagesToTest) {
 
 module.exports.filterPackagesToTest = filterPackagesToTest;
 
-function runPackageTests(karmaConfig, resolve, summary, packageName) {
-  console.log(`\nRunning ${karmaConfig.testsType} for: \x1b[35m${packageName}\x1b[0m`);
+function runPackageTests(karmaConfig) {
+  return new Promise(resolve => {
+    let testsResult;
+    const server = new Server(karmaConfig, () => {
+      // Wait until the server exit code callback is executed to resolve as
+      // `run_complete` is called before the logger's `onRunComplete` is.
+      resolve(testsResult);
+    });
 
-  const server = new Server(karmaConfig, () => {
-    resolve();
+    server.on("run_complete", (browsers, result) => {
+      testsResult = result;
+    });
+
+    server.start();
   });
-
-  server.on("run_complete", (browsers, { success, failed, error }) => {
-    summary.success += success;
-    summary.failed += failed;
-    summary.error = summary.error || error;
-  });
-
-  server.start();
 }
 
 module.exports.runPackageTests = runPackageTests;

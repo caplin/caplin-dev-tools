@@ -1,14 +1,13 @@
+/* eslint no-await-in-loop: 0 */
+
 const { resolve } = require("path");
 
 const { LOG_ERROR } = require("karma/lib/constants");
-const { onError } = require("karma-caplin-dots-reporter");
-const { onFailure } = require("karma-caplin-dots-reporter");
 const parseArgs = require("minimist");
 const { DefinePlugin } = require("webpack");
 
 const {
   filterPackagesToTest,
-  getShortPathFromBasePath,
   getTestBrowser,
   runPackageTests,
   runOnlyATs,
@@ -110,47 +109,16 @@ function createPackagesATsKarmaConfigs(packagesMetadata) {
 module.exports.createPackagesATsKarmaConfigs = createPackagesATsKarmaConfigs;
 
 async function runPackagesTests(packagesKarmaConfigs) {
-  // This might cause issues if our tests start running concurrently,
-  // but given we currently run package by package, it should be fine
-  let packageName = "";
-  const summary = {
-    success: 0,
-    failed: 0,
-    error: false,
-    errors: [],
-    failures: []
-  };
-  // When the user hits Control-C we want to exit the process even if we have
-  // queued test runs.
-  process.on("SIGINT", () => {
-    console.log("\nTesting stopped due to the process termination\x1b[0m");
+  const results = [];
 
-    showSummary(summary, devMode);
-    process.exit();
-  });
-  onError(error => {
-    summary.errors.push({ packageName, error });
-  });
-  onFailure(function (failure) {
-      summary.failures.push({ packageName, failure });
-  });
+  // Pressing Control-C must exit the process even if we have queued test runs.
+  process.on("SIGINT", process.exit);
 
-  try {
-    for (const packageKarmaConfig of packagesKarmaConfigs) {
-      packageName = getShortPathFromBasePath(packageKarmaConfig.basePath);
-      await new Promise(resolve =>
-        runPackageTests(packageKarmaConfig, resolve, summary, packageName)
-      );
-    }
-  } catch (err) {
-    showSummary(summary, devMode);
-    console.error(err);
+  for (const packageKarmaConfig of packagesKarmaConfigs) {
+    results.push(await runPackageTests(packageKarmaConfig));
   }
 
-  if (devMode === false) {
-    showSummary(summary, devMode);
-    process.exit(0);
-  }
+  showSummary(results, devMode);
 }
 
 module.exports.runPackagesTests = runPackagesTests;

@@ -2,47 +2,16 @@
 
 let runPackagesTests = (() => {
   var _ref = _asyncToGenerator(function* (packagesKarmaConfigs) {
-    // This might cause issues if our tests start running concurrently,
-    // but given we currently run package by package, it should be fine
-    let packageName = "";
-    const summary = {
-      success: 0,
-      failed: 0,
-      error: false,
-      errors: [],
-      failures: []
-    };
-    // When the user hits Control-C we want to exit the process even if we have
-    // queued test runs.
-    process.on("SIGINT", function () {
-      console.log("\nTesting stopped due to the process termination\x1b[0m");
+    const results = [];
 
-      showSummary(summary, devMode);
-      process.exit();
-    });
-    onError(function (error) {
-      summary.errors.push({ packageName, error });
-    });
-    onFailure(function (failure) {
-      summary.failures.push({ packageName, failure });
-    });
+    // Pressing Control-C must exit the process even if we have queued test runs.
+    process.on("SIGINT", process.exit);
 
-    try {
-      for (const packageKarmaConfig of packagesKarmaConfigs) {
-        packageName = getShortPathFromBasePath(packageKarmaConfig.basePath);
-        yield new Promise(function (resolve) {
-          return runPackageTests(packageKarmaConfig, resolve, summary, packageName);
-        });
-      }
-    } catch (err) {
-      showSummary(summary, devMode);
-      console.error(err);
+    for (const packageKarmaConfig of packagesKarmaConfigs) {
+      results.push((yield runPackageTests(packageKarmaConfig)));
     }
 
-    if (devMode === false) {
-      showSummary(summary, devMode);
-      process.exit(0);
-    }
+    showSummary(results, devMode);
   });
 
   return function runPackagesTests(_x) {
@@ -52,17 +21,16 @@ let runPackagesTests = (() => {
 
 function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { return Promise.resolve(value).then(function (value) { step("next", value); }, function (err) { step("throw", err); }); } } return step("next"); }); }; }
 
+/* eslint no-await-in-loop: 0 */
+
 const { resolve } = require("path");
 
 const { LOG_ERROR } = require("karma/lib/constants");
-const { onError } = require("karma-caplin-dots-reporter");
-const { onFailure } = require("karma-caplin-dots-reporter");
 const parseArgs = require("minimist");
 const { DefinePlugin } = require("webpack");
 
 const {
   filterPackagesToTest,
-  getShortPathFromBasePath,
   getTestBrowser,
   runPackageTests,
   runOnlyATs,
