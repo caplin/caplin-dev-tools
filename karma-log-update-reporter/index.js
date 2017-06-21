@@ -29,8 +29,8 @@ function testsStatus(
   return status;
 }
 
-function logMessage({ testsType, packageDir, browser }, message) {
-  return logUpdate(`${packageDir} ${testsType} in ${browser}: ${message}`);
+function logMessage({ testsType, basePath, browser }, message) {
+  return logUpdate(`${basePath} ${testsType} in ${browser}: ${message}`);
 }
 
 function logFailedResult(failedResult) {
@@ -52,7 +52,7 @@ function LogUpdateReporter(karmaConfig) {
     failed: 0,
     error: false
   };
-  this.packageDir = karmaConfig.packageDir;
+  this.basePath = karmaConfig.basePath;
   // Initialize so `testsStatus` has data to destructure in case of
   // `onBrowserError` instead of `onBrowserStart`.
   this.specsInfo = { total: 0 };
