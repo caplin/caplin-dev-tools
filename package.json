@@ -2,7 +2,7 @@
   "name": "caplin-dev-tools",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "private": true,
   "bin": {
     "brjs-app-converter": "./brjs-app-converter/src/cli.js",
     "caplin-cli": "./cli/index.js"
