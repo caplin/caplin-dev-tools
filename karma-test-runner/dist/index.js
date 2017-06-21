@@ -52,14 +52,7 @@ const testBrowser = getTestBrowser(args);
 const baseKarmaConfig = {
   browsers: [testBrowser],
   logLevel: LOG_ERROR,
-  caplinDotsReporter: {
-    icon: {
-      success: ".",
-      failure: "F",
-      ignore: "-"
-    }
-  },
-  reporters: ["caplin-dots"],
+  reporters: ["log-update"],
   singleRun: !devMode,
   failOnEmptyTestSuite: true,
   webpackMiddleware: {
