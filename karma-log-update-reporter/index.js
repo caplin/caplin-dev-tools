@@ -42,6 +42,16 @@ function logFailedResult(failedResult) {
   console.error("\n", suite, "->", description, "\n\n\t", failure, "\n");
 }
 
+function formatBasePath(basePath) {
+  if (basePath.length <= 50) {
+    const padding = " ".repeat(50 - basePath.length);
+
+    return basePath + padding;
+  }
+
+  return `...${basePath.slice(-47)}`;
+}
+
 function LogUpdateReporter(karmaConfig) {
   this.browser = karmaConfig.browsers[0];
   this.errorMessage = "";
@@ -52,7 +62,7 @@ function LogUpdateReporter(karmaConfig) {
     failed: 0,
     error: false
   };
-  this.basePath = karmaConfig.basePath;
+  this.basePath = formatBasePath(karmaConfig.basePath);
   // Initialize so `testsStatus` has data to destructure in case of
   // `onBrowserError` instead of `onBrowserStart`.
   this.specsInfo = { total: 0 };
