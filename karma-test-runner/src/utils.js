@@ -71,6 +71,29 @@ function getTestBrowser(commandLineArgs) {
 
 module.exports.getTestBrowser = getTestBrowser;
 
+function checkCLArguments(commandLineArgs) {
+  var correctFlags = [
+    "variant",
+    "uts",
+    "ats",
+    "sourcemaps",
+    "hot",
+    "dev",
+    "browser"
+  ];
+  Object.keys(commandLineArgs).forEach(flag => {
+    if (correctFlags.indexOf(flag.toLowerCase()) === -1 && flag !== "_") {
+      console.log(
+        `\n Flag: \x1b[35m${flag}\x1b[0m isn't a recognised command.\n\n ` +
+          `\x1b[0mThe recognised flags are: \x1b[35m variant, uts, ats, sourceMaps, hot and browser\n\x1b[0m`
+      );
+      process.exit(0);
+    }
+  });
+}
+
+module.exports.checkCLArguments = checkCLArguments;
+
 function showSummary(results, watching) {
   let error = false;
   let exitCode = 0;

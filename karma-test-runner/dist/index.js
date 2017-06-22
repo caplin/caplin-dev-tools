@@ -30,6 +30,7 @@ const parseArgs = require("minimist");
 const { DefinePlugin } = require("webpack");
 
 const {
+  checkCLArguments,
   filterPackagesToTest,
   getTestBrowser,
   runPackageTests,
@@ -39,6 +40,7 @@ const {
 } = require("./utils");
 
 const args = parseArgs(process.argv.slice(2));
+checkCLArguments(args);
 const atsOnly = runOnlyATs(args);
 const utsOnly = runOnlyUTs(args);
 // If true keep browser open after test run.
