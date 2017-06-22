@@ -67,6 +67,7 @@ describe("create-app", () => {
             -1
           ) {
             // last message displayed
+            cp.stdout.removeAllListeners('data');
             allFilesCreated();
           }
         }
