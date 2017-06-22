@@ -87,7 +87,8 @@ function createConfig(skipTests, packagesMetadata, testEntry) {
     packagesMetadata,
     packagesToTest
   ).map(packageTestMetadata =>
-    createPackageKarmaConfig(packageTestMetadata, testEntry));
+    createPackageKarmaConfig(packageTestMetadata, testEntry)
+  );
 }
 
 function createPackagesKarmaConfigs(packagesMetadata) {
