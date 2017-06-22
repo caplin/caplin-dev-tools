@@ -12,7 +12,7 @@ const configureI18nLoading = require("./i18n");
 const configureOutput = require("./output");
 const configureHotReloading = require("./hot-reloading");
 
-const { sourceMaps, variant, hot } = parseArgs(process.argv.slice(2));
+const { sourcemaps, variant, hot } = parseArgs(process.argv.slice(2));
 const lifeCycleEvent = process.env.npm_lifecycle_event || "";
 // Check the name of the running script as well as the npm life cycle event as
 // when debugging npm isn't used so there is no life cycle event set.
@@ -36,7 +36,7 @@ module.exports.webpackConfigGenerator = function webpackConfigGenerator({
   configureBabelLoader(webpackConfig, basePath);
   configureI18nLoading(webpackConfig, i18nFileName, isTest);
   configureAliases(webpackConfig, basePath);
-  configureDevtool(webpackConfig, sourceMaps);
+  configureDevtool(webpackConfig, sourcemaps);
   configureBuildDependentConfig(webpackConfig, version, uglifyOptions, isBuild);
 
   // With npm 5 `file:` dependencies are symlinked to instead of copied into
