@@ -2,8 +2,6 @@
 
 **Caplin-cli is a command line module to create Node.js apps**
 
-[![Build Status](https://api.travis-ci.org/caplin/caplin-cli.svg)](https://api.travis-ci.org/caplin/caplin-cli)
-
 ## Getting started
 
 #### Prerequisites
