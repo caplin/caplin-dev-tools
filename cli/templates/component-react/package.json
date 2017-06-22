@@ -1,0 +1,19 @@
+{
+  "name": "{{componentNameLowerCase}}",
+  "version": "1.0.0",
+  "description": "",
+  "main": "react-component.js",
+  "scripts": {
+    "storybook": "start-storybook -p 6006",
+    "build-storybook": "build-storybook"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "react": "^15.6.1",
+    "react-dom": "^15.6.1",
+    "@storybook/react": "^3.1.5",
+    "sass-loader": "^3.1.2",
+    "node-sass": "^3.6.0"
+  }
+}
