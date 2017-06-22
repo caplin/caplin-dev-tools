@@ -21,12 +21,14 @@ const testsScriptRunning = basename(process.argv[1]) === "tests.js";
 const isBuild = buildScriptRunning || lifeCycleEvent === "build";
 const isTest = testsScriptRunning || lifeCycleEvent.startsWith("test");
 
-module.exports.webpackConfigGenerator = function webpackConfigGenerator({
-  basePath,
-  version = "dev",
-  i18nFileName = `i18n-${version}.js`,
-  uglifyOptions
-}) {
+module.exports.webpackConfigGenerator = function webpackConfigGenerator(
+  {
+    basePath,
+    version = "dev",
+    i18nFileName = `i18n-${version}.js`,
+    uglifyOptions
+  }
+) {
   // Object.create won't work as webpack only uses enumerable own properties.
   const webpackConfig = Object.assign({}, BASE_WEBPACK_CONFIG);
 
