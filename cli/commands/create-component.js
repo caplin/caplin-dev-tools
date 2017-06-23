@@ -6,6 +6,22 @@ const copyTemplate = require("../utils/copyTemplate");
 const invalidComponentError = "Invalid component type, " +
   "valid options are 'blank' and 'react'.";
 
+const getComponentLocations = function() {
+  /*
+  // in project
+  return ["apps/app1/src", "apps/app2/src", "packages", "./"];
+
+  // in apps
+  return ["/app1/src", "/app2/src", "./"];
+
+  // in app
+  return ["/src", "./"];
+
+  */
+  // in src or a subfolder
+  return ["./"];
+};
+
 module.exports = {
   name: "create-component",
 
@@ -42,6 +58,22 @@ module.exports = {
           return true;
         }
       }
+    },
+    {
+      name: "location",
+      question: {
+        type: "list",
+        name: "component-location",
+        message: "Where do you want to create your component?:",
+        choices: getComponentLocations(),
+        validate(type) {
+          if (type !== "blank" && type !== "react") {
+            return invalidComponentError;
+          }
+
+          return true;
+        }
+      }
     }
   ],
 
@@ -53,6 +85,8 @@ module.exports = {
     const name = options[0];
     const typeOfComponent = options[1];
     const nameIsCapitalised = name[0] === name[0].toUpperCase();
+
+    console.log(options[2]);
 
     if (typeOfComponent === "react" && !nameIsCapitalised) {
       console.log(
