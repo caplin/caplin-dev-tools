@@ -38,10 +38,12 @@ module.exports = {
     let appsFound = false;
     let packagesFound = false;
 
-    appsFound = fs.lstatSync(path.join(process.cwd(), "apps")).isDirectory();
-    packagesFound = fs
-      .lstatSync(path.join(process.cwd(), "packages-caplin"))
-      .isDirectory();
+    try {
+      appsFound = fs.lstatSync(path.join(process.cwd(), "apps")).isDirectory();
+      packagesFound = fs
+        .lstatSync(path.join(process.cwd(), "packages-caplin"))
+        .isDirectory();
+    } catch (e) {}
 
     if (!appsFound) return workingDirectoryErrorMessage("apps");
     if (!packagesFound) return workingDirectoryErrorMessage("packages-caplin");

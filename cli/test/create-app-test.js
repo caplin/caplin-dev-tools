@@ -27,53 +27,50 @@ describe("create-app", () => {
     cleanDirectories();
   });
 
-  it(
-    "should throw an error if apps and packages-caplin directories are now found",
-    errorThrown => {
-      var cp = execFile("node", ["./index.js", "create-app", "newapp"]);
-      var stdOutput = "", done = false;
+  it("should throw an error if apps and packages-caplin directories are not found", errorThrown => {
+    var cp = execFile("node", ["./index.js", "create-app", "newapp"]);
+    var stdOutput = "",
+      done = false;
 
-      cp.stdout.on("data", data => {
-        stdOutput += data;
+    cp.stdout.on("data", data => {
+      stdOutput += data;
 
-        if (stdOutput.indexOf("no such file or directory") !== -1 && !done) {
-          done = true;
-          errorThrown();
+      if (
+        stdOutput.indexOf("Error: 'apps' directory not found.") !== -1 &&
+        !done
+      ) {
+        done = true;
+        errorThrown();
+      }
+    });
+  });
+
+  it("should generate an app folder if apps and packages-caplin directories are found", allFilesCreated => {
+    initDirectories();
+
+    var cp = execFile("node", ["./index.js", "create-app", "newapp"]);
+    var stdOutput;
+
+    cp.stdout.on("data", data => {
+      stdOutput += data;
+
+      if (stdOutput.indexOf("Created") > -1) {
+        assert.file("apps/newapp/index.html");
+        assert.file("apps/newapp/src/index.js");
+        assert.file("apps/newapp/package.json");
+        assert.file("apps/newapp/webpack.config.js");
+        assert.file("apps/newapp/server/node/server.js");
+
+        if (
+          stdOutput.indexOf("Now cd into apps/newapp and run npm install") > -1
+        ) {
+          // last message displayed
+          cp.stdout.removeAllListeners("data");
+          allFilesCreated();
         }
-      });
-    }
-  );
-
-  it(
-    "should generate an app folder if apps and packages-caplin directories are found",
-    allFilesCreated => {
-      initDirectories();
-
-      var cp = execFile("node", ["./index.js", "create-app", "newapp"]);
-      var stdOutput;
-
-      cp.stdout.on("data", data => {
-        stdOutput += data;
-
-        if (stdOutput.indexOf("Created") > -1) {
-          assert.file("apps/newapp/index.html");
-          assert.file("apps/newapp/src/index.js");
-          assert.file("apps/newapp/package.json");
-          assert.file("apps/newapp/webpack.config.js");
-          assert.file("apps/newapp/server/node/server.js");
-
-          if (
-            stdOutput.indexOf("Now cd into apps/newapp and run npm install") >
-            -1
-          ) {
-            // last message displayed
-            cp.stdout.removeAllListeners('data');
-            allFilesCreated();
-          }
-        }
-      });
-    }
-  );
+      }
+    });
+  });
 
   it("should prompt for an app name", prompted => {
     initDirectories();
