@@ -3,9 +3,11 @@
 
 const logUpdate = require("log-update");
 
+const LENGTH_OF_PATH = 40;
+
 // Outline the current tests run status (no. passed, no. failed, etc...)
 function testsStatus(
-  { specsInfo: { total } },
+  { endDate, specsInfo: { total }, startDate },
   { success, failed, error, skipped }
 ) {
   let status = `specs: ${total}`;
@@ -26,6 +28,10 @@ function testsStatus(
     status = `${status}, error: true`;
   }
 
+  if (endDate) {
+    status = `${status} in ${endDate - startDate}ms`;
+  }
+
   return status;
 }
 
@@ -43,16 +49,17 @@ function logFailedResult(failedResult) {
 }
 
 function formatBasePath(basePath) {
-  if (basePath.length <= 50) {
-    const padding = " ".repeat(50 - basePath.length);
+  if (basePath.length <= LENGTH_OF_PATH) {
+    const padding = " ".repeat(LENGTH_OF_PATH - basePath.length);
 
     return basePath + padding;
   }
 
-  return `...${basePath.slice(-47)}`;
+  return `...${basePath.slice(-(LENGTH_OF_PATH - 3))}`;
 }
 
 function LogUpdateReporter(karmaConfig) {
+  this.startDate = new Date();
   this.browser = karmaConfig.browsers[0];
   this.errorMessage = "";
   this.failedResults = [];
@@ -67,8 +74,6 @@ function LogUpdateReporter(karmaConfig) {
   // `onBrowserError` instead of `onBrowserStart`.
   this.specsInfo = { total: 0 };
   this.testsType = karmaConfig.testsType;
-
-  logMessage(this, "Creating log update reporter.");
 }
 
 LogUpdateReporter.prototype.onRunStart = function() {
@@ -101,6 +106,7 @@ LogUpdateReporter.prototype.onSpecComplete = function(browser, result) {
 };
 
 LogUpdateReporter.prototype.onRunComplete = function(browsers, results) {
+  this.endDate = new Date();
   logMessage(this, testsStatus(this, results));
 
   // Persist the logged output. The next test run will use a new log session.
