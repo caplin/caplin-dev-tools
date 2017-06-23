@@ -7,25 +7,25 @@ const LENGTH_OF_PATH = 40;
 
 // Outline the current tests run status (no. passed, no. failed, etc...)
 function testsStatus(
-  { endDate, specsInfo: { total }, startDate },
+  { endDate, startDate },
   { success, failed, error, skipped }
 ) {
-  let status = `specs: ${total}`;
+  let status = "";
 
   if (success > 0) {
-    status = `${status}, pass: ${success}`;
+    status = `pass: ${success}`;
   }
 
   if (skipped > 0) {
-    status = `${status}, skip: ${skipped}`;
+    status = `${status} skip: ${skipped}`;
   }
 
   if (failed > 0) {
-    status = `${status}, fail: ${failed}`;
+    status = `${status} fail: ${failed}`;
   }
 
   if (error === true) {
-    status = `${status}, error: true`;
+    status = `${status} error: true`;
   }
 
   if (endDate) {
@@ -70,9 +70,6 @@ function LogUpdateReporter(karmaConfig) {
     error: false
   };
   this.basePath = formatBasePath(karmaConfig.basePath);
-  // Initialize so `testsStatus` has data to destructure in case of
-  // `onBrowserError` instead of `onBrowserStart`.
-  this.specsInfo = { total: 0 };
   this.testsType = karmaConfig.testsType;
 }
 
@@ -80,9 +77,8 @@ LogUpdateReporter.prototype.onRunStart = function() {
   logMessage(this, "Test run starting, compiling webpack bundle...");
 };
 
-LogUpdateReporter.prototype.onBrowserStart = function(browser, specsInfo) {
+LogUpdateReporter.prototype.onBrowserStart = function(browser) {
   this.browser = browser.name;
-  this.specsInfo = specsInfo;
 
   logMessage(this, testsStatus(this, this.results));
 };
