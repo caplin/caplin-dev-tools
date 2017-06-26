@@ -12,6 +12,7 @@ const lifeCycleEvent = process.env.npm_lifecycle_event || "";
 const stubFileStats = new Stats();
 const testsScriptRunning = basename(process.argv[1]) === "tests.js";
 const isTest = testsScriptRunning || lifeCycleEvent.startsWith("test");
+let aliasesModule = {};
 
 // Helps trick webpack into believing there is a file for the alias.
 stubFileStats.isFile = () => true;
@@ -20,16 +21,31 @@ stubFileStats.isFile = () => true;
 // `require('service!alias-name')` goes to the `ServiceRegistry` afresh. This
 // is necessary in tests where the services can be replaced by different stubs.
 function createTestingServiceAliasModule(alias) {
-  return `module.exports = require("br/ServiceRegistry").getService("${alias}");
+  return `
+  const ar = require("br/AliasRegistry");
+  if (!ar.isAlias("${alias}") || !ar.isAliasAssigned("${alias}")) {
+    ar.registerAliasProvider("${alias}", ${aliasesModule[alias].toString()});
+  }
+  module.exports = require("br/ServiceRegistry").getService("${alias}");
   delete __webpack_require__.c[module.id];`;
 }
 
 function createServiceAliasModule(alias) {
-  return `module.exports = require("br/ServiceRegistry").getService("${alias}");`;
+  return `
+  const ar = require("br/AliasRegistry");
+  if (!ar.isAlias("${alias}") || !ar.isAliasAssigned("${alias}")) {
+    ar.registerAliasProvider("${alias}", ${aliasesModule[alias].toString()});
+  }
+  module.exports = require("br/ServiceRegistry").getService("${alias}");`
 }
 
 function createAliasModule(alias) {
-  return `module.exports = require("br/AliasRegistry").getClass("${alias}")`;
+  return `
+  const ar = require("br/AliasRegistry");
+  if (!ar.isAlias("${alias}") || !ar.isAliasAssigned("${alias}")) {
+    ar.registerAliasProvider("${alias}", ${aliasesModule[alias].toString()});
+  }
+  module.exports = require("br/AliasRegistry").getClass("${alias}")`;
 }
 
 // `aliasType` is either `alias` or `service`.
@@ -37,9 +53,11 @@ function createCommonAliasFileData(aliasType, moduleCreator, result, compiler) {
   const { context, inputFileSystem } = compiler;
   const alias = result.request.replace(`${aliasType}!`, "");
   const aliasModule = moduleCreator(alias);
-  const aliasFilePath = join(
-    `${context}/node_modules/@caplin/${aliasType}/${alias}.js`
-  );
+
+  const aliasRequest = join(`${context}/src/config/${alias}.js`);
+
+  const aliasFilePath = aliasRequest;
+
   const fileBuffer = Buffer.from(aliasModule);
 
   importedAliases.add(alias);
@@ -66,14 +84,10 @@ function createAliasFileData(result, compiler) {
 
 // `require` the `$aliases-data$` module to inspect the configured aliases.
 function recordAliasesDataAliases(result, compiler) {
-  const aliasesDataPath = compiler.options.resolve.alias["$aliases-data$"];
-  const aliasesData = require(aliasesDataPath);
+  const { context } = compiler;
+  const aliasRequest = join(`${context}/src/config/aliases-test.js`);
 
-  aliasesDataAliases = new Set(Object.keys(aliasesData));
-  // Remove the "alias!" prefix from the request or webpack searches for
-  // an `alias` module/loader in the `AliasRegistry` folder. `$aliases-data`
-  // is aliased in webpack to point toward the `aliases.js` module.
-  result.request = "$aliases-data";
+  result.request = aliasRequest;
 }
 
 function handleAliasImports(result, callback, compiler) {
@@ -115,8 +129,9 @@ function verifyImportedAliasesAreRegistered() {
 
 function nmfCreated(nmf, compiler) {
   // Called inside `NormalModuleFactory` during module creation.
-  nmf.plugin("before-resolve", (result, callback) =>
-    handleAliasImports(result, callback, compiler)
+  nmf.plugin(
+    "before-resolve",
+    (result, callback) => handleAliasImports(result, callback, compiler)
   );
 }
 
@@ -124,6 +139,23 @@ class AliasesPlugin {
   apply(compiler) {
     // Every compilation we clear down the set of found aliases, used during
     // development when file watching.
+    const { context, inputFileSystem, options } = compiler;
+    const aliasesDataPath = options.resolve.alias["$aliases-data$"];
+    const aliasesData = require(aliasesDataPath);
+    aliasesModule = aliasesData;
+
+    const aliasRequest = join(`${context}/src/config/aliases-test.js`);
+    const aliasFilePath = aliasRequest;
+
+    aliasesDataAliases = new Set(Object.keys(aliasesData));
+
+    const fileBuffer = Buffer.from('module.exports = {};');
+    // Remove the "alias!" prefix from the request or webpack searches for
+    // an `alias` module/loader in the `AliasRegistry` folder. `$aliases-data`
+    // is aliased in webpack to point toward the `aliases.js` module.
+    inputFileSystem._statStorage.data[aliasFilePath] = [null, stubFileStats];
+    inputFileSystem._readFileStorage.data[aliasFilePath] = [null, fileBuffer];
+
     compiler.plugin("compile", () => importedAliases.clear());
     compiler.plugin("done", verifyImportedAliasesAreRegistered);
     // Called when `Compiler` creates `NormalModuleFactory`.
