@@ -92,3 +92,13 @@ new-app/
   server/
   src/
 ```
+
+## Development using React Storybook
+
+It is possible to create stories for all your React components and load them using
+React Storybook. Just run:
+```
+npm run storybook
+```
+and you can develop your components in storybook's dashboard, found by navigating to localhost:6006.
+Storybook uses hot module replacement to instantly inspect your code or styling changes.
