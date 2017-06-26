@@ -92,3 +92,11 @@ new-app/
   server/
   src/
 ```
+
+### Command Line Arguments
+
+There are two command line arguments supported during development.
+To use them, run: npm start -- --<flag>
+The possible flags are:
+`hot`, use this flag for the hot module replacement feature
+`sourcemaps`, use this to enable source maps. It also enables the webpack compilation error overlay in the browser
