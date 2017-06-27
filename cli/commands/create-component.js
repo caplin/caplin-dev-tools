@@ -66,7 +66,8 @@ module.exports = {
     // check template exists
 
     copyTemplate(templateId, path.join(process.cwd(), name), {
-      componentName: name
+      componentName: name,
+      componentNameLowerCase: name.toLowerCase()
     })
       .then(() => {
         console.log(`New component '${name}' created!`);

@@ -37,6 +37,14 @@ you can use the default scripts:
 This will start the app in dev mode, the app is available at
 http://localhost:8080 (unless you specify a different port in the .env file)
 
+### Command Line Arguments
+
+There are two command line arguments supported during development.
+To use them, run: npm start -- --<flag>
+The possible flags are:
+`hot`, use this flag for the hot module replacement feature
+`sourcemaps`, use this to enable source maps. It also enables the webpack compilation error overlay in the browser
+
 ### `npm test` or `npm t`
 
 This will launch a browser and run the tests, for further test configuration
@@ -93,10 +101,12 @@ new-app/
   src/
 ```
 
-### Command Line Arguments
+## Development using React Storybook
 
-There are two command line arguments supported during development.
-To use them, run: npm start -- --<flag>
-The possible flags are:
-`hot`, use this flag for the hot module replacement feature
-`sourcemaps`, use this to enable source maps. It also enables the webpack compilation error overlay in the browser
+It is possible to create stories for all your React components and load them using
+React Storybook. Just run:
+```
+npm run storybook
+```
+and you can develop your components in storybook's dashboard, found by navigating to localhost:6006.
+Storybook uses hot module replacement to instantly inspect your code or styling changes.
