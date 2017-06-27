@@ -1,11 +1,10 @@
 /* eslint no-await-in-loop: 0 */
 
-const { resolve } = require("path");
-
 const { LOG_ERROR } = require("karma/lib/constants");
 const parseArgs = require("minimist");
 const { DefinePlugin } = require("webpack");
 
+const { atsTestEntry, utsTestEntry } = require("./config");
 const {
   checkCLArguments,
   filterPackagesToTest,
@@ -24,8 +23,6 @@ const utsOnly = runOnlyUTs(args);
 const devMode = args.dev || false;
 // Packages to test, if the user specifies none all packages will be tested.
 const packagesToTest = args._;
-const atsTestEntry = resolve(__dirname, "ats-test-entry.js");
-const utsTestEntry = resolve(__dirname, "uts-test-entry.js");
 const testBrowser = getTestBrowser(args);
 
 const baseKarmaConfig = {
