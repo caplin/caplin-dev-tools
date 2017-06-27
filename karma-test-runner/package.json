@@ -17,11 +17,11 @@
   },
   "dependencies": {
     "babel-polyfill": "^6.9.1",
-    "karma-log-update-reporter": "^1.0.0",
     "karma": "^1.7.0",
     "karma-chrome-launcher": "^2.1.1",
     "karma-firefox-launcher": "^1.0.1",
     "karma-ie-launcher": "^1.0.0",
+    "karma-log-update-reporter": "^1.0.0",
     "karma-phantomjs-launcher": "^1.0.4",
     "karma-sourcemap-loader": "^0.3.7",
     "karma-webpack": "^2.0.3",
