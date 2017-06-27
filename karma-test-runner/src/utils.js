@@ -76,7 +76,7 @@ function getTestBrowser(commandLineArgs) {
 module.exports.getTestBrowser = getTestBrowser;
 
 function checkCLArguments(commandLineArgs) {
-  var correctFlags = [
+  const correctFlags = [
     "variant",
     "uts",
     "ats",
