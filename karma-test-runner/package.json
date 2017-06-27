@@ -13,9 +13,7 @@
   ],
   "devDependencies": {
     "babel-cli": "^6.7.5",
-    "babel-plugin-transform-object-rest-spread": "^6.6.5",
-    "babel-preset-node6": "^11.0.0",
-    "babel-preset-stage-3": "^6.5.0"
+    "babel-preset-eslatest-node6": "^1.0.0"
   },
   "dependencies": {
     "babel-polyfill": "^6.9.1",
