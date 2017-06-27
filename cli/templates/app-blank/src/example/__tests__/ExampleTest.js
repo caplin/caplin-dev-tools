@@ -12,10 +12,6 @@ describe("Testing Example class", () => {
   });
 
   test("it should say hello", () => {
-    expect(
-      exampleClass.sayHello(),
-      "Hello world!",
-      "The world did not receive a welcoming hello."
-    );
+     expect(exampleClass.sayHello()).toBe("Hello world!");
   });
 });
