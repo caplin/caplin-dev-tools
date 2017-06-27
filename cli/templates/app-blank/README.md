@@ -37,6 +37,14 @@ you can use the default scripts:
 This will start the app in dev mode, the app is available at
 http://localhost:8080 (unless you specify a different port in the .env file)
 
+### Command Line Arguments
+
+There are two command line arguments supported during development.
+To use them, run: npm start -- --<flag>
+The possible flags are:
+`hot`, use this flag for the hot module replacement feature
+`sourcemaps`, use this to enable source maps. It also enables the webpack compilation error overlay in the browser
+
 ### `npm test` or `npm t`
 
 This will launch a browser and run the tests, for further test configuration

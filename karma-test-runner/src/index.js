@@ -59,7 +59,8 @@ function createPackageKarmaConfig(
     new DefinePlugin({ PACKAGE_DIRECTORY: `"${packageDirectory}"` })
   ];
   const packageWebpackConfig = Object.assign({}, webpackConfig, {
-    entry: testEntry,
+    // No `entry` as `karma-webpack` doesn't need it, creates second chunk.
+    entry: undefined,
     plugins
   });
   const testsType = testEntry === utsTestEntry ? "UTs" : "ATs";

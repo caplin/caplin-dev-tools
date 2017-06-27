@@ -3,27 +3,33 @@
 
 const logUpdate = require("log-update");
 
+const LENGTH_OF_PATH = 40;
+
 // Outline the current tests run status (no. passed, no. failed, etc...)
 function testsStatus(
-  { specsInfo: { total } },
+  { endDate, startDate },
   { success, failed, error, skipped }
 ) {
-  let status = `specs: ${total}`;
+  let status = "";
 
   if (success > 0) {
-    status = `${status}, pass: ${success}`;
+    status = `pass: ${success}`;
   }
 
   if (skipped > 0) {
-    status = `${status}, skip: ${skipped}`;
+    status = `${status} skip: ${skipped}`;
   }
 
   if (failed > 0) {
-    status = `${status}, fail: ${failed}`;
+    status = `${status} fail: ${failed}`;
   }
 
   if (error === true) {
-    status = `${status}, error: true`;
+    status = `${status} error: true`;
+  }
+
+  if (endDate) {
+    status = `${status} in ${endDate - startDate}ms`;
   }
 
   return status;
@@ -43,16 +49,17 @@ function logFailedResult(failedResult) {
 }
 
 function formatBasePath(basePath) {
-  if (basePath.length <= 50) {
-    const padding = " ".repeat(50 - basePath.length);
+  if (basePath.length <= LENGTH_OF_PATH) {
+    const padding = " ".repeat(LENGTH_OF_PATH - basePath.length);
 
     return basePath + padding;
   }
 
-  return `...${basePath.slice(-47)}`;
+  return `...${basePath.slice(-(LENGTH_OF_PATH - 3))}`;
 }
 
 function LogUpdateReporter(karmaConfig) {
+  this.startDate = new Date();
   this.browser = karmaConfig.browsers[0];
   this.errorMessage = "";
   this.failedResults = [];
@@ -63,21 +70,15 @@ function LogUpdateReporter(karmaConfig) {
     error: false
   };
   this.basePath = formatBasePath(karmaConfig.basePath);
-  // Initialize so `testsStatus` has data to destructure in case of
-  // `onBrowserError` instead of `onBrowserStart`.
-  this.specsInfo = { total: 0 };
   this.testsType = karmaConfig.testsType;
-
-  logMessage(this, "Creating log update reporter.");
 }
 
 LogUpdateReporter.prototype.onRunStart = function() {
   logMessage(this, "Test run starting, compiling webpack bundle...");
 };
 
-LogUpdateReporter.prototype.onBrowserStart = function(browser, specsInfo) {
+LogUpdateReporter.prototype.onBrowserStart = function(browser) {
   this.browser = browser.name;
-  this.specsInfo = specsInfo;
 
   logMessage(this, testsStatus(this, this.results));
 };
@@ -101,6 +102,7 @@ LogUpdateReporter.prototype.onSpecComplete = function(browser, result) {
 };
 
 LogUpdateReporter.prototype.onRunComplete = function(browsers, results) {
+  this.endDate = new Date();
   logMessage(this, testsStatus(this, results));
 
   // Persist the logged output. The next test run will use a new log session.
