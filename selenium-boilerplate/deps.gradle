@@ -1,0 +1,60 @@
+apply plugin: 'idea'
+apply plugin: 'eclipse'
+apply plugin: 'maven'
+
+def browsersDir = "${buildDir}/browsers"
+def driversDir = "${buildDir}/drivers"
+
+repositories {
+    maven { url 'http://artifactory.caplin.com/artifactory/repo1/' }
+    maven { url 'http://artifactory.caplin.com/artifactory/jcenter/' }
+    maven { url 'http://artifactory.caplin.com/artifactory/caplin-releng/' }
+    maven { url 'http://artifactory.caplin.com/artifactory/thirdparty-repo/' }
+    maven { url 'http://artifactory.caplin.com/artifactory/caplin-ci/' }
+    maven { url 'http://artifactory.caplin.com/artifactory/caplin-qa/' }
+}
+
+buildscript {
+    repositories {
+        mavenLocal()
+        maven { url 'http://artifactory.caplin.com/artifactory/jcenter/' }
+    }
+    dependencies {
+    }
+}
+
+configurations {
+    drivers
+    browsersDep
+}
+
+dependencies {
+    drivers "browser:chromedriver_win32:2.26@zip"
+    drivers "browser:chromedriver_mac:2.26@zip"
+
+    drivers "browser:geckodriver:0.14.0:win32@zip"
+    drivers "browser:geckodriver:0.14.0:mac@zip"
+
+    browsersDep "browser.chromium.stable:win32:53.0.2785.0@zip"
+    browsersDep "browser.chromium.stable:mac:53.0.2785.0@zip"
+
+    browsersDep "browser:firefox-win32:41.0@zip"
+    browsersDep "browser:firefox-mac:41.0@zip"
+}
+
+task copyBrowsers(type: Sync) {
+    from { configurations.browsersDep.collect { zipTree(it) } }
+    into browsersDir
+
+    doLast {
+        file(browsersDir).eachDirMatch(~/(chrome|firefox)-.*/) {
+            def newName = it.name.replaceAll(/-.*/, '')
+            it.renameTo("${browsersDir}/${newName}")
+        }
+    }
+}
+
+task copyDrivers(type: Sync, dependsOn: copyBrowsers) {
+    from { configurations.drivers.collect { driver -> zipTree(driver) } }
+    into driversDir
+}

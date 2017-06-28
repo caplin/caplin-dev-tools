@@ -1,0 +1,93 @@
+apply plugin: 'java'
+apply plugin: 'idea'
+apply plugin: 'eclipse'
+apply plugin: 'maven'
+apply plugin: 'net.serenity-bdd.aggregator'
+
+gradle.startParameter.continueOnFailure = true
+
+def os = System.getProperty('os.name').split(' ')[0].toLowerCase()
+if (os == 'windows') { os = 'win32' }
+
+// B R O W S E R  S E T U P
+if (!project.hasProperty('browser')) {
+    project.ext.set('browser', 'Chrome')
+} else if (!['Chrome', 'Firefox'].contains(project.browser)) {
+    throw new GradleException("Browser must be one of: 'Chrome' or 'Firefox' e.g. -Pbrowser=Chrome.")
+}
+
+def browsersDir = "${buildDir}/browsers"
+def driversDir = "${buildDir}/drivers"
+
+repositories {
+    mavenCentral()
+}
+
+buildscript {
+    repositories {
+        mavenLocal()
+        mavenCentral()
+    }
+    dependencies {
+        classpath 'net.serenity-bdd:serenity-gradle-plugin:1.2.2'
+    }
+}
+
+dependencies {
+    testCompile 'net.serenity-bdd:serenity-junit:1.2.2'
+    testCompile 'net.serenity-bdd:serenity-jbehave:1.21.0'
+    testCompile 'org.seleniumhq.selenium:selenium-java:3.0.1'
+    testCompile 'org.slf4j:slf4j-simple:1.7.23'
+}
+
+tasks.withType(Test).all {
+    scanForTestClasses = false
+
+    if (project.properties.story) {
+        systemProperty 'story', project.properties.story
+    }
+
+        systemProperty 'webdriver.driver', 'provided'
+        systemProperty 'webdriver.provided.type', 'CustomDriver'
+        systemProperty 'webdriver.provided.CustomDriver', 'caplin.example.utils.CustomDriver'
+
+        if (browser.startsWith('Firefox')) {
+            switch (os) {
+                case 'win32':
+                    systemProperty 'webdriver.firefox.marionette', "${driversDir}/geckodriver.exe"
+                    systemProperty 'webdriver.firefox.bin', "${browsersDir}/firefox-win32-41.0/firefox.exe"
+                    break
+                case 'mac':
+                    systemProperty 'webdriver.firefox.marionette', "${driversDir}/geckodriver"
+                    systemProperty 'webdriver.firefox.bin', "${browsersDir}/firefox/Firefox.app/Contents/MacOS/firefox-bin"
+                    break
+                default:
+                    throw new GradleException("Unknown os: " + os + ". Must be one of linux, win32, or mac")
+                    break
+            }
+        } else if (browser.startsWith('Chrome')) {
+            switch (os) {
+                case 'win32':
+                    systemProperty 'webdriver.chrome.driver', "${driversDir}/chromedriver.exe"
+                    systemProperty 'webdriver.chrome.bin', "${browsersDir}/chrome-win32/chrome.exe"
+                    break
+                case 'mac':
+                    systemProperty 'webdriver.chrome.driver', "${driversDir}/chromedriver"
+                    systemProperty 'webdriver.chrome.bin', "${browsersDir}/chrome/Chromium.app/Contents/MacOS/Chromium"
+                    break
+                default:
+                    throw new GradleException("Unknown os: " + os + ". Must be one of linux, win32, or mac")
+                    break
+            }
+        }
+
+
+    systemProperty 'browser', "${browser}"
+    outputs.upToDateWhen { false }
+    finalizedBy aggregate
+}
+
+// S Y S T E M  T E S T S
+task systemTests(type: Test) {
+    include '**/SystemTestSuite.class'
+}
