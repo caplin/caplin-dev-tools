@@ -3,6 +3,7 @@ const express = require("express");
 
 const poll = require("./poll");
 const webpackMiddleware = require("./webpack");
+const getPort = require('./get-port');
 
 module.exports = ({ webpackConfig }) => {
   const app = express();
@@ -19,13 +20,11 @@ module.exports = ({ webpackConfig }) => {
   // Handlers/middleware for webpack.
   webpackMiddleware(app, webpackConfig);
 
-  const APP_PORT = process.env.PORT || 8080;
-
-  // Don't bind to `localhost` as that will mean the server won't be accessible
-  // by other machines on the LAN.
-  app.listen(APP_PORT, err =>
-    console.log(err || `Listening on port ${APP_PORT}`)
-  );
+  getPort().then(port => {
+    app.listen(port, err =>
+      console.log(err || `Listening on port ${port}`)
+    );
+  });
 
   return app;
 };
