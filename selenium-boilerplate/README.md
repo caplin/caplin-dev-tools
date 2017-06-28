@@ -5,6 +5,22 @@
 
   As we are testing against websites, a internet connection will be required with access to wikipedia.com.
 
+## Downloading browser dependencies (Internal+External)
+
+If working inside the Caplin network, you can download the dependencies by running:
+
+`./gradlew -b deps.gradle copyDrivers` (Unix style CML) or `gradlew -b deps.gradle copyDrivers` (WIN style CML)
+
+If working outside the caplin network, you can serve your own browser versions and update the dependencies in the gradle config (deps.gradle).
+Alternatively, place your desired browsers in a build directory directly which will allow you to run the tests. e.g. for chrome
+
+```
+{PROJECT-ROOT}/build/browsers/chrome-win32/chrome.exe (for Windows) {PROJECT-ROOT}/build/browsers/chrome/* (for MAC)
+{PROJECT-ROOT}/build/drivers/chromedriver.exe
+```
+
+Portable versions of applications and drivers can be downloaded from https://portableapps.com and http://docs.seleniumhq.org/download/ respectively
+
 ## Browsers
 
 All tests will run against the browsers we have provided in the `build\browsers` directory. These are:
@@ -20,19 +36,7 @@ To control the automated interaction process with have provided the following dr
 
 When updating the browsers, please ensure that you update the drivers to the recommended version for that browser.
 
-## Downloading browser dependencies (Internal+External)
 
-If working inside the Caplin network, you can download the dependencies by running:
-
-`./gradlew -b deps.gradle copyDrivers` (Unix style CML) or `gradlew -b deps.gradle copyDrivers` (WIN style CML)
-
-If working outside the caplin network, you can serve your own browser versions and update the dependencies in the gradle config.
-Alternatively, place your desired browsers in a build directory directly which will allow you to run the tests. e.g. for chrome in windows (default browser)
-
-```
-{PROJECT-ROOT}/build/browsers/chrome-win32/chrome.exe
-{PROJECT-ROOT}/build/drivers/chromedriver.exe
-```
 
 ## Running the example tests:
 
