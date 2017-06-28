@@ -2,11 +2,13 @@ const findAvailablePort = require("detect-port");
 const inquirer = require("inquirer");
 
 const APP_PORT = process.env.PORT || 8080;
-const portQuestion = {
-	type: "confirm",
-	name: "tryAnotherPort",
-	message: `port ${APP_PORT} is already in use, would you like to try another port instead?`,
-	default: true
+const portQuestion = availablePort => {
+	return {
+		type: "confirm",
+		name: "tryAnotherPort",
+		message: `port ${APP_PORT} is already in use, would you like to use ${availablePort} instead?`,
+		default: true
+	};
 };
 
 module.exports = () => {
@@ -15,11 +17,13 @@ module.exports = () => {
 			.then(availablePort => {
 				availablePort === APP_PORT
 					? resolve(APP_PORT)
-					: inquirer.prompt([portQuestion]).then(answer => {
-							answer.tryAnotherPort
-								? resolve(availablePort)
-								: resolve(APP_PORT);
-						});
+					: inquirer
+							.prompt([portQuestion(availablePort)])
+							.then(answer => {
+								answer.tryAnotherPort
+									? resolve(availablePort)
+									: resolve(APP_PORT);
+							});
 			})
 			.catch(error => console.log(error));
 	});
