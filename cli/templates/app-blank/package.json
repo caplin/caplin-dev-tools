@@ -9,7 +9,7 @@
     "storybook": "start-storybook -p 6006",
     "build-storybook": "build-storybook",
     "test": "jest",
-    "test:debug": "node --inspect --debug-brk ./node_modules/jest-cli/bin/jest.js -i --env jest-environment-node-debug"
+    "test:debug": "node --inspect-brk ./node_modules/jest-cli/bin/jest.js -i --env jest-environment-node-debug"
   },
   "dependencies": {
     "@caplin/build-tasks": "^4.0.0",
