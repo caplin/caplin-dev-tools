@@ -15,7 +15,7 @@ module.exports = () => {
 	return new Promise((resolve, reject) => {
 		findAvailablePort(APP_PORT)
 			.then(availablePort => {
-				availablePort === APP_PORT
+				availablePort === APP_PORT || !process.stdout.isTTY
 					? resolve(APP_PORT)
 					: inquirer
 							.prompt([portQuestion(availablePort)])
