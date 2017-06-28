@@ -1,16 +1,15 @@
 const findAvailablePort = require("detect-port");
 const inquirer = require("inquirer");
 
+const APP_PORT = process.env.PORT || 8080;
 const portQuestion = {
 	type: "confirm",
 	name: "tryAnotherPort",
-	message: "Would you like to run on another port instead?",
+	message: `port ${APP_PORT} is already in use, would you like to try another port instead?`,
 	default: true
 };
 
 module.exports = () => {
-	const APP_PORT = process.env.PORT || 8080;
-
 	return new Promise((resolve, reject) => {
 		findAvailablePort(APP_PORT).then(availablePort => {
 			availablePort === APP_PORT
