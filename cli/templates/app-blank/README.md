@@ -113,7 +113,7 @@ Storybook uses hot module replacement to instantly inspect your code or styling 
 
 ## How to debug Jest tests
 
-There are two ways to debug Jest tests; with chrome devtools and using your IDE of choice (we prefer Visual Studio Code and IntelliJ IDEA). 
+There are two ways to debug Jest tests; with chrome devtools or using your IDE of choice (we prefer Visual Studio Code and IntelliJ IDEA). 
 
 ### Using Chrome devtools 
 
