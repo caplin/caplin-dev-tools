@@ -11,14 +11,16 @@ const portQuestion = {
 
 module.exports = () => {
 	return new Promise((resolve, reject) => {
-		findAvailablePort(APP_PORT).then(availablePort => {
-			availablePort === APP_PORT
-				? resolve(port)
-				: inquirer.prompt([portQuestion]).then(answer => {
-						answer.tryAnotherPort
-							? resolve(availablePort)
-							: resolve(APP_PORT);
-					});
-		});
+		findAvailablePort(APP_PORT)
+			.then(availablePort => {
+				availablePort === APP_PORT
+					? resolve(APP_PORT)
+					: inquirer.prompt([portQuestion]).then(answer => {
+							answer.tryAnotherPort
+								? resolve(availablePort)
+								: resolve(APP_PORT);
+						});
+			})
+			.catch(error => console.log(error));
 	});
 };
