@@ -1,7 +1,7 @@
 # Example System Test Suite
 
 ## Requirements
-  Please make sure that your organization provides access MavenCentral, as we use this to get the required dependancies.
+  Please make sure that your organization provides access to MavenCentral, as we use this to get the required dependancies.
 
   As we are testing against websites, a internet connection will be required with access to wikipedia.com.
 
