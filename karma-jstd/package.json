@@ -1,6 +1,6 @@
 {
   "name": "@caplin/karma-jstd",
-  "version": "1.0.2",
+  "version": "1.1.0",
   "description": "A package that adds the JSTD adapter to a Karma config",
   "main": "index.js",
   "keywords": [],

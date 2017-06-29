@@ -11,3 +11,9 @@ module.exports = function configurePackageTestDatatype(testDatatype) {
   // Return a clone of the TestDatatype instead of modifying it.
   return Object.assign({}, testDatatype, jstdTestDatatype);
 };
+
+module.exports.addJSTDFiles = function addJSTDFiles(karmaConfig) {
+  const jstdAdapter = require.resolve("karma-jstd-adapter", "jstd-adapter.js");
+
+  karmaConfig.files.unshift(jstdAdapter);
+};
