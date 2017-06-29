@@ -37,11 +37,10 @@ you can use the default scripts:
 This will start the app in dev mode, the app is available at
 http://localhost:8080 (unless you specify a different port in the .env file)
 
-### Command Line Arguments
+### Hot Module Replacement
 
-There are a command line argument supported during development.
-To use it, run: npm start -- --hot
-Use this flag for the hot module replacement feature
+Use the --hot flag to use the hot module replacement feature during development:
+npm start -- --hot
 
 ### `npm test` or `npm t`
 
