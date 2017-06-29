@@ -12,5 +12,5 @@ module.exports = function configureBundleEntryPoint(
   const appEntryPoint = join(basePath, "src", entryFile);
 
   const reactErrorOverlay = require.resolve("react-error-overlay");
-  webpackConfig.entry = [reactErrorOverlay, appEntryPoint];
+  webpackConfig.entry = ["babel-polyfill", reactErrorOverlay, appEntryPoint];
 };
