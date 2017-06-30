@@ -146,3 +146,14 @@ Jest options: --runInBand
 
 Don’t forget to install and enable the nodejs plugin from the JetBrains plugin repository.
 
+## IE11 Support
+
+Currently we don't support IE11 but if you need your app to be compatible you have to follow these steps.
+
+Run: 
+
+```
+npm install --save babel-polyfill
+```
+
+Add "babel-polyfill" in your webpack's config entry point ensuring it is placed before your app's entry point.
