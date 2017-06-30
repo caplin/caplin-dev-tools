@@ -148,7 +148,7 @@ Don’t forget to install and enable the nodejs plugin from the JetBrains plugin
 
 ## IE11 Support
 
-Currently we don't support IE11 but if you need your app to be compatible you have to follow these steps.
+By default the app does not support IE11, to do so you'll need to add a pollyfill as follows.
 
 Run: 
 
@@ -156,4 +156,4 @@ Run:
 npm install --save babel-polyfill
 ```
 
-Add "babel-polyfill" in your webpack's config entry point ensuring it is placed before your app's entry point.
+Add "babel-polyfill" in your webpack config's entry ensuring it is placed before your app's entry point.
