@@ -1,6 +1,6 @@
 {
   "name": "@caplin/html-loader",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Caplin HTML templates loader",
   "main": "index.js",
   "keywords": [],
