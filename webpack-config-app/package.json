@@ -1,6 +1,6 @@
 {
   "name": "@caplin/webpack-config-app",
-  "version": "5.0.3",
+  "version": "5.1.0",
   "description": "webpack config common to Caplin applications",
   "main": "index.js",
   "author": "",
@@ -17,6 +17,7 @@
     "css-loader": "^0.28.0",
     "extract-text-webpack-plugin": "^2.1.0",
     "file-loader": "^0.10.0",
+    "hard-source-webpack-plugin": "^0.4.6",
     "minimist": "^1.2.0",
     "node-sass": "^3.6.0",
     "raw-loader": "^0.5.1",
