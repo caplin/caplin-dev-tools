@@ -6,15 +6,15 @@ const { runAppTests } = require("./test-runner-app");
 
 function runTests(searchDir, argv) {
   const pathParts = searchDir.split(sep);
-  const appOrPckName = pathParts.pop();
-  const appOrPckDir = pathParts.pop();
+  const appOrPkgName = pathParts.pop();
+  const appOrPkgDir = pathParts.pop();
 
-  if (appOrPckDir === "apps") {
-    console.log(`Running tests for ${appOrPckName} application.`);
+  if (appOrPkgDir === "apps") {
+    console.log(`Running tests for ${appOrPkgName} application.`);
 
     runAppTests(searchDir, argv);
-  } else if (appOrPckDir === "caplin-packages" || appOrPckDir === "packages") {
-    console.log(`Running tests for ${appOrPckName} package.`);
+  } else if (appOrPkgDir === "caplin-packages" || appOrPkgDir === "packages") {
+    console.log(`Running tests for ${appOrPkgName} package.`);
 
     console.warn("Running package tests feature still to be implemented.");
   } else {

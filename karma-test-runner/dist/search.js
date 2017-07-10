@@ -34,14 +34,14 @@ function getDependenciesDirs(dependencies = {}, packageDirectory, appDir) {
 // With npm 5 the copying of relative packages stops and it uses symlinks
 // instead, this should fix these issues as all requires will resolve to the
 // same files.
-function dependencySearch(pckToSearch, foundPcks, appDir = pckToSearch) {
-  const pckJSON = require(join(pckToSearch, "package.json"));
-  const deps = getDependenciesDirs(pckJSON.dependencies, pckToSearch, appDir);
-  const newDeps = deps.filter(name => !foundPcks.includes(name));
+function dependencySearch(pkgToSearch, foundPkgs, appDir = pkgToSearch) {
+  const pkgJSON = require(join(pkgToSearch, "package.json"));
+  const deps = getDependenciesDirs(pkgJSON.dependencies, pkgToSearch, appDir);
+  const newDeps = deps.filter(name => !foundPkgs.includes(name));
 
-  foundPcks.push(...newDeps);
+  foundPkgs.push(...newDeps);
   newDeps.forEach(name => {
-    dependencySearch(name, foundPcks, appDir);
+    dependencySearch(name, foundPkgs, appDir);
   });
 }
 
