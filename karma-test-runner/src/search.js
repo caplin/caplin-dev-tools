@@ -3,6 +3,8 @@
 const { readdirSync, statSync } = require("fs");
 const { basename, join } = require("path");
 
+const IS_WIN = /^win/.test(process.platform);
+
 // FIND PACKAGE DIRS TO TEST. Depth first `package.json` `dependencies` search.
 
 function getDependenciesDirs(dependencies = {}, packageDirectory, appDir) {
@@ -47,6 +49,11 @@ function dependencySearch(pkgToSearch, foundPkgs, appDir = pkgToSearch) {
   });
 }
 
+// Escape backslashes in Win paths.
+function escSep(packageDirectory) {
+  return IS_WIN ? packageDirectory.replace(/\\/g, "\\\\") : packageDirectory;
+}
+
 function findAppPackages(searchDir) {
   const appPackagesDirs = readdirSync(join(searchDir, "src"))
     .map(name => join(searchDir, "src", name))
@@ -55,7 +62,7 @@ function findAppPackages(searchDir) {
 
   dependencySearch(searchDir, foundPackages);
 
-  return foundPackages.concat(appPackagesDirs);
+  return foundPackages.concat(appPackagesDirs).map(escSep);
 }
 
 module.exports.findAppPackages = findAppPackages;
