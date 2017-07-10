@@ -39,7 +39,29 @@ describe("create-component", () => {
     });
   });
 
-  it("creates correct files for a component", () => {
-    // todo
+  it("creates correct files for a component", correctFilesCreated => {
+    execFile("node", ["./index.js", "create-app", "newapp"]);
+    var cp = execFile("node", ["./index.js", "create-component", "NewReactComponent", "react"]);
+    var stdOutput;
+
+    cp.stdout.on("data", data => {
+      stdOutput += data;
+
+      if (stdOutput.indexOf("Created") > -1) {
+        assert.file("apps/newapp/NewReactComponent/NewReactComponent.scss");
+        assert.file("apps/newapp/NewReactComponent/NewReactComponent.js");
+        assert.file("apps/newapp/NewReactComponent/stories/index.js");
+        assert.file("apps/newapp/NewReactComponent/__tests__/NewReactComponent-test.js");
+
+        if (
+          stdOutput.indexOf("react-component") === -1 &&
+          stdOutput.indexOf("New component 'NewReactComponent' created!") !== -1
+        ) {
+          // last message displayed
+          cp.stdout.removeAllListeners("data");
+          correctFilesCreated();
+        }
+      }
+    });
   });
 });
