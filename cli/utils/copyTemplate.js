@@ -1,28 +1,40 @@
-const copy = require('copy-template-dir');
-const path = require('path');
-const chalk = require('chalk');
- 
+const copy = require("copy-template-dir");
+const path = require("path");
+const chalk = require("chalk");
+const fs = require("fs");
+
 module.exports = function(template, target, vars) {
+  return new Promise(function(resolve, reject) {
+    var inDir = path.join(__dirname, "..", "templates", template);
 
-	return new Promise(function(resolve, reject) {
+    copy(inDir, target, vars, function(err, createdFiles) {
+      if (err) {
+        throw err;
+      } else {
+        console.log("\n");
 
-		var inDir = path.join(__dirname, '..', 'templates', template);
+        createdFiles.forEach(filePath => {
+          if (filePath.indexOf("react-component") !== -1) {
+            const newFileName = filePath.replace(
+              /react-component/g,
+              `${vars.componentName}`
+            );
+            fs.rename(filePath, newFileName, err => {
+              if (err) {
+                console.log(err);
+                return;
+              }
+            });
+            console.log(chalk.green("\tCreated ") + newFileName);
+          } else {
+            console.log(chalk.green("\tCreated ") + filePath);
+          }
+        });
 
-		copy(inDir, target, vars, function(err, createdFiles) {
-			if (err) {
-				throw err
-			} else {
-				console.log('\n');
-				createdFiles.forEach(filePath => console.log(chalk.green('\tCreated ') + filePath));
-				console.log('\n');
+        console.log("\n");
 
-				resolve();
-			}
-
-		});
-
-	});
-
+        resolve();
+      }
+    });
+  });
 };
-
-
