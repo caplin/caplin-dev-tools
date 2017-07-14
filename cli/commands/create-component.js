@@ -7,6 +7,9 @@ const copyTemplate = require("../utils/copyTemplate");
 const invalidComponentError =
   "Invalid component type, " + "valid options are 'blank' and 'react'.";
 
+const invalidLocationError = 
+  "Invalid location, " + "some valid options are './' and 'packages'.";
+
 const getComponentLocations = function() {
   const targetDir = process.cwd().split("\\");
   const isProject = !targetDir.includes("apps");
@@ -77,9 +80,9 @@ module.exports = {
         name: "component-location",
         message: "Where do you want to create your component?:",
         choices: getComponentLocations(),
-        validate(type) {
-          if (type === "" || type === undefined) {
-            return invalidComponentError;
+        validate(location) {
+          if (location === "" || location === undefined) {
+            return invalidLocationError;
           }
 
           return true;
