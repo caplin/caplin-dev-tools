@@ -11,7 +11,7 @@ const invalidLocationError =
   "Invalid location, " + "some valid options are './' and 'packages'.";
 
 const getComponentLocations = function() {
-  if (args.indexOf('create-component') === -1)  {
+  if (args.indexOf("create-component") === -1) {
     return [];
   }
   const targetDir = process.cwd().split("\\");
@@ -24,7 +24,7 @@ const getComponentLocations = function() {
     fs.readdir(locationPath, (err, files) => {
       if (err) {
         console.log(err);
-        return ;
+        return;
       }
       files.forEach(app => {
         if (app !== ".caplin.dir") {
