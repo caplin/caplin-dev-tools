@@ -44,7 +44,7 @@ describe("create-component", () => {
     initDirectories();
     execFile("node", ["./index.js", "create-app", "newapp"]);
 
-    var cp = execFile("node", ["./index.js", "create-component", "NewReactComponent", "react"]);
+    var cp = execFile("node", ["./index.js", "create-component", "NewReactComponent", "react",  "./"]);
     var stdOutput;
 
     cp.stdout.on("data", data => {
