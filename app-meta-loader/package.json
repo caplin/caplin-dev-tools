@@ -1,6 +1,6 @@
 {
   "name": "@caplin/app-meta-loader",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Webpack loader used for loading Caplin application metadata",
   "main": "index.js",
   "author": "",

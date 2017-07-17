@@ -1,57 +1,26 @@
+/* eslint no-await-in-loop: 0 */
+
 const { Server } = require("karma");
 
-function runOnlyATs(args) {
-  return (
-    args.ats ||
-    args.ATs ||
-    args._.includes("--ats") ||
-    args._.includes("--ATs") ||
-    args._.includes("ats") ||
-    args._.includes("ATs") ||
-    false
-  );
-}
-
-module.exports.runOnlyATs = runOnlyATs;
-
-function runOnlyUTs(args) {
-  return (
-    args.uts ||
-    args.UTs ||
-    args._.includes("--uts") ||
-    args._.includes("--UTs") ||
-    args._.includes("uts") ||
-    args._.includes("UTs") ||
-    false
-  );
-}
-
-module.exports.runOnlyUTs = runOnlyUTs;
-
 function getSelectedBrowser(commandLineArgs) {
-  let browser = commandLineArgs.b || commandLineArgs.browser || "chrome";
-  const optionlessArgs = commandLineArgs._;
-  const browserIndex = optionlessArgs.indexOf("--browser");
-
-  if (browserIndex !== -1) {
-    browser = optionlessArgs[browserIndex + 1];
-  }
+  const browser = commandLineArgs.b;
 
   // To be removed once Chrome Headless supports Windows
   const isWin = /^win/.test(process.platform);
+
+  if (browser === "headless" && isWin) {
+    return "phantom-js";
+  }
+
   if (browser === "headless") {
-    if (isWin) {
-      browser = "phantom-js";
-    } else {
-      browser = "chrome-headless";
-    }
+    return "chrome-headless";
   }
 
   return browser.toLowerCase();
 }
 
-function getTestBrowser(commandLineArgs) {
-  const selectedBrowser = getSelectedBrowser(commandLineArgs);
+function getTestBrowser(argv) {
+  const selectedBrowser = getSelectedBrowser(argv);
 
   switch (selectedBrowser) {
     case "ie":
@@ -74,29 +43,6 @@ function getTestBrowser(commandLineArgs) {
 }
 
 module.exports.getTestBrowser = getTestBrowser;
-
-function checkCLArguments(commandLineArgs) {
-  var correctFlags = [
-    "variant",
-    "uts",
-    "ats",
-    "sourcemaps",
-    "hot",
-    "dev",
-    "browser"
-  ];
-  Object.keys(commandLineArgs).forEach(flag => {
-    if (correctFlags.indexOf(flag.toLowerCase()) === -1 && flag !== "_") {
-      console.log(
-        `\n Flag: \x1b[35m${flag}\x1b[0m isn't a recognised command.\n\n ` +
-          `\x1b[0mThe recognised flags are: \x1b[35m variant, uts, ats, sourceMaps, hot and browser\n\x1b[0m`
-      );
-      process.exit(0);
-    }
-  });
-}
-
-module.exports.checkCLArguments = checkCLArguments;
 
 function showSummary(results, watching) {
   let error = false;
@@ -142,20 +88,6 @@ function showSummary(results, watching) {
   }
 }
 
-module.exports.showSummary = showSummary;
-
-function filterPackagesToTest(packagesTestMetadata, packagesToTest) {
-  if (packagesToTest.length === 0) {
-    return packagesTestMetadata;
-  }
-
-  return packagesTestMetadata.filter(({ packageName }) =>
-    packagesToTest.includes(packageName)
-  );
-}
-
-module.exports.filterPackagesToTest = filterPackagesToTest;
-
 function runPackageTests(karmaConfig) {
   return new Promise(resolve => {
     let testsResult;
@@ -173,4 +105,17 @@ function runPackageTests(karmaConfig) {
   });
 }
 
-module.exports.runPackageTests = runPackageTests;
+async function runPackagesTests(packagesKarmaConfigs, watching) {
+  const results = [];
+
+  // Pressing Control-C must exit the process even if we have queued test runs.
+  process.on("SIGINT", process.exit);
+
+  for (const packageKarmaConfig of packagesKarmaConfigs) {
+    results.push(await runPackageTests(packageKarmaConfig));
+  }
+
+  showSummary(results, watching);
+}
+
+module.exports.runPackagesTests = runPackagesTests;

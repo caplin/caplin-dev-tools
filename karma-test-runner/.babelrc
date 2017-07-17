@@ -1,9 +1,5 @@
 {
-	"plugins": [
-		"transform-object-rest-spread"
-	],
 	"presets": [
-		"node6",
-		"stage-3"
+		"eslatest-node6"
 	]
 }

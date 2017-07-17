@@ -1,8 +1,9 @@
 {
   "name": "@caplin/karma-test-runner",
-  "version": "3.1.4",
+  "version": "4.0.2",
+  "bin": "./dist/cli.js",
   "description": "Package that allows running all the UTs and ATs in a package using Karma",
-  "main": "dist/index.js",
+  "main": "dist/test-runner.js",
   "scripts": {
     "build": "babel src --out-dir dist"
   },
@@ -13,17 +14,17 @@
   ],
   "devDependencies": {
     "babel-cli": "^6.7.5",
-    "babel-plugin-transform-object-rest-spread": "^6.6.5",
-    "babel-preset-node6": "^11.0.0",
-    "babel-preset-stage-3": "^6.5.0"
+    "babel-preset-eslatest-node6": "^1.0.0"
   },
   "dependencies": {
+    "@caplin/karma-jstd": "^1.0.2",
     "babel-polyfill": "^6.9.1",
-    "karma-log-update-reporter": "^1.0.0",
+    "glob": "^7.1.2",
     "karma": "^1.7.0",
     "karma-chrome-launcher": "^2.1.1",
     "karma-firefox-launcher": "^1.0.1",
     "karma-ie-launcher": "^1.0.0",
+    "karma-log-update-reporter": "^1.0.0",
     "karma-phantomjs-launcher": "^1.0.4",
     "karma-sourcemap-loader": "^0.3.7",
     "karma-webpack": "^2.0.3",

@@ -1,4 +1,4 @@
-import "babel-polyfill";
+require("babel-polyfill");
 
 // The RegExp starts with '.' to filter out files inside `node_modules`
 // directories. A testContext module source is in a format like so:
