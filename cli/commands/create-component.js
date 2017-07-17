@@ -7,7 +7,7 @@ const copyTemplate = require("../utils/copyTemplate");
 const invalidComponentError =
   "Invalid component type, " + "valid options are 'blank' and 'react'.";
 
-const invalidLocationError = 
+const invalidLocationError =
   "Invalid location, " + "some valid options are './' and 'packages'.";
 
 const getComponentLocations = function() {
@@ -18,14 +18,15 @@ const getComponentLocations = function() {
     let locationPath = isProject
       ? path.join(...targetDir, "apps")
       : path.join(...targetDir);
-    const apps = fs.readdirSync(locationPath);
-    apps.forEach(app => {
-      if (app !== ".caplin.dir") {
-        let appLocation = isProject
-          ? path.join("apps", app, "src")
-          : path.join(app, "src");
-        possibleLocations.push(appLocation);
-      }
+    fs.readdir(locationPath, (err, files) => {
+      files.forEach(app => {
+        if (app !== ".caplin.dir") {
+          let appLocation = isProject
+            ? path.join("apps", app, "src")
+            : path.join(app, "src");
+          possibleLocations.push(appLocation);
+        }
+      });
     });
   } else {
     possibleLocations.push("src");
