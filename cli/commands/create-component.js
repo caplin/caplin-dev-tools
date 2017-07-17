@@ -1,7 +1,7 @@
 const path = require("path");
 const chalk = require("chalk");
 const fs = require("fs");
-
+const args = require("minimist")(process.argv.slice(2))._;
 const copyTemplate = require("../utils/copyTemplate");
 
 const invalidComponentError =
@@ -11,6 +11,9 @@ const invalidLocationError =
   "Invalid location, " + "some valid options are './' and 'packages'.";
 
 const getComponentLocations = function() {
+  if (args.indexOf("create-component") === -1) {
+    return [];
+  }
   const targetDir = process.cwd().split("\\");
   const isProject = !targetDir.includes("apps");
   let possibleLocations = [];
@@ -19,6 +22,10 @@ const getComponentLocations = function() {
       ? path.join(...targetDir, "apps")
       : path.join(...targetDir);
     fs.readdir(locationPath, (err, files) => {
+      if (err) {
+        console.log(err);
+        return;
+      }
       files.forEach(app => {
         if (app !== ".caplin.dir") {
           let appLocation = isProject
