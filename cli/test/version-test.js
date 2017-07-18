@@ -8,7 +8,6 @@ describe("version", () => {
     var cp = execFile("node", ["./index.js", "version"]);
 
     cp.stdout.on("data", (data) => {
-      console.log(data);
       var expected = pkg.version;
       assert.equal(data.replace(/\r\n|\n/g, ""), expected);
       cp.stdout.removeAllListeners("data");
