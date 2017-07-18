@@ -12,6 +12,7 @@ describe("init", () => {
 
     cp.stdout.on("data", (data) => {
       if (data.indexOf(expected) > -1) {
+        cp.stdout.removeAllListeners("data");
         isDisplayed();
       }
     });
@@ -23,6 +24,7 @@ describe("init", () => {
 
     cp.stdout.on("data", (data) => {
       if (data.indexOf(expected) > -1) {
+        cp.stdout.removeAllListeners("data");
         isDisplayed();
       }
     });
