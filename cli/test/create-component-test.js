@@ -36,6 +36,7 @@ describe("create-component", () => {
 
     cp.stdout.on("data", data => {
       if (data.indexOf(expected) > -1) {
+        cp.stdout.removeAllListeners("data");
         prompted();
       }
     });

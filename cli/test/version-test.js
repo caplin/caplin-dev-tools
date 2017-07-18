@@ -10,6 +10,7 @@ describe("version", () => {
     cp.stdout.on("data", (data) => {
       var expected = pkg.version;
       assert.equal(data.replace(/\r\n|\n/g, ""), expected);
+      cp.stdout.removeAllListeners("data");
       isDisplayed();
     });
   });

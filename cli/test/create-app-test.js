@@ -39,6 +39,7 @@ describe("create-app", () => {
         stdOutput.indexOf("Error: 'apps' directory not found.") !== -1 &&
         !done
       ) {
+        cp.stdout.removeAllListeners("data");
         done = true;
         errorThrown();
       }
@@ -80,6 +81,7 @@ describe("create-app", () => {
 
     cp.stdout.on("data", data => {
       if (data.indexOf(expected) > -1) {
+        cp.stdout.removeAllListeners("data");
         prompted();
       }
     });
