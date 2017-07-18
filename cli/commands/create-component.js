@@ -11,37 +11,59 @@ const invalidLocationError =
   "Invalid location, " + "some valid options are './' and 'packages'.";
 
 const getComponentLocations = function() {
-  if (args.indexOf("create-component") === -1) {
-    return [];
-  }
-  const targetDir = process.cwd().split("\\");
-  const isProject = !targetDir.includes("apps");
+  const targetDir = process.cwd();
+  const isInProjectDir = isInProjectDirectory(targetDir);
+  const isInAppsDir =
+    targetDir.split("\\").indexOf("apps") === targetDir.split("\\").length - 1;
+  const isInAppDir = fs.existsSync(path.join(targetDir, "src"));
+
   let possibleLocations = [];
-  if (isProject || targetDir.indexOf("apps") === targetDir.length - 1) {
-    let locationPath = isProject
-      ? path.join(...targetDir, "apps")
-      : path.join(...targetDir);
-    fs.readdir(locationPath, (err, files) => {
-      if (err) {
-        console.log(err);
-        return;
-      }
-      files.forEach(app => {
-        if (app !== ".caplin.dir") {
-          let appLocation = isProject
-            ? path.join("apps", app, "src")
-            : path.join(app, "src");
-          possibleLocations.push(appLocation);
-        }
-      });
-    });
-  } else {
+  let appsLocationPath;
+
+  if (isInProjectDir || isInAppsDir) {
+    appsLocationPath = isInProjectDir
+      ? path.join(targetDir, "apps")
+      : path.join(targetDir);
+    const apps = fs.readdirSync(appsLocationPath);
+    possibleLocations = possibleLocations.concat(
+      getLocations(apps, appsLocationPath)
+    );
+  } else if (isInAppDir) {
     possibleLocations.push("src");
+  } else {
+    return [];
   }
 
   possibleLocations.push("packages");
   possibleLocations.push("./");
   return possibleLocations;
+};
+
+const getLocations = function(apps, appsLocationPath) {
+  let srcLocations = [];
+  apps.forEach(app => {
+    if (app !== ".caplin.dir") {
+      let possibleSrcLocation = path.join(appsLocationPath, app, "src");
+      if (fs.existsSync(possibleSrcLocation)) {
+        srcLocation = possibleSrcLocation.split("\\");
+        srcLocation.splice(0, srcLocation.length - 3);
+        srcLocations.push(path.join(...srcLocation));
+      }
+    }
+  });
+  return srcLocations;
+};
+
+const isInProjectDirectory = function(targetDir) {
+  const appsDir = path.join(targetDir, "apps");
+  const packagesDir = path.join(targetDir, "packages");
+  const packagesCaplinDir = path.join(targetDir, "packages-caplin");
+
+  return (
+    fs.existsSync(appsDir) &&
+    fs.existsSync(packagesDir) &&
+    fs.existsSync(packagesCaplinDir)
+  );
 };
 
 module.exports = {
