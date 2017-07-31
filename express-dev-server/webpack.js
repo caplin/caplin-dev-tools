@@ -33,6 +33,9 @@ module.exports = (application, webpackConfig) => {
     }
   });
 
+  // overrides hard-source-log's console output
+  compiler.plugin('hard-source-log', () => {});
+
   const devMiddlewareOptions = {
     // Required, path to bind the middleware to.
     publicPath: webpackConfig.output.publicPath,
