@@ -8,10 +8,12 @@
     "express": "^4.13.4",
     "express-session": "^1.14.2",
     "http-proxy": "^1.14.0",
+    "address": "^1.0.2",
     "jsrsasign": "^7.2.1",
     "minimist": "^1.2.0",
     "webpack": "2.3.3",
     "webpack-dev-middleware": "^1.6.1",
-    "webpack-hot-middleware": "^2.18.0"
+    "webpack-hot-middleware": "^2.18.0",
+    "react-dev-utils": "^3.0.2"
   }
 }
