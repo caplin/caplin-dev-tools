@@ -3,6 +3,7 @@ const webpackDevMiddleware = require("webpack-dev-middleware");
 const webpackHotMiddleware = require("webpack-hot-middleware");
 const parseArgs = require("minimist");
 const formatWebpackMessages = require("react-dev-utils/formatWebpackMessages");
+const chalk = require("chalk");
 
 const { hot } = parseArgs(process.argv.slice(2));
 let isFirstTime = true;
@@ -16,19 +17,19 @@ module.exports = (application, webpackConfig) => {
 
     if (isSuccessful) {
       if (!isFirstTime) {
-        console.log("Compiled successfully!");
+        console.log(chalk.yellow("Compiled successfully!"));
       }
       isFirstTime = false;
     }
 
     if (messages.errors.length) {
-      console.log("Failed to compile.\n");
+      console.log(chalk.red("Failed to compile.\n"));
       console.log(messages.errors.join("\n\n"));
       return;
     }
 
     if (messages.warnings.length) {
-      console.log("Compiled with warnings.\n");
+      console.log(chalk.magenta("Compiled with warnings.\n"));
       console.log(messages.warnings.join("\n\n"));
     }
   });
