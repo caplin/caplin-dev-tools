@@ -7,52 +7,55 @@ const path = require("path");
 
 const poll = require("./poll");
 const webpackMiddleware = require("./webpack");
+const getPort = require("./get-port");
 
 const { hot } = parseArgs(process.argv.slice(2));
 
 module.exports = ({ webpackConfig }) => {
-  const app = express();
-  const appRoot = process.cwd();
+  return new Promise((resolve, reject) => {
+    const app = express();
+    const appRoot = process.cwd();
 
-  // Load application environment variables from `.env` file, to inject into
-  // JNDI tokens.
-  dotenv.config();
+    // Load application environment variables from `.env` file, to inject into
+    // JNDI tokens.
+    dotenv.config();
 
-  // Serve static files (HTML, XML, CSS), contained in application directory.
-  app.use(express.static(appRoot));
+    // Serve static files (HTML, XML, CSS), contained in application directory.
+    app.use(express.static(appRoot));
 
-  poll(app);
-  // Handlers/middleware for webpack.
-  webpackMiddleware(app, webpackConfig);
+    poll(app);
 
-  const APP_PORT = process.env.PORT || 8080;
+    getPort()
+      .then(port => {
+        // Handlers/middleware for webpack.
+        webpackMiddleware(app, webpackConfig);
 
-  app.listen(APP_PORT, err => {
-    if (err) {
-      console.log(err);
-      return;
-    }
+        app.listen(port, err => {
+          if (err) {
+            console.log(err);
+            return;
+          }
 
-    const APP_NAME = path.parse(appRoot).name;
-    const ipAddress = address.ip();
+          const APP_NAME = path.parse(appRoot).name;
+          const ipAddress = address.ip();
 
-    console.log(chalk.yellow(`Compiled successfully!\n`));
-    console.log(`You can view ${chalk.green(APP_NAME)} in the browser.\n`);
-    console.log(
-      `Local Connection:  ${chalk.green("http://localhost:" + APP_PORT + "/")}`
-    );
-    console.log(
-      `Remote Connection: ${chalk.green(
-        "http://" + ipAddress + ":" + APP_PORT + "/"
-      )}\n`
-    );
+          console.log(chalk.yellow(`Compiled successfully!\n`));
+          console.log(
+            `You can view ${chalk.green(APP_NAME)} in the browser.\n`
+          );
+          console.log(
+            `Local Connection:  ${chalk.green("http://localhost:" + port + "/")}`
+          );
+          console.log(
+            `Remote Connection: ${chalk.green("http://" + ipAddress + ":" + port + "/")}\n`
+          );
 
-    console.log(
-      `Hot module replacement is ${hot
-        ? chalk.green("enabled")
-        : chalk.red("disabled")}\n`
-    );
+          console.log(
+            `Hot module replacement is ${hot ? chalk.green("enabled") : chalk.red("disabled")}\n`
+          );
+        });
+        resolve(app);
+      })
+      .catch(error => console.log(error));
   });
-
-  return app;
 };
