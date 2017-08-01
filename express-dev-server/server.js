@@ -43,20 +43,14 @@ module.exports = ({ webpackConfig }) => {
             `You can view ${chalk.green(APP_NAME)} in the browser.\n`
           );
           console.log(
-            `Local Connection:  ${chalk.green(
-              "http://localhost:" + port + "/"
-            )}`
+            `Local Connection:  ${chalk.green("http://localhost:" + port + "/")}`
           );
           console.log(
-            `Remote Connection: ${chalk.green(
-              "http://" + ipAddress + ":" + port + "/"
-            )}\n`
+            `Remote Connection: ${chalk.green("http://" + ipAddress + ":" + port + "/")}\n`
           );
 
           console.log(
-            `Hot module replacement is ${hot
-              ? chalk.green("enabled")
-              : chalk.red("disabled")}\n`
+            `Hot module replacement is ${hot ? chalk.green("enabled") : chalk.red("disabled")}\n`
           );
         });
 
