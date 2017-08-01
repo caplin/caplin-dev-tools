@@ -1,5 +1,6 @@
 const AliasesPlugin = require("@caplin/aliases-plugin");
 const { appendModulePatch } = require("@caplin/patch-loader/patchesStore");
+const HardSourceWebpackPlugin = require("hard-source-webpack-plugin");
 
 module.exports.BASE_WEBPACK_CONFIG = {
   module: {
@@ -38,7 +39,7 @@ module.exports.BASE_WEBPACK_CONFIG = {
     alias: {},
     extensions: [".js", ".json", ".jsx"]
   },
-  plugins: [new AliasesPlugin()],
+  plugins: [new HardSourceWebpackPlugin(), new AliasesPlugin()],
   resolveLoader: {
     alias: {
       // This alias can be removed by changing the metadata require in CT libs.

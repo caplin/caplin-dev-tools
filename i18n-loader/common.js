@@ -7,8 +7,6 @@ module.exports = function i18nLoader(
   createModuleSource,
   loader
 ) {
-  loader.cacheable();
-
   const callback = loader.async();
   const language = loader.resource.split(sep).pop().split(".").shift();
 

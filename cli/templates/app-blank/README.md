@@ -37,13 +37,10 @@ you can use the default scripts:
 This will start the app in dev mode, the app is available at
 http://localhost:8080 (unless you specify a different port in the .env file)
 
-### Command Line Arguments
+### Hot Module Replacement
 
-There are two command line arguments supported during development.
-To use them, run: npm start -- --<flag>
-The possible flags are:
-`hot`, use this flag for the hot module replacement feature
-`sourcemaps`, use this to enable source maps. It also enables the webpack compilation error overlay in the browser
+Use the --hot flag to use the hot module replacement feature during development:
+npm start -- --hot
 
 ### `npm test` or `npm t`
 
@@ -149,3 +146,14 @@ Jest options: --runInBand
 
 Don’t forget to install and enable the nodejs plugin from the JetBrains plugin repository.
 
+## IE11 Support
+
+By default the app does not support IE11, to do so you'll need to add a pollyfill as follows.
+
+Run: 
+
+```
+npm install --save babel-polyfill
+```
+
+Add "babel-polyfill" in your webpack config's entry ensuring it is placed before your app's entry point.

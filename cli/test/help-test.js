@@ -10,7 +10,7 @@ describe("help", () => {
     cp.stdout.on("data", (data) => {
       stdOutput += data;
       if (stdOutput.indexOf("Prints the current caplin-cli version") > -1) {
-        cp.stdout.destroy();
+        cp.stdout.removeAllListeners("data");
         isDisplayed();
       }
     });
