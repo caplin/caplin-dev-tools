@@ -1,8 +1,13 @@
 const dotenv = require("dotenv");
 const express = require("express");
+const address = require("address");
+const parseArgs = require("minimist");
+const chalk = require("chalk");
 
 const poll = require("./poll");
 const webpackMiddleware = require("./webpack");
+
+const { hot } = parseArgs(process.argv.slice(2));
 
 module.exports = ({ webpackConfig }) => {
   const app = express();
@@ -21,11 +26,28 @@ module.exports = ({ webpackConfig }) => {
 
   const APP_PORT = process.env.PORT || 8080;
 
-  // Don't bind to `localhost` as that will mean the server won't be accessible
-  // by other machines on the LAN.
-  app.listen(APP_PORT, err =>
-    console.log(err || `Listening on port ${APP_PORT}`)
-  );
+  app.listen(APP_PORT, err => {
+    if (err) {
+      console.log(err);
+      return;
+    }
+
+    const APP_NAME = appRoot.split("\\").pop();
+    const ipAddress = address.ip();
+
+    console.log(chalk.yellow(`Compiled successfully!\n`));
+    console.log(`You can view ${chalk.green(APP_NAME)} in the browser.\n`);
+    console.log(
+      `Local Connection:  ${chalk.green("http://localhost:" + APP_PORT + "/")}`
+    );
+    console.log(
+      `Remote Connection: ${chalk.green(
+        "http://" + ipAddress + ":" + APP_PORT + "/"
+      )}\n`
+    );
+
+    console.log(`Hot module replacement is ${hot ? chalk.green('enabled') : chalk.red('disabled') }\n`);
+  });
 
   return app;
 };
