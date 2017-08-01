@@ -32,7 +32,10 @@ module.exports = ({ webpackConfig }) => {
       return;
     }
 
-    const APP_NAME = appRoot.split("\\").pop();
+    const IS_WIN = /^win/.test(process.platform);
+    const APP_NAME = IS_WIN
+      ? appRoot.split("\\").pop()
+      : appRoot.split("/").pop();
     const ipAddress = address.ip();
 
     console.log(chalk.yellow(`Compiled successfully!\n`));
@@ -46,7 +49,11 @@ module.exports = ({ webpackConfig }) => {
       )}\n`
     );
 
-    console.log(`Hot module replacement is ${hot ? chalk.green('enabled') : chalk.red('disabled') }\n`);
+    console.log(
+      `Hot module replacement is ${hot
+        ? chalk.green("enabled")
+        : chalk.red("disabled")}\n`
+    );
   });
 
   return app;
