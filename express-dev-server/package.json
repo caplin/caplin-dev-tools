@@ -12,6 +12,7 @@
     "http-proxy": "^1.14.0",
     "jsrsasign": "^7.2.1",
     "minimist": "^1.2.0",
+    "path": "^0.12.7",
     "react-dev-utils": "^3.0.2",
     "webpack": "2.3.3",
     "webpack-dev-middleware": "^1.6.1",
