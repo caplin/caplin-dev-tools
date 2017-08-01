@@ -3,6 +3,7 @@ const express = require("express");
 const address = require("address");
 const parseArgs = require("minimist");
 const chalk = require("chalk");
+const path = require("path");
 
 const poll = require("./poll");
 const webpackMiddleware = require("./webpack");
@@ -35,7 +36,7 @@ module.exports = ({ webpackConfig }) => {
             return;
           }
 
-          const APP_NAME = appRoot.split("\\").pop();
+          const APP_NAME = path.parse(appRoot).name;
           const ipAddress = address.ip();
 
           console.log(chalk.yellow(`Compiled successfully!\n`));
@@ -53,7 +54,6 @@ module.exports = ({ webpackConfig }) => {
             `Hot module replacement is ${hot ? chalk.green("enabled") : chalk.red("disabled")}\n`
           );
         });
-
         resolve(app);
       })
       .catch(error => console.log(error));
