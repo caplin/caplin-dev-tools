@@ -19,7 +19,9 @@ const getComponentLocations = function() {
   let possibleLocations = [];
 
   if (isInProjectDir || isInAppsDir) {
-    possibleLocations = possibleLocations.concat(getLocations(isInProjectDir, targetDir));
+    possibleLocations = possibleLocations.concat(
+      getLocations(isInProjectDir, targetDir)
+    );
   } else if (isInAppDir) {
     possibleLocations.push("src");
   }
@@ -29,7 +31,7 @@ const getComponentLocations = function() {
   return possibleLocations;
 };
 
-const getLocations = function(isInProjectDir , targetDir) {
+const getLocations = function(isInProjectDir, targetDir) {
   const appsLocationPath = isInProjectDir
     ? path.join(targetDir, "apps")
     : path.join(targetDir);
