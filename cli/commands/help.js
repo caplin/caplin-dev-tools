@@ -11,12 +11,12 @@ module.exports = {
     fmt.title("caplin-cli commands");
     fmt.field("init", "Creates a new workspace in the current directory");
     fmt.field(
-      "create",
-      "Creates a new file structure based on the selected template"
+      "create-app",
+      "Creates a new app with basic configuration and an example component"
     );
     fmt.field(
-      "list",
-      "Lists the current workspace`s applications and available templates"
+      "create-component",
+      "Creates a component in the style of your choosing"
     );
     fmt.line();
     fmt.field("help", "Prints this list of commands");
