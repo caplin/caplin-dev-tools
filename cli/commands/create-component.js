@@ -13,25 +13,17 @@ const invalidLocationError =
 const getComponentLocations = function() {
   const targetDir = process.cwd();
   const isInProjectDir = isInProjectDirectory(targetDir);
-  const isInAppsDir =
-    targetDir.split("\\").indexOf("apps") === targetDir.split("\\").length - 1;
+  const isInAppsDir = path.parse(targetDir).name === "apps";
   const isInAppDir = fs.existsSync(path.join(targetDir, "src"));
 
   let possibleLocations = [];
-  let appsLocationPath;
 
   if (isInProjectDir || isInAppsDir) {
-    appsLocationPath = isInProjectDir
-      ? path.join(targetDir, "apps")
-      : path.join(targetDir);
-    const apps = fs.readdirSync(appsLocationPath);
     possibleLocations = possibleLocations.concat(
-      getLocations(apps, appsLocationPath)
+      getLocations(isInProjectDir, targetDir)
     );
   } else if (isInAppDir) {
     possibleLocations.push("src");
-  } else {
-    return [];
   }
 
   possibleLocations.push("packages");
@@ -39,15 +31,21 @@ const getComponentLocations = function() {
   return possibleLocations;
 };
 
-const getLocations = function(apps, appsLocationPath) {
+const getLocations = function(isInProjectDir, targetDir) {
+  const appsLocationPath = isInProjectDir
+    ? path.join(targetDir, "apps")
+    : path.join(targetDir);
+  const apps = fs.readdirSync(appsLocationPath);
+
   let srcLocations = [];
   apps.forEach(app => {
     if (app !== ".caplin.dir") {
       let possibleSrcLocation = path.join(appsLocationPath, app, "src");
       if (fs.existsSync(possibleSrcLocation)) {
-        srcLocation = possibleSrcLocation.split("\\");
-        srcLocation.splice(0, srcLocation.length - 3);
-        srcLocations.push(path.join(...srcLocation));
+        const location = isInProjectDir
+          ? path.join("apps", app, "src")
+          : path.join(app, "src");
+        srcLocations.push(location);
       }
     }
   });
@@ -144,7 +142,7 @@ module.exports = {
     if (options[2] === "./") {
       location = path.join(process.cwd(), name);
     } else if (options[2] === "packages") {
-      const splitPath = process.cwd().split("\\");
+      const splitPath = process.cwd().split(path.sep);
       const indexOfApps = splitPath.indexOf("apps");
       let distance = 0;
       if (indexOfApps !== -1) {

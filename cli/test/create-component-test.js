@@ -42,7 +42,7 @@ describe("create-component", () => {
     });
   });
 
-  it("creates correct files for a component", correctFilesCreated => {
+  it("creates correct files for a component in current location", correctFilesCreated => {
     initDirectories();
     execFile("node", ["./index.js", "create-app", "newapp"]);
 
@@ -60,7 +60,33 @@ describe("create-component", () => {
           assert.file("NewReactComponent/NewReactComponent.js");
           assert.file("NewReactComponent/stories/index.js");
           assert.file("NewReactComponent/__tests__/NewReactComponent-test.js");
-          // last message displayed
+          //last message displayed
+          cp.stdout.removeAllListeners("data");
+          correctFilesCreated();
+        }
+      }
+    });
+  });    
+
+  it("creates correct files for a component when adding to src", correctFilesCreated => {
+    initDirectories();
+    execFile("node", ["./index.js", "create-app", "newapp2"]);
+
+    var cp = execFile("node", ["./index.js", "create-component", "NewReactComponent", "react",  "apps/newapp2/src"]);
+    var stdOutput;
+
+    cp.stdout.on("data", data => {
+      stdOutput += data;
+      if (stdOutput.indexOf("Created") > -1) {
+        if (
+          stdOutput.indexOf("react-component") === -1 &&
+          stdOutput.indexOf("New component 'NewReactComponent' created!") !== -1
+        ) {
+          assert.file("apps/newapp2/src/NewReactComponent/NewReactComponent.scss");
+          assert.file("apps/newapp2/src/NewReactComponent/NewReactComponent.js");
+          assert.file("apps/newapp2/src/NewReactComponent/stories/index.js");
+          assert.file("apps/newapp2/src/NewReactComponent/__tests__/NewReactComponent-test.js");
+          //last message displayed
           cp.stdout.removeAllListeners("data");
           correctFilesCreated();
         }
