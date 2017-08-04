@@ -3,6 +3,15 @@ const path = require("path");
 const chalk = require("chalk");
 const fs = require("fs");
 
+const renameFile = (filePath, newFileName) => {
+  fs.rename(filePath, newFileName, err => {
+    if (err) {
+      console.log(err);
+      return;
+    }
+  });
+};
+
 module.exports = function(template, target, vars) {
   return new Promise(function(resolve, reject) {
     var inDir = path.join(__dirname, "..", "templates", template);
@@ -19,12 +28,14 @@ module.exports = function(template, target, vars) {
               /react-component/g,
               `${vars.componentName}`
             );
-            fs.rename(filePath, newFileName, err => {
-              if (err) {
-                console.log(err);
-                return;
-              }
-            });
+            renameFile(filePath, newFileName);
+            console.log(chalk.green("\tCreated ") + newFileName);
+          } else if (filePath.indexOf("package-name") !== -1) {
+            const newFileName = filePath.replace(
+              /package-name/g,
+              `${vars.packageName}`
+            );
+            renameFile(filePath, newFileName);
             console.log(chalk.green("\tCreated ") + newFileName);
           } else {
             console.log(chalk.green("\tCreated ") + filePath);
