@@ -4,8 +4,7 @@ const fs = require("fs");
 const copyTemplate = require("../utils/copyTemplate");
 
 function noPackagesDirectoryErrorMessage(dir) {
-  return `'${dir}' directory not found.
-
+  return `\n\n'${dir}' directory not found.
   Please ensure you are in the project root and you have run the ${chalk.blue(
     "caplin-cli init"
   )} command'`;
@@ -27,7 +26,8 @@ const getPackagesLocation = () => {
   
   const packagesLocation = path.join(process.cwd(), ...backPath, "packages");
   if (!fs.existsSync(packagesLocation)) {
-    return noPackagesDirectoryErrorMessage("packages");
+     console.log(noPackagesDirectoryErrorMessage("packages"));
+     process.exit(0);
   } 
 
   return packagesLocation;
