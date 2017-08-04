@@ -4,10 +4,10 @@ const fs = require("fs");
 const copyTemplate = require("../utils/copyTemplate");
 
 function noPackagesDirectoryErrorMessage(dir) {
-  return `\n\n'${dir}' directory not found.
+  console.log(`\n\n'${dir}' directory not found.
   Please ensure you are in the project root and you have run the ${chalk.blue(
     "caplin-cli init"
-  )} command'`;
+  )} command'`);
 }
 
 const getPackagesLocation = () => {
@@ -23,12 +23,12 @@ const getPackagesLocation = () => {
   }
 
   let backPath = new Array(distance).fill("..");
-  
+
   const packagesLocation = path.join(process.cwd(), ...backPath, "packages");
   if (!fs.existsSync(packagesLocation)) {
-     console.log(noPackagesDirectoryErrorMessage("packages"));
-     process.exit(0);
-  } 
+    noPackagesDirectoryErrorMessage("packages");
+    process.exit(0);
+  }
 
   return packagesLocation;
 };
@@ -46,14 +46,9 @@ module.exports = {
         name: "value",
         message: "What do you want to name your package:",
         validate(name) {
-          if (
-            name !== "" &&
-            name !== null &&
-            name !== undefined
-          ) {
+          if (name !== "" && name !== null && name !== undefined) {
             const packageLocation = path.join(getPackagesLocation(), name);
-            const packageAlreadyExists = fs
-              .existsSync(packageLocation);
+            const packageAlreadyExists = fs.existsSync(packageLocation);
             if (!packageAlreadyExists) {
               return true;
             }
