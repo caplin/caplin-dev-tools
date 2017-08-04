@@ -8,7 +8,7 @@ function workingDirectoryErrorMessage(dir) {
 
   Please ensure you are in the project root and you have run the ${chalk.blue(
     "caplin-cli init"
-  )} command'`;
+  )} command`;
 }
 
 module.exports = {

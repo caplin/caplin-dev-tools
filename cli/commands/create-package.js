@@ -7,7 +7,7 @@ function noPackagesDirectoryErrorMessage(dir) {
   console.log(`\n'${dir}' directory not found.`);
   console.log(`Please ensure you are in the project root and you have run the ${chalk.blue(
     "caplin-cli init"
-  )} command'`);
+  )} command`);
 }
 
 const getPackagesLocation = () => {
