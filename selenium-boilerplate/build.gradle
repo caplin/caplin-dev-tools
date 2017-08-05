@@ -12,8 +12,10 @@ if (os == 'windows') { os = 'win32' }
 // B R O W S E R  S E T U P
 if (!project.hasProperty('browser')) {
     project.ext.set('browser', 'Chrome')
-} else if (!['Chrome', 'Firefox'].contains(project.browser)) {
-    throw new GradleException("Browser must be one of: 'Chrome' or 'Firefox' e.g. -Pbrowser=Chrome.")
+}else if (project.browser.equals('Safari') && os != 'mac') {
+    throw new GradleException("We are unable to run Safari on Operating systems that are not Mac OS, pleas choose another browser")
+}else if (!['Chrome', 'Firefox', 'Safari'].contains(project.browser)) {
+    throw new GradleException("Browser must be one of: 'Chrome','Firefox' or 'Safari' e.g. -Pbrowser=Chrome.")
 }
 
 def browsersDir = "${buildDir}/browsers"

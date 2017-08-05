@@ -5,6 +5,8 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.safari.SafariDriver;
+import org.openqa.selenium.safari.SafariOptions;
 import org.openqa.selenium.remote.DesiredCapabilities;
 
 public class CustomDriver implements DriverSource {
@@ -17,6 +19,8 @@ public class CustomDriver implements DriverSource {
             return newChromeDriver();
         } else if (browser.equals("Firefox")) {
             return newFirefoxDriver();
+        } else if (browser.equals("Safari")) {
+            return newSafariDriver();
         }
 
         return null;
@@ -38,6 +42,13 @@ public class CustomDriver implements DriverSource {
         capabilities.setCapability("marionette", true);
 
         return new FirefoxDriver(capabilities);
+    }
+
+    private WebDriver newSafariDriver() {
+        SafariOptions options = new SafariOptions();
+        options.setUseCleanSession(true);
+
+        return new SafariDriver(options);
     }
 
     @Override
