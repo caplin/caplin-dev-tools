@@ -1,0 +1,25 @@
+{
+  "name": "{{packageName}}",
+  "version": "1.0.0",
+  "description": "",
+  "main": "{{packageName}}.js",
+  "scripts": {
+    "test": "jest",
+    "test:debug": "node --inspect-brk ./node_modules/jest-cli/bin/jest.js -i --env jest-environment-node-debug"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "babel-jest": "^20.0.3",
+    "babel-preset-es2015": "^6.24.1",
+    "enzyme": "^2.8.2",
+    "jest-cli": "^20.0.4",
+    "jest-environment-node-debug": "^2.0.0"
+  },
+   "jest": {
+    "roots": [
+      "<rootDir>"
+    ],
+    "testMatch": ["**/_test-ut/**/*.js?(x)", "**/?(*-)(spec|test).js?(x)"]
+  }
+}
