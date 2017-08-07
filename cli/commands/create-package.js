@@ -5,9 +5,11 @@ const copyTemplate = require("../utils/copyTemplate");
 
 function noPackagesDirectoryErrorMessage(dir) {
   console.log(`\n'${dir}' directory not found.`);
-  console.log(`Please ensure you are in the project root and you have run the ${chalk.blue(
-    "caplin-cli init"
-  )} command`);
+  console.log(
+    `Please ensure you are in the project root and you have run the ${chalk.blue(
+      "caplin-cli init"
+    )} command`
+  );
 }
 
 const getPackagesLocation = () => {
@@ -79,7 +81,7 @@ module.exports = {
       console.log(
         `
         
-          Now cd into packages/${name} and run ${chalk.blue("npm init")}
+          Now cd into packages/${name} and run ${chalk.blue("npm install")}
           `
       );
     });
