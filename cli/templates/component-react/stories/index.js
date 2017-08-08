@@ -1,7 +1,7 @@
 import React from 'react';
-import Component from '../react-component';
+import {{componentName}} from '../{{componentName}}';
 import { storiesOf } from '@storybook/react';
 
 storiesOf(`{{componentName}}`, module)
-  .add('with steve', () => <Component owner='steve' />)
-  .add('with natalia', () => <Component owner='natalia' />)
+  .add('with steve', () => <{{componentName}} owner='steve' />)
+  .add('with natalia', () => <{{componentName}} owner='natalia' />)
