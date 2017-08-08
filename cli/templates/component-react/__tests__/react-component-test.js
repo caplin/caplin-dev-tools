@@ -1,7 +1,7 @@
 import React from "react";
 import { shallow, mount, render } from "enzyme";
 
-import {{componentName}} from "../react-component";
+import {{componentName}} from "../{{componentName}}";
 
 describe("example tests", function() {
   test("should have correct header when passed owner with props", () => {
