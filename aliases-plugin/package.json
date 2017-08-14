@@ -1,6 +1,6 @@
 {
   "name": "@caplin/aliases-plugin",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "webpack plugin that creates modules for aliases and services",
   "main": "index.js",
   "keywords": [],

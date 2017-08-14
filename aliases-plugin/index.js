@@ -32,6 +32,21 @@ function createAliasModule(alias) {
   return `module.exports = require("br/AliasRegistry").getClass("${alias}")`;
 }
 
+function registerVirtualFile(inputFileSystem, aliasFilePath, fileBuffer) {
+  const statsStorageData = inputFileSystem._statStorage.data;
+  const readFileStorageData = inputFileSystem._readFileStorage.data;
+
+  // Newer versions of `enhanced-resolve` use a `Map` as a data store in
+  // `CachedInputFileSystem.js`.
+  if (statsStorageData instanceof Map) {
+    statsStorageData.set(aliasFilePath, [null, stubFileStats]);
+    readFileStorageData.set(aliasFilePath, [null, fileBuffer]);
+  } else {
+    statsStorageData[aliasFilePath] = [null, stubFileStats];
+    readFileStorageData[aliasFilePath] = [null, fileBuffer];
+  }
+}
+
 // `aliasType` is either `alias` or `service`.
 function createCommonAliasFileData(aliasType, moduleCreator, result, compiler) {
   const { context, inputFileSystem } = compiler;
@@ -48,8 +63,8 @@ function createCommonAliasFileData(aliasType, moduleCreator, result, compiler) {
   // So when webpack goes to look for that file it a) believes it exists and
   // b) finds contents for the file.
   result.request = aliasFilePath;
-  inputFileSystem._statStorage.data[aliasFilePath] = [null, stubFileStats];
-  inputFileSystem._readFileStorage.data[aliasFilePath] = [null, fileBuffer];
+
+  registerVirtualFile(inputFileSystem, aliasFilePath, fileBuffer);
 }
 
 function createServiceFileData(result, compiler) {
