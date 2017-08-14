@@ -49,7 +49,31 @@ please see the package.json file in the app root to configure jest.
 
 ### `npm run build`
 
-This will generate a war file ready to be deployed on your Web server.
+This will generate a war and a flat file ready to be deployed on your Web server.
+
+The structure of your app, after running the command, can be seen below.
+
+```
+new-app/
+  .storybook/
+  build/
+    dist/
+      static/
+        bundle-dev.js
+      index.html
+    exported-wars/
+      new-app.war
+  node_modules/
+  scripts/
+  server/
+  src/
+  .babelrc
+  .env
+  index.html
+  package.json
+  README.md
+  webpack.config.js
+```
 
 ## Creating Component Scripts
 
