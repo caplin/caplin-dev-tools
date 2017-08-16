@@ -40,12 +40,16 @@ function logMessage({ testsType, basePath, browser }, message) {
 }
 
 function logFailedResult(failedResult) {
-  const description = failedResult.description || "Undefined test description";
-  // Make failure message appear as child of test description by indenting.
-  const failure = failedResult.log[0].replace(/\n/g, "\n\t");
-  const suite = failedResult.suite[0] || "Undefined test suite";
+  // Make failure logs appear as child of test header by space indenting.
+  const log = failedResult.log.map(errTxt => errTxt.replace(/\n/g, "\n  "));
+  // Karma sometimes adds spaces/CR to the spec `description`.
+  const name = failedResult.description.trim() || "Blank test name";
+  // A suite can be a child of a suite, so `suites` is an array.
+  const suites = failedResult.suite.join(":") || "Blank test suite";
+  const testHeading = `\n${suites} : ${name}\n`;
+  const testFailureLog = `\n  ${log.join("")}\n`;
 
-  console.error("\n", suite, "->", description, "\n\n\t", failure, "\n");
+  console.error(testHeading, testFailureLog);
 }
 
 function formatBasePath(basePath) {
