@@ -39,17 +39,25 @@ function logMessage({ testsType, basePath, browser }, message) {
   return logUpdate(`${basePath} ${testsType} in ${browser}: ${message}`);
 }
 
+function formatErrorText(errorText) {
+  // Indent, strip any whitespace and indent content.
+  return `\n  ${errorText.trim().replace(/\n/g, "\n  ")}`;
+}
+
 function logFailedResult(failedResult) {
-  // Make failure logs appear as child of test header by space indenting.
-  const log = failedResult.log.map(errTxt => errTxt.replace(/\n/g, "\n  "));
+  // Make failure logs appear as child of test header by indenting.
+  const log = failedResult.log.map(formatErrorText);
   // Karma sometimes adds spaces/CR to the spec `description`.
   const name = failedResult.description.trim() || "Blank test name";
   // A suite can be a child of a suite, so `suites` is an array.
   const suites = failedResult.suite.join(":") || "Blank test suite";
+  // Seperate each log entry.
+  const testFailureLog = log.join("\n");
   const testHeading = `\n${suites} : ${name}\n`;
-  const testFailureLog = `\n  ${log.join("")}\n`;
+  // Join them or `console.error(x, y)` adds a space between the two strings.
+  const testErrorOuput = `${testHeading}${testFailureLog}`;
 
-  console.error(testHeading, testFailureLog);
+  console.error(testErrorOuput);
 }
 
 function formatBasePath(basePath) {
