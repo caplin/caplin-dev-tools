@@ -73,7 +73,9 @@ module.exports = {
 
       if (invalidNpmVersion.length !== 0) {
         console.log(
-          `You may have problems using local libraries with your current version of npm. Until npm have addressed this issue we recommend using npm 4`
+          `${chalk.yellow(
+            "WARNING:"
+          )} You may have problems using local libraries with your current version of npm. Until npm have addressed this issue we recommend using npm 4`
         );
         console.log(
           `To change your npm version run ${chalk.blue("npm i -g npm@4")}`
