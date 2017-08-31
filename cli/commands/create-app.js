@@ -67,13 +67,11 @@ module.exports = {
           `
       );
 
-      const npmVersion = fs
-        .readdirSync(
-          path.join(globalModules, "..", "..", "npm-cache", "npmlog")
-        )
-        .pop();
+      const invalidNpmVersion = fs
+        .readdirSync(path.join(globalModules, "..", "..", "npm-cache", "npm"))
+        .filter(version => version.startsWith("5"));
 
-      if (npmVersion.startsWith("5")) {
+      if (invalidNpmVersion.length !== 0) {
         console.log(
           `You may have problems using local libraries with your current version of npm. Until npm have addressed this issue we recommend using npm 4`
         );
