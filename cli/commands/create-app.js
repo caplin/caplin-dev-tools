@@ -75,7 +75,7 @@ module.exports = {
 
       if (npmVersion.startsWith("5")) {
         console.log(
-          `You may have problems using some of the tooling with your current version of npm. Whilst npm address these issues we recommend using npm 4`
+          `You may have problems using local libraries with your current version of npm. Until npm have addressed this issue we recommend using npm 4`
         );
         console.log(
           `To change your npm version run ${chalk.blue("npm i -g npm@4")}`
