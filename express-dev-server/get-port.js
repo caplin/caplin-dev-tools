@@ -1,8 +1,7 @@
 const findAvailablePort = require("detect-port");
 const inquirer = require("inquirer");
 
-const APP_PORT = process.env.PORT || 8080;
-const portQuestion = availablePort => {
+const portQuestion = (APP_PORT, availablePort) => {
   return {
     type: "confirm",
     name: "tryAnotherPort",
@@ -12,12 +11,14 @@ const portQuestion = availablePort => {
 };
 
 module.exports = () => {
+  const APP_PORT = parseInt(process.env.PORT, 10) || 8080;
+  
   return new Promise((resolve, reject) => {
     findAvailablePort(APP_PORT)
       .then(availablePort => {
         availablePort === APP_PORT || !process.stdout.isTTY
           ? resolve(APP_PORT)
-          : inquirer.prompt([portQuestion(availablePort)]).then(answer => {
+          : inquirer.prompt([portQuestion(APP_PORT, availablePort)]).then(answer => {
               answer.tryAnotherPort
                 ? resolve(availablePort)
                 : resolve(APP_PORT);
