@@ -2,7 +2,6 @@ const path = require("path");
 const chalk = require("chalk");
 const fs = require("fs");
 const copyTemplate = require("../utils/copyTemplate");
-const globalModules = require("global-modules");
 
 function workingDirectoryErrorMessage(dir) {
   return `'${dir}' directory not found.
@@ -66,21 +65,6 @@ module.exports = {
           Now cd into apps/${name} and run ${chalk.blue("npm install")}
           `
       );
-
-      const invalidNpmVersion = fs
-        .readdirSync(path.join(globalModules, "..", "..", "npm-cache", "npm"))
-        .filter(version => version.startsWith("5"));
-
-      if (invalidNpmVersion.length !== 0) {
-        console.log(
-          `${chalk.yellow(
-            "WARNING:"
-          )} You may have problems using local libraries with your current version of npm. Until npm have addressed this issue we recommend using npm 4`
-        );
-        console.log(
-          `To change your npm version run ${chalk.blue("npm i -g npm@4")}`
-        );
-      }
     });
   }
 };
