@@ -6,7 +6,7 @@
   "author": "",
   "license": "ISC",
   "scripts": {
-    "preinstall": "node pre-install.js"
+    "postinstall": "node post-install.js"
   },
   "dependencies": {
     "@caplin/aliases-plugin": "^1.0.0",
