@@ -1,6 +1,6 @@
 {
   "name": "@caplin/express-dev-server",
-  "version": "3.0.1",
+  "version": "3.1.0",
   "description": "Express.js server modules for developing Caplin applications",
   "license": "ISC",
   "dependencies": {
