@@ -11,51 +11,51 @@ const getPort = require("./get-port");
 
 const { hot } = parseArgs(process.argv.slice(2));
 
-module.exports = ({ webpackConfig }) => {
-  return new Promise((resolve, reject) => {
-    const app = express();
-    const appRoot = process.cwd();
+function printStatus(appRoot, port) {
+  const appName = path.parse(appRoot).name;
+  const hmrStatus = hot ? chalk.green("enabled") : chalk.red("disabled");
+  const ipAddress = address.ip();
+  const remoteAddressed = chalk.green(`http://${ipAddress}:${port}/`);
 
-    // Load application environment variables from `.env` file, to inject into
-    // JNDI tokens.
-    dotenv.config();
+  console.log(chalk.yellow(`Compiled successfully!\n`));
+  console.log(`You can view ${chalk.green(appName)} in the browser.\n`);
+  console.log(`Local Connection: ${chalk.green(`http://localhost:${port}/`)}`);
+  console.log(`Remote Connection: ${remoteAddressed}\n`);
+  console.log(`Hot module replacement is ${hmrStatus}\n`);
+}
 
-    // Serve static files (HTML, XML, CSS), contained in application directory.
-    app.use(express.static(appRoot));
+module.exports = ({ appCreated = () => {}, webpackConfig }) => {
+  const app = express();
+  const appRoot = process.cwd();
 
-    poll(app);
+  // Allow user to register handlers before default ones to allow intercepting
+  // requests, e.g. reroute a request for a static file such as `.jsp`.
+  appCreated(app);
+  // Load application environment variables from `.env` file, to inject into
+  // JNDI tokens.
+  dotenv.config();
 
-    getPort()
-      .then(port => {
-        // Handlers/middleware for webpack.
-        webpackMiddleware(app, webpackConfig);
+  // Serve static files (HTML, XML, CSS), contained in application directory.
+  app.use(express.static(appRoot));
 
-        app.listen(port, err => {
-          if (err) {
-            console.log(err);
-            return;
-          }
+  poll(app);
 
-          const APP_NAME = path.parse(appRoot).name;
-          const ipAddress = address.ip();
+  // Handlers/middleware for webpack.
+  webpackMiddleware(app, webpackConfig);
 
-          console.log(chalk.yellow(`Compiled successfully!\n`));
-          console.log(
-            `You can view ${chalk.green(APP_NAME)} in the browser.\n`
-          );
-          console.log(
-            `Local Connection:  ${chalk.green("http://localhost:" + port + "/")}`
-          );
-          console.log(
-            `Remote Connection: ${chalk.green("http://" + ipAddress + ":" + port + "/")}\n`
-          );
+  function listenToPort(port) {
+    app.listen(port, err => {
+      if (err) {
+        console.error(err);
+      } else {
+        printStatus(appRoot, port);
+      }
+    });
 
-          console.log(
-            `Hot module replacement is ${hot ? chalk.green("enabled") : chalk.red("disabled")}\n`
-          );
-        });
-        resolve(app);
-      })
-      .catch(error => console.log(error));
-  });
+    return app;
+  }
+
+  return getPort()
+    .then(listenToPort)
+    .catch(error => console.error(error));
 };
