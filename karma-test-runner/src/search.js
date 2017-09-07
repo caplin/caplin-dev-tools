@@ -10,6 +10,10 @@ const IS_WIN = /^win/.test(process.platform);
 function getDependenciesDirs(dependencies = {}, packageDirectory, appDir) {
   return (
     Object.values(dependencies)
+      // To allow stripping of packages in client builds we surround the
+      // targetted package with a comment dependency e.g. `"//":["orders"]` and
+      // `"//":["endorders"]` so we must filter these arrays out.
+      .filter(name => Array.isArray(name) === false)
       .filter(name => name.startsWith("file:"))
       .map(name => name.replace("file:", ""))
       // Once we move to npm 5 (https://github.com/npm/npm/issues/16788 is
