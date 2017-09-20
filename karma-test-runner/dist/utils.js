@@ -28,13 +28,6 @@ const { Server } = require("karma");
 function getSelectedBrowser(commandLineArgs) {
   const browser = commandLineArgs.b;
 
-  // To be removed once Chrome Headless supports Windows
-  const isWin = /^win/.test(process.platform);
-
-  if (browser === "headless" && isWin) {
-    return "phantom-js";
-  }
-
   if (browser === "headless") {
     return "chrome-headless";
   }
@@ -54,8 +47,6 @@ function getTestBrowser(argv) {
       return "Chrome";
     case "chrome-headless":
       return "ChromeHeadless";
-    case "phantom-js":
-      return "PhantomJS";
 
     default:
       console.log(`${selectedBrowser} is not a supported browser, defaulting to Chrome`);
