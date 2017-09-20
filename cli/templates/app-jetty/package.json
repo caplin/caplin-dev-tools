@@ -1,0 +1,41 @@
+{
+  "name": "{{appName}}",
+  "version": "1.0.0",
+  "description": "",
+  "scripts": {
+    "build": "node scripts/build.js",
+    "start": "node server/node/server.js --sourcemaps",
+    "start:debug": "node --inspect-brk server/node/server.js",
+    "storybook": "start-storybook -p 6006",
+    "build-storybook": "build-storybook",
+    "test": "jest",
+    "test:debug": "node --inspect-brk ./node_modules/jest-cli/bin/jest.js -i --env jest-environment-node-debug"
+  },
+  "dependencies": {
+    "@caplin/build-tasks": "^4.0.0",
+    "@caplin/express-dev-server": "^3.0.0",
+    "@caplin/versioning": "^2.0.0",
+    "@caplin/webpack-config-app": "^5.0.0",
+    "babel-preset-env": "^1.2.2",
+    "babel-preset-react": "^6.23.0"
+  },
+  "devDependencies": {
+    "@storybook/react": "^3.1.5",
+    "babel-jest": "^20.0.3",
+    "enzyme": "^2.8.2",
+    "jest-cli": "^20.0.4",
+    "jest-environment-node-debug": "^2.0.0",
+    "react": "^15.6.1",
+    "react-addons-test-utils": "^15.6.0",
+    "react-dom": "^15.6.1",
+    "react-test-renderer": "^15.6.1"
+  },
+  "jest": {
+    "roots": [
+      "<rootDir>"
+    ],
+    "moduleNameMapper": {
+      "^.+\\.(css|less|scss)$": "babel-jest"
+    }
+  }
+}

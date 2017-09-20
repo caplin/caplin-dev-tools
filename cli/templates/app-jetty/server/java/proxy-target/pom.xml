@@ -1,0 +1,33 @@
+<project
+	xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<groupId>the.group.id</groupId>
+	<artifactId>proxy-target</artifactId>
+	<packaging>war</packaging>
+	<version>1.0-SNAPSHOT</version>
+
+	<build>
+		<plugins>
+
+			<!--
+				The command `mvn jetty:run` will launch the proxy target project.
+				The command `mvn jetty:deploy-war` will launch the war configured in the `<war>` tag.
+			-->
+			<plugin>
+				<groupId>org.eclipse.jetty</groupId>
+				<artifactId>jetty-maven-plugin</artifactId>
+				<version>9.3.12.v20160915</version>
+				<configuration>
+					<httpConnector>
+						<port>9999</port>
+					</httpConnector>
+					<war>${war}</war>
+					<daemon>false</daemon>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+</project>
