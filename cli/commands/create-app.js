@@ -12,7 +12,7 @@ function workingDirectoryErrorMessage(dir) {
 }
 
 const invalidAppError =
-  "Invalid app type. Valid options are 'blank' and 'with jetty server'";
+  "Invalid app type. Valid options are 'app-blank' and 'app-jetty'";
 
 module.exports = {
   name: "create-app",
