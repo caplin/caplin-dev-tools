@@ -11,6 +11,9 @@ function workingDirectoryErrorMessage(dir) {
   )} command`;
 }
 
+const invalidAppError =
+  "Invalid app type. Valid options are 'blank' and 'with jetty server'";
+
 module.exports = {
   name: "create-app",
 
@@ -29,6 +32,22 @@ module.exports = {
           }
 
           return "Name must not be blank";
+        }
+      }
+    },
+    {
+      name: "typeOfApp",
+      question: {
+        type: "list",
+        name: "app-type",
+        message: "What type of app do you want to create:",
+        choices: ["app-blank", "app-jetty"],
+        validate(type) {
+          if (type !== "app-blank" && type !== "app-jetty") {
+            return invalidAppError;
+          }
+
+          return true;
         }
       }
     }
@@ -53,7 +72,7 @@ module.exports = {
 
   commandFunction(options) {
     const name = options[0];
-    const templateId = "app-blank";
+    const templateId = options[1];
 
     copyTemplate(templateId, path.join(process.cwd(), "apps", name), {
       appName: name
