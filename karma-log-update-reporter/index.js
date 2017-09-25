@@ -103,7 +103,10 @@ LogUpdateReporter.prototype.onBrowserError = function(browser, error) {
 LogUpdateReporter.prototype.onSpecComplete = function(browser, result) {
   if (result.success === true) {
     this.results.success = this.results.success + 1;
-  } else if (result.success === false) {
+    return;
+  }
+
+  if (result.success === false) {
     this.results.failed = this.results.failed + 1;
     this.failedResults.push(result);
   } else if (result.skipped === true) {
