@@ -103,6 +103,10 @@ LogUpdateReporter.prototype.onBrowserError = function(browser, error) {
 LogUpdateReporter.prototype.onSpecComplete = function(browser, result) {
   if (result.success === true) {
     this.results.success = this.results.success + 1;
+    // When running on jenkins we wish to prevent log lines for passing tests
+    if (process.env.BUILD_NUMBER) {
+      return;
+    }
   } else if (result.success === false) {
     this.results.failed = this.results.failed + 1;
     this.failedResults.push(result);
