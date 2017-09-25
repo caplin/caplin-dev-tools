@@ -49,7 +49,7 @@ describe("create-app", () => {
   it("should generate an app folder if apps and packages-caplin directories are found", allFilesCreated => {
     initDirectories();
 
-    var cp = execFile("node", ["./index.js", "create-app", "newapp"]);
+    var cp = execFile("node", ["./index.js", "create-app", "newapp", "app-blank"]);
     var stdOutput;
 
     cp.stdout.on("data", data => {

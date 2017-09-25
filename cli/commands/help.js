@@ -12,7 +12,7 @@ module.exports = {
     fmt.field("init", "Creates a new workspace in the current directory");
     fmt.field(
       "create-app",
-      "Creates a new app with basic configuration and an example component"
+      "Creates a new app with basic configuration of your choosing and an example component"
     );
     fmt.field(
       "create-component",

@@ -3,6 +3,10 @@
 Below we document some of the common commands you will use as you build your
 application using the caplin packages.
 
+### Dependencies
+* Node 7 (or higher)
+* NPM 4
+
 ### Folder Structure
 
 Your initial app structure should look like this:
