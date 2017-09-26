@@ -39,7 +39,7 @@ module.exports.BASE_WEBPACK_CONFIG = {
     alias: {},
     extensions: [".js", ".json", ".jsx"]
   },
-  plugins: [new HardSourceWebpackPlugin(), new AliasesPlugin()],
+  plugins: [new AliasesPlugin(), new HardSourceWebpackPlugin()],
   resolveLoader: {
     alias: {
       // This alias can be removed by changing the metadata require in CT libs.
