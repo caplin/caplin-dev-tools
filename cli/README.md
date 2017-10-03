@@ -26,7 +26,7 @@ packages-caplin/
 
 #### Create an app
 
-    caplin-cli create-app myapp app-jetty
+    caplin-cli create-app myapp j2ee-app
 
 The newly created app will be placed in an apps folder. To start the app, `cd`
 into the newly created app directory run `npm install` and `npm start`. This app
