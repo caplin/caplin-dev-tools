@@ -11,8 +11,8 @@ function workingDirectoryErrorMessage(dir) {
   )} command`;
 }
 
-const invalidAppError =
-  "Invalid app type. Valid options are 'app-blank' and 'app-jetty'";
+const invalidResponseError =
+  "Invalid response. Please answer 'yes' or 'no'";
 
 module.exports = {
   name: "create-app",
@@ -40,11 +40,11 @@ module.exports = {
       question: {
         type: "list",
         name: "app-type",
-        message: "What type of app do you want to create:",
-        choices: ["app-blank", "app-jetty"],
+        message: "Would you like your app to support java servlets:",
+        choices: ["yes", "no"],
         validate(type) {
-          if (type !== "app-blank" && type !== "app-jetty") {
-            return invalidAppError;
+          if (type !== "yes" && type !== "no" && type !== "j2ee-app") {
+            return invalidResponseError;
           }
 
           return true;
@@ -72,7 +72,7 @@ module.exports = {
 
   commandFunction(options) {
     const name = options[0];
-    const templateId = options[1];
+    const templateId = options[1] == "yes" || "j2ee-app" ? "j2ee-app" : "app-blank";
 
     copyTemplate(templateId, path.join(process.cwd(), "apps", name), {
       appName: name
