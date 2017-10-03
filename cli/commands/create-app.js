@@ -43,7 +43,7 @@ module.exports = {
         message: "Would you like your app to support java servlets:",
         choices: ["yes", "no"],
         validate(type) {
-          if (type !== "yes" && type !== "no" && type !== "j2ee-app") {
+          if (type !== "yes" && type !== "no" && type !== "j2ee-app" && type !== "app-blank") {
             return invalidResponseError;
           }
 

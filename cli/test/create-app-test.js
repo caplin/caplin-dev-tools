@@ -73,6 +73,36 @@ describe("create-app", () => {
     });
   });
 
+it("should generate an app folder with j2ee support if j2ee-app flag is passed", allFilesCreated => {
+    initDirectories();
+
+    var cp = execFile("node", ["./index.js", "create-app", "newapp3", "j2ee-app"]);
+    var stdOutput;
+
+    cp.stdout.on("data", data => {
+      stdOutput += data;
+
+      if (stdOutput.indexOf("Created") > -1) {
+        assert.file("apps/newapp3/index.html");
+        assert.file("apps/newapp3/src/index.js");
+        assert.file("apps/newapp3/package.json");
+        assert.file("apps/newapp3/webpack.config.js");
+        assert.file("apps/newapp3/server/node/server.js");
+        assert.file("apps/newapp3/server/java/proxy-target/pom.xml");
+        assert.file("apps/newapp3/server/java/proxy-target/src/main/webapp/WEB-INF/jetty-env.xml");
+        assert.file("apps/newapp3/server/java/proxy-target/src/main/webapp/WEB-INF/web.xml");
+
+        if (
+          stdOutput.indexOf("Now cd into apps/newapp3 and run npm install") > -1
+        ) {
+          // last message displayed
+          cp.stdout.removeAllListeners("data");
+          allFilesCreated();
+        }
+      }
+    });
+  });
+
   it("should prompt for an app name", prompted => {
     initDirectories();
 
