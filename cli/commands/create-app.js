@@ -11,8 +11,7 @@ function workingDirectoryErrorMessage(dir) {
   )} command`;
 }
 
-const invalidResponseError =
-  "Invalid response. Please answer 'yes' or 'no'";
+const invalidResponseError = "Invalid response. Please answer 'yes' or 'no'";
 
 module.exports = {
   name: "create-app",
@@ -43,7 +42,12 @@ module.exports = {
         message: "Would you like your app to support java servlets:",
         choices: ["yes", "no"],
         validate(type) {
-          if (type !== "yes" && type !== "no" && type !== "j2ee-app" && type !== "app-blank") {
+          if (
+            type !== "yes" &&
+            type !== "no" &&
+            type !== "j2ee-app" &&
+            type !== "app-blank"
+          ) {
             return invalidResponseError;
           }
 
@@ -72,7 +76,10 @@ module.exports = {
 
   commandFunction(options) {
     const name = options[0];
-    const templateId = options[1] == "yes" || "j2ee-app" ? "j2ee-app" : "app-blank";
+    let templateId = "app-blank";
+    if (options[1] === "yes" || options[1] === "j2ee-app") {
+      templateId = "j2ee-app";
+    }
 
     copyTemplate(templateId, path.join(process.cwd(), "apps", name), {
       appName: name
