@@ -73,7 +73,7 @@ tasks.withType(Test).all {
                     break
                 case 'mac':
                     systemProperty 'webdriver.chrome.driver', "${driversDir}/chromedriver"
-                    systemProperty 'webdriver.chrome.bin', "${browsersDir}/chrome/Chromium.app/Contents/MacOS/Chromium"
+                    systemProperty 'webdriver.chrome.bin', "${browsersDir}/chrome-mac/Chromium.app/Contents/MacOS/Chromium"
                     break
                 default:
                     throw new GradleException("Unknown os: " + os + ". Must be one of linux, win32, or mac")
