@@ -1,6 +1,5 @@
 const AliasesPlugin = require("@caplin/aliases-plugin");
 const { appendModulePatch } = require("@caplin/patch-loader/patchesStore");
-const HardSourceWebpackPlugin = require("hard-source-webpack-plugin");
 
 module.exports.BASE_WEBPACK_CONFIG = {
   module: {
@@ -39,7 +38,7 @@ module.exports.BASE_WEBPACK_CONFIG = {
     alias: {},
     extensions: [".js", ".json", ".jsx"]
   },
-  plugins: [new AliasesPlugin(), new HardSourceWebpackPlugin()]
+  plugins: [new AliasesPlugin()]
 };
 
 module.exports.STATIC_DIR = "static";
