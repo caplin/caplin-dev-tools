@@ -39,13 +39,7 @@ module.exports.BASE_WEBPACK_CONFIG = {
     alias: {},
     extensions: [".js", ".json", ".jsx"]
   },
-  plugins: [new AliasesPlugin(), new HardSourceWebpackPlugin()],
-  resolveLoader: {
-    alias: {
-      // This alias can be removed by changing the metadata require in CT libs.
-      "app-meta": require.resolve("@caplin/app-meta-loader")
-    }
-  }
+  plugins: [new AliasesPlugin(), new HardSourceWebpackPlugin()]
 };
 
 module.exports.STATIC_DIR = "static";

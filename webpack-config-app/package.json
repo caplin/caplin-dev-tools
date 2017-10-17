@@ -10,7 +10,6 @@
   },
   "dependencies": {
     "@caplin/aliases-plugin": "^1.0.0",
-    "@caplin/app-meta-loader": "^1.0.0",
     "@caplin/html-loader": "^1.0.2",
     "@caplin/i18n-loader": "^1.0.0",
     "@caplin/patch-loader": "^3.0.0",
