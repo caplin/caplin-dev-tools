@@ -51,12 +51,5 @@ module.exports.BASE_WEBPACK_CONFIG = {
 module.exports.STATIC_DIR = "static";
 
 module.exports.UGLIFY_OPTIONS = {
-  exclude: /i18n(.*)\.js/,
-  output: {
-    comments: false
-  },
-  compress: {
-    warnings: false,
-    screw_ie8: true
-  }
+  exclude: /i18n(.*)\.js/
 };
