@@ -13,10 +13,10 @@
       "node --inspect-brk ./node_modules/jest-cli/bin/jest.js -i --env jest-environment-node-debug"
   },
   "dependencies": {
-    "@caplin/build-tasks": "^4.0.0",
-    "@caplin/express-dev-server": "^3.0.0",
+    "@caplin/build-tasks": "^5.0.0",
+    "@caplin/express-dev-server": "^4.0.0",
     "@caplin/versioning": "^2.0.0",
-    "@caplin/webpack-config-app": "^5.0.0",
+    "@caplin/webpack-config-app": "^6.0.0",
     "babel-preset-env": "^1.2.2",
     "babel-preset-react": "^6.23.0"
   },
