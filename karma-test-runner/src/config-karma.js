@@ -18,26 +18,26 @@ const baseKarmaConfig = {
   }
 };
 
-function applyPackageConfig(packageDirectory, karmaConfig) {
-  const packageTestConf = join(packageDirectory, "test.conf.js");
+function applyBasePathConfig(basePath, karmaConfig) {
+  const basePathTestConf = join(basePath, "test.conf.js");
 
-  if (existsSync(packageTestConf)) {
-    const testConf = require(packageTestConf);
+  if (existsSync(basePathTestConf)) {
+    const testConf = require(basePathTestConf);
 
     testConf(karmaConfig);
   }
 
-  // If the package test conf hasn't added a framework we default to JSTD.
+  // If the base path test conf hasn't added a framework we default to JSTD.
   if (karmaConfig.frameworks.length === 0) {
     addJSTDFiles(karmaConfig);
   }
 }
 
-function createKarmaConf(packageDirectory, testEntry, testsType, argv) {
+function createKarmaConf(basePath, testEntry, testsType, argv) {
   const browser = getTestBrowser(argv);
   const watch = argv.w;
   const karmaConfig = Object.assign({}, baseKarmaConfig, {
-    basePath: packageDirectory,
+    basePath,
     browsers: [browser],
     files: [testEntry],
     frameworks: [],
@@ -48,7 +48,7 @@ function createKarmaConf(packageDirectory, testEntry, testsType, argv) {
     testsType
   });
 
-  applyPackageConfig(packageDirectory, karmaConfig);
+  applyBasePathConfig(basePath, karmaConfig);
 
   return karmaConfig;
 }
