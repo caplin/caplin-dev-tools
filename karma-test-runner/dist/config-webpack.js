@@ -7,14 +7,16 @@ const { join } = require("path");
 
 const { DefinePlugin } = require("webpack");
 
-function createWebpackConfig(searchDir) {
-  const aliasesTestPath = join(searchDir, "src/config/aliases-test.js");
-  const legacyAliasesTestPath = join(searchDir, "scripts/aliases-test.js");
-  const webpackConfig = require(join(searchDir, "webpack.config"))();
+function createWebpackConfig(appDir) {
+  const aliasesTestPath = join(appDir, "src/config/aliases-test.js");
+  const legacyAliasesTestPath = join(appDir, "scripts/aliases-test.js");
+  const webpackConfig = require(join(appDir, "webpack.config"))();
 
   if (existsSync(aliasesTestPath)) {
     webpackConfig.resolve.alias["$aliases-data$"] = aliasesTestPath;
   } else if (existsSync(legacyAliasesTestPath)) {
+    console.warn("Move your app aliases-test.js file to src/config.");
+
     webpackConfig.resolve.alias["$aliases-data$"] = legacyAliasesTestPath;
   }
 
