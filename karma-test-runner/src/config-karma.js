@@ -10,19 +10,11 @@ const { atsTestEntry, utsTestEntry } = require("./config");
 const { getTestBrowser } = require("./utils");
 
 const baseKarmaConfig = {
-  frameworks: [],
   logLevel: LOG_ERROR,
   reporters: ["log-update"],
   webpackMiddleware: {
     noInfo: true,
-    stats: {
-      assets: false,
-      chunks: false,
-      errors: true,
-      hash: false,
-      version: false,
-      warnings: false
-    }
+    stats: "errors-only"
   }
 };
 
@@ -48,6 +40,7 @@ function createKarmaConf(packageDirectory, testEntry, testsType, argv) {
     basePath: packageDirectory,
     browsers: [browser],
     files: [testEntry],
+    frameworks: [],
     preprocessors: {
       [testEntry]: ["webpack", "sourcemap"]
     },

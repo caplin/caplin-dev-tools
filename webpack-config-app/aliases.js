@@ -7,10 +7,4 @@ module.exports = function configureAliases(webpackConfig, basePath) {
 
   // `AliasRegistry` requires `alias!$aliases-data`.
   webpackConfig.resolve.alias["$aliases-data$"] = join(configDir, "aliases.js");
-  // `BRAppMetaService` requires `app-meta!$app-metadata` loaded with
-  // `app-meta-loader`.
-  webpackConfig.resolve.alias["$app-metadata$"] = join(
-    configDir,
-    "metadata.js"
-  );
 };

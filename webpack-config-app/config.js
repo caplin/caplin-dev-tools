@@ -1,6 +1,5 @@
 const AliasesPlugin = require("@caplin/aliases-plugin");
 const { appendModulePatch } = require("@caplin/patch-loader/patchesStore");
-const HardSourceWebpackPlugin = require("hard-source-webpack-plugin");
 
 module.exports.BASE_WEBPACK_CONFIG = {
   module: {
@@ -21,10 +20,6 @@ module.exports.BASE_WEBPACK_CONFIG = {
         }
       },
       {
-        test: /\.scss$/,
-        use: ["style-loader", "css-loader", "sass-loader"]
-      },
-      {
         test: /\.css$/,
         use: ["style-loader", "css-loader"]
       },
@@ -39,24 +34,11 @@ module.exports.BASE_WEBPACK_CONFIG = {
     alias: {},
     extensions: [".js", ".json", ".jsx"]
   },
-  plugins: [new AliasesPlugin(), new HardSourceWebpackPlugin()],
-  resolveLoader: {
-    alias: {
-      // This alias can be removed by changing the metadata require in CT libs.
-      "app-meta": require.resolve("@caplin/app-meta-loader")
-    }
-  }
+  plugins: [new AliasesPlugin()]
 };
 
 module.exports.STATIC_DIR = "static";
 
 module.exports.UGLIFY_OPTIONS = {
-  exclude: /i18n(.*)\.js/,
-  output: {
-    comments: false
-  },
-  compress: {
-    warnings: false,
-    screw_ie8: true
-  }
+  exclude: /i18n(.*)\.js/
 };

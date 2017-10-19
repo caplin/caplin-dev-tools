@@ -5,5 +5,10 @@ module.exports = function createWebpackConfig() {
     basePath: __dirname
   });
 
+  webpackConfig.module.rules.push({
+    test: /\.scss$/,
+    use: ["style-loader", "css-loader", "sass-loader"]
+  });
+
   return webpackConfig;
 };

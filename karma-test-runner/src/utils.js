@@ -24,8 +24,6 @@ function getTestBrowser(argv) {
       return "Chrome";
     case "chrome-headless":
       return "ChromeHeadless";
-    case "phantom-js":
-      return "PhantomJS";
 
     default:
       console.log(
