@@ -53,6 +53,8 @@ function createKarmaConf(basePath, testEntry, testsType, argv) {
   return karmaConfig;
 }
 
+module.exports.createKarmaConf = createKarmaConf;
+
 function createATsKarmaConf(packageDirectory, argv) {
   return createKarmaConf(packageDirectory, atsTestEntry, "ATs", argv);
 }
