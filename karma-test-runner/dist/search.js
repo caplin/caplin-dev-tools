@@ -2,7 +2,7 @@
 
 /* eslint global-require: 0, import/no-dynamic-require: 0 */
 
-const { readdirSync, statSync } = require("fs");
+const { existsSync, readdirSync, statSync } = require("fs");
 const { basename, join } = require("path");
 
 const IS_WIN = /^win/.test(process.platform);
@@ -56,11 +56,22 @@ function escSep(packageDirectory) {
   return IS_WIN ? packageDirectory.replace(/\\/g, "\\\\") : packageDirectory;
 }
 
-function findAppPackages(searchDir) {
-  const appPackagesDirs = readdirSync(join(searchDir, "src")).map(name => join(searchDir, "src", name)).filter(name => statSync(name).isDirectory());
+function getAppPackages(appDir) {
+  const appSrc = join(appDir, "src");
+
+  // The ct-sdk app exists only to run tests so doesn't have a `src` directory.
+  if (existsSync(appSrc)) {
+    return readdirSync(appSrc).map(name => join(appSrc, name)).filter(name => statSync(name).isDirectory());
+  }
+
+  return [];
+}
+
+function findAppPackages(appDir) {
+  const appPackagesDirs = getAppPackages(appDir);
   const foundPackages = [];
 
-  dependencySearch(searchDir, foundPackages);
+  dependencySearch(appDir, foundPackages);
 
   return foundPackages.concat(appPackagesDirs).map(escSep);
 }
