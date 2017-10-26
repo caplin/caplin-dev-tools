@@ -40,6 +40,10 @@ function logMessage({ testsType, basePath, browser }, message) {
 }
 
 function formatErrorText(errorText) {
+  if (errorText === null) {
+    return `\n  Error text is null.`
+  }
+
   // Indent, strip any whitespace and indent content.
   return `\n  ${errorText.trim().replace(/\n/g, "\n  ")}`;
 }
