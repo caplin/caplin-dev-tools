@@ -13,7 +13,13 @@ function format(value) {
 }
 
 function getTimeStamp() {
-  const now = new Date();
+  let now = new Date();
+
+  if (now.getTimezoneOffset() !== 0) {
+    const fixedTimezone =
+      3600000 + now.getTime() + now.getTimezoneOffset() * 60000;
+    now = new Date(fixedTimezone);
+  }
 
   return (
     String(now.getFullYear()) +
