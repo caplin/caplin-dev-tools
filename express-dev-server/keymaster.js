@@ -4,7 +4,7 @@ const { join } = require("path");
 const { hex2b64, Signature } = require("jsrsasign");
 
 let defaultCustomerID;
-let defaultIsLocal;
+let localTimezone;
 let index = 0;
 let privateKey;
 const SEPARATOR = "~";
@@ -17,7 +17,7 @@ function getTimeStamp() {
   let now = new Date();
   // For non UK dev servers, this adjusts the timestamp when
   // running against a backend server hosted in the UK
-  if (!defaultIsLocal && now.getTimezoneOffset() !== 0) {
+  if (!localTimezone && now.getTimezoneOffset() !== 0) {
     const HOUR_IN_MILLISEC = 3600000;
     const MIN_IN_MILLISEC = 60000;
     const fixedTimezone =
@@ -109,10 +109,10 @@ function keymasterHandler(req, res) {
 
 module.exports = (
   application,
-  { keyDirectory, customerID = "", isLocal = true }
+  { keyDirectory, customerID = "", defaultLocalTimezone = true }
 ) => {
   defaultCustomerID = customerID;
-  defaultIsLocal = isLocal;
+  localTimezone = defaultLocalTimezone;
   privateKey = readFileSync(join(keyDirectory, "privatekey.pem"), "utf8");
   application.post("/servlet/StandardKeyMaster", keymasterHandler);
 };
