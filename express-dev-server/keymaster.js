@@ -18,7 +18,7 @@ function getTimeStamp() {
   let now = new Date();
   // For non UK dev servers, this adjusts the timestamp when
   // running against a backend server hosted in the UK
-  if (!localTimezone && now.getTimezoneOffset() !== 0) {
+  if (!localTimezone) {
     const serverTime =
       now.getTime() +
       now.getTimezoneOffset() * MIN_IN_MILLISEC;
