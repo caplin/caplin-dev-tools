@@ -8,6 +8,7 @@ let localTimezone;
 let index = 0;
 let privateKey;
 const SEPARATOR = "~";
+const MIN_IN_MILLISEC = 60000;
 
 function format(value) {
   return String(value).length === 2 ? value : `0${value}`;
@@ -18,11 +19,10 @@ function getTimeStamp() {
   // For non UK dev servers, this adjusts the timestamp when
   // running against a backend server hosted in the UK
   if (!localTimezone && now.getTimezoneOffset() !== 0) {
-    const MIN_IN_MILLISEC = 60000;
-    const fixedTimezone =
+    const serverTime =
       now.getTime() +
       now.getTimezoneOffset() * MIN_IN_MILLISEC;
-    now = new Date(fixedTimezone);
+    now = new Date(serverTime);
   }
 
   return (
