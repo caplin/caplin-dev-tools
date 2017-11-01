@@ -18,10 +18,8 @@ function getTimeStamp() {
   // For non UK dev servers, this adjusts the timestamp when
   // running against a backend server hosted in the UK
   if (!localTimezone && now.getTimezoneOffset() !== 0) {
-    const HOUR_IN_MILLISEC = 3600000;
     const MIN_IN_MILLISEC = 60000;
     const fixedTimezone =
-      HOUR_IN_MILLISEC +
       now.getTime() +
       now.getTimezoneOffset() * MIN_IN_MILLISEC;
     now = new Date(fixedTimezone);
