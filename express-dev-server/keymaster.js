@@ -4,16 +4,26 @@ const { join } = require("path");
 const { hex2b64, Signature } = require("jsrsasign");
 
 let defaultCustomerID;
+let localTimezone;
 let index = 0;
 let privateKey;
 const SEPARATOR = "~";
+const MIN_IN_MILLISEC = 60000;
 
 function format(value) {
   return String(value).length === 2 ? value : `0${value}`;
 }
 
 function getTimeStamp() {
-  const now = new Date();
+  let now = new Date();
+  // For non UK dev servers, this adjusts the timestamp when
+  // running against a backend server hosted in the UK
+  if (!localTimezone) {
+    const serverTime =
+      now.getTime() +
+      now.getTimezoneOffset() * MIN_IN_MILLISEC;
+    now = new Date(serverTime);
+  }
 
   return (
     String(now.getFullYear()) +
@@ -95,8 +105,12 @@ function keymasterHandler(req, res) {
   }
 }
 
-module.exports = (application, { keyDirectory, customerID = "" }) => {
+module.exports = (
+  application,
+  { keyDirectory, customerID = "", defaultLocalTimezone = true }
+) => {
   defaultCustomerID = customerID;
+  localTimezone = defaultLocalTimezone;
   privateKey = readFileSync(join(keyDirectory, "privatekey.pem"), "utf8");
   application.post("/servlet/StandardKeyMaster", keymasterHandler);
 };
