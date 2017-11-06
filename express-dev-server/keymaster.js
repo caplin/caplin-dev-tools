@@ -4,11 +4,11 @@ const { join } = require("path");
 const { hex2b64, Signature } = require("jsrsasign");
 
 let defaultCustomerID;
-let localTimezone;
+let timestampOffset;
 let index = 0;
 let privateKey;
 const SEPARATOR = "~";
-const MIN_IN_MILLISEC = 60000;
+const MINUTE_IN_MILLISECONDS = 60000;
 
 function format(value) {
   return String(value).length === 2 ? value : `0${value}`;
@@ -16,13 +16,14 @@ function format(value) {
 
 function getTimeStamp() {
   let now = new Date();
-  // For non UK dev servers, this adjusts the timestamp when
-  // running against a backend server hosted in the UK
-  if (!localTimezone) {
-    const serverTime =
-      now.getTime() +
-      now.getTimezoneOffset() * MIN_IN_MILLISEC;
-    now = new Date(serverTime);
+
+  // If a timestamp offset has been provided, the timestamp will be modified.
+  // e.g. if the client is based in New York and the Liberator is in London,
+  // an offset of 5 would be used to add 5 hours to the client timestamp
+  if (timestampOffset) {
+    const timeWithOffset =
+      now.getTime() + timestampOffset * MINUTE_IN_MILLISECONDS;
+    now = new Date(timeWithOffset);
   }
 
   return (
@@ -107,10 +108,10 @@ function keymasterHandler(req, res) {
 
 module.exports = (
   application,
-  { keyDirectory, customerID = "", defaultLocalTimezone = true }
+  { keyDirectory, customerID = "", clientTimestampOffset = 0 }
 ) => {
   defaultCustomerID = customerID;
-  localTimezone = defaultLocalTimezone;
+  timestampOffset = clientTimestampOffset;
   privateKey = readFileSync(join(keyDirectory, "privatekey.pem"), "utf8");
   application.post("/servlet/StandardKeyMaster", keymasterHandler);
 };
