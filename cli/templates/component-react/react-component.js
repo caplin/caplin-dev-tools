@@ -1,4 +1,4 @@
-require('./{{componentName}}.scss');
+require('./{{componentName}}.less');
 
 import React from "react";
 import ReactDOM from "react-dom";
