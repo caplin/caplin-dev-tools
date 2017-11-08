@@ -21,7 +21,7 @@ new-app/
     config/
     example/
     index.js
-    index.scss
+    index.less
   .babelrc
   .env
   index.html
@@ -99,7 +99,7 @@ new-app/
       __tests__/
       Example.js
     index.js
-    index.scss
+    index.less
   .babelrc
   .env
   index.html
@@ -111,7 +111,7 @@ new-app/
 #### React Component
 
 React component names must start with a capital letter. Don't forget neither the component nor the
-sass file are imported by default. Once you're ready, you have to import them.
+less file are imported by default. Once you're ready, you have to import them.
 This will result in this folder structure.
 
 ```
@@ -120,7 +120,7 @@ new-app/
     _test-ut/
       react-component-test.js
     react-component.js
-    react-component.scss
+    react-component.less
   scripts/
   server/
   src/

@@ -56,7 +56,7 @@ describe("create-component", () => {
           stdOutput.indexOf("react-component") === -1 &&
           stdOutput.indexOf("New component 'NewReactComponent' created!") !== -1
         ) {
-          assert.file("NewReactComponent/NewReactComponent.scss");
+          assert.file("NewReactComponent/NewReactComponent.less");
           assert.file("NewReactComponent/NewReactComponent.js");
           assert.file("NewReactComponent/stories/index.js");
           assert.file("NewReactComponent/__tests__/NewReactComponent-test.js");
@@ -82,7 +82,7 @@ describe("create-component", () => {
           stdOutput.indexOf("react-component") === -1 &&
           stdOutput.indexOf("New component 'NewReactComponent' created!") !== -1
         ) {
-          assert.file("apps/newapp2/src/NewReactComponent/NewReactComponent.scss");
+          assert.file("apps/newapp2/src/NewReactComponent/NewReactComponent.less");
           assert.file("apps/newapp2/src/NewReactComponent/NewReactComponent.js");
           assert.file("apps/newapp2/src/NewReactComponent/stories/index.js");
           assert.file("apps/newapp2/src/NewReactComponent/__tests__/NewReactComponent-test.js");

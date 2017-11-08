@@ -1,5 +1,5 @@
 import Example from "./example/Example";
-import "./index.scss";
+import "./index.less";
 
 console.log(new Example().sayHello());
 
