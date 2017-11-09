@@ -12,7 +12,8 @@ application directory to new locations within the application directory.
 1. It's first step is to back up the entire folder (except for hidden files)
 into a `brjs-app-backup` directory. This allows a user to access the old
 application files.
-2. It then creates a new top level directory for the application packages.
+2. It then creates a top level directory (`packages-caplin`) for the application
+packages.
 3. It copies all the application's libs and SDK libs into the packages
 directory.
 	* While copying them it generates a stub `package.json` for each copied
