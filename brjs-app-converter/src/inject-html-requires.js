@@ -42,20 +42,23 @@ function isRelativeApp(applicationName) {
 function findReferencedTemplateIDs(parsedDOM) {
   const dependentTemplateIDs = new Set();
 
-  parsedDOM.root().find("[data-bind*=template]").each((index, element) => {
-    const dataValue = parsedDOM(element).data("bind");
-    // Some template names are code to be executed as opposed to a simple string
-    // e.g. `template: {name: amount.getTemplateName()}`, we want to skip these.
-    const templateNameMatchArray =
-      dataValue.match(/.*name\s*:\s*['|"](.*?)['|"]/) ||
-      // Some template names are strings instead of being wrapped in an object
-      // e.g. `template: 'caplin.orderticket.amount'`.
-      dataValue.match(/.*template\s*:\s*['|"](.*?)['|"]/);
+  parsedDOM
+    .root()
+    .find("[data-bind*=template]")
+    .each((index, element) => {
+      const dataValue = parsedDOM(element).data("bind");
+      // Some template names are code to be executed as opposed to a simple string
+      // e.g. `template: {name: amount.getTemplateName()}`, we want to skip these.
+      const templateNameMatchArray =
+        dataValue.match(/.*name\s*:\s*['|"](.*?)['|"]/) ||
+        // Some template names are strings instead of being wrapped in an object
+        // e.g. `template: 'caplin.orderticket.amount'`.
+        dataValue.match(/.*template\s*:\s*['|"](.*?)['|"]/);
 
-    if (templateNameMatchArray) {
-      dependentTemplateIDs.add(templateNameMatchArray[1]);
-    }
-  });
+      if (templateNameMatchArray) {
+        dependentTemplateIDs.add(templateNameMatchArray[1]);
+      }
+    });
 
   return dependentTemplateIDs;
 }
@@ -70,16 +73,21 @@ function createTemplateFileInfo(
 ) {
   let warnedAboutLackOfID = false;
 
-  parsedDOM.root().children().each((index, element) => {
-    const id = parsedDOM(element).attr("id");
+  parsedDOM
+    .root()
+    .children()
+    .each((index, element) => {
+      const id = parsedDOM(element).attr("id");
 
-    if (id) {
-      templateIDsToFileInfo.set(id, { filePath, referencedTemplateIDs });
-    } else if (warnedAboutLackOfID === false) {
-      console.warn(`${filePath} has no id in one of its top level DOM nodes.`);
-      warnedAboutLackOfID = true;
-    }
-  });
+      if (id) {
+        templateIDsToFileInfo.set(id, { filePath, referencedTemplateIDs });
+      } else if (warnedAboutLackOfID === false) {
+        console.warn(
+          `${filePath} has no id in one of its top level DOM nodes.`
+        );
+        warnedAboutLackOfID = true;
+      }
+    });
 }
 
 // Read the provided HTML template IDs and register their file location to allow
@@ -173,7 +181,7 @@ function addReferencedTemplates(
   if (templateFileInfo === undefined) {
     console.log(
       `
-    Couldn't fine template file info for ${templateID}.
+    Couldn't find template file info for ${templateID}.
     It might be an application level template incorrectly referenced at the
     package level.
     `
