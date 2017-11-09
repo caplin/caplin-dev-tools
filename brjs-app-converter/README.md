@@ -30,7 +30,8 @@ This leaves the project with three top level directories, `apps`,
 `packages-caplin`, and `brjs-app-backup` (which can be deleted once the user is
 satisfied they don't need the old files).
 
-These screenshots contrast before and after:
+These screenshots contrast before and after (after shows a monorepo with several
+applications, the conversion tool only converts one app at a time):
 
 ![alt text](https://raw.githubusercontent.com/caplin/caplin-dev-tools/master/brjs-app-converter/preparation/current.png "Current Structure")
 ![alt text](https://raw.githubusercontent.com/caplin/caplin-dev-tools/master/brjs-app-converter/preparation/post.png "Post Conversion Structure")
