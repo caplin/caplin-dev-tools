@@ -8,7 +8,7 @@
     "caplin-cli": "./cli/index.js"
   },
   "scripts": {
-    "install": "cd brjs-app-converter && npm i && cd ../cli && npm i"
+    "postinstall": "cd brjs-app-converter && npm i && cd ../cli && npm i"
   },
   "repository": {
     "type": "git",
