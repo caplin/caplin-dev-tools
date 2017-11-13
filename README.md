@@ -10,3 +10,11 @@ applications.
 ## caplin-cli
 
 For information on the `caplin-cli` tool [read its README.md](https://github.com/caplin/caplin-dev-tools/blob/master/cli/README.md).
+
+## Releasing packages
+
+We are experimenting with using https://github.com/conventional-changelog/conventional-changelog
+
+To create a `CHANGELOG.md` first `cd` into the package folder and run:
+
+`conventional-changelog --commit-path . -p angular -i CHANGELOG.md -s -r 0`
