@@ -13,8 +13,36 @@ For information on the `caplin-cli` tool [read its README.md](https://github.com
 
 ## Releasing packages
 
-We are experimenting with using https://github.com/conventional-changelog/conventional-changelog
+We are using https://github.com/conventional-changelog/conventional-changelog
 
-To create a `CHANGELOG.md` first `cd` into the package folder and run:
+### Creation of CHANGELOG.md
 
-`conventional-changelog --commit-path . -p angular -i CHANGELOG.md -s -r 0`
+If the package you are modifying has no `CHANGELOG.md` to create a 
+`CHANGELOG.md` first `cd` into the package folder and run:
+
+`conventional-changelog -p angular -i CHANGELOG.md -s -r 0 --commit-path .`
+
+You should run this **before** you make your commits and update the
+`package.json` version.
+
+Then tag the package's last release (the last time its version was updated).
+
+`git tag express-dev-server@4.0.1 50100c3aa8376e`
+
+The format of the tag is `NAME_OF_PACKAGE@LAST_PUBLISHED_VERSION` and the commit
+is the commit where the `package.json` version was changed.
+
+Push the newly created tag to the server
+
+`git push origin express-dev-server@4.0.1`
+
+### Updating CHANGELOG.md
+
+1. Make changes
+2. Commit those changes
+3. Bump version in package.json
+4. `conventional-changelog -p angular -i CHANGELOG.md -s --commit-path . -l express-dev-server`
+5. Commit `package.json` and `CHANGELOG.md`
+6. Tag e.g. `g tag express-dev-server@4.1.0`
+7. Push code and tag (`g push origin express-dev-server@4.1.0`)
+
