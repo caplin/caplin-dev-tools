@@ -2,37 +2,23 @@ const { readFileSync } = require("fs");
 const { join } = require("path");
 
 const { hex2b64, Signature } = require("jsrsasign");
+const moment = require('moment-timezone');
 
 let defaultCustomerID;
-let localTimezone;
 let index = 0;
 let privateKey;
+let timestampTimezone;
 const SEPARATOR = "~";
-const MIN_IN_MILLISEC = 60000;
-
-function format(value) {
-  return String(value).length === 2 ? value : `0${value}`;
-}
 
 function getTimeStamp() {
-  let now = new Date();
-  // For non UK dev servers, this adjusts the timestamp when
-  // running against a backend server hosted in the UK
-  if (!localTimezone) {
-    const serverTime =
-      now.getTime() +
-      now.getTimezoneOffset() * MIN_IN_MILLISEC;
-    now = new Date(serverTime);
+  let now = moment();
+
+  // Adjust the timestamp if the back end is located in a different timezone.
+  if (timestampTimezone) {
+    now = now.tz(timestampTimezone);
   }
 
-  return (
-    String(now.getFullYear()) +
-    format(now.getMonth() + 1) +
-    format(now.getDate()) +
-    format(now.getHours()) +
-    format(now.getMinutes()) +
-    format(now.getSeconds())
-  );
+  return now.format("YYYYMMDDHHmmss");
 }
 
 function getExtraDataToSign() {
@@ -107,10 +93,10 @@ function keymasterHandler(req, res) {
 
 module.exports = (
   application,
-  { keyDirectory, customerID = "", defaultLocalTimezone = true }
+  { keyDirectory, customerID = "", serverTimezone }
 ) => {
   defaultCustomerID = customerID;
-  localTimezone = defaultLocalTimezone;
+  timestampTimezone = serverTimezone;
   privateKey = readFileSync(join(keyDirectory, "privatekey.pem"), "utf8");
   application.post("/servlet/StandardKeyMaster", keymasterHandler);
 };
