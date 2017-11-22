@@ -1,3 +1,13 @@
+<a name="4.2.0"></a>
+# [4.2.0](https://github.com/caplin/caplin-dev-tools/compare/express-dev-server@4.1.0...express-dev-server@4.2.0) (2017-11-21)
+
+
+### Features
+
+* Add a module that proxies all requests to a Jetty server ([7e00278](https://github.com/caplin/caplin-dev-tools/commit/7e00278))
+
+
+
 <a name="4.1.0"></a>
 # [4.1.0](https://github.com/caplin/caplin-dev-tools/compare/express-dev-server@4.0.1...express-dev-server@4.1.0) (2017-11-14)
 
