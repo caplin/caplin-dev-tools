@@ -11,7 +11,7 @@ const { getTestBrowser } = require("./utils");
 
 const baseKarmaConfig = {
   logLevel: LOG_ERROR,
-  reporters: ["log-update", "progress", "html"],
+  reporters: ["log-update", "html"],
   webpackMiddleware: {
     noInfo: true,
     stats: "errors-only"
