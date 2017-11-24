@@ -17,8 +17,8 @@ We are using [conventional-changelog](https://github.com/conventional-changelog/
 
 ### Creation of CHANGELOG.md
 
-If the package you are modifying has no `CHANGELOG.md` to create a
-`CHANGELOG.md` first `cd` into the package folder and run:
+If the package you are modifying has no `CHANGELOG.md` file, then create a
+`CHANGELOG.md`. First `cd` into the package folder and run:
 
 `conventional-changelog -p angular -i CHANGELOG.md -s -r 0 --commit-path .`
 
