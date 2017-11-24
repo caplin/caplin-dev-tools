@@ -13,7 +13,7 @@ For information on the `caplin-cli` tool
 
 ## Releasing packages
 
-We are using https://github.com/conventional-changelog/conventional-changelog
+We are using [conventional-changelog](https://github.com/conventional-changelog/conventional-changelog)
 
 ### Creation of CHANGELOG.md
 
