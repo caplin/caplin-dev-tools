@@ -1,3 +1,13 @@
+<a name="5.2.0"></a>
+# [5.2.0](https://github.com/caplin/caplin-dev-tools/compare/karma-test-runner@5.1.1...karma-test-runner@5.2.0) (2017-11-24)
+
+
+### Features
+
+* Add support for yarn link ([d310af7](https://github.com/caplin/caplin-dev-tools/commit/d310af7))
+
+
+
 <a name="5.1.1"></a>
 
 ## 5.1.1 (2017-11-24)
