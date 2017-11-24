@@ -2,7 +2,7 @@
 
 ## Packages for developing Caplin applications using node.js tooling
 
-This monorepo contains tens of packages, they are designed to be used as part of
+This monorepo contains tens of packages that are designed to be used as part of
 a Caplin development environment. They are not designed for usage in generic web
 applications. The more important packages have their own README.md files.
 
