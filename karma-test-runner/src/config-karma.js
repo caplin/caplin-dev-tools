@@ -11,7 +11,7 @@ const { getTestBrowser } = require("./utils");
 
 const baseKarmaConfig = {
   logLevel: LOG_ERROR,
-  reporters: ["log-update", "html"],
+  reporters: ["log-update"],
   webpackMiddleware: {
     noInfo: true,
     stats: "errors-only"
@@ -36,8 +36,7 @@ function applyBasePathConfig(basePath, karmaConfig) {
 function createKarmaConf(basePath, testEntry, testsType, argv) {
   const browser = getTestBrowser(argv);
   const watch = argv.w;
-  const fileName = parse(basePath).base;
-  const rootDir = process.cwd();
+  const htmlReport = argv.h;
   const karmaConfig = Object.assign({}, baseKarmaConfig, {
     basePath,
     browsers: [browser],
@@ -47,15 +46,24 @@ function createKarmaConf(basePath, testEntry, testsType, argv) {
       [testEntry]: ["webpack", "sourcemap"]
     },
     singleRun: !watch,
-    testsType,
-    htmlReporter: {
-      outputFile: `${rootDir}/reports-${testsType}/${testsType}-report-${fileName}.html`,
+    testsType
+  });
+
+  if (htmlReport) {
+    const fileName = parse(basePath).base;
+    const rootDir = process.cwd();
+
+    karmaConfig.htmlReporter = {
+      outputFile: `${rootDir}/reports-${testsType}/${testsType}-report-${
+        fileName
+      }.html`,
       pageTitle: `${testsType} Report`,
       groupSuites: true,
       useCompactStyle: true,
       useLegacyStyle: true
-    }
-  });
+    };
+    karmaConfig.reporters.push("html");
+  }
 
   applyBasePathConfig(basePath, karmaConfig);
 
