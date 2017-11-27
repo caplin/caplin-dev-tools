@@ -1,4 +1,4 @@
-const { basename } = require("path");
+const { basename, resolve } = require("path");
 
 const parseArgs = require("minimist");
 
@@ -39,18 +39,23 @@ module.exports.webpackConfigGenerator = function webpackConfigGenerator({
   configureDevtool(webpackConfig, sourcemaps);
   configureBuildDependentConfig(webpackConfig, version, uglifyOptions, isBuild);
 
-  // With npm 5 `file:` dependencies are symlinked to instead of copied into
-  // `node_modules`. webpack follows the node algorithm for resolving modules;
-  // it resolves required modules relative to the requiring module. It searches
+  // `file:` (npm 5) and `link:` (yarn) dependencies are symlinked to instead
+  // of being copied into `node_modules`.
+  //
+  // Webpack follows the node algorithm for resolving packages; it resolves
+  // required packages relative to the requiring module. It searches
   // for the required package inside `node_modules` directories all the way to
-  // the root of the file system. So a module inside `packages-caplin` that
-  // requires another `packages-caplin` based module will fail to find it.
+  // the root of the file system from the requiring module.
+  //
+  // So a module inside `packages-caplin` (that Webpack is parsing due to
+  // following a symlink) that requires another package will fail to find it as
+  // yarn would have installed it in the app's `node_modules`.
+  //
   // Given that we must configure webpack to search for packages within
-  // `node_modules`, `packages-caplin` and `packages`.
+  // `node_modules`, and the application's `node_modules` folder.
   webpackConfig.resolve.modules = [
     "node_modules",
-    "packages-caplin",
-    "packages"
+    resolve(basePath, "node_modules")
   ];
 
   return webpackConfig;
