@@ -1,2 +1,3 @@
 # patches-loader
-a js module patches loader for webpack
+
+A js module patches loader for Webpack

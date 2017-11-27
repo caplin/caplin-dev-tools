@@ -1,24 +1,24 @@
 # caplin-dev-tools
+
 ## Packages for developing Caplin applications using node.js tooling
 
-## Setup
-
-This monorepo contains tens of packages, they are designed to be used as part of
+This monorepo contains tens of packages that are designed to be used as part of
 a Caplin development environment. They are not designed for usage in generic web
-applications.
+applications. The more important packages have their own README.md files.
 
 ## caplin-cli
 
-For information on the `caplin-cli` tool [read its README.md](https://github.com/caplin/caplin-dev-tools/blob/master/cli/README.md).
+For information on the `caplin-cli` tool
+[read its README.md](https://github.com/caplin/caplin-dev-tools/blob/master/cli/README.md).
 
 ## Releasing packages
 
-We are using https://github.com/conventional-changelog/conventional-changelog
+We are using [conventional-changelog](https://github.com/conventional-changelog/conventional-changelog)
 
 ### Creation of CHANGELOG.md
 
-If the package you are modifying has no `CHANGELOG.md` to create a 
-`CHANGELOG.md` first `cd` into the package folder and run:
+If the package you are modifying has no `CHANGELOG.md` file, then create a
+`CHANGELOG.md`. First `cd` into the package folder and run:
 
 `conventional-changelog -p angular -i CHANGELOG.md -s -r 0 --commit-path .`
 
@@ -41,8 +41,8 @@ Push the newly created tag to the server
 1. Make changes
 2. Commit those changes
 3. Bump version in package.json
-4. `conventional-changelog -p angular -i CHANGELOG.md -s --commit-path . -l express-dev-server`
+4. `conventional-changelog -p angular -i CHANGELOG.md -s --commit-path . -l
+   express-dev-server`
 5. Commit `package.json` and `CHANGELOG.md`
 6. Tag e.g. `g tag express-dev-server@4.1.0`
 7. Push code and tag (`g push origin express-dev-server@4.1.0`)
-
