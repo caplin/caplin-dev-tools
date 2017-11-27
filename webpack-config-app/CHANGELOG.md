@@ -1,3 +1,13 @@
+<a name="6.1.0"></a>
+# [6.1.0](https://github.com/caplin/caplin-dev-tools/compare/webpack-config-app@6.0.2...webpack-config-app@6.1.0) (2017-11-27)
+
+
+### Features
+
+* Add support for yarn link ([c2c826b](https://github.com/caplin/caplin-dev-tools/commit/c2c826b))
+
+
+
 <a name="6.0.2"></a>
 
 ## 6.0.2 (2017-11-24)
