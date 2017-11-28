@@ -1,7 +1,7 @@
 /* eslint global-require: 0, import/no-dynamic-require: 0 */
 
 const { existsSync } = require("fs");
-const { join } = require("path");
+const { join, parse } = require("path");
 
 const { addJSTDFiles } = require("@caplin/karma-jstd");
 const { LOG_ERROR } = require("karma/lib/constants");
@@ -36,6 +36,7 @@ function applyBasePathConfig(basePath, karmaConfig) {
 function createKarmaConf(basePath, testEntry, testsType, argv) {
   const browser = getTestBrowser(argv);
   const watch = argv.w;
+  const htmlReport = argv.h;
   const karmaConfig = Object.assign({}, baseKarmaConfig, {
     basePath,
     browsers: [browser],
@@ -47,6 +48,22 @@ function createKarmaConf(basePath, testEntry, testsType, argv) {
     singleRun: !watch,
     testsType
   });
+
+  if (htmlReport) {
+    const fileName = parse(basePath).base;
+    const rootDir = process.cwd();
+
+    karmaConfig.htmlReporter = {
+      outputFile: `${rootDir}/reports-${testsType}/${testsType}-report-${
+        fileName
+      }.html`,
+      pageTitle: `${testsType} Report`,
+      groupSuites: true,
+      useCompactStyle: true,
+      useLegacyStyle: true
+    };
+    karmaConfig.reporters.push("html");
+  }
 
   applyBasePathConfig(basePath, karmaConfig);
 

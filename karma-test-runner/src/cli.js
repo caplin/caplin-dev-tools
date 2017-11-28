@@ -9,8 +9,9 @@ const { runTests } = require("./test-runner");
 //                    `f` -> package name RegExp to filter out packages.
 //                    `u` -> Run only UTs.
 //                    `w` -> watch.
+//                    `h` -> Enable HTML reporting.
 const minimistOpts = {
-  boolean: ["a", "u", "w"],
+  boolean: ["a", "u", "w", "h"],
   default: { b: "chrome" },
   string: ["b", "f"]
 };
