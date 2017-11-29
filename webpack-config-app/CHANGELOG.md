@@ -1,3 +1,13 @@
+<a name="6.1.1"></a>
+## [6.1.1](https://github.com/caplin/caplin-dev-tools/compare/webpack-config-app@6.1.0...webpack-config-app@6.1.1) (2017-11-29)
+
+
+### Bug Fixes
+
+* Don't Babel compile thirdparty dependencies ([b477d93](https://github.com/caplin/caplin-dev-tools/commit/b477d93))
+
+
+
 <a name="6.1.0"></a>
 # [6.1.0](https://github.com/caplin/caplin-dev-tools/compare/webpack-config-app@6.0.2...webpack-config-app@6.1.0) (2017-11-27)
 

@@ -1,16 +1,18 @@
 const { readdirSync, readFileSync } = require("fs");
 const { join, sep } = require("path");
 
+const dirSep = sep === "\\" ? "\\\\" : sep;
 // Find a `node_modules` that is not followed by any further `node_modules`,
 // and extract the path part following it (should be name of imported package).
-const pckNameRE = new RegExp(`node_modules(?!.*node_modules)${sep}(.*?)${sep}`);
+const pckNameRE = `node_modules(?!.*node_modules)${dirSep}(.*?)${dirSep}`;
+const pckNameRegExp = new RegExp(pckNameRE);
 
 function createIncludeFunction(basePath) {
   const packagesDir = join(basePath, "../../packages-caplin");
   const devPackages = readdirSync(packagesDir);
 
   return function includeFunction(sourcePath) {
-    const nodeModulesMatch = sourcePath.match(pckNameRE);
+    const nodeModulesMatch = sourcePath.match(pckNameRegExp);
 
     if (nodeModulesMatch === null) {
       // If the file isn't in `node_modules` it's either a source file from
