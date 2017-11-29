@@ -1,80 +1,34 @@
-const { existsSync, readdirSync, readFileSync } = require("fs");
+const { readdirSync, readFileSync } = require("fs");
 const { join, sep } = require("path");
 
-function isPackageToBeExcludedFromBabelCompilation(packagesDir, packageDir) {
-  // The new HTML/XML services are written in ES2015.
-  if (packageDir === "ct-services" || packageDir === "br-services") {
-    return false;
-  }
+// Find a `node_modules` that is not followed by any further `node_modules`,
+// and extract the path part following it (should be name of imported package).
+const pckNameRE = new RegExp(`node_modules(?!.*node_modules)${sep}(.*?)${sep}`);
 
-  // BR/CT libs have no ES2015+.
-  if (packageDir.startsWith("br-") || packagesDir.startsWith("ct-")) {
-    return true;
-  }
-
-  // Thirdparty library.
-  if (existsSync(join(packagesDir, `${packageDir}/converted_library.js`))) {
-    return true;
-  }
-
-  return false;
-}
-
-function createBabelLoaderExcludeList(basePath) {
-  const babelLoaderExclude = [/KeyMasterHack.js/];
-  const dirSep = sep === "\\" ? "\\\\" : sep;
-  // Exclude `babel-polyfill`, IE11 issues,
-  // https://github.com/zloirock/core-js/issues/189
-  const packagesToExclude = ["babel-polyfill"];
+function createIncludeFunction(basePath) {
   const packagesDir = join(basePath, "../../packages-caplin");
-  const legacyPackagesDir = join(basePath, "../../packages");
-  const legacyPackagesCaplinDir = join(basePath, "../../../packages-caplin");
-  const rootExclusionDirs = "(node_modules|packages|packages-caplin)";
+  const devPackages = readdirSync(packagesDir);
 
-  // Legacy `packages` path.
-  if (existsSync(legacyPackagesDir)) {
-    for (const packageDir of readdirSync(legacyPackagesDir)) {
-      if (
-        isPackageToBeExcludedFromBabelCompilation(legacyPackagesDir, packageDir)
-      ) {
-        packagesToExclude.push(packageDir);
-      }
+  return function includeFunction(sourcePath) {
+    const nodeModulesMatch = sourcePath.match(pckNameRE);
+
+    if (nodeModulesMatch === null) {
+      // If the file isn't in `node_modules` it's either a source file from
+      // `basePath` (e.g. app's `src` folder) or a file inside a symlinked
+      // development package (using Yarn's `link:` feature`).
+      return true;
     }
-  }
 
-  // Legacy `packages-caplin` path.
-  if (existsSync(legacyPackagesCaplinDir)) {
-    for (const packageDir of readdirSync(legacyPackagesCaplinDir)) {
-      if (
-        isPackageToBeExcludedFromBabelCompilation(
-          legacyPackagesCaplinDir,
-          packageDir
-        )
-      ) {
-        packagesToExclude.push(packageDir);
-      }
+    const packageName = nodeModulesMatch[1];
+    const isDevPackage = devPackages.includes(packageName);
+
+    if (isDevPackage) {
+      // Don't compile thirdparty packages.
+      return sourcePath.endsWith("converted_library.js") === false;
     }
-  }
 
-  if (existsSync(packagesDir)) {
-    for (const packageDir of readdirSync(packagesDir)) {
-      if (isPackageToBeExcludedFromBabelCompilation(packagesDir, packageDir)) {
-        packagesToExclude.push(packageDir);
-      }
-    }
-  }
-
-  const packagesToExcludeGroup = `(${packagesToExclude.join("|")})`;
-  const packagesToExcludeRegExpString = [
-    rootExclusionDirs,
-    dirSep,
-    packagesToExcludeGroup,
-    dirSep
-  ].join("");
-
-  babelLoaderExclude.push(new RegExp(packagesToExcludeRegExpString));
-
-  return babelLoaderExclude;
+    return false;
+  };
 }
 
 function createBabelLoaderOptions(basePath) {
@@ -109,7 +63,7 @@ module.exports = function configureBabelLoader(webpackConfig, basePath) {
   const babelModulesRule = {
     test: /\.jsx?$/,
     loader: "babel-loader",
-    exclude: createBabelLoaderExcludeList(basePath),
+    include: createIncludeFunction(basePath),
     options: createBabelLoaderOptions(basePath)
   };
 
