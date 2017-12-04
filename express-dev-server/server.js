@@ -11,17 +11,36 @@ const getPort = require("./get-port");
 
 const { hot } = parseArgs(process.argv.slice(2));
 
+const ipCheckInterval = 300000;
+let checkIP = true;
+let currentIP = address.ip();
+
 function printStatus(appRoot, port) {
   const appName = path.parse(appRoot).name;
   const hmrStatus = hot ? chalk.green("enabled") : chalk.red("disabled");
   const ipAddress = address.ip();
+  const localConnection = chalk.green(`http://localhost:${port}/`);
   const remoteAddressed = chalk.green(`http://${ipAddress}:${port}/`);
 
   console.log(chalk.yellow(`Compiled successfully!\n`));
   console.log(`You can view ${chalk.green(appName)} in the browser.\n`);
-  console.log(`Local Connection: ${chalk.green(`http://localhost:${port}/`)}`);
+  console.log(`Local Connection: ${localConnection}`);
   console.log(`Remote Connection: ${remoteAddressed}\n`);
   console.log(`Hot module replacement is ${hmrStatus}\n`);
+}
+
+function checkIP() {
+  if (checkIP) {
+    if (address.ip() !== currentIP) {
+      checkIP = false;
+
+      getPort().then(port => {
+        currentIP = address.ip();
+        printStatus(process.cwd(), port);
+        checkIP = true;
+      });
+    }
+  }
 }
 
 module.exports = ({ appCreated = () => {}, webpackConfig }) => {
@@ -49,6 +68,7 @@ module.exports = ({ appCreated = () => {}, webpackConfig }) => {
         console.error(err);
       } else {
         printStatus(appRoot, port);
+        setInterval(checkIP, ipCheckInterval);
       }
     });
 
