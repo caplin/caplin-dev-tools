@@ -7,7 +7,7 @@ const dirSep = sep === "\\" ? "\\\\" : sep;
 const pckNameRE = `node_modules(?!.*node_modules)${dirSep}(.*?)${dirSep}`;
 const pckNameRegExp = new RegExp(pckNameRE);
 
-function createIncludeFunction(basePath) {
+function findAllPackages(basePath) {
   const caplinPackagesDir = join(basePath, "../../packages-caplin");
   const clientPackagesDir = join(basePath, "../../packages");
   const allPackages = [];
@@ -17,8 +17,20 @@ function createIncludeFunction(basePath) {
   }
 
   if (existsSync(caplinPackagesDir)) {
-    allPackages.push(...readdirSync(caplinPackagesDir));
+    const caplinPackages = readdirSync(caplinPackagesDir).filter(pckName => {
+      const convLib = join(caplinPackagesDir, pckName, "converted_library.js");
+
+      return existsSync(convLib) === false;
+    });
+
+    allPackages.push(...caplinPackages);
   }
+
+  return allPackages;
+}
+
+function createIncludeFunction(basePath) {
+  const allPackages = findAllPackages(basePath);
 
   return function includeFunction(sourcePath) {
     const nodeModulesMatch = sourcePath.match(pckNameRegExp);
@@ -31,14 +43,8 @@ function createIncludeFunction(basePath) {
     }
 
     const packageName = nodeModulesMatch[1];
-    const isDevPackage = allPackages.includes(packageName);
 
-    if (isDevPackage) {
-      // Don't compile thirdparty packages.
-      return sourcePath.endsWith("converted_library.js") === false;
-    }
-
-    return false;
+    return allPackages.includes(packageName);
   };
 }
 
