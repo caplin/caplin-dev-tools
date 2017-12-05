@@ -1,3 +1,13 @@
+<a name="6.1.2"></a>
+## [6.1.2](https://github.com/caplin/caplin-dev-tools/compare/webpack-config-app@6.1.0...webpack-config-app@6.1.2) (2017-12-05)
+
+
+### Bug Fixes
+
+* **babel:** Verify existance of packages dir ([e0d0c2e](https://github.com/caplin/caplin-dev-tools/commit/e0d0c2e))
+
+
+
 <a name="6.1.1"></a>
 ## [6.1.1](https://github.com/caplin/caplin-dev-tools/compare/webpack-config-app@6.1.0...webpack-config-app@6.1.1) (2017-11-29)
 
