@@ -1,3 +1,13 @@
+<a name="6.1.4"></a>
+## [6.1.4](https://github.com/caplin/caplin-dev-tools/compare/webpack-config-app@6.1.3...webpack-config-app@6.1.4) (2017-12-05)
+
+
+### Bug Fixes
+
+* **babel:** Don't compile thirdparty packages ([fee4f70](https://github.com/caplin/caplin-dev-tools/commit/fee4f70))
+
+
+
 <a name="6.1.3"></a>
 ## [6.1.3](https://github.com/caplin/caplin-dev-tools/compare/webpack-config-app@6.1.2...webpack-config-app@6.1.3) (2017-12-05)
 
