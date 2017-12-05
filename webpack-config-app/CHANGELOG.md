@@ -1,3 +1,13 @@
+<a name="6.1.3"></a>
+## [6.1.3](https://github.com/caplin/caplin-dev-tools/compare/webpack-config-app@6.1.2...webpack-config-app@6.1.3) (2017-12-05)
+
+
+### Bug Fixes
+
+* **babel:** Add packages to list of packages to compile ([f2cad92](https://github.com/caplin/caplin-dev-tools/commit/f2cad92))
+
+
+
 <a name="6.1.2"></a>
 ## [6.1.2](https://github.com/caplin/caplin-dev-tools/compare/webpack-config-app@6.1.0...webpack-config-app@6.1.2) (2017-12-05)
 
