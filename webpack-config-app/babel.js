@@ -13,11 +13,11 @@ function createIncludeFunction(basePath) {
   const allPackages = [];
 
   if (existsSync(clientPackagesDir)) {
-    allPackages.push(readdirSync(clientPackagesDir));
+    allPackages.push(...readdirSync(clientPackagesDir));
   }
 
   if (existsSync(caplinPackagesDir)) {
-    allPackages.push(readdirSync(caplinPackagesDir));
+    allPackages.push(...readdirSync(caplinPackagesDir));
   }
 
   return function includeFunction(sourcePath) {
