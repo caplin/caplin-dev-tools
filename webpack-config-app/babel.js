@@ -1,4 +1,4 @@
-const { readdirSync, readFileSync } = require("fs");
+const { existsSync, readdirSync, readFileSync } = require("fs");
 const { join, sep } = require("path");
 
 const dirSep = sep === "\\" ? "\\\\" : sep;
@@ -8,8 +8,17 @@ const pckNameRE = `node_modules(?!.*node_modules)${dirSep}(.*?)${dirSep}`;
 const pckNameRegExp = new RegExp(pckNameRE);
 
 function createIncludeFunction(basePath) {
-  const packagesDir = join(basePath, "../../packages-caplin");
-  const devPackages = readdirSync(packagesDir);
+  const caplinPackagesDir = join(basePath, "../../packages-caplin");
+  const clientPackagesDir = join(basePath, "../../packages");
+  const allPackages = [];
+
+  if (existsSync(clientPackagesDir)) {
+    allPackages.push(readdirSync(clientPackagesDir));
+  }
+
+  if (existsSync(caplinPackagesDir)) {
+    allPackages.push(readdirSync(caplinPackagesDir));
+  }
 
   return function includeFunction(sourcePath) {
     const nodeModulesMatch = sourcePath.match(pckNameRegExp);
@@ -22,7 +31,7 @@ function createIncludeFunction(basePath) {
     }
 
     const packageName = nodeModulesMatch[1];
-    const isDevPackage = devPackages.includes(packageName);
+    const isDevPackage = allPackages.includes(packageName);
 
     if (isDevPackage) {
       // Don't compile thirdparty packages.
