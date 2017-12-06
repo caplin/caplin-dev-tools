@@ -1,4 +1,3 @@
-const dotenv = require("dotenv");
 const express = require("express");
 const address = require("address");
 const parseArgs = require("minimist");
@@ -31,9 +30,6 @@ module.exports = ({ appCreated = () => {}, webpackConfig }) => {
   // Allow user to register handlers before default ones to allow intercepting
   // requests, e.g. reroute a request for a static file such as `.jsp`.
   appCreated(app);
-  // Load application environment variables from `.env` file, to inject into
-  // JNDI tokens.
-  dotenv.config();
 
   // Serve static files (HTML, XML, CSS), contained in application directory.
   app.use(express.static(appRoot));

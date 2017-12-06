@@ -1,24 +1,11 @@
-/* eslint-disable no-param-reassign */
 const { join } = require("path");
 
 const session = require("express-session");
 
-function jndiTokenReplacer(match, jndiToken) {
-  if (process.env[jndiToken]) {
-    return process.env[jndiToken];
-  }
-
-  console.warn(`A value for JNDI token ${jndiToken} could not be found.`);
-
-  return match;
-}
+const injectJNDITokens = require("./jndi");
 
 function indexRequestHandler(indexPage, res) {
-  const indexPageHTML = indexPage();
-  const indexPageHTMLWithInjectedJNDI = indexPageHTML.replace(
-    /@([A-Z|.]+)@/g,
-    jndiTokenReplacer
-  );
+  const indexPageHTMLWithInjectedJNDI = injectJNDITokens(indexPage());
 
   res.send(indexPageHTMLWithInjectedJNDI);
 }
