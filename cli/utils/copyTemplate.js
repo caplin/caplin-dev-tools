@@ -23,20 +23,25 @@ module.exports = function(template, target, vars) {
         console.log("\n");
 
         createdFiles.forEach(filePath => {
-          if (filePath.indexOf("react-component") !== -1) {
-            const newFileName = filePath.replace(
-              /react-component/g,
-              `${vars.componentName}`
+          let fileName = path.basename(filePath);
+          let dirName = path.dirname(filePath);
+
+          if (/react-component/g.test(fileName)) {
+            const newFilePath = path.resolve(
+              dirName,
+              fileName.replace(/react-component/g, vars.componentName)
             );
-            renameFile(filePath, newFileName);
-            console.log(chalk.green("\tCreated ") + newFileName);
-          } else if (filePath.indexOf("package-name") !== -1) {
-            const newFileName = filePath.replace(
-              /package-name/g,
-              `${vars.packageName}`
+
+            renameFile(filePath, newFilePath);
+            console.log(chalk.green("\tCreated ") + newFilePath);
+          } else if (/package-name/g.test(fileName)) {
+            const newFilePath = path.resolve(
+              dirName,
+              fileName.replace(/package-name/g, vars.packageName)
             );
-            renameFile(filePath, newFileName);
-            console.log(chalk.green("\tCreated ") + newFileName);
+
+            renameFile(filePath, newFilePath);
+            console.log(chalk.green("\tCreated ") + newFilePath);
           } else {
             console.log(chalk.green("\tCreated ") + filePath);
           }
