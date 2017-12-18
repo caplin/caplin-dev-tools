@@ -1,3 +1,13 @@
+<a name="4.3.0"></a>
+# [4.3.0](https://github.com/caplin/caplin-dev-tools/compare/express-dev-server@4.2.0...express-dev-server@4.3.0) (2017-12-06)
+
+
+### Features
+
+* **JNDI:** Create a standalone JNDI replacement module ([8923dc9](https://github.com/caplin/caplin-dev-tools/commit/8923dc9))
+
+
+
 <a name="4.2.0"></a>
 # [4.2.0](https://github.com/caplin/caplin-dev-tools/compare/express-dev-server@4.1.0...express-dev-server@4.2.0) (2017-11-21)
 
