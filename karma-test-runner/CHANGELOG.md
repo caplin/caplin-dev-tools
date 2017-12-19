@@ -1,3 +1,13 @@
+<a name="5.2.1"></a>
+## [5.2.1](https://github.com/caplin/caplin-dev-tools/compare/karma-test-runner@5.2.0...karma-test-runner@5.2.1) (2017-12-19)
+
+
+### Bug Fixes
+
+* Add missing Webpack dependency to package.json ([17cdbdd](https://github.com/caplin/caplin-dev-tools/commit/17cdbdd))
+
+
+
 <a name="5.2.0"></a>
 # [5.2.0](https://github.com/caplin/caplin-dev-tools/compare/karma-test-runner@5.1.1...karma-test-runner@5.2.0) (2017-11-24)
 
