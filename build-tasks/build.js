@@ -51,6 +51,7 @@ function createWAR(indexPage, version, webInfLocation, buildCallback, warName) {
     archive.directory(distDir, "");
     archive.pipe(warWriteStream);
     archive.finalize();
+    console.log("Finished creating", join(warDir, `${warName}.war`));
   });
 }
 
@@ -79,10 +80,14 @@ function webpackBuildCallback(
 
 // When we've removed the previous `dist` directory build the application.
 function rimrafCallback(config) {
-  return () =>
-    webpack(config.webpackConfig, (error, stats) =>
-      webpackBuildCallback(error, stats, config)
-    );
+  return () => {
+    console.log("Running webpack compiler...");
+    config.webpackConfig.plugins.push(new webpack.ProgressPlugin());
+
+    webpack(config.webpackConfig, (error, stats) => {
+      webpackBuildCallback(error, stats, config);
+    });
+  };
 }
 
 exports.buildDir = buildDir;
