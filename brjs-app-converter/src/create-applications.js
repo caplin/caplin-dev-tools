@@ -52,10 +52,13 @@ function setUpApplicationFiles(
 
   const { javaServerDir, nodeServerDir } = serverDirs(convertedAppDir);
 
-  copySync(
-    conversionMetadata.privateKeyFileLocation,
-    join(nodeServerDir, "privatekey.pem")
-  );
+  if (existsSync(conversionMetadata.privateKeyFileLocation)) {
+    copySync(
+      conversionMetadata.privateKeyFileLocation,
+      join(nodeServerDir, "privatekey.pem")
+    );
+  }
+
   copySync(
     join(conversionMetadata.brjsApplicationDir, "WEB-INF"),
     join(javaServerDir, "WEB-INF")
