@@ -185,3 +185,10 @@ To extract the controls from a `renderDefinitions.xml` file use this RegExp
 `[^]*?<control className="(.*?)"`
 
 `import '$1';\nControlFactory.CONTROL_CLASSES['$1'] = $1;\n`
+
+Static files are now served from the `static` directory as oppoesd to the
+`unbundled-resources` directory. Any requests for files in `unbundled-resources`
+should be changed to `static`. Use the app meta service to create the correct
+URL path:
+
+`require("service!br.app-meta-service").getVersionedBundlePath("webcentric/")`
