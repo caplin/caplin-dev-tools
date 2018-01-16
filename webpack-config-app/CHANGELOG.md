@@ -1,3 +1,13 @@
+<a name="6.1.5"></a>
+## [6.1.5](https://github.com/caplin/caplin-dev-tools/compare/webpack-config-app@6.1.4...webpack-config-app@6.1.5) (2018-01-16)
+
+
+### Bug Fixes
+
+* **babel:** Compile caplin packages in mobile/REX ([d850d54](https://github.com/caplin/caplin-dev-tools/commit/d850d54))
+
+
+
 <a name="6.1.4"></a>
 ## [6.1.4](https://github.com/caplin/caplin-dev-tools/compare/webpack-config-app@6.1.3...webpack-config-app@6.1.4) (2017-12-05)
 
