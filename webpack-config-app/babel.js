@@ -7,8 +7,18 @@ const dirSep = sep === "\\" ? "\\\\" : sep;
 const pckNameRE = `node_modules(?!.*node_modules)${dirSep}(.*?)${dirSep}`;
 const pckNameRegExp = new RegExp(pckNameRE);
 
+function findCaplinPackagesDir(basePath) {
+  // Once mobile and REX are moved into the main `apps` folder this can be
+  // deleted.
+  if (existsSync(join(basePath, "../../packages-caplin"))) {
+    return join(basePath, "../../packages-caplin");
+  }
+
+  return join(basePath, "../../../packages-caplin");
+}
+
 function findAllPackages(basePath) {
-  const caplinPackagesDir = join(basePath, "../../packages-caplin");
+  const caplinPackagesDir = findCaplinPackagesDir(basePath);
   const clientPackagesDir = join(basePath, "../../packages");
   const allPackages = [];
 
