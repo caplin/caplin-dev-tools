@@ -14,7 +14,8 @@ module.exports = function configureBuildDependentConfig(
   if (isBuild) {
     const definitions = {
       "process.env": {
-        VERSION: JSON.stringify(version)
+        VERSION: JSON.stringify(version),
+        NODE_ENV: JSON.stringify("production")
       }
     };
 
