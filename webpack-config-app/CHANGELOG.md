@@ -1,3 +1,8 @@
+<a name="6.2.0"></a>
+# [6.2.0](https://github.com/caplin/caplin-dev-tools/compare/webpack-config-app@6.1.5...webpack-config-app@6.2.0) (2018-01-24)
+
+* **build** Set `process.env.NODE_ENV` to `production` when building.
+
 <a name="6.1.5"></a>
 ## [6.1.5](https://github.com/caplin/caplin-dev-tools/compare/webpack-config-app@6.1.4...webpack-config-app@6.1.5) (2018-01-16)
 
