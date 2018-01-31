@@ -1,6 +1,6 @@
 {
   "name": "caplin-cli",
-  "version": "1.9.1",
+  "version": "1.10.0",
   "description": "caplin-cli app scaffolding",
   "main": "index.js",
   "bin": {
