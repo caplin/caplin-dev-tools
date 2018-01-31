@@ -91,9 +91,9 @@ module.exports = {
         type: "list",
         name: "component-type",
         message: "What type of component do you want to create:",
-        choices: ["blank", "react"],
+        choices: ["blank", "react", "highstock"],
         validate(type) {
-          if (type !== "blank" && type !== "react") {
+          if (type !== "blank" && type !== "react" && type !== "highstock") {
             return invalidComponentError;
           }
 
