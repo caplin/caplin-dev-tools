@@ -1,6 +1,6 @@
 const { join } = require("path");
 
-const { copySync, readdirSync, removeSync } = require("fs-extra");
+const { copySync, existsSync, readdirSync, removeSync } = require("fs-extra");
 
 const { moveBladeCodeToPackages } = require("./convert-blade");
 const { createNamespaceDirectoriesIfMissing } = require("./converter-utils");
@@ -12,21 +12,26 @@ function moveAndConvertBladesCode(
   conversionMetadata
 ) {
   const bladesetBladesDir = join(bladesetDir, "blades");
-  const moveBladesPromises = readdirSync(bladesetBladesDir)
-    // `blades` directories can contain `.js-style` files so filter them out.
-    .filter(possibleBladeName => possibleBladeName.startsWith(".") === false)
-    .map(bladeName => {
-      conversionMetadata.packagesThatShouldBeLibs.push(bladeName);
 
-      return moveBladeCodeToPackages(
-        bladeName,
-        bladesetName,
-        bladesetBladesDir,
-        conversionMetadata
-      );
-    });
+  if (existsSync(bladesetBladesDir)) {
+    const moveBladesPromises = readdirSync(bladesetBladesDir)
+      // `blades` directories can contain `.js-style` files so filter them out.
+      .filter(possibleBladeName => possibleBladeName.startsWith(".") === false)
+      .map(bladeName => {
+        conversionMetadata.packagesThatShouldBeLibs.push(bladeName);
 
-  return Promise.all(moveBladesPromises);
+        return moveBladeCodeToPackages(
+          bladeName,
+          bladesetName,
+          bladesetBladesDir,
+          conversionMetadata
+        );
+      });
+
+    return Promise.all(moveBladesPromises);
+  }
+
+  return Promise.resolve();
 }
 
 module.exports.moveAndConvertBladesCode = moveAndConvertBladesCode;
