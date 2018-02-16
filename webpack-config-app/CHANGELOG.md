@@ -1,3 +1,13 @@
+<a name="6.3.0"></a>
+# [6.3.0](https://github.com/caplin/caplin-dev-tools/compare/webpack-config-app@6.2.0...webpack-config-app@6.3.0) (2018-02-16)
+
+
+### Features
+
+* **file-loader:** Added support for loading ttf files ([fc108f5](https://github.com/caplin/caplin-dev-tools/commit/fc108f5))
+
+
+
 <a name="6.2.0"></a>
 # [6.2.0](https://github.com/caplin/caplin-dev-tools/compare/webpack-config-app@6.1.5...webpack-config-app@6.2.0) (2018-01-24)
 
