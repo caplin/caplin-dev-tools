@@ -1,5 +1,5 @@
 {
-  "name": "@caplin/brjs-app-converter",
+  "name": "brjs-app-converter",
   "version": "0.1.2",
   "description": "Tool to convert BRJS apps",
   "main": "index.js",
@@ -11,9 +11,7 @@
     "type": "git",
     "url": "git+https://github.com/caplin/brjs-app-converter.git"
   },
-  "keywords": [
-    "BRJS"
-  ],
+  "keywords": ["BRJS"],
   "author": "",
   "license": "MIT",
   "bugs": {
