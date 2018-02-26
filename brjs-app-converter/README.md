@@ -14,11 +14,11 @@ application directory to new locations within the application directory.
    application files.
 2. It then creates a top level directory (`packages-caplin`) for the application
    packages.
-3. It copies all the application's libs and SDK libs into the packages
+3. It copies all the application's libs and CT SDK libs into the packages
    directory.
    * While copying them it generates a stub `package.json` for each
      copied directory.
-4. It then creates another top level directory called `apps`.
+4. It creates another top level directory called `apps`.
 5. Within this directory it creates a directory for the restructured
    application.
    * For an app named `mobile` it creates `apps/mobile` and populates it with
@@ -26,9 +26,12 @@ application directory to new locations within the application directory.
    * It also creates a `src` directory for the application `apps/mobile/src`
      that contains the blades/bladesets and aspects of the application.
 
-This leaves the project with three top level directories, `apps`,
-`packages-caplin`, and `brjs-app-backup` (which can be deleted once the user is
-satisfied they don't need the old files).
+This leaves the project with three top level directories:
+
+* `apps`
+* `packages-caplin` (Caplin provided packages, CT SDK)
+* `brjs-app-backup` (which can be deleted once the user is satisfied they don't
+  need the old files).
 
 These screenshots contrast before and after (after shows a monorepo with several
 applications, the conversion tool only converts one app at a time):
@@ -36,35 +39,43 @@ applications, the conversion tool only converts one app at a time):
 ![alt text](https://raw.githubusercontent.com/caplin/caplin-dev-tools/master/brjs-app-converter/preparation/current.png "Current Structure")
 ![alt text](https://raw.githubusercontent.com/caplin/caplin-dev-tools/master/brjs-app-converter/preparation/post.png "Post Conversion Structure")
 
+## Preparation
+
+The conversion tool requires a `conversion-data` directory next to the BRJS
+project directory. Inside the `conversion-data` directory you must create a
+directory for each application you are converting. If your application directory
+(the folder inside your BRJS `apps` folder) is called `fxtrader` you create a
+directory called `fxtrader`, if it's named `mobile` you create a `mobile`
+directory.
+
+The conversion tool will copy files any files in those directories during the
+conversion process.
+Any `conversion-data` application files have to be placed inside a directory
+with the same name as the application e.g. for an app called `mobile` place the
+files you wish copied into the converted application in `conversion-data\mobile`
+. Examples of the files that you might want copied are the `index.js` module,
+the application `package.json` and the `config` and `server` directories.
+
+The screenshot below shows an example `conversion-data` directory.
+There is no need to copy the application source into `conversion-data`.
+
+![alt text](https://raw.githubusercontent.com/caplin/caplin-dev-tools/master/brjs-app-converter/preparation/conversion-data.png "Conversion data")
+
+In the `conversion-data` directory you can, optionally, place an `sdk` directory
+and if that exists it will be used instead of the application's own `sdk`
+directory.
+
 ## How
 
-Firstly the tool needs to be installed via npm, this can be done with
+Install the tool
 
 `npm i -g caplin/caplin-dev-tools`
 
 Which asks npm to install (`i`) the repo globally (`-g`), this means the command
 `brjs-app-converter` is now made available on the command line.
 
-The conversion tool uses any user provided application configuration files
-(`aliases.js`, `metadata.js`, `html-templates.js`) that are placed in a
-`conversion-data` directory next to the BRJS project directory.
-
-The screenshot below shows the files/folders that can be inside the
-`conversion-data` directory, they aren't all required to test a conversion.
-There is no need to copy the application source into `conversion-data`.
-
-![alt text](https://raw.githubusercontent.com/caplin/caplin-dev-tools/master/brjs-app-converter/preparation/conversion-data.png "Conversion data")
-
-In the `conversion-data` directory you can place an `sdk` directory and if that
-exists it will be used instead of the application's own `sdk` directory. The
-application config files have to be placed inside a directory with the same name
-as the application e.g. for an app called `mobile` place the files you wish
-copied into the converted application in `conversion-data\mobile`. The files
-that can be copied are the `index.js` module, the application `package.json` and
-the `config` and `server` directories.
-
-Then you must navigate to the BRJS project root directory (e.g. C/dev/someApp,
-not C/dev/someApp/apps/someApp) and run the tool.
+Then you must navigate to the BRJS project root directory (e.g. C:/dev/someApp,
+not C:/dev/someApp/apps/mobile) and run the tool.
 
 ```bash
 brjs-app-converter --app mobile
@@ -86,7 +97,7 @@ npm i
 Launch the application's Express server,
 
 ```bash
-npm run serve
+npm start
 ```
 
 ## Notes
@@ -123,14 +134,18 @@ conversion without completing these steps but it's likely the application will
 not load.
 
 * The codebase should be converted to CJS, this can be done using https://github.com/caplin/gc-cli
-* Third party libraries that don't export a value should have their `exports`
-  property in their `thirdparty-lib.manifest` file set to `null`; if it's set to
-  `"{}"` errors will be thrown during bundling.
 * Capture the application's aliases to an aliases file. The aliases can be
   captured by searching for the `alias!$data` network request or the `alias!$data`
   module in the BRJS `bundle.js`. The aliases bundle can be converted by running
   the `jscodeshift` transform script called `aliases-transform.js` which is stored
   inside the `preparation` directory using the `astexplorer.net` website.
+
+These two steps maybe redundant now. The first should be handled by the
+conversion tool and the second has been changed in the latest CT packages.
+
+* Third party libraries that don't export a value should have their `exports`
+  property in their `thirdparty-lib.manifest` file set to `null`; if it's set to
+  `"{}"` errors will be thrown during bundling.
 * Capture the applications's metadata. This can be done by executing
   `require("app-meta!$data")` when the application is running in BRJS. A
   `metadata.js` module should be created in the application's `conversion-data`
