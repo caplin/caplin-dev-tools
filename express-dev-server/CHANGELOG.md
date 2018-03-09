@@ -1,3 +1,13 @@
+<a name="4.3.1"></a>
+## [4.3.1](https://github.com/caplin/caplin-dev-tools/compare/express-dev-server@4.3.0...express-dev-server@4.3.1) (2018-03-09)
+
+
+### Bug Fixes
+
+* **jndi:** Support empty string environment values ([5105e57](https://github.com/caplin/caplin-dev-tools/commit/5105e57))
+
+
+
 <a name="4.3.0"></a>
 # [4.3.0](https://github.com/caplin/caplin-dev-tools/compare/express-dev-server@4.2.0...express-dev-server@4.3.0) (2017-12-06)
 
