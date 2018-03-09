@@ -38,11 +38,11 @@ Push the newly created tag to the server
 
 ### Updating CHANGELOG.md
 
-1. Make changes
-2. Commit those changes
-3. Bump version in package.json
-4. `conventional-changelog -p angular -i CHANGELOG.md -s --commit-path . -l
-   express-dev-server`
-5. Commit `package.json` and `CHANGELOG.md`
-6. Tag e.g. `g tag express-dev-server@4.1.0`
-7. Push code and tag (`g push origin express-dev-server@4.1.0`)
+1.  Make changes
+2.  Commit those changes
+3.  Bump version in package.json
+4.  `conventional-changelog -p angular -i CHANGELOG.md -s --commit-path . -l express-dev-server`
+5.  Commit `package.json` and `CHANGELOG.md`
+6.  Tag e.g. `g tag express-dev-server@4.1.0`
+7.  Push code and tag (`g push origin express-dev-server@4.1.0`)
+8.  Publish to npm
