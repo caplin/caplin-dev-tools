@@ -5,7 +5,7 @@ const dotenv = require("dotenv");
 dotenv.config();
 
 function jndiTokenReplacer(match, jndiToken) {
-  if (process.env[jndiToken]) {
+  if (process.env.hasOwnProperty(jndiToken)) {
     return process.env[jndiToken];
   }
 
