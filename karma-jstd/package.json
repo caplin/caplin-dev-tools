@@ -7,6 +7,6 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "karma-jstd-adapter": "github:briandipalma/karma-jstd-adapter"
+    "karma-jstd-adapter": "@caplin/karma-jstd-adapter"
   }
 }
