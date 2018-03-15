@@ -1,3 +1,13 @@
+<a name="1.1.2"></a>
+## [1.1.2](https://github.com/caplin/caplin-dev-tools/compare/karma-jstd@1.1.1...karma-jstd@1.1.2) (2018-03-15)
+
+
+### Bug Fixes
+
+* Use correct dependency and resolve path ([1ab476a](https://github.com/caplin/caplin-dev-tools/commit/1ab476a))
+
+
+
 <a name="1.1.1"></a>
 ## [1.1.1](https://github.com/caplin/caplin-dev-tools/compare/karma-jstd@1.1.0...karma-jstd@1.1.1) (2018-03-15)
 
