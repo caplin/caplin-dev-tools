@@ -9,22 +9,22 @@ Restructures a BRJS application to a CT5 compatible structure.
 Given a BRJS application directory this tool will move the contents of the
 application directory to new locations within the application directory.
 
-1. It's first step is to back up the entire folder (except for hidden files)
-   into a `brjs-app-backup` directory. This allows a user to access the old
-   application files.
-2. It then creates a top level directory (`packages-caplin`) for the application
-   packages.
-3. It copies all the application's libs and CT SDK libs into the packages
-   directory.
-   * While copying them it generates a stub `package.json` for each
-     copied directory.
-4. It creates another top level directory called `apps`.
-5. Within this directory it creates a directory for the restructured
-   application.
-   * For an app named `mobile` it creates `apps/mobile` and populates it with
-     a few application files that the user provides.
-   * It also creates a `src` directory for the application `apps/mobile/src`
-     that contains the blades/bladesets and aspects of the application.
+1.  It's first step is to back up the entire folder (except for hidden files)
+    into a `brjs-app-backup` directory. This allows a user to access the old
+    application files.
+2.  It then creates a top level directory (`packages-caplin`) for the application
+    packages.
+3.  It copies all the application's libs and CT SDK libs into the packages
+    directory.
+    * While copying them it generates a stub `package.json` for each
+      copied directory.
+4.  It creates another top level directory called `apps`.
+5.  Within this directory it creates a directory for the restructured
+    application.
+    * For an app named `mobile` it creates `apps/mobile` and populates it with
+      a few application files that the user provides.
+    * It also creates a `src` directory for the application `apps/mobile/src`
+      that contains the blades/bladesets and aspects of the application.
 
 This leaves the project with three top level directories:
 
@@ -186,7 +186,7 @@ you can convert the comments to imports with this replacement pattern.
 Then change the file paths to the new structure by removing incorrect prefixes
 e.g. `libs/` and replace `/resources/` with `/_resources/` in file paths. Change
 `.css` to `.less` if required. `default-aspect/` to `./$TRADER-default-aspect/`,
-`'.*blades/` with `'./`.
+`'.*blades/` with `'./`, `'(.*)-bladeset/` with `./$TRADER-$1/`.
 
 To extract the transforms/handlers from a `renderDefinitions.xml` file use this
 RegExp
