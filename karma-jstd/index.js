@@ -1,11 +1,12 @@
+const jstdAdapter = require.resolve(
+  "@caplin/karma-jstd-adapter",
+  "jstd-adapter.js"
+);
+
 module.exports = function configurePackageTestDatatype(testDatatype) {
   const currentKarmaFiles = testDatatype.files || [];
-  const jstdAdapterLocation = require.resolve(
-    "karma-jstd-adapter",
-    "jstd-adapter.js"
-  );
   const jstdTestDatatype = {
-    files: [...currentKarmaFiles, jstdAdapterLocation]
+    files: [...currentKarmaFiles, jstdAdapter]
   };
 
   // Return a clone of the TestDatatype instead of modifying it.
@@ -13,7 +14,5 @@ module.exports = function configurePackageTestDatatype(testDatatype) {
 };
 
 module.exports.addJSTDFiles = function addJSTDFiles(karmaConfig) {
-  const jstdAdapter = require.resolve("karma-jstd-adapter", "jstd-adapter.js");
-
   karmaConfig.files.unshift(jstdAdapter);
 };
