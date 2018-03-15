@@ -125,6 +125,30 @@ require changing the code to use `var MyClass = require('CLASS_NAME')` instead
 and passing the class in as a trailing parameter to `getProxy` and `subscribe`,
 the gc-cli tool [handles this automatically](https://github.com/caplin/gc-cli/commit/15c465fb9cac8a669e495c7315130dad06c0fe86).
 
+If you see `\r \r` in your grids, its most likely because XMLResourceService can
+no longer handle CDATA with special characters used in rendererDefintions. While
+these are not being stripped, it's necessary to manually remove these special
+characters.
+
+```
+Error: Error: Message from ComponentFactory: The Component registered for the type 'br.presenter-component' threw an exception
+ Related XML: <br.presenter-component templateId="caplinps.fx.confirmation.trade-confirmation" presentationModel="caplinps.fx.confirmation.TradeConfirmation"></br.presenter-component>
+ Message from Exception: getClass called requesting caplinps.fx.confirmation.TradeConfirmation please register the class with the appropriate factory. Dynamic requires are no longer supported in CT5.
+```
+
+This is most likely a missing aliases-test file in the package where the tests
+exist. As the message indicates, dynamic requires are no longer supported, you
+need to register with the factory, e.g:
+
+```javascript
+var PresenterComponentFactory = require("ct-presenter/PresenterComponentFactory");
+var TradeConfirmation = require("../TradeConfirmation");
+
+PresenterComponentFactory.PRESENTATION_MODEL_CLASSES[
+  "caplinps.fx.confirmation.TradeConfirmation"
+] = TradeConfirmation;
+```
+
 ## Preparation
 
 These operations should be performed on the application before conversion. It's
