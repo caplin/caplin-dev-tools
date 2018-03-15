@@ -1,0 +1,21 @@
+{
+  "name": "@caplin/karma-jstd-adapter",
+  "version": "1.0.0",
+  "description": "An adapter for karma, so you can run your js-test-driver tests.",
+  "main": "jstd-adapter.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "http://github.com/tylerc/karma-jstd-adapter"
+  },
+  "keywords": [
+    "jstestdriver",
+    "js-test-driver",
+    "karma",
+    "adapter"
+  ],
+  "author": "Tyler Church",
+  "license": "MIT"
+}
