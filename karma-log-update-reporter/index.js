@@ -39,6 +39,10 @@ function logMessage({ testsType, basePath, browser }, message) {
   return logUpdate(`${basePath} ${testsType} in ${browser}: ${message}`);
 }
 
+function getPackageName(path) {
+  return path.substring(path.lastIndexOf("/") + 1)
+}
+
 function formatErrorText(errorText) {
   if (errorText === null) {
     return `\n  Error text is null.`
@@ -86,6 +90,7 @@ function LogUpdateReporter(karmaConfig) {
     error: false
   };
   this.basePath = formatBasePath(karmaConfig.basePath);
+  this.packageName = getPackageName(this.basePath);
   this.testsType = karmaConfig.testsType;
 }
 
@@ -122,6 +127,12 @@ LogUpdateReporter.prototype.onSpecComplete = function(browser, result) {
 };
 
 LogUpdateReporter.prototype.onRunComplete = function(browsers, results) {
+  if (results.disconnected) {
+    results.error = true;
+    results.packageName = this.packageName;
+    throw new Error("Browser Disconnected!");
+  }
+
   this.endDate = new Date();
   logMessage(this, testsStatus(this, results));
 

@@ -41,6 +41,7 @@ function showSummary(results, watching) {
   let failed = 0;
   let skipped = 0;
   let success = 0;
+  let disconnected = [];
 
   for (const result of results) {
     error = error || result.error;
@@ -48,6 +49,9 @@ function showSummary(results, watching) {
     // `skipped` is only set to a number if there are skipped tests.
     skipped += result.skipped || 0;
     success += result.success;
+    if (result.disconnected) {
+      disconnected.push(result.packageName)
+    }
   }
 
   let status = `\nspecs: ${failed + skipped + success}`;
@@ -66,6 +70,10 @@ function showSummary(results, watching) {
 
   if (error === true) {
     status = `${status}, error: true`;
+  }
+
+  if (disconnected.length > 0) {
+    status = `${status} \n${disconnected.length} packages disconnected:\n${disconnected.join("\n")}`;
   }
 
   if (failed > 0 || error) {
