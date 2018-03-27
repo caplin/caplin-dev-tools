@@ -1,3 +1,10 @@
+<a name="5.3.0"></a>
+# [5.3.0](https://github.com/caplin/caplin-dev-tools/compare/karma-test-runner@5.2.1...karma-test-runner@5.3.0) (2018-03-27)
+
+### Features
+
+* Log out browser disconnects ([3559b23](https://github.com/caplin/caplin-dev-tools/commit/3559b23))
+
 <a name="5.2.1"></a>
 ## [5.2.1](https://github.com/caplin/caplin-dev-tools/compare/karma-test-runner@5.2.0...karma-test-runner@5.2.1) (2017-12-19)
 
