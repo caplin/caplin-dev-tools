@@ -1,3 +1,8 @@
+<a name="4.3.2"></a>
+## [4.3.2](https://github.com/caplin/caplin-dev-tools/compare/express-dev-server@4.3.1...express-dev-server@4.3.2) (2018-04-04)
+
+
+
 <a name="4.3.1"></a>
 ## [4.3.1](https://github.com/caplin/caplin-dev-tools/compare/express-dev-server@4.3.0...express-dev-server@4.3.1) (2018-03-09)
 
