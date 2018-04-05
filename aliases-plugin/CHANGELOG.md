@@ -1,3 +1,13 @@
+<a name="1.0.4"></a>
+## [1.0.4](https://github.com/caplin/caplin-dev-tools/compare/aliases-plugin@1.0.3...aliases-plugin@1.0.4) (2018-04-05)
+
+
+### Features
+
+* **logging:** Move to Caplin node-logging logging ([682a33b](https://github.com/caplin/caplin-dev-tools/commit/682a33b))
+
+
+
 <a name="1.0.3"></a>
 ## 1.0.3 (2018-04-05)
 
