@@ -22,11 +22,8 @@
   },
   "homepage": "https://github.com/caplin/caplin-dev-tools#readme",
   "devDependencies": {
-    "eslint": "^3.17.1",
-    "eslint-config-airbnb": "^15.0.0",
+    "eslint": "^4.0.0",
     "eslint-config-prettier": "^2.0.0",
-    "eslint-plugin-import": "^2.2.0",
-    "eslint-plugin-jsx-a11y": "^5.0.0",
-    "eslint-plugin-react": "^7.0.0"
+    "eslint-plugin-import": "^2.2.0"
   }
 }
