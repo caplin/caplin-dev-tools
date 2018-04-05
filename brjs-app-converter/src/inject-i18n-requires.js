@@ -97,7 +97,7 @@ function selectPropertyFileToRequire(
       level: "warn",
       message:
         `In ${jsFilePath} there are multiple possible requires for token` +
-        ` ${discoveredToken}, skipping: ${propertiesFilePaths.join(",")}.`
+        ` ${discoveredToken}, skipping: ${propertiesFilePaths.join(", ")}.`
     });
   }
 }
