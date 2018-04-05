@@ -1,0 +1,1 @@
+Central location for logging in Caplin node.js packages.

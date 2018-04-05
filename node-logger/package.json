@@ -1,0 +1,11 @@
+{
+  "name": "@caplin/node-logger",
+  "version": "1.0.0",
+  "description": "Logger for Caplin node.js packages",
+  "main": "index.js",
+  "license": "MIT",
+  "dependencies": {
+    "chalk": "^2.3.2",
+    "winston": "^3.0.0-rc3"
+  }
+}
