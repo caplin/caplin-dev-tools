@@ -1,3 +1,13 @@
+<a name="4.4.0"></a>
+# [4.4.0](https://github.com/caplin/caplin-dev-tools/compare/express-dev-server@4.3.2...express-dev-server@4.4.0) (2018-04-05)
+
+
+### Features
+
+* **jndi:** Reduce logging from JNDI module ([b1e6b38](https://github.com/caplin/caplin-dev-tools/commit/b1e6b38))
+
+
+
 <a name="4.3.2"></a>
 ## [4.3.2](https://github.com/caplin/caplin-dev-tools/compare/express-dev-server@4.3.1...express-dev-server@4.3.2) (2018-04-04)
 
