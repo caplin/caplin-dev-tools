@@ -1,20 +1,34 @@
-const chalk = require("chalk");
+const { red, yellow } = require("chalk");
 const { createLogger, format, transports } = require("winston");
 
 const { combine, timestamp, printf } = format;
+const NO_COLOUR = () => {};
 
-const customFormat = printf(({ level, label, message, timestamp }) => {
-  let colour = () => {};
-  const formattedLevel = level.toUpperCase();
-  const middle = ` [${label}] ${timestamp}: `;
-
+function getColour(level) {
   if (level === "warn") {
-    colour = chalk.bgYellow;
+    return yellow;
   } else if (level === "error") {
-    colour = chalk.bgRed;
+    return red;
   }
 
-  return `${colour(formattedLevel)}${middle}${colour(message)}`;
+  return NO_COLOUR;
+}
+
+function getMessage(level, message) {
+  if (level === "error") {
+    return message.stack;
+  }
+
+  return message;
+}
+
+const customFormat = printf(({ level, label, message, timestamp }) => {
+  const colour = getColour(level);
+  const formattedLevel = colour(level.toUpperCase());
+  const formattedMessage = colour(getMessage(level, message));
+  const middle = ` [${label}] ${timestamp}: `;
+
+  return `${formattedLevel}${middle}${formattedMessage}`;
 });
 
 const logger = createLogger({
