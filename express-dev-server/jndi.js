@@ -1,3 +1,4 @@
+const logger = require("@caplin/node-logger");
 const dotenv = require("dotenv");
 
 // Load application environment variables from `.env` file, to inject into
@@ -9,7 +10,11 @@ function jndiTokenReplacer(match, jndiToken) {
     return process.env[jndiToken];
   }
 
-  console.warn(`A value for JNDI token ${jndiToken} could not be found.`);
+  logger.log({
+    label: "express-dev-server/jndi",
+    level: "warn",
+    message: `JNDI token ${jndiToken} value could not be found.`
+  });
 
   return match;
 }

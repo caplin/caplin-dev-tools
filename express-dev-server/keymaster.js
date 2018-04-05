@@ -1,8 +1,8 @@
 const { readFileSync } = require("fs");
 const { join } = require("path");
-
+const logger = require("@caplin/node-logger");
 const { hex2b64, Signature } = require("jsrsasign");
-const moment = require('moment-timezone');
+const moment = require("moment-timezone");
 
 let defaultCustomerID;
 let index = 0;
@@ -65,15 +65,14 @@ function getResponse(username, signedToken, clearTextToken) {
 }
 
 function getToken(username, customerId) {
-  console.log(
-    `Generating token for username [${username}] and customer ID [${customerId}]`
-  );
-
   const clearTextToken = generateClearTextToken(username, customerId);
   const signedToken = signToken(clearTextToken);
 
-  console.log(`Token: ${clearTextToken}`);
-  console.log(`Signed Token: ${signedToken}`);
+  logger.log({
+    label: "express-dev-server/keymaster",
+    level: "info",
+    message: `Token for ${username} [${clearTextToken}] [${signedToken}] and customer ID [${customerId}]`
+  });
 
   return getResponse(username, signedToken, clearTextToken);
 }

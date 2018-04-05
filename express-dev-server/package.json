@@ -4,6 +4,7 @@
   "description": "Express.js server modules for developing Caplin applications",
   "license": "ISC",
   "dependencies": {
+    "@caplin/node-logger": "^1.0.0",
     "address": "^1.0.2",
     "chalk": "^2.0.0",
     "detect-port": "^1.2.1",

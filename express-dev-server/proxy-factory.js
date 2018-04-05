@@ -1,3 +1,4 @@
+const logger = require("@caplin/node-logger");
 const { createProxyServer } = require("http-proxy");
 
 module.exports = ({ host = "http://localhost", port = "9999" } = {}) => {
@@ -5,16 +6,16 @@ module.exports = ({ host = "http://localhost", port = "9999" } = {}) => {
     target: `${host}:${port}`
   });
 
-  proxy.on("error", (err, req) => {
-    console.error(`Error proxying ${req.path}`, err); //eslint-disable-line
-  });
-
-  proxy.on("proxyReq", req => {
-    console.log(`Request ${req.path} proxied`); //eslint-disable-line
-  });
-
-  proxy.on("proxyRes", (proxyRes, req) => {
-    console.log(`Response to ${req.path} from target`); //eslint-disable-line
+  proxy.on("error", (err, req, res) => {
+    // Lower status codes aren't necessarily indicating an error. For example
+    // redirections shouldn't be logged as errors.
+    if (res.statusCode > 499) {
+      logger.log({
+        label: "express-dev-server/proxy-factory",
+        level: "warn",
+        message: `Error proxying ${req.path}\n${err.stack}`
+      });
+    }
   });
 
   return proxy;

@@ -1,3 +1,5 @@
+const logger = require("@caplin/node-logger");
+
 const NOT_FOUND_CODE = 404;
 
 module.exports = application => {
@@ -7,7 +9,11 @@ module.exports = application => {
   application.use((req, res) => {
     const notFoundWarning = `Resource for ${req.url} not found.`;
 
-    console.warn(notFoundWarning); // eslint-disable-line
+    logger.log({
+      label: "express-dev-server/not-found",
+      level: "warn",
+      message: notFoundWarning
+    });
 
     res.status(NOT_FOUND_CODE).send(notFoundWarning);
   });
