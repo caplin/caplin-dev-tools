@@ -1,7 +1,6 @@
-/* eslint no-param-reassign: 0, no-underscore-dangle: 0, global-require: 0,
-   import/no-dynamic-require: 0, class-methods-use-this: 0 */
 const { Stats } = require("fs");
 const { basename, join } = require("path");
+const logger = require("@caplin/node-logger");
 
 // Record all aliases inside the `$aliases-data` module i.e. `aliases.js` or
 // `aliases-test.js`.
@@ -116,14 +115,11 @@ function handleAliasImports(result, callback, compiler) {
 function verifyImportedAliasesAreRegistered() {
   for (const alias of importedAliases) {
     if (aliasesDataAliases.has(alias) === false) {
-      console.error(
-        `
-                ******************************************
-                    Alias "${alias}" not registered.
-                    Usage of this alias will fail.
-                ******************************************
-            `
-      );
+      logger.log({
+        label: "aliases-plugin",
+        level: "warn",
+        message: `Alias "${alias}" not registered.`
+      });
     }
   }
 }
