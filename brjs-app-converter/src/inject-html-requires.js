@@ -189,9 +189,10 @@ function addReferencedTemplates(
     logger.log({
       label: "brjs-app-converter/inject-html-requires",
       level: "warn",
-      message: `Couldn't find "${templateID}" template used by ${jsFilePath}.
-      It might be an application level template incorrectly referenced at the
-      package level.`
+      message:
+        `Couldn't find "${templateID}" template used by ${jsFilePath}.` +
+        ` It might be an application level template incorrectly referenced at` +
+        ` the package level.`
     });
   }
 

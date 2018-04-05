@@ -86,7 +86,8 @@ function discoverI18nProperties(jsFilePath, propertiesToFilePath) {
 function selectPropertyFileToRequire(
   propertiesFilePaths,
   jsFilePath,
-  propertiesFilesToRequire
+  propertiesFilesToRequire,
+  discoveredToken
 ) {
   if (propertiesFilePaths.length === 1) {
     propertiesFilesToRequire.add(propertiesFilePaths[0]);
@@ -95,8 +96,8 @@ function selectPropertyFileToRequire(
       label: "brjs-app-converter/inject-i18n-requires",
       level: "warn",
       message:
-        `In ${jsFilePath} there are multiple possible requires, ` +
-        `skipping: ${propertiesFilePaths.join("\n")}.`
+        `In ${jsFilePath} there are multiple possible requires for token` +
+        ` ${discoveredToken}, skipping: ${propertiesFilePaths.join(",")}.`
     });
   }
 }
@@ -121,7 +122,8 @@ function searchForPropertiesPrefix(
     selectPropertyFileToRequire(
       filePaths,
       jsFilePath,
-      propertiesFilesToRequire
+      propertiesFilesToRequire,
+      discoveredToken
     );
   } else if (allPossibleFilePaths.size > 1) {
     logger.log({
@@ -155,7 +157,8 @@ function calculatePropertiesFileToRequire(
     selectPropertyFileToRequire(
       propertiesFilePaths,
       jsFilePath,
-      propertiesFilesToRequire
+      propertiesFilesToRequire,
+      discoveredToken
     );
   } else if (discoveredToken.endsWith(".")) {
     searchForPropertiesPrefix(
