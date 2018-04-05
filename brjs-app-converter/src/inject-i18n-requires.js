@@ -1,6 +1,6 @@
 const { readFileSync, writeFileSync } = require("fs");
 const { dirname, relative, sep } = require("path");
-
+const logger = require("@caplin/node-logger");
 const { sync } = require("glob");
 const { parse } = require("properties");
 
@@ -91,9 +91,13 @@ function selectPropertyFileToRequire(
   if (propertiesFilePaths.length === 1) {
     propertiesFilesToRequire.add(propertiesFilePaths[0]);
   } else {
-    console.warn(
-      `In ${jsFilePath} there are multiple possible requires, skipping: ${propertiesFilePaths.join("\n")}.`
-    );
+    logger.log({
+      label: "brjs-app-converter/inject-i18n-requires",
+      level: "warn",
+      message:
+        `In ${jsFilePath} there are multiple possible requires, ` +
+        `skipping: ${propertiesFilePaths.join("\n")}.`
+    });
   }
 }
 
@@ -120,13 +124,21 @@ function searchForPropertiesPrefix(
       propertiesFilesToRequire
     );
   } else if (allPossibleFilePaths.size > 1) {
-    console.warn(
-      `In ${jsFilePath} with prefixed token ${discoveredToken} there are multiple possible requires, skipping.`
-    );
+    logger.log({
+      label: "brjs-app-converter/inject-i18n-requires",
+      level: "warn",
+      message:
+        `In ${jsFilePath} with prefixed token ${discoveredToken} there` +
+        ` are multiple possible requires, skipping.`
+    });
   } else if (allPossibleFilePaths.size === 0) {
-    console.warn(
-      `In ${jsFilePath} with prefixed token ${discoveredToken} there are no possible requires.`
-    );
+    logger.log({
+      label: "brjs-app-converter/inject-i18n-requires",
+      level: "warn",
+      message:
+        `In ${jsFilePath} with prefixed token ${discoveredToken} there` +
+        ` are no possible requires.`
+    });
   }
 }
 
@@ -153,9 +165,13 @@ function calculatePropertiesFileToRequire(
       propertiesFilesToRequire
     );
   } else {
-    console.warn(
-      `In ${jsFilePath} token ${discoveredToken} has no possible require.`
-    );
+    logger.log({
+      label: "brjs-app-converter/inject-i18n-requires",
+      level: "warn",
+      message:
+        `In ${jsFilePath} token ${discoveredToken} has no possible` +
+        ` require.`
+    });
   }
 }
 
@@ -212,9 +228,16 @@ function isRelativeApp(applicationName) {
     propertyFileToRequire.startsWith(`apps/${applicationName}/`);
 }
 
-module.exports.injectI18nRequires = function injectI18nRequires(
-  { applicationName, packagesDirName }
-) {
+module.exports.injectI18nRequires = function injectI18nRequires({
+  applicationName,
+  packagesDirName
+}) {
+  logger.log({
+    label: "brjs-app-converter/inject-i18n-requires",
+    level: "info",
+    message: "\n\n *** Injecting i18n requires *** \n\n"
+  });
+
   const appJSFilePaths = sync(`apps/${applicationName}/src/**/*.js`);
   const appPropertiesFilePaths = sync(
     `apps/${applicationName}/src/**/en.properties`,
@@ -235,7 +258,8 @@ module.exports.injectI18nRequires = function injectI18nRequires(
       propertiesToFilePath,
       isRelativePackage(),
       dirPrefixRemover(`${packagesDirName}/`)
-    ));
+    )
+  );
   // Then add requires to app source code.
   registerI18nProperties(appPropertiesFilePaths, propertiesToFilePath);
   appJSFilePaths.forEach(jsFilePath =>
@@ -244,5 +268,12 @@ module.exports.injectI18nRequires = function injectI18nRequires(
       propertiesToFilePath,
       isRelativeApp(applicationName),
       dirPrefixRemover(`${packagesDirName}/`)
-    ));
+    )
+  );
+
+  logger.log({
+    label: "brjs-app-converter/inject-i18n-requires",
+    level: "info",
+    message: "\n\n *** i18n requires added *** \n\n"
+  });
 };

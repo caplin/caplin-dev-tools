@@ -6,7 +6,7 @@ const {
   writeFileSync
 } = require("fs");
 const { dirname, join, relative, sep } = require("path");
-
+const logger = require("@caplin/node-logger");
 const { load } = require("cheerio");
 const { sync } = require("glob");
 
@@ -47,8 +47,8 @@ function findReferencedTemplateIDs(parsedDOM) {
     .find("[data-bind*=template]")
     .each((index, element) => {
       const dataValue = parsedDOM(element).data("bind");
-      // Some template names are code to be executed as opposed to a simple string
-      // e.g. `template: {name: amount.getTemplateName()}`, we want to skip these.
+      // Some template names are code to be executed instead of a string
+      // e.g. `template: {name: amount.getTemplateName()}`, skip these.
       const templateNameMatchArray =
         dataValue.match(/.*name\s*:\s*['|"](.*?)['|"]/) ||
         // Some template names are strings instead of being wrapped in an object
@@ -82,9 +82,11 @@ function createTemplateFileInfo(
       if (id) {
         templateIDsToFileInfo.set(id, { filePath, referencedTemplateIDs });
       } else if (warnedAboutLackOfID === false) {
-        console.warn(
-          `${filePath} has no id in one of its top level DOM nodes.`
-        );
+        logger.log({
+          label: "brjs-app-converter/inject-html-requires",
+          level: "warn",
+          message: `${filePath} has no ID in one of its top level DOM nodes.`
+        });
         warnedAboutLackOfID = true;
       }
     });
@@ -154,9 +156,13 @@ function addMatchIfItsATemplateID(
           templatedID.startsWith(matchArray[1]) &&
           templatedID.endsWith(matchArray[2])
         ) {
-          console.log(
-            `${possibleTemplateID} generates a require for the template with ID ${templatedID}`
-          );
+          logger.log({
+            label: "brjs-app-converter/inject-html-requires",
+            level: "info",
+            message:
+              `${possibleTemplateID} generates a require for the` +
+              ` template with ID ${templatedID}`
+          });
 
           discoveredTemplateIDs.add(templatedID);
         }
@@ -170,7 +176,8 @@ function addMatchIfItsATemplateID(
 function addReferencedTemplates(
   templateID,
   discoveredTemplateIDs,
-  templateIDsToFileInfo
+  templateIDsToFileInfo,
+  jsFilePath
 ) {
   const templateFileInfo = templateIDsToFileInfo.get(templateID);
   // The template `caplinx.motf.orderticket.message-overlay` is referenced in
@@ -179,14 +186,15 @@ function addReferencedTemplates(
   // we add package to package requires first there will not be any application
   // template knowledge in the converter so use an empty Array.
   if (templateFileInfo === undefined) {
-    console.log(
-      `
-    Couldn't find template file info for ${templateID}.
-    It might be an application level template incorrectly referenced at the
-    package level.
-    `
-    );
+    logger.log({
+      label: "brjs-app-converter/inject-html-requires",
+      level: "warn",
+      message: `Couldn't find "${templateID}" template used by ${jsFilePath}.
+      It might be an application level template incorrectly referenced at the
+      package level.`
+    });
   }
+
   const referencedTemplateIDs = templateFileInfo
     ? templateFileInfo.referencedTemplateIDs
     : [];
@@ -198,7 +206,8 @@ function addReferencedTemplates(
       addReferencedTemplates(
         referencedTemplateID,
         discoveredTemplateIDs,
-        templateIDsToFileInfo
+        templateIDsToFileInfo,
+        jsFilePath
       );
     }
   });
@@ -251,7 +260,8 @@ function discoverHTMLFilePaths(jsFilePath, templateIDsToFileInfo) {
     addReferencedTemplates(
       templateID,
       discoveredTemplateIDs,
-      templateIDsToFileInfo
+      templateIDsToFileInfo,
+      jsFilePath
     );
   });
 
@@ -307,6 +317,12 @@ module.exports.injectHTMLRequires = function injectHTMLRequires({
   applicationName,
   packagesDirName
 }) {
+  logger.log({
+    label: "brjs-app-converter/inject-html-requires",
+    level: "info",
+    message: "Injecting requires to HTML templates."
+  });
+
   const appJSFilePaths = sync(
     `apps/${applicationName}/src/**/*.js`,
     jsGlobOptions
@@ -353,4 +369,10 @@ module.exports.injectHTMLRequires = function injectHTMLRequires({
     isRelativeApp(applicationName),
     stripPackagePrefix
   );
+
+  logger.log({
+    label: "brjs-app-converter/inject-html-requires",
+    level: "info",
+    message: "Requires to HTML templates injected."
+  });
 };
