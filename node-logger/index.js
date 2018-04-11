@@ -23,6 +23,12 @@ function getMessage(level, message) {
 }
 
 const customFormat = printf(({ level, label, message, timestamp }) => {
+  // If an info object doesn't specify a `label` then we log the message as is.
+  // Useful for when you provide your own message formatting.
+  if (label === undefined) {
+    return message;
+  }
+
   const colour = getColour(level);
   const formattedLevel = colour(level.toUpperCase());
   const formattedMessage = colour(getMessage(level, message));
