@@ -3,7 +3,7 @@ const address = require("address");
 const parseArgs = require("minimist");
 const chalk = require("chalk");
 const path = require("path");
-
+const logger = require("@caplin/node-logger");
 const poll = require("./poll");
 const webpackMiddleware = require("./webpack");
 const getPort = require("./get-port");
@@ -16,11 +16,10 @@ function printStatus(appRoot, port) {
   const ipAddress = address.ip();
   const remoteAddressed = chalk.green(`http://${ipAddress}:${port}/`);
 
-  console.log(chalk.yellow(`Compiled successfully!\n`));
-  console.log(`You can view ${chalk.green(appName)} in the browser.\n`);
-  console.log(`Local Connection: ${chalk.green(`http://localhost:${port}/`)}`);
-  console.log(`Remote Connection: ${remoteAddressed}\n`);
-  console.log(`Hot module replacement is ${hmrStatus}\n`);
+  logger.info(`You can view ${chalk.green(appName)} in the browser.\n`);
+  logger.info(`Local Connection: ${chalk.green(`http://localhost:${port}/`)}`);
+  logger.info(`Remote Connection: ${remoteAddressed}\n`);
+  logger.info(`Hot module replacement is ${hmrStatus}\n`);
 }
 
 module.exports = ({ appCreated = () => {}, webpackConfig }) => {
@@ -42,7 +41,11 @@ module.exports = ({ appCreated = () => {}, webpackConfig }) => {
   function listenToPort(port) {
     app.listen(port, err => {
       if (err) {
-        console.error(err);
+        logger.log({
+          label: "express-dev-server/server",
+          level: "error",
+          message: err
+        });
       } else {
         printStatus(appRoot, port);
       }
@@ -53,5 +56,11 @@ module.exports = ({ appCreated = () => {}, webpackConfig }) => {
 
   return getPort()
     .then(listenToPort)
-    .catch(error => console.error(error));
+    .catch(error =>
+      logger.log({
+        label: "express-dev-server/server",
+        level: "error",
+        message: error
+      })
+    );
 };
