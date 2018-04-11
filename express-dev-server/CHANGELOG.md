@@ -1,3 +1,25 @@
+<a name="4.5.0"></a>
+# [4.5.0](https://github.com/caplin/caplin-dev-tools/compare/express-dev-server@4.4.0...express-dev-server@4.5.0) (2018-04-11)
+
+
+
+<a name="4.5.0"></a>
+# 4.5.0 (2018-04-11)
+
+
+### Bug Fixes
+
+* **server:** Don't log compile success before compilation finishes ([111edec](https://github.com/caplin/caplin-dev-tools/commit/111edec))
+* **webpack:** Log compile success message after first compilation ([5c6bba4](https://github.com/caplin/caplin-dev-tools/commit/5c6bba4))
+
+
+### Features
+
+* **logging:** Change default log level to info ([c9e1b3a](https://github.com/caplin/caplin-dev-tools/commit/c9e1b3a))
+* **proxy-target-factory:** Reduce logging output on Jetty start ([8ce8202](https://github.com/caplin/caplin-dev-tools/commit/8ce8202))
+
+
+
 <a name="4.4.0"></a>
 # [4.4.0](https://github.com/caplin/caplin-dev-tools/compare/express-dev-server@4.3.2...express-dev-server@4.4.0) (2018-04-05)
 
