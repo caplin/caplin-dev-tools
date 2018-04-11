@@ -6,9 +6,7 @@ const proxySpawnOptions = {
   stdio: "inherit"
 };
 
-module.exports = (
-  {
-    cmd = "mvn",
-    args = ["-f", "server/java/proxy-target-FXPro", "jetty:run"]
-  } = {}
-) => spawn(cmd, args, proxySpawnOptions);
+module.exports = ({
+  cmd = "mvn",
+  args = ["-q", "-f", "server/java/proxy-target-FXPro", "jetty:run"]
+} = {}) => spawn(cmd, args, proxySpawnOptions);
