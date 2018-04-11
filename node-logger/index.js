@@ -32,7 +32,7 @@ const customFormat = printf(({ level, label, message, timestamp }) => {
 });
 
 const logger = createLogger({
-  level: "warn",
+  level: "info",
   format: combine(timestamp({ format: "hh:mm:ss" }), customFormat),
   transports: [new transports.Console()]
 });

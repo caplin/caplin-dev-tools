@@ -320,7 +320,7 @@ module.exports.injectHTMLRequires = function injectHTMLRequires({
 }) {
   logger.log({
     label: "brjs-app-converter/inject-html-requires",
-    level: "info",
+    level: "verbose",
     message: "Injecting requires to HTML templates."
   });
 
@@ -373,7 +373,7 @@ module.exports.injectHTMLRequires = function injectHTMLRequires({
 
   logger.log({
     label: "brjs-app-converter/inject-html-requires",
-    level: "info",
+    level: "verbose",
     message: "Requires to HTML templates injected."
   });
 };

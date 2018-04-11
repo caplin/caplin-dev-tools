@@ -237,8 +237,8 @@ module.exports.injectI18nRequires = function injectI18nRequires({
 }) {
   logger.log({
     label: "brjs-app-converter/inject-i18n-requires",
-    level: "info",
-    message: "\n\n *** Injecting i18n requires *** \n\n"
+    level: "verbose",
+    message: "Injecting i18n requires"
   });
 
   const appJSFilePaths = sync(`apps/${applicationName}/src/**/*.js`);
@@ -276,7 +276,7 @@ module.exports.injectI18nRequires = function injectI18nRequires({
 
   logger.log({
     label: "brjs-app-converter/inject-i18n-requires",
-    level: "info",
-    message: "\n\n *** i18n requires added *** \n\n"
+    level: "verbose",
+    message: "i18n requires added"
   });
 };

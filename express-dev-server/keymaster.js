@@ -70,7 +70,7 @@ function getToken(username, customerId) {
 
   logger.log({
     label: "express-dev-server/keymaster",
-    level: "info",
+    level: "verbose",
     message: `Token for ${username} [${clearTextToken}] [${signedToken}] and customer ID [${customerId}]`
   });
 
