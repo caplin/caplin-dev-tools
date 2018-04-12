@@ -1,3 +1,13 @@
+<a name="4.5.1"></a>
+## [4.5.1](https://github.com/caplin/caplin-dev-tools/compare/express-dev-server@4.5.0...express-dev-server@4.5.1) (2018-04-12)
+
+
+### Bug Fixes
+
+* **webpack:** Add missing peerDependency to webpack-dev-middleware ([5f104ae](https://github.com/caplin/caplin-dev-tools/commit/5f104ae))
+
+
+
 <a name="4.5.0"></a>
 # [4.5.0](https://github.com/caplin/caplin-dev-tools/compare/express-dev-server@4.4.0...express-dev-server@4.5.0) (2018-04-11)
 
