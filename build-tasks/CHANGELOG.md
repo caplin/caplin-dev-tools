@@ -1,3 +1,13 @@
+<a name="5.2.0"></a>
+# [5.2.0](https://github.com/caplin/caplin-dev-tools/compare/build-tasks@5.1.0...build-tasks@5.2.0) (2018-04-17)
+
+
+### Features
+
+* **spider:** Provide list of packages package depends on ([4c4b15b](https://github.com/caplin/caplin-dev-tools/commit/4c4b15b))
+
+
+
 <a name="5.1.0"></a>
 # [5.1.0](https://github.com/caplin/caplin-dev-tools/compare/build-tasks@5.0.0...build-tasks@5.1.0) (2017-12-21)
 
