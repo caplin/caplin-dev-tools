@@ -14,6 +14,7 @@ describe("Webpack config app build tests.", () => {
     const isBuild = true;
     const definitions = {
       "process.env": {
+        "NODE_ENV": "\"production\"",
         VERSION: JSON.stringify(version)
       }
     };

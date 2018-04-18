@@ -1,3 +1,4 @@
+const { join } = require("path");
 const configureOutput = require("../output");
 const { BASE_WEBPACK_CONFIG } = require("../config");
 const expect = require("chai").expect;
@@ -14,7 +15,7 @@ describe("Webpack config app output tests.", () => {
     expect(webpackConfig.output.filename).to.equal(`bundle-${version}.js`);
 
     expect(webpackConfig).to.have.nested.property("output.path");
-    expect(webpackConfig.output.path).to.equal("build\\dist\\static");
+    expect(webpackConfig.output.path).to.equal(join("build", "dist", "static"));
 
     expect(webpackConfig).to.have.nested.property("output.publicPath");
     expect(webpackConfig.output.publicPath).to.equal("/static/");
