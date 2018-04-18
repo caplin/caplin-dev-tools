@@ -5,9 +5,6 @@
   "main": "index.js",
   "keywords": [],
   "license": "ISC",
-  "files": [
-    "dist"
-  ],
   "dependencies": {
     "karma-jasmine": "^0.1.0"
   }
