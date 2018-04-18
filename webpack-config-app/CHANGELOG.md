@@ -1,3 +1,13 @@
+<a name="6.3.1"></a>
+## [6.3.1](https://github.com/caplin/caplin-dev-tools/compare/webpack-config-app@6.3.0...webpack-config-app@6.3.1) (2018-04-18)
+
+
+### Bug Fixes
+
+* Update tests to reflect recent changes ([961efa8](https://github.com/caplin/caplin-dev-tools/commit/961efa8))
+
+
+
 <a name="6.3.0"></a>
 # [6.3.0](https://github.com/caplin/caplin-dev-tools/compare/webpack-config-app@6.2.0...webpack-config-app@6.3.0) (2018-02-16)
 
