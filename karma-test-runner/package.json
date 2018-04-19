@@ -27,7 +27,7 @@
     "karma-ie-launcher": "^1.0.0",
     "karma-log-update-reporter": "^1.0.0",
     "karma-sourcemap-loader": "^0.3.7",
-    "karma-webpack": "^3.0.0",
+    "karma-webpack": "^4.0.0-beta.0",
     "minimist": "^1.2.0",
     "webpack": "^4.0.0"
   }
