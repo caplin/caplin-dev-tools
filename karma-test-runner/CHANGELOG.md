@@ -1,3 +1,8 @@
+<a name="5.3.2"></a>
+## [5.3.2](https://github.com/caplin/caplin-dev-tools/compare/karma-test-runner@5.3.1...karma-test-runner@5.3.2) (2018-04-19)
+
+
+
 <a name="5.3.1"></a>
 ## [5.3.1](https://github.com/caplin/caplin-dev-tools/compare/karma-test-runner@5.2.1...karma-test-runner@5.3.1) (2018-04-18)
 
