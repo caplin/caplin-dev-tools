@@ -1,5 +1,3 @@
-/* eslint global-require: 0, import/no-dynamic-require: 0 */
-
 const { existsSync } = require("fs");
 const { join, parse } = require("path");
 
@@ -50,13 +48,12 @@ function createKarmaConf(basePath, testEntry, testsType, argv) {
   });
 
   if (htmlReport) {
-    const fileName = parse(basePath).base;
+    const { base } = parse(basePath);
+    const htmlFileName = `${testsType}-report-${base}.html`;
     const rootDir = process.cwd();
 
     karmaConfig.htmlReporter = {
-      outputFile: `${rootDir}/reports-${testsType}/${testsType}-report-${
-        fileName
-      }.html`,
+      outputFile: `${rootDir}/reports-${testsType}/${htmlFileName}`,
       pageTitle: `${testsType} Report`,
       groupSuites: true,
       useCompactStyle: true,

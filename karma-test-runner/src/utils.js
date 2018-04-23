@@ -1,5 +1,3 @@
-/* eslint no-await-in-loop: 0 */
-
 const { Server } = require("karma");
 
 function getSelectedBrowser(commandLineArgs) {
@@ -50,7 +48,7 @@ function showSummary(results, watching) {
     skipped += result.skipped || 0;
     success += result.success;
     if (result.disconnected) {
-      disconnected.push(result.packageName)
+      disconnected.push(result.packageName);
     }
   }
 
@@ -73,7 +71,9 @@ function showSummary(results, watching) {
   }
 
   if (disconnected.length > 0) {
-    status = `${status} \n${disconnected.length} packages disconnected:\n${disconnected.join("\n")}`;
+    const disconnectedMessage = `${disconnected.length} packages disconnected:`;
+
+    status = `${status}\n${disconnectedMessage}\n${disconnected.join("\n")}`;
   }
 
   if (failed > 0 || error) {

@@ -1,5 +1,3 @@
-/* eslint global-require: 0, import/no-dynamic-require: 0, no-param-reassign: 0  */
-
 const { existsSync } = require("fs");
 const { join } = require("path");
 
