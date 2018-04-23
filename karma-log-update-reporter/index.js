@@ -1,6 +1,6 @@
 // Karma DI doesn't support classes hence the constructor + prototype funcs.
-/* eslint func-names: 0 */
 
+const logger = require("@caplin/node-logger");
 const logUpdate = require("log-update");
 
 const LENGTH_OF_PATH = 40;
@@ -40,12 +40,12 @@ function logMessage({ testsType, basePath, browser }, message) {
 }
 
 function getPackageName(path) {
-  return path.substring(path.lastIndexOf("/") + 1)
+  return path.substring(path.lastIndexOf("/") + 1);
 }
 
 function formatErrorText(errorText) {
   if (errorText === null) {
-    return `\n  Error text is null.`
+    return `\n  Error text is null.`;
   }
 
   // Indent, strip any whitespace and indent content.
@@ -65,7 +65,7 @@ function logFailedResult(failedResult) {
   // Join them or `console.error(x, y)` adds a space between the two strings.
   const testErrorOuput = `${testHeading}${testFailureLog}`;
 
-  console.error(testErrorOuput);
+  logger.info(testErrorOuput);
 }
 
 function formatBasePath(basePath) {
@@ -142,7 +142,7 @@ LogUpdateReporter.prototype.onRunComplete = function(browsers, results) {
   this.failedResults.forEach(logFailedResult);
 
   if (this.errorMessage !== "") {
-    console.error("\n", this.errorMessage, "\n");
+    logger.info("\n", this.errorMessage, "\n");
   }
 };
 
