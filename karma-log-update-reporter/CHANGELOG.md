@@ -1,3 +1,13 @@
+<a name="1.3.0"></a>
+# [1.3.0](https://github.com/caplin/caplin-dev-tools/compare/karma-log-update-reporter@1.2.0...karma-log-update-reporter@1.3.0) (2018-04-23)
+
+
+### Features
+
+* **logging:** Use caplin-logger for logging ([63a133b](https://github.com/caplin/caplin-dev-tools/commit/63a133b))
+
+
+
 <a name="1.2.0"></a>
 # [1.2.0](https://github.com/caplin/caplin-dev-tools/compare/karma-log-update-reporter@1.1.5...karma-log-update-reporter@1.2.0) (2018-03-27)
 
