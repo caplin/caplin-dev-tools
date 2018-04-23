@@ -1,4 +1,3 @@
-/* eslint no-param-reassign: "off" */
 const webpack = require("webpack");
 
 module.exports = function configureHotReloading(webpackConfig, hot) {

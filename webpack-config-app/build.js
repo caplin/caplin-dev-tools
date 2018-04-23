@@ -1,5 +1,3 @@
-/* eslint no-param-reassign: "off" */
-
 const UglifyJSPlugin = require("uglifyjs-webpack-plugin");
 const { DefinePlugin } = require("webpack");
 

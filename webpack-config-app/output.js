@@ -1,5 +1,3 @@
-/* eslint no-param-reassign: "off" */
-
 const { join } = require("path");
 
 const { STATIC_DIR } = require("./config");
