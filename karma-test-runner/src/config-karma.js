@@ -11,8 +11,14 @@ const baseKarmaConfig = {
   logLevel: LOG_ERROR,
   reporters: ["log-update"],
   webpackMiddleware: {
-    noInfo: true,
-    stats: "errors-only"
+    logLevel: "warn",
+    stats: {
+      all: false,
+      colors: true,
+      errors: true,
+      moduleTrace: true,
+      warnings: true
+    }
   }
 };
 
