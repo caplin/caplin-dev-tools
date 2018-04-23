@@ -35,15 +35,8 @@ function registerVirtualFile(inputFileSystem, aliasFilePath, fileBuffer) {
   const statsStorageData = inputFileSystem._statStorage.data;
   const readFileStorageData = inputFileSystem._readFileStorage.data;
 
-  // Newer versions of `enhanced-resolve` use a `Map` as a data store in
-  // `CachedInputFileSystem.js`.
-  if (statsStorageData instanceof Map) {
-    statsStorageData.set(aliasFilePath, [null, stubFileStats]);
-    readFileStorageData.set(aliasFilePath, [null, fileBuffer]);
-  } else {
-    statsStorageData[aliasFilePath] = [null, stubFileStats];
-    readFileStorageData[aliasFilePath] = [null, fileBuffer];
-  }
+  statsStorageData.set(aliasFilePath, [null, stubFileStats]);
+  readFileStorageData.set(aliasFilePath, [null, fileBuffer]);
 }
 
 // `aliasType` is either `alias` or `service`.
@@ -57,7 +50,7 @@ function createCommonAliasFileData(aliasType, moduleCreator, result, compiler) {
   const fileBuffer = Buffer.from(aliasModule);
 
   importedAliases.add(alias);
-  // Change the `result` object `request` to point to an illusionary file. Add
+  // Change the `result` object `request` to point to a virtual file. Add
   // stat and file data for that file into webpack's `inputFileStorage`.
   // So when webpack goes to look for that file it a) believes it exists and
   // b) finds contents for the file.
