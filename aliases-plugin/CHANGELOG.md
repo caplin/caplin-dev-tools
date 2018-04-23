@@ -1,3 +1,18 @@
+<a name="2.0.0"></a>
+# [2.0.0](https://github.com/caplin/caplin-dev-tools/compare/aliases-plugin@1.0.4...aliases-plugin@2.0.0) (2018-04-23)
+
+
+### Features
+
+* Add support for Webpack 4 ([6fa04a8](https://github.com/caplin/caplin-dev-tools/commit/6fa04a8))
+
+
+### BREAKING CHANGES
+
+* Drop support for Webpack <4
+
+
+
 <a name="1.0.4"></a>
 ## [1.0.4](https://github.com/caplin/caplin-dev-tools/compare/aliases-plugin@1.0.3...aliases-plugin@1.0.4) (2018-04-05)
 
