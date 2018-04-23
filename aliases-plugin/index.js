@@ -8,6 +8,7 @@ let aliasesDataAliases = new Set();
 // Record all aliases found during a compilation.
 const importedAliases = new Set();
 const lifeCycleEvent = process.env.npm_lifecycle_event || "";
+const NAME = "CaplinAliasesPlugin";
 const stubFileStats = new Stats();
 const testsScriptRunning = basename(process.argv[1]) === "tests.js";
 const isTest = testsScriptRunning || lifeCycleEvent.startsWith("test");
@@ -83,7 +84,7 @@ function recordAliasesDataAliases(result, compiler) {
   result.request = "$aliases-data";
 }
 
-function handleAliasImports(result, callback, compiler) {
+function handleAliasImports(result, compiler) {
   const isImportingAlias = result && result.request.startsWith("alias!");
   const isImportingService = result && result.request.startsWith("service!");
 
@@ -101,11 +102,9 @@ function handleAliasImports(result, callback, compiler) {
   if (isImportingService) {
     createServiceFileData(result, compiler);
   }
-
-  return callback(null, result);
 }
 
-function verifyImportedAliasesAreRegistered() {
+function logUnregisteredImportedAliases() {
   for (const alias of importedAliases) {
     if (aliasesDataAliases.has(alias) === false) {
       logger.log({
@@ -119,19 +118,17 @@ function verifyImportedAliasesAreRegistered() {
 
 function nmfCreated(nmf, compiler) {
   // Called inside `NormalModuleFactory` during module creation.
-  nmf.plugin("before-resolve", (result, callback) =>
-    handleAliasImports(result, callback, compiler)
-  );
+  nmf.hooks.beforeResolve.tap(NAME, r => handleAliasImports(r, compiler));
 }
 
 class AliasesPlugin {
   apply(compiler) {
     // Every compilation we clear down the set of found aliases, used during
     // development when file watching.
-    compiler.plugin("compile", () => importedAliases.clear());
-    compiler.plugin("done", verifyImportedAliasesAreRegistered);
+    compiler.hooks.compile.tap(NAME, () => importedAliases.clear());
+    compiler.hooks.done.tap(NAME, logUnregisteredImportedAliases);
     // Called when `Compiler` creates `NormalModuleFactory`.
-    compiler.plugin("normal-module-factory", nmf => nmfCreated(nmf, compiler));
+    compiler.hooks.normalModuleFactory.tap(NAME, f => nmfCreated(f, compiler));
   }
 }
 
