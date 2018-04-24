@@ -1,3 +1,18 @@
+<a name="5.0.0"></a>
+# [5.0.0](https://github.com/caplin/caplin-dev-tools/compare/express-dev-server@4.6.1...express-dev-server@5.0.0) (2018-04-24)
+
+
+### Features
+
+* **webpack:** Add support for Webpack 4 ([0c0df81](https://github.com/caplin/caplin-dev-tools/commit/0c0df81))
+
+
+### BREAKING CHANGES
+
+* **webpack:** Drop support for Webpack <4
+
+
+
 <a name="4.6.1"></a>
 ## [4.6.1](https://github.com/caplin/caplin-dev-tools/compare/express-dev-server@4.6.0...express-dev-server@4.6.1) (2018-04-18)
 
