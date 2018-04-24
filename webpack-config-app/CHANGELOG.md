@@ -1,3 +1,18 @@
+<a name="7.0.0"></a>
+# [7.0.0](https://github.com/caplin/caplin-dev-tools/compare/webpack-config-app@6.3.1...webpack-config-app@7.0.0) (2018-04-24)
+
+
+### Features
+
+* Add support for Webpack 4 ([f216192](https://github.com/caplin/caplin-dev-tools/commit/f216192))
+
+
+### BREAKING CHANGES
+
+* Drop support for Webpack <4
+
+
+
 <a name="6.3.1"></a>
 ## [6.3.1](https://github.com/caplin/caplin-dev-tools/compare/webpack-config-app@6.3.0...webpack-config-app@6.3.1) (2018-04-18)
 
