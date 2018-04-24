@@ -34,6 +34,10 @@ module.exports.BASE_WEBPACK_CONFIG = {
     alias: {},
     extensions: [".js", ".json", ".jsx"]
   },
+  performance: {
+    // Turn off performance hint warnings.
+    hints: false
+  },
   plugins: [new AliasesPlugin()]
 };
 

@@ -17,8 +17,11 @@ module.exports = function configureBuildDependentConfig(
       }
     };
 
+    webpackConfig.mode = "production";
     webpackConfig.output.publicPath = `${STATIC_DIR}/`;
     webpackConfig.plugins.push(new DefinePlugin(definitions));
     webpackConfig.plugins.push(new UglifyJSPlugin(uglifyOptions));
+  } else {
+    webpackConfig.mode = "development";
   }
 };
