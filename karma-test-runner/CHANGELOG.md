@@ -1,3 +1,25 @@
+<a name="6.0.0"></a>
+# [6.0.0](https://github.com/caplin/caplin-dev-tools/compare/karma-test-runner@5.3.2...karma-test-runner@6.0.0) (2018-04-24)
+
+
+### Bug Fixes
+
+* Drop babel usage in build ([e3451c6](https://github.com/caplin/caplin-dev-tools/commit/e3451c6))
+
+
+### Features
+
+* **aliases-test:** Drop support for aliases-test.js in scripts ([7d5be30](https://github.com/caplin/caplin-dev-tools/commit/7d5be30))
+* **webpack:** Add support for Webpack 4 ([1043d4f](https://github.com/caplin/caplin-dev-tools/commit/1043d4f))
+
+
+### BREAKING CHANGES
+
+* Drop support for node.js 6
+* **aliases-test:** Drop support for legacy aliases-test.js file location
+
+
+
 <a name="5.3.2"></a>
 ## [5.3.2](https://github.com/caplin/caplin-dev-tools/compare/karma-test-runner@5.3.1...karma-test-runner@5.3.2) (2018-04-19)
 
