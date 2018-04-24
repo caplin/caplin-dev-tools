@@ -1,21 +1,11 @@
 {
   "name": "@caplin/karma-test-runner",
   "version": "5.3.2",
-  "bin": "./dist/cli.js",
+  "bin": "./cli.js",
   "description": "Package that allows running all the UTs and ATs in a package using Karma",
-  "main": "dist/test-runner.js",
-  "scripts": {
-    "build": "babel src --out-dir dist"
-  },
+  "main": "test-runner.js",
   "keywords": [],
   "license": "MIT",
-  "files": [
-    "dist"
-  ],
-  "devDependencies": {
-    "babel-cli": "^6.7.5",
-    "babel-preset-eslatest-node6": "^1.0.0"
-  },
   "dependencies": {
     "@caplin/karma-jstd": "^1.0.2",
     "babel-polyfill": "^6.9.1",
