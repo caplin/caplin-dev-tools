@@ -1,3 +1,6 @@
+// This require is replaced with individual requires for `@babel/polyfill` based
+// on environment settings when using `babel-preset-env`.
+// https://github.com/babel/babel/tree/master/packages/babel-preset-env#usebuiltins
 require("babel-polyfill");
 
 // The RegExp starts with '.' to filter out files inside `node_modules`
