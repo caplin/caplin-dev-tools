@@ -1,3 +1,13 @@
+<a name="7.0.1"></a>
+## [7.0.1](https://github.com/caplin/caplin-dev-tools/compare/webpack-config-app@7.0.0...webpack-config-app@7.0.1) (2018-04-24)
+
+
+### Bug Fixes
+
+* **i18n:** Upgrade `extract-text-webpack-plugin` to Webpack 4 version ([655d275](https://github.com/caplin/caplin-dev-tools/commit/655d275))
+
+
+
 <a name="7.0.0"></a>
 # [7.0.0](https://github.com/caplin/caplin-dev-tools/compare/webpack-config-app@6.3.1...webpack-config-app@7.0.0) (2018-04-24)
 
