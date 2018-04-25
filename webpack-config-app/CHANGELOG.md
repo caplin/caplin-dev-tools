@@ -1,3 +1,13 @@
+<a name="7.0.2"></a>
+## [7.0.2](https://github.com/caplin/caplin-dev-tools/compare/webpack-config-app@7.0.1...webpack-config-app@7.0.2) (2018-04-25)
+
+
+### Features
+
+* **webpack-config:** Add support for .eot files ([e75043b](https://github.com/caplin/caplin-dev-tools/commit/e75043b))
+
+
+
 <a name="7.0.1"></a>
 ## [7.0.1](https://github.com/caplin/caplin-dev-tools/compare/webpack-config-app@7.0.0...webpack-config-app@7.0.1) (2018-04-24)
 
