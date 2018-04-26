@@ -1,5 +1,5 @@
 // This require is replaced with individual requires for `@babel/polyfill` based
-// on environment settings when using `babel-preset-env`.
+// on the babel preset `env` browser settings.
 // https://github.com/babel/babel/tree/master/packages/babel-preset-env#usebuiltins
 require("babel-polyfill");
 
