@@ -1,3 +1,13 @@
+<a name="6.0.2"></a>
+## [6.0.2](https://github.com/caplin/caplin-dev-tools/compare/karma-test-runner@6.0.1...karma-test-runner@6.0.2) (2018-04-27)
+
+
+### Bug Fixes
+
+* **karma:** Update module source to Caplin Karma module ([a40d705](https://github.com/caplin/caplin-dev-tools/commit/a40d705))
+
+
+
 <a name="6.0.1"></a>
 ## [6.0.1](https://github.com/caplin/caplin-dev-tools/compare/karma-test-runner@6.0.0...karma-test-runner@6.0.1) (2018-04-27)
 
