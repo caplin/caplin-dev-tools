@@ -2,7 +2,7 @@ const { existsSync } = require("fs");
 const { join, parse } = require("path");
 
 const { addJSTDFiles } = require("@caplin/karma-jstd");
-const { LOG_ERROR } = require("karma/lib/constants");
+const { LOG_ERROR } = require("@caplin/karma/lib/constants");
 
 const { atsTestEntry, utsTestEntry } = require("./config");
 const { getTestBrowser } = require("./utils");
