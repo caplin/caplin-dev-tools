@@ -1,16 +1,16 @@
 {
   "name": "@caplin/karma-test-runner",
-  "version": "6.0.0",
+  "version": "6.0.1",
   "bin": "./cli.js",
   "description": "Package that allows running all the UTs and ATs in a package using Karma",
   "main": "test-runner.js",
   "keywords": [],
   "license": "MIT",
   "dependencies": {
+    "@caplin/karma": "^2.0.0",
     "@caplin/karma-jstd": "^1.0.2",
     "babel-polyfill": "^6.9.1",
     "glob": "^7.1.2",
-    "@caplin/karma": "^2.0.0",
     "karma-chrome-launcher": "^2.1.1",
     "karma-firefox-launcher": "^1.0.1",
     "karma-htmlfile-reporter": "^0.3.5",

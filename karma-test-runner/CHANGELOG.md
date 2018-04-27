@@ -1,3 +1,18 @@
+<a name="6.0.1"></a>
+## [6.0.1](https://github.com/caplin/caplin-dev-tools/compare/karma-test-runner@6.0.0...karma-test-runner@6.0.1) (2018-04-27)
+
+
+
+<a name="6.0.1"></a>
+## 6.0.1 (2018-04-27)
+
+
+### Bug Fixes
+
+* **karma:** Use Caplin Karma that includes memory leak fix ([0e8ef0c](https://github.com/caplin/caplin-dev-tools/commit/0e8ef0c))
+
+
+
 <a name="6.0.0"></a>
 # [6.0.0](https://github.com/caplin/caplin-dev-tools/compare/karma-test-runner@5.3.2...karma-test-runner@6.0.0) (2018-04-24)
 
