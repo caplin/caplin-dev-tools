@@ -1,3 +1,13 @@
+<a name="7.1.0"></a>
+# [7.1.0](https://github.com/caplin/caplin-dev-tools/compare/webpack-config-app@7.0.2...webpack-config-app@7.1.0) (2018-04-30)
+
+
+### Features
+
+* **patches:** Allow configuring patches location ([3721ef1](https://github.com/caplin/caplin-dev-tools/commit/3721ef1))
+
+
+
 <a name="7.0.2"></a>
 ## [7.0.2](https://github.com/caplin/caplin-dev-tools/compare/webpack-config-app@7.0.1...webpack-config-app@7.0.2) (2018-04-25)
 
