@@ -1,5 +1,4 @@
 const AliasesPlugin = require("@caplin/aliases-plugin");
-const { appendModulePatch } = require("@caplin/patch-loader/patchesStore");
 
 module.exports.BASE_WEBPACK_CONFIG = {
   module: {
@@ -11,13 +10,6 @@ module.exports.BASE_WEBPACK_CONFIG = {
       {
         test: /\.(eot|gif|jpg|png|svg|ttf|woff|woff2)$/,
         loader: "file-loader"
-      },
-      {
-        test: /\.js$/,
-        loader: "@caplin/patch-loader",
-        options: {
-          appendModulePatch: appendModulePatch()
-        }
       },
       {
         test: /\.css$/,

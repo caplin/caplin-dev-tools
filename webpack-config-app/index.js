@@ -11,6 +11,7 @@ const configureBundleEntryPoint = require("./entry");
 const configureI18nLoading = require("./i18n");
 const configureOutput = require("./output");
 const configureHotReloading = require("./hot-reloading");
+const configurePatches = require("./patches");
 
 const { sourcemaps, variant, hot } = parseArgs(process.argv.slice(2));
 const lifeCycleEvent = process.env.npm_lifecycle_event || "";
@@ -25,6 +26,7 @@ module.exports.webpackConfigGenerator = function webpackConfigGenerator({
   basePath,
   version = "dev",
   i18nFileName = `i18n-${version}.js`,
+  patchesOptions,
   uglifyOptions
 }) {
   // Object.create won't work as webpack only uses enumerable own properties.
@@ -38,6 +40,7 @@ module.exports.webpackConfigGenerator = function webpackConfigGenerator({
   configureAliases(webpackConfig, basePath);
   configureDevtool(webpackConfig, sourcemaps);
   configureBuildDependentConfig(webpackConfig, version, uglifyOptions, isBuild);
+  configurePatches(webpackConfig, patchesOptions);
 
   // `file:` (npm 5) and `link:` (yarn) dependencies are symlinked to instead
   // of being copied into `node_modules`.
