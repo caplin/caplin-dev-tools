@@ -14,6 +14,8 @@ const pathPrefix = new RegExp(
   `node_modules${esc(sep)}|packages-caplin${esc(sep)}`
 );
 
+module.exports.defaultPatchesOptions = GLOB_OPTIONS;
+
 function appendPatchToPatchedModules(loaderAPI, moduleSource) {
   // Remove the absolute `node_modules` or `packages-caplin` path prefix from
   // `resourcePath` to calculate `importedModule` path.
