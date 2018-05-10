@@ -7,9 +7,11 @@ const { LOG_ERROR } = require("@caplin/karma/lib/constants");
 const { atsTestEntry, utsTestEntry } = require("./config");
 const { getTestBrowser } = require("./utils");
 
+const baseReporters = ["log-update"];
+
 const baseKarmaConfig = {
   logLevel: LOG_ERROR,
-  reporters: ["log-update"],
+  reporters: baseReporters,
   webpackMiddleware: {
     logLevel: "warn",
     stats: {
@@ -41,8 +43,11 @@ function createKarmaConf(basePath, testEntry, testsType, argv) {
   const browser = getTestBrowser(argv);
   const watch = argv.w;
   const htmlReport = argv.h;
+  const showConsoleLogs = argv['show-console-logs'];
+
   const karmaConfig = Object.assign({}, baseKarmaConfig, {
     basePath,
+    reporters: showConsoleLogs ? ["progress"].concat(baseReporters) : baseReporters,
     browsers: [browser],
     files: [testEntry],
     frameworks: [],
