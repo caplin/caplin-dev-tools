@@ -1,3 +1,13 @@
+<a name="1.4.0"></a>
+# [1.4.0](https://github.com/caplin/caplin-dev-tools/compare/karma-log-update-reporter@1.3.0...karma-log-update-reporter@1.4.0) (2018-05-11)
+
+
+### Features
+
+* Output browser console logs ([be28959](https://github.com/caplin/caplin-dev-tools/commit/be28959))
+
+
+
 <a name="1.3.0"></a>
 # [1.3.0](https://github.com/caplin/caplin-dev-tools/compare/karma-log-update-reporter@1.2.0...karma-log-update-reporter@1.3.0) (2018-04-23)
 
