@@ -1,3 +1,13 @@
+<a name="6.1.0"></a>
+# [6.1.0](https://github.com/caplin/caplin-dev-tools/compare/karma-test-runner@6.0.2...karma-test-runner@6.1.0) (2018-05-11)
+
+
+### Features
+
+* **karma-output:** Suppress I18n warnings in test output ([941672c](https://github.com/caplin/caplin-dev-tools/commit/941672c))
+
+
+
 <a name="6.0.2"></a>
 ## [6.0.2](https://github.com/caplin/caplin-dev-tools/compare/karma-test-runner@6.0.1...karma-test-runner@6.0.2) (2018-04-27)
 
