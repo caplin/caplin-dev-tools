@@ -10,6 +10,6 @@
   ],
   "license": "ISC",
   "dependencies": {
-    "log-update": "^2.0.0"
+    "karma": "^2.0.2"
   }
 }
