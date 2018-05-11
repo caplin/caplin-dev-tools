@@ -3,6 +3,10 @@
 // https://github.com/babel/babel/tree/master/packages/babel-preset-env#usebuiltins
 require("babel-polyfill");
 
+// When using a reporter that outputs browser logs missing I18n token warnings
+// may overwhelm the other output and make it harder to spot useful logs.
+window.suppressI18nWarnings = true;
+
 // The RegExp starts with '.' to filter out files inside `node_modules`
 // directories. A testContext module source is in a format like so:
 // `./_test-ut/js-test-driver/tests/caplin/alerts/NotificationServiceTest.js`
