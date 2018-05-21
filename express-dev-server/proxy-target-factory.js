@@ -9,7 +9,6 @@ const proxySpawnOptions = {
 module.exports = ({
   cmd = "mvn",
   args = [
-    "-q",
     "-f",
     "server/java/proxy-target-FXPro",
     "jetty:run",
