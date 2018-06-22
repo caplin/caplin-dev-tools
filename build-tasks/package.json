@@ -1,6 +1,6 @@
 {
   "name": "@caplin/build-tasks",
-  "version": "5.2.1",
+  "version": "5.2.2",
   "description": "Build scripts for creating WARs",
   "main": "build.js",
   "keywords": [],

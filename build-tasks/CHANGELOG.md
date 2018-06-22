@@ -1,3 +1,8 @@
+<a name="5.2.2"></a>
+## [5.2.2](https://github.com/caplin/caplin-dev-tools/compare/build-tasks@5.2.1...build-tasks@5.2.2) (2018-06-22)
+
+
+
 <a name="5.2.1"></a>
 ## [5.2.1](https://github.com/caplin/caplin-dev-tools/compare/build-tasks@5.2.0...build-tasks@5.2.1) (2018-04-18)
 
