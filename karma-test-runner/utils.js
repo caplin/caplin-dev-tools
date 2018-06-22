@@ -1,4 +1,4 @@
-const { Server } = require("@caplin/karma");
+const { Server } = require("karma");
 
 function getSelectedBrowser(commandLineArgs) {
   const browser = commandLineArgs.b;
