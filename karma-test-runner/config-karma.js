@@ -9,6 +9,7 @@ const { getTestBrowser } = require("./utils");
 
 const baseKarmaConfig = {
   logLevel: LOG_ERROR,
+  plugins: ["karma-*"],
   reporters: ["log-update"],
   webpackMiddleware: {
     logLevel: "warn",
