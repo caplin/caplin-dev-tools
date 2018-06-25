@@ -1,3 +1,13 @@
+<a name="6.2.0"></a>
+# [6.2.0](https://github.com/caplin/caplin-dev-tools/compare/karma-test-runner@6.1.1...karma-test-runner@6.2.0) (2018-06-25)
+
+
+### Features
+
+* **karma-config:** Allow packages to specify plugins ([904fa2e](https://github.com/caplin/caplin-dev-tools/commit/904fa2e))
+
+
+
 <a name="6.1.1"></a>
 ## [6.1.1](https://github.com/caplin/caplin-dev-tools/compare/karma-test-runner@6.1.0...karma-test-runner@6.1.1) (2018-06-22)
 
