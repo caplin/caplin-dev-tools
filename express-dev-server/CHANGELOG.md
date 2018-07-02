@@ -1,3 +1,13 @@
+<a name="5.1.0"></a>
+# [5.1.0](https://github.com/caplin/caplin-dev-tools/compare/express-dev-server@5.0.0...express-dev-server@5.1.0) (2018-07-02)
+
+
+### Features
+
+* **express-server:** Add configurable route paths for index page ([8dec7c2](https://github.com/caplin/caplin-dev-tools/commit/8dec7c2))
+
+
+
 <a name="5.0.0"></a>
 # [5.0.0](https://github.com/caplin/caplin-dev-tools/compare/express-dev-server@4.6.1...express-dev-server@5.0.0) (2018-04-24)
 
