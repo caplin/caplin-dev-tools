@@ -10,8 +10,8 @@ function indexRequestHandler(indexPage, res) {
   res.send(indexPageHTMLWithInjectedJNDI);
 }
 
-module.exports = (application, indexPage) => {
-  application.get("/", (req, res) => indexRequestHandler(indexPage, res));
+module.exports = (application, indexPage, routePath = "/") => {
+  application.get(routePath, (req, res) => indexRequestHandler(indexPage, res));
 };
 
 module.exports.loginProtectedIndexPage = ({ app, appRoot, indexPage }) => {
