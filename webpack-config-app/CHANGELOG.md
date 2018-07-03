@@ -1,3 +1,13 @@
+<a name="7.2.0"></a>
+# [7.2.0](https://github.com/caplin/caplin-dev-tools/compare/webpack-config-app@7.1.0...webpack-config-app@7.2.0) (2018-07-03)
+
+
+### Features
+
+* **config:** Add support for cur files ([1fef88f](https://github.com/caplin/caplin-dev-tools/commit/1fef88f))
+
+
+
 <a name="7.1.0"></a>
 # [7.1.0](https://github.com/caplin/caplin-dev-tools/compare/webpack-config-app@7.0.2...webpack-config-app@7.1.0) (2018-04-30)
 
