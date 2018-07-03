@@ -8,7 +8,7 @@ module.exports.BASE_WEBPACK_CONFIG = {
         loader: "@caplin/html-loader"
       },
       {
-        test: /\.(eot|gif|jpg|png|svg|ttf|woff|woff2)$/,
+        test: /\.(cur|eot|gif|jpg|png|svg|ttf|woff|woff2)$/,
         loader: "file-loader"
       },
       {
