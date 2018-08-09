@@ -1,3 +1,24 @@
+<a name="6.0.0"></a>
+# [6.0.0](https://github.com/caplin/caplin-dev-tools/compare/build-tasks@5.3.0...build-tasks@6.0.0) (2018-08-09)
+
+
+### Features
+
+* Add META-INF support for WAR building ([6f8ccb2](https://github.com/caplin/caplin-dev-tools/commit/6f8ccb2))
+
+
+### BREAKING CHANGES
+
+* Option `webInfLocation` replaced with
+`webINFPath`.
+
+Adding support for `metaINFPath` option; default is
+`META-INF` directory next to `WEB-INF`.
+
+closes: MFXMOTIF-2392
+
+
+
 <a name="5.3.0"></a>
 # [5.3.0](https://github.com/caplin/caplin-dev-tools/compare/build-tasks@5.2.2...build-tasks@5.3.0) (2018-07-17)
 
