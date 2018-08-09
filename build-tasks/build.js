@@ -1,5 +1,5 @@
 const { existsSync, renameSync, mkdir } = require("fs");
-const { join } = require("path");
+const { join, parse } = require("path");
 
 const { create } = require("archiver");
 const { copySync, createWriteStream, writeFileSync } = require("fs-extra");
@@ -15,8 +15,7 @@ const NO_OP = () => {
 const STATIC_DIR = "static";
 const warDir = join(buildDir, "exported-wars");
 
-// When we've built the application add any required WAR files.
-function createWAR(indexPage, version, webInfLocation, buildCallback, warName) {
+function createWARFiles({ indexPage, metaINFPath, version, webINFPath }) {
   const variant = parseArgs(process.argv.slice(2)).variant;
   const indexFile = indexPage({ variant, version });
   const staticDistDir = join(distDir, `${STATIC_DIR}`);
@@ -35,11 +34,23 @@ function createWAR(indexPage, version, webInfLocation, buildCallback, warName) {
     renameSync(versionedStaticDistDir, join(staticDistDir, version));
   }
 
-  if (existsSync(webInfLocation)) {
-    copySync(webInfLocation, join(distDir, "WEB-INF"));
+  if (existsSync(webINFPath)) {
+    copySync(webINFPath, join(distDir, "WEB-INF"));
+  }
+
+  if (existsSync(metaINFPath)) {
+    copySync(metaINFPath, join(distDir, "META-INF"));
   }
 
   writeFileSync(join(distDir, "index.html"), indexFile, "utf8");
+}
+
+// When we've built the application add any required WAR files.
+function createWAR(config) {
+  const { buildCallback, version, warName } = config;
+
+  createWARFiles(config);
+
   // Allows the user of this package to attach their own post build/pre WAR
   // creation script.
   buildCallback({ version });
@@ -51,22 +62,13 @@ function createWAR(indexPage, version, webInfLocation, buildCallback, warName) {
     archive.directory(distDir, "");
     archive.pipe(warWriteStream);
     archive.finalize();
+
     console.log("Finished creating", join(warDir, `${warName}.war`));
   });
 }
 
 // Called once the webpack build finishes.
-function webpackBuildCallback(
-  error,
-  stats,
-  {
-    buildCallback = NO_OP,
-    indexPage,
-    version,
-    warName,
-    webInfLocation = join(process.cwd(), "scripts", "WEB-INF")
-  }
-) {
+function webpackBuildCallback(error, stats, config) {
   const jsonStats = stats.toJson();
 
   if (error) {
@@ -74,7 +76,7 @@ function webpackBuildCallback(
   } else if (jsonStats.errors.length > 0) {
     jsonStats.errors.forEach(err => console.error(err));
   } else {
-    createWAR(indexPage, version, webInfLocation, buildCallback, warName);
+    createWAR(config);
   }
 }
 
@@ -99,6 +101,15 @@ exports.deleteBuildDir = function deleteBuildDir(callback) {
 };
 
 exports.cleanDistAndBuildWAR = function cleanDistAndBuildWAR(config) {
+  const defaultWEBINFPath = join(process.cwd(), "scripts", "WEB-INF");
+  const webINFPath = config.webINFPath || defaultWEBINFPath;
+  // The default is for META-INF to be in the same directory as WEB-INF.
+  const defaultMETAINFPath = join(parse(webINFPath).dir, "META-INF");
+
+  config.buildCallback = config.buildCallback || NO_OP;
+  config.metaINFPath = config.metaINFPath || defaultMETAINFPath;
+  config.webINFPath = webINFPath;
+
   // Remove the current `build/dist` directory.
   rimraf(distDir, rimrafCallback(config));
 };
