@@ -10,13 +10,13 @@
     "postinstall": "node post-install.js"
   },
   "dependencies": {
+    "@babel/core": "^7.1.2",
     "@caplin/aliases-plugin": "^2.0.0",
     "@caplin/html-loader": "^1.0.2",
     "@caplin/i18n-loader": "^1.0.0",
     "@caplin/patch-loader": "^3.0.0",
     "@caplin/xml-loader": "^2.0.0",
-    "babel-core": "^6.23.1",
-    "babel-loader": "^7.0.0",
+    "babel-loader": "^8.0.4",
     "chalk": "^2.0.0",
     "css-loader": "^0.28.0",
     "extract-text-webpack-plugin": "^4.0.0-beta.0",
