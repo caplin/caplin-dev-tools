@@ -1,3 +1,18 @@
+<a name="8.0.0-alpha.1"></a>
+# [8.0.0-alpha.1](https://github.com/caplin/caplin-dev-tools/compare/webpack-config-app@7.2.0...webpack-config-app@8.0.0-alpha.1) (2018-10-09)
+
+
+### Features
+
+* **webpack-config:** Move to Babel 7 ([778d313](https://github.com/caplin/caplin-dev-tools/commit/778d313))
+
+
+### BREAKING CHANGES
+
+* **webpack-config:** Drop support for Babel 6
+
+
+
 <a name="7.2.0"></a>
 # [7.2.0](https://github.com/caplin/caplin-dev-tools/compare/webpack-config-app@7.1.0...webpack-config-app@7.2.0) (2018-07-03)
 
