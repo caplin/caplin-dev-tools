@@ -1,3 +1,19 @@
+<a name="6.0.0"></a>
+# [6.0.0](https://github.com/caplin/caplin-dev-tools/compare/express-dev-server@5.1.0...express-dev-server@6.0.0) (2018-10-16)
+
+
+### Features
+
+* **proxy-factory:** Terminate the server on proxy process errors ([8802476](https://github.com/caplin/caplin-dev-tools/commit/8802476))
+
+
+### BREAKING CHANGES
+
+* **proxy-factory:** It's possible that certain errors don't affect the
+running of the proxy target.
+
+
+
 <a name="5.1.0"></a>
 # [5.1.0](https://github.com/caplin/caplin-dev-tools/compare/express-dev-server@5.0.0...express-dev-server@5.1.0) (2018-07-02)
 
