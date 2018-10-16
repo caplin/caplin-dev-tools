@@ -1,4 +1,4 @@
-const { existsSync, readdirSync, readFileSync } = require("fs");
+const { existsSync, readdirSync } = require("fs");
 const { join, sep } = require("path");
 
 const dirSep = sep === "\\" ? "\\\\" : sep;
@@ -58,40 +58,17 @@ function createIncludeFunction(basePath) {
   };
 }
 
-function createBabelLoaderOptions(basePath) {
-  const babelLoaderQuery = {
-    cacheDirectory: true
-  };
-  const babelRC = JSON.parse(readFileSync(join(basePath, ".babelrc"), "utf8"));
-
-  if (babelRC.presets) {
-    babelLoaderQuery.presets = babelRC.presets.map(preset => {
-      // Presets can be of type string|[string, {}] to allow configuring presets
-      // https://babeljs.io/docs/plugins/#plugin-preset-options
-      if (Array.isArray(preset)) {
-        // Include the preset configuration `preset[1]` in returned value.
-        return [require.resolve(`babel-preset-${preset[0]}`), preset[1]];
-      }
-
-      return require.resolve(`babel-preset-${preset}`);
-    });
-  }
-
-  if (babelRC.plugins) {
-    babelLoaderQuery.plugins = babelRC.plugins.map(plugin =>
-      require.resolve(`babel-plugin-${plugin}`)
-    );
-  }
-
-  return babelLoaderQuery;
-}
-
 module.exports = function configureBabelLoader(webpackConfig, basePath) {
   const babelModulesRule = {
     test: /\.jsx?$/,
-    loader: "babel-loader",
-    include: createIncludeFunction(basePath),
-    options: createBabelLoaderOptions(basePath)
+    // exclude: /(node_modules|bower_components)/,
+    // include: createIncludeFunction(basePath),
+    use: {
+      loader: "babel-loader",
+      options: {
+        cacheDirectory: true
+      }
+    }
   };
 
   // Babel loader must be first for source maps to be shown in ES6
