@@ -1,3 +1,13 @@
+<a name="8.0.0-alpha.2"></a>
+# [8.0.0-alpha.2](https://github.com/caplin/caplin-dev-tools/compare/webpack-config-app@8.0.0-alpha.1...webpack-config-app@8.0.0-alpha.2) (2018-10-16)
+
+
+### Bug Fixes
+
+* **babel:** Don't resolve the location of Babel presets and plugins ([6639e64](https://github.com/caplin/caplin-dev-tools/commit/6639e64))
+
+
+
 <a name="8.0.0-alpha.1"></a>
 # [8.0.0-alpha.1](https://github.com/caplin/caplin-dev-tools/compare/webpack-config-app@7.2.0...webpack-config-app@8.0.0-alpha.1) (2018-10-09)
 
