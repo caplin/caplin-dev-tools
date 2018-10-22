@@ -1,3 +1,8 @@
+<a name="7.3.0"></a>
+# [7.3.0](https://github.com/caplin/caplin-dev-tools/compare/webpack-config-app@7.2.0...webpack-config-app@7.3.0) (2018-10-22)
+
+
+
 <a name="7.2.0"></a>
 # [7.2.0](https://github.com/caplin/caplin-dev-tools/compare/webpack-config-app@7.1.0...webpack-config-app@7.2.0) (2018-07-03)
 
