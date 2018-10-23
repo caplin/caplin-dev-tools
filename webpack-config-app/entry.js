@@ -6,22 +6,22 @@ module.exports = function configureBundleEntryPoint(
   webpackConfig,
   basePath
 ) {
-  let entryFile = "index.js";
+  const srcPath = join(basePath, "src");
+  let appEntryPoint = join(srcPath, "index.js");
 
   // Certain apps can have variant entry points e.g. mobile.
   if (variant) {
-    const customerEntryPoint = join("customers", variant, "index.js");
+    const customerEntryPoint = join(srcPath, "customers", variant, "index.js");
     // Keep backwards compatibility for apps that might already be using this
-    const variantEntryPoint = `index-${variant}.js`;
+    const variantEntryPoint = join(srcPath, `index-${variant}.js`);
 
-    entryFile = existsSync(customerEntryPoint)
+    appEntryPoint = existsSync(customerEntryPoint)
       ? customerEntryPoint
       : existsSync(variantEntryPoint)
         ? variantEntryPoint
-        : entryFile;
+        : appEntryPoint;
   }
 
-  const appEntryPoint = join(basePath, "src", entryFile);
   const reactErrorOverlay = require.resolve("react-error-overlay");
 
   webpackConfig.entry = [reactErrorOverlay, appEntryPoint];
