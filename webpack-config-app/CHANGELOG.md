@@ -21,6 +21,11 @@
 
 * **webpack-config:** Drop support for Babel 6
 
+<a name="7.3.1"></a>
+## [7.3.1](https://github.com/caplin/caplin-dev-tools/compare/webpack-config-app@7.3.0...webpack-config-app@7.3.1) (2018-10-23)
+
+
+
 <a name="7.3.0"></a>
 # [7.3.0](https://github.com/caplin/caplin-dev-tools/compare/webpack-config-app@7.2.0...webpack-config-app@7.3.0) (2018-10-22)
 
