@@ -12,25 +12,25 @@ application directory to new locations within the application directory.
 1.  It's first step is to back up the entire folder (except for hidden files)
     into a `brjs-app-backup` directory. This allows a user to access the old
     application files.
-2.  It then creates a top level directory (`packages-caplin`) for the application
-    packages.
+2.  It then creates a top level directory (`packages-caplin`) for the
+    application packages.
 3.  It copies all the application's libs and CT SDK libs into the packages
     directory.
-    * While copying them it generates a stub `package.json` for each
+    - While copying them it generates a stub `package.json` for each
       copied directory.
 4.  It creates another top level directory called `apps`.
 5.  Within this directory it creates a directory for the restructured
     application.
-    * For an app named `mobile` it creates `apps/mobile` and populates it with
+    - For an app named `mobile` it creates `apps/mobile` and populates it with
       a few application files that the user provides.
-    * It also creates a `src` directory for the application `apps/mobile/src`
+    - It also creates a `src` directory for the application `apps/mobile/src`
       that contains the blades/bladesets and aspects of the application.
 
 This leaves the project with three top level directories:
 
-* `apps`
-* `packages-caplin` (Caplin provided packages, CT SDK)
-* `brjs-app-backup` (which can be deleted once the user is satisfied they don't
+- `apps` (holds the application directory with blades, bladesets, aspects)
+- `packages-caplin` (Caplin provided packages, CT SDK, application libs)
+- `brjs-app-backup` (which can be deleted once the user is satisfied they don't
   need the old files).
 
 These screenshots contrast before and after (after shows a monorepo with several
@@ -67,15 +67,19 @@ directory.
 
 ## How
 
-Install the tool
+You must navigate to the BRJS project root directory (e.g. C:/dev/someApp,
+not C:/dev/someApp/apps/mobile) and run the tool.
+
+To run the tool you can either use `npx` (packaged with node):
+
+`npx -p github:caplin/caplin-dev-tools brjs-app-converter --app mobile`
+
+which is easiest for experimenting or you can install the tool:
 
 `npm i -g caplin/caplin-dev-tools`
 
 Which asks npm to install (`i`) the repo globally (`-g`), this means the command
-`brjs-app-converter` is now made available on the command line.
-
-Then you must navigate to the BRJS project root directory (e.g. C:/dev/someApp,
-not C:/dev/someApp/apps/mobile) and run the tool.
+`brjs-app-converter` is now made available on the command line and run:
 
 ```bash
 brjs-app-converter --app mobile
@@ -83,7 +87,7 @@ brjs-app-converter --app mobile
 
 The parameters mean:
 
-* Provide the name of the app directory to convert with `--app`.
+- Provide the name of the app directory to convert with `--app`.
 
 ## Following steps.
 
@@ -157,8 +161,8 @@ BRJS application still works following these changes. It is possible to run the
 conversion without completing these steps but it's likely the application will
 not load.
 
-* The codebase should be converted to CJS, this can be done using https://github.com/caplin/gc-cli
-* Capture the application's aliases to an aliases file. The aliases can be
+- The codebase should be converted to CJS, this can be done using https://github.com/caplin/gc-cli
+- Capture the application's aliases to an aliases file. The aliases can be
   captured by searching for the `alias!$data` network request or the `alias!$data`
   module in the BRJS `bundle.js`. The aliases bundle can be converted by running
   the `jscodeshift` transform script called `aliases-transform.js` which is stored
@@ -167,10 +171,10 @@ not load.
 These two steps maybe redundant now. The first should be handled by the
 conversion tool and the second has been changed in the latest CT packages.
 
-* Third party libraries that don't export a value should have their `exports`
+- Third party libraries that don't export a value should have their `exports`
   property in their `thirdparty-lib.manifest` file set to `null`; if it's set to
   `"{}"` errors will be thrown during bundling.
-* Capture the applications's metadata. This can be done by executing
+- Capture the applications's metadata. This can be done by executing
   `require("app-meta!$data")` when the application is running in BRJS. A
   `metadata.js` module should be created in the application's `conversion-data`
   `config` directory containing that metadata. The code below is an example of a
