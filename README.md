@@ -1,8 +1,8 @@
-# caplin-dev-tools
+# Caplin dev tools
 
 ## Packages for developing Caplin applications using node.js tooling
 
-This monorepo contains tens of packages that are designed to be used as part of
+This monorepo contains packages that are designed to be used as part of
 a Caplin development environment. They are not designed for usage in generic web
 applications. The more important packages have their own README.md files.
 
@@ -13,7 +13,8 @@ For information on the `caplin-cli` tool
 
 ## Releasing packages
 
-We are using [conventional-changelog](https://github.com/conventional-changelog/conventional-changelog)
+We are using [conventional-changelog](https://github.com/conventional-changelog/conventional-changelog) to
+programatically create changelogs.
 
 ### Creation of CHANGELOG.md
 
@@ -37,6 +38,8 @@ Push the newly created tag to the server
 `git push origin express-dev-server@4.0.1`
 
 ### Updating CHANGELOG.md
+
+This example uses the `express-dev-server` package:
 
 1.  Make changes
 2.  Commit those changes
