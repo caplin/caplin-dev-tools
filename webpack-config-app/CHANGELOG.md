@@ -1,3 +1,13 @@
+<a name="8.0.0"></a>
+# [8.0.0](https://github.com/caplin/caplin-dev-tools/compare/webpack-config-app@8.0.0-alpha.2...webpack-config-app@8.0.0) (2018-10-31)
+
+
+### Bug Fixes
+
+* **babel:** Filter out node_modules from compilation ([e6457de](https://github.com/caplin/caplin-dev-tools/commit/e6457de))
+
+
+
 <a name="8.0.0-alpha.2"></a>
 # [8.0.0-alpha.2](https://github.com/caplin/caplin-dev-tools/compare/webpack-config-app@8.0.0-alpha.1...webpack-config-app@8.0.0-alpha.2) (2018-10-16)
 
