@@ -1,6 +1,12 @@
 const { existsSync, readdirSync } = require("fs");
 const { join, sep } = require("path");
 
+// Windows uses `\` as directory separator, in a string `\` will act as an
+// escape character so to represent `\` in a string literal you must write `\\`
+// which will be converted to `\` when printing/viewing the value in a debugger.
+// As `\` acts as an escape character in RegExps too when creating RegExps from
+// strings `\` must be escaped twice. Once for the string value and again for
+// the RegExp value, so `\\\\` is the string `\\` and the RegExp `\`.
 const dirSep = sep === "\\" ? "\\\\" : sep;
 // Find a `node_modules` that is not followed by any further `node_modules` (in
 // other words the last `node_modules` in a string), and extract the path part
@@ -56,12 +62,12 @@ function extractPackageNameFromPath(sourcePath) {
 
 function createIncludeFunction(basePath) {
   const allPackages = findAllLocalPackages(basePath);
-  const isAppSource = new RegExp(`${basePath}${dirSep}src`);
+  const applicationSrcPath = `${basePath}${sep}src`;
   const isSourceFile = new RegExp(/\.jsx?$/);
 
   return function includeFunction(sourcePath) {
     if (isSourceFile.test(sourcePath)) {
-      if (isAppSource.test(sourcePath)) {
+      if (sourcePath.startsWith(applicationSrcPath)) {
         return true;
       }
 
