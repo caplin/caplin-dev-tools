@@ -1,3 +1,13 @@
+<a name="8.0.1"></a>
+## [8.0.1](https://github.com/caplin/caplin-dev-tools/compare/webpack-config-app@8.0.0...webpack-config-app@8.0.1) (2018-11-07)
+
+
+### Bug Fixes
+
+* **babel:** Compile app source files in Windows ([cec41c2](https://github.com/caplin/caplin-dev-tools/commit/cec41c2))
+
+
+
 <a name="8.0.0"></a>
 # [8.0.0](https://github.com/caplin/caplin-dev-tools/compare/webpack-config-app@8.0.0-alpha.2...webpack-config-app@8.0.0) (2018-10-31)
 
