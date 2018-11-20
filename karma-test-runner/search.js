@@ -44,8 +44,8 @@ function dependencySearch(pkgToSearch, foundPkgs, appDir = pkgToSearch) {
   const pkgJSON = require(join(pkgToSearch, "package.json"));
   const deps = getDependenciesDirs(pkgJSON.dependencies, pkgToSearch, appDir);
   const newDeps = deps.filter(name => !foundPkgs.includes(name));
-  console.log("dependencies", pkgJSON.dependencies);
-  console.log("foundPkgs", foundPkgs);
+  //console.log("dependencies", pkgJSON.dependencies);
+  //console.log("foundPkgs", foundPkgs);
   foundPkgs.push(...newDeps);
   newDeps.forEach(name => {
     dependencySearch(name, foundPkgs, appDir);
@@ -77,7 +77,7 @@ function findAppPackages(appDir) {
   dependencySearch(appDir, foundPackages);
 
   const escapedAppPackages = foundPackages.concat(appPackagesDirs).map(escSep);
-  console.log("escaped app packages", escapedAppPackages);
+  //console.log("escaped app packages", escapedAppPackages);
   return escapedAppPackages;
 }
 
