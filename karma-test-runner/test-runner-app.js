@@ -25,9 +25,9 @@ function filterPkgs(appPkgs, { _, f }) {
     const filter = new RegExp(regExpString);
 
     return appPkgs.filter(dir => {
-      if (dir.contains("cps-react")) {
+
         console.log("basename: ", dir, basename(dir), basename(dir).search(filter));  
-      }
+     
       return basename(dir).search(filter) === -1
     });
   }
