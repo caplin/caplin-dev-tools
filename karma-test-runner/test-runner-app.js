@@ -23,11 +23,13 @@ function filterPkgs(appPkgs, { _, f }) {
 
   if (regExpString) {
     const filter = new RegExp(regExpString);
-    if (dir.contains("cps-react")) {
-      console.log("basename: ", dir, basename(dir), basename(dir).search(filter));  
-    }
 
-    return appPkgs.filter(dir => basename(dir).search(filter) === -1);
+    return appPkgs.filter(dir => {
+      if (dir.contains("cps-react")) {
+        console.log("basename: ", dir, basename(dir), basename(dir).search(filter));  
+      }
+      return basename(dir).search(filter) === -1
+    });
   }
 
   return appPkgs;
