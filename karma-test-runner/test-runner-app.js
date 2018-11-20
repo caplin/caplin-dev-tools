@@ -32,7 +32,10 @@ function filterPkgs(appPkgs, { _, f }) {
 
 function getPkgsWithTests(searchDir, argv) {
   const appPkgs = findAppPackages(searchDir);
+  console.log("appPkgs", appPkgs.join(","));
   const validPks = filterPkgs(appPkgs, argv);
+  console.log("validPks", validPks.join(","));
+
   const pkgsWithATs = argv.u ? [] : validPks.filter(doesPkgHaveATs);
   const pkgsWithUTs = argv.a ? [] : validPks.filter(doesPkgHaveUTs);
 
