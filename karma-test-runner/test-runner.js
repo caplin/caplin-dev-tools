@@ -1,4 +1,5 @@
 const { sep } = require("path");
+const fs = require("fs-extra");
 
 const { runAppTests } = require("./test-runner-app");
 const {
@@ -10,6 +11,11 @@ function runTests(searchDir, argv) {
   const pathParts = searchDir.split(sep);
   const appOrPkgName = pathParts.pop();
   const appOrPkgDir = pathParts.pop();
+  const cleanCoverage = argv.k;
+
+  if (cleanCoverage) {
+    fs.removeSync("./coverage");
+  }
 
   if (isSingleTestFile(argv, searchDir)) {
     console.log(`Running tests in ${argv._[0]}`);

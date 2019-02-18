@@ -1,11 +1,13 @@
 const { existsSync } = require("fs");
 const { join } = require("path");
-
+const { basename } = require("path");
+const { findAppPackages } = require("./search");
 const { DefinePlugin } = require("webpack");
 
-function createWebpackConfig(appDir) {
+function createWebpackConfig(appDir, argv) {
   const aliasesTestPath = join(appDir, "src/config/aliases-test.js");
   const webpackConfig = require(join(appDir, "webpack.config"))();
+  const coverageReport = argv.c;
 
   if (existsSync(aliasesTestPath)) {
     webpackConfig.resolve.alias["$aliases-data$"] = aliasesTestPath;
@@ -14,6 +16,26 @@ function createWebpackConfig(appDir) {
   // No `entry` as `karma-webpack` doesn't use it, it creates second redudant
   // chunk, slowing down build.
   delete webpackConfig.entry;
+
+  if (coverageReport) {
+    const packages = findAppPackages(appDir);
+
+    let caplinPackages = [];
+    if (argv._.length > 0) {
+      caplinPackages = packages.filter(dir => argv._.includes(basename(dir)));
+    }
+    caplinPackages.push(join(appDir, "./src"));
+
+    webpackConfig.module.rules.push({
+      test: /\.js$/,
+      loader: "istanbul-instrumenter-loader",
+      options: {
+        esModules: true
+      },
+      include: caplinPackages,
+      exclude: /(test)/
+    });
+  }
 
   return webpackConfig;
 }

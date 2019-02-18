@@ -42,7 +42,10 @@ function createKarmaConf(basePath, testEntry, testsType, argv) {
   const browser = getTestBrowser(argv);
   const watch = argv.w;
   const htmlReport = argv.h;
-  const karmaConfig = Object.assign({}, baseKarmaConfig, {
+  const coverageReport = argv.c;
+  // Takes a copy of baseKarmaConfig to prevent subjects from being modified.
+  const baseCopy = JSON.parse(JSON.stringify(baseKarmaConfig));
+  const karmaConfig = Object.assign({}, baseCopy, {
     basePath,
     browsers: [browser],
     files: [testEntry],
@@ -67,6 +70,37 @@ function createKarmaConf(basePath, testEntry, testsType, argv) {
       useLegacyStyle: true
     };
     karmaConfig.reporters.push("html");
+  }
+
+  if (coverageReport) {
+    const { base } = parse(basePath);
+
+    const coverageConfig = {
+      coverageReporter: {
+        type: "in-memory"
+      },
+
+      coverageIstanbulReporter: {
+        reports: ["text-summary", "json"],
+        fixWebpackSourcePaths: true,
+        combineBrowserReports: true,
+        skipFilesWithNoCoverage: false,
+        "report-config": {
+          // all options available at: https://github.com/istanbuljs/istanbuljs/blob/aae256fb8b9a3d19414dcf069c592e88712c32c6/packages/istanbul-reports/lib/html/index.js#L135-L137
+          html: {
+            // outputs the report in ./coverage/html
+            subdir: "html"
+          },
+          json: {
+            file: `${base}-${testsType}-coverage-report.json`
+          }
+        }
+      }
+    };
+
+    karmaConfig.reporters.push("coverage");
+    karmaConfig.reporters.push("coverage-istanbul");
+    Object.assign(karmaConfig, coverageConfig);
   }
 
   applyBasePathConfig(basePath, karmaConfig);

@@ -1,4 +1,6 @@
 const { Server } = require("karma");
+const combineCoverage = require("./coverageCombiner");
+const { basename } = require("path");
 
 function getSelectedBrowser(commandLineArgs) {
   const browser = commandLineArgs.b;
@@ -88,6 +90,8 @@ function showSummary(results, watching) {
 }
 
 function runPackageTests(karmaConfig) {
+  console.log("Running Tests in " + basename(karmaConfig.basePath));
+
   return new Promise(resolve => {
     let testsResult;
     const server = new Server(karmaConfig, () => {
@@ -99,12 +103,20 @@ function runPackageTests(karmaConfig) {
     server.on("run_complete", (browsers, result) => {
       testsResult = result;
     });
+    server.on("browser_error", (browser, error) => {
+      console.log(`ERROR on browser: ${error}`);
+    });
 
     server.start();
   });
 }
 
-async function runPackagesTests(packagesKarmaConfigs, watching) {
+async function runPackagesTests(
+  packagesKarmaConfigs,
+  watching,
+  coverageOn,
+  appDir
+) {
   const results = [];
 
   // Pressing Control-C must exit the process even if we have queued test runs.
@@ -112,6 +124,10 @@ async function runPackagesTests(packagesKarmaConfigs, watching) {
 
   for (const packageKarmaConfig of packagesKarmaConfigs) {
     results.push(await runPackageTests(packageKarmaConfig));
+  }
+
+  if (coverageOn) {
+    combineCoverage(appDir);
   }
 
   showSummary(results, watching);
