@@ -1,3 +1,13 @@
+<a name="8.1.0"></a>
+# [8.1.0](https://github.com/caplin/caplin-dev-tools/compare/webpack-config-app@8.0.1...webpack-config-app@8.1.0) (2019-04-15)
+
+
+### Features
+
+* **webpack-config:** Add support for TypeScript ([e314585](https://github.com/caplin/caplin-dev-tools/commit/e314585))
+
+
+
 <a name="8.0.1"></a>
 ## [8.0.1](https://github.com/caplin/caplin-dev-tools/compare/webpack-config-app@8.0.0...webpack-config-app@8.0.1) (2018-11-07)
 

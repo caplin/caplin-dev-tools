@@ -43,8 +43,10 @@ This example uses the `express-dev-server` package:
 
 1.  Make changes
 2.  Commit those changes
-3.  Bump version in package.json
+3.  Bump version in package.json e.g. `yarn version --minor --no-git-tag-version`
 4.  `conventional-changelog -p angular -i CHANGELOG.md -s --commit-path . -l express-dev-server`
+    Replace `express-dev-server` with the directory the package you are publishing
+    resides in.
 5.  Commit `package.json` and `CHANGELOG.md`
 6.  Tag e.g. `g tag express-dev-server@4.1.0`
 7.  Push code and tag (`g push origin express-dev-server@4.1.0`)
