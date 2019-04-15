@@ -48,6 +48,7 @@ This example uses the `express-dev-server` package:
     Replace `express-dev-server` with the directory the package you are publishing
     resides in.
 5.  Commit `package.json` and `CHANGELOG.md`
-6.  Tag e.g. `g tag express-dev-server@4.1.0`
-7.  Push code and tag (`g push origin express-dev-server@4.1.0`)
-8.  Publish to npm
+6.  Tag e.g. `git tag express-dev-server@4.1.0` replace `express-dev-server@4.1.0`
+    with the `package@version` that you are releasing.
+7.  Push code `git push` and tag `git push origin express-dev-server@4.1.0`
+8.  Publish to npm `yarn publish`
