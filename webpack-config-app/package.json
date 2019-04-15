@@ -25,6 +25,8 @@
     "raw-loader": "^0.5.1",
     "react-error-overlay": "^4.0.0",
     "style-loader": "^0.20.0",
+    "ts-loader": "^5.3.3",
+    "typescript": "^3.4.3",
     "uglifyjs-webpack-plugin": "^1.0.0",
     "webpack": "^4.0.0"
   },

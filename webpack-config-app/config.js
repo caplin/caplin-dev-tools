@@ -18,13 +18,17 @@ module.exports.BASE_WEBPACK_CONFIG = {
       {
         test: /\.xml$/,
         loader: "@caplin/xml-loader"
+      },
+      {
+        test: /\.tsx?$/,
+        loader: "ts-loader"
       }
     ]
   },
   resolve: {
     // Empty object required for `aliases` module
     alias: {},
-    extensions: [".js", ".json", ".jsx"]
+    extensions: [".js", ".ts", ".tsx", ".jsx", ".json"]
   },
   performance: {
     // Turn off performance hint warnings.
