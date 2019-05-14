@@ -20,7 +20,8 @@ const baseKarmaConfig = {
       moduleTrace: true,
       warnings: true
     }
-  }
+  },
+  browserDisconnectTolerance: 5
 };
 
 function applyBasePathConfig(basePath, karmaConfig) {
