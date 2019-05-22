@@ -41,7 +41,7 @@ function getPkgsWithTests(searchDir, argv) {
 
 function runAppTests(searchDir, argv) {
   const { pkgsWithATs, pkgsWithUTs } = getPkgsWithTests(searchDir, argv);
-  const webpackConfig = createWebpackConfig(searchDir);
+  const webpackConfig = createWebpackConfig(searchDir, argv);
 
   const atsKarmaConf = pkgsWithATs
     .map(dir => createATsKarmaConf(dir, argv))
@@ -50,7 +50,12 @@ function runAppTests(searchDir, argv) {
     .map(dir => createUTsKarmaConf(dir, argv))
     .map(karmaConf => addWebpackConf(karmaConf, webpackConfig));
 
-  runPackagesTests(utsKarmaConf.concat(atsKarmaConf), argv.w);
+  runPackagesTests(
+    utsKarmaConf.concat(atsKarmaConf),
+    argv.w,
+    argv.c,
+    searchDir
+  );
 }
 
 module.exports.runAppTests = runAppTests;
