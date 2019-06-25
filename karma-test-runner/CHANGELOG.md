@@ -1,3 +1,13 @@
+<a name="6.4.1"></a>
+## [6.4.1](https://github.com/caplin/caplin-dev-tools/compare/karma-test-runner@6.4.0...karma-test-runner@6.4.1) (2019-06-25)
+
+
+### Bug Fixes
+
+* **config-karma:** Don't shut down the browser in the middle of debug sessions ([94d3fac](https://github.com/caplin/caplin-dev-tools/commit/94d3fac))
+
+
+
 <a name="6.4.0"></a>
 # [6.4.0](https://github.com/caplin/caplin-dev-tools/compare/karma-test-runner@6.3.0...karma-test-runner@6.4.0) (2019-05-22)
 
