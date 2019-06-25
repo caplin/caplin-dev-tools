@@ -1,3 +1,13 @@
+<a name="6.0.2"></a>
+## [6.0.2](https://github.com/caplin/caplin-dev-tools/compare/express-dev-server@6.0.1...express-dev-server@6.0.2) (2019-06-25)
+
+
+### Bug Fixes
+
+* **proxy-target:** Don't throw errors on stderr target output ([2a3d967](https://github.com/caplin/caplin-dev-tools/commit/2a3d967))
+
+
+
 <a name="6.0.1"></a>
 ## [6.0.1](https://github.com/caplin/caplin-dev-tools/compare/express-dev-server@6.0.0...express-dev-server@6.0.1) (2019-06-25)
 
