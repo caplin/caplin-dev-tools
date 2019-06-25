@@ -20,8 +20,7 @@ const baseKarmaConfig = {
       moduleTrace: true,
       warnings: true
     }
-  },
-  browserDisconnectTolerance: 5
+  }
 };
 
 function applyBasePathConfig(basePath, karmaConfig) {
@@ -57,6 +56,12 @@ function createKarmaConf(basePath, testEntry, testsType, argv) {
     singleRun: !watch,
     testsType
   });
+
+  if (!watch) {
+    // Unless this is left as default debugging causes Karma to disconnect and
+    // shut down the browser in the middle of debug sessions.
+    karmaConfig.browserDisconnectTolerance = 5;
+  }
 
   if (htmlReport) {
     const { base } = parse(basePath);
