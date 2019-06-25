@@ -1,3 +1,8 @@
+<a name="6.0.1"></a>
+## [6.0.1](https://github.com/caplin/caplin-dev-tools/compare/express-dev-server@6.0.0...express-dev-server@6.0.1) (2019-06-25)
+
+
+
 <a name="6.0.0"></a>
 # [6.0.0](https://github.com/caplin/caplin-dev-tools/compare/express-dev-server@5.1.0...express-dev-server@6.0.0) (2018-10-16)
 
