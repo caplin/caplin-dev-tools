@@ -22,10 +22,11 @@ module.exports = ({
     // Convert from `Buffer` to utf-8 string.
     const errorMessage = stderrData.toString();
 
-    // Throwing an uncaught error and allowing the process to terminate is safer
-    // than calling process.exit as it won't be truncate error message output.
-    // https://nodejs.org/api/process.html#process_process_exit_code
-    throw new Error(errorMessage);
+    // We can't throw an error here even though it looks like the right thing
+    // to do because sometimes spawned programs log to error output as part of
+    // their standard logging...
+    // eslint-disable-next-line no-console
+    console.error(errorMessage);
   });
 
   process.stdout.on("data", stdoutData => {
