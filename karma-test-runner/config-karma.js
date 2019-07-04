@@ -11,6 +11,7 @@ const baseKarmaConfig = {
   logLevel: LOG_ERROR,
   plugins: ["karma-*"],
   reporters: ["log-update"],
+  browserDisconnectTimeout: 30000,
   webpackMiddleware: {
     logLevel: "warn",
     stats: {
@@ -60,7 +61,7 @@ function createKarmaConf(basePath, testEntry, testsType, argv) {
   if (!watch) {
     // Unless this is left as default debugging causes Karma to disconnect and
     // shut down the browser in the middle of debug sessions.
-    karmaConfig.browserDisconnectTolerance = 5;
+    karmaConfig.browserDisconnectTolerance = 10;
   }
 
   if (htmlReport) {
