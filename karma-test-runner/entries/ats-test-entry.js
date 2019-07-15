@@ -19,3 +19,14 @@ const testsContext = require.context(
 );
 
 testsContext.keys().forEach(testsContext);
+
+if (CODE_COVERAGE_REQUESTED) {
+  // requires all modules of directory under test
+  const modulesContext = require.context(
+    PACKAGE_DIRECTORY,
+    true,
+    /(?<!\..*_test-[a|u]t.*)\.js$/
+  );
+
+  modulesContext.keys().forEach(modulesContext);
+}
