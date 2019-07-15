@@ -1,3 +1,13 @@
+<a name="8.2.0"></a>
+# [8.2.0](https://github.com/caplin/caplin-dev-tools/compare/webpack-config-app@8.1.0...webpack-config-app@8.2.0) (2019-07-15)
+
+
+### Features
+
+* **test-config:** Enable test mode if process is karma-runner ([494d787](https://github.com/caplin/caplin-dev-tools/commit/494d787))
+
+
+
 <a name="8.1.0"></a>
 # [8.1.0](https://github.com/caplin/caplin-dev-tools/compare/webpack-config-app@8.0.1...webpack-config-app@8.1.0) (2019-04-15)
 
