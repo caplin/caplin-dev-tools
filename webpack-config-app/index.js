@@ -20,7 +20,10 @@ const lifeCycleEvent = process.env.npm_lifecycle_event || "";
 const buildScriptRunning = basename(process.argv[1]) === "build.js";
 const testsScriptRunning = basename(process.argv[1]) === "tests.js";
 const isBuild = buildScriptRunning || lifeCycleEvent === "build";
-const isTest = testsScriptRunning || lifeCycleEvent.startsWith("test");
+const isTest =
+  testsScriptRunning ||
+  lifeCycleEvent.startsWith("test") ||
+  lifeCycleEvent === "karma-test-runner";
 
 module.exports.webpackConfigGenerator = function webpackConfigGenerator({
   basePath,
