@@ -37,18 +37,8 @@ Push the newly created tag to the server
 
 `git push origin express-dev-server@4.0.1`
 
-### Updating CHANGELOG.md
-
-This example uses the `express-dev-server` package:
+### Releasing a new package
 
 1.  Make changes
 2.  Commit those changes
-3.  Bump version in package.json e.g. `yarn version --minor --no-git-tag-version`
-4.  `conventional-changelog -p angular -i CHANGELOG.md -s --commit-path . -l express-dev-server`
-    Replace `express-dev-server` with the directory the package you are publishing
-    resides in.
-5.  Commit `package.json` and `CHANGELOG.md`
-6.  Tag e.g. `git tag express-dev-server@4.1.0` replace `express-dev-server@4.1.0`
-    with the `package@version` that you are releasing.
-7.  Push code `git push` and tag `git push origin express-dev-server@4.1.0`
-8.  Publish to npm `yarn publish`
+3.  `yarn run release`

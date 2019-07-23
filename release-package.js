@@ -1,6 +1,7 @@
 const { readdirSync } = require("fs");
 const { prompt } = require("enquirer");
 const execa = require("execa");
+const Listr = require("listr");
 
 const IGNORED_DIRECTORIES = [
   ".git",
@@ -35,39 +36,73 @@ prompt([packageNamePrompt, versionPrompt])
 
 async function releasePackage({ packageName, version }) {
   const options = { cwd: packageName };
-  const { stdout } = await execa(
-    "yarn",
-    ["version", `--${version}`, "--no-git-tag-version"],
-    options
-  );
-  const newVersion = stdout.match(/New version: (.*)/)[1];
+  const tasks = new Listr([
+    {
+      title: `Bump version in ${packageName} package.json`,
+      task: async ctx => {
+        const { stdout } = await execa(
+          "yarn",
+          ["version", `--${version}`, "--no-git-tag-version"],
+          options
+        );
 
-  await execa("yarn", [
-    "conventional-changelog",
-    "--preset",
-    "angular",
-    "--infile",
-    `${packageName}/CHANGELOG.md`,
-    "--same-file",
-    "--commit-path",
-    packageName,
-    "--pkg",
-    packageName,
-    "--lerna-package",
-    packageName
+        ctx.newVersion = stdout.match(/New version: (.*)/)[1];
+      }
+    },
+    {
+      title: `Update ${packageName} CHANGELOG.md`,
+      task: () =>
+        execa("yarn", [
+          "conventional-changelog",
+          "--preset",
+          "angular",
+          "--infile",
+          `${packageName}/CHANGELOG.md`,
+          "--same-file",
+          "--commit-path",
+          packageName,
+          "--pkg",
+          packageName,
+          "--lerna-package",
+          packageName
+        ])
+    },
+    {
+      title: `Publishing new ${packageName} version`,
+      task: ctx =>
+        execa("yarn", ["publish", "--new-version", ctx.newVersion], options)
+    },
+    {
+      title: `Adding ${packageName} CHANGELOG.md and package.json`,
+      task: () =>
+        execa("git", [
+          "add",
+          `${packageName}/CHANGELOG.md`,
+          `${packageName}/package.json`
+        ])
+    },
+    {
+      title: `Commiting ${packageName} CHANGELOG.md and package.json`,
+      task: ctx =>
+        execa("git", [
+          "commit",
+          "-m",
+          `chore(${packageName}): Release ${packageName}@${ctx.newVersion}`
+        ])
+    },
+    {
+      title: `Tagging new ${packageName} version`,
+      task: ctx => execa("git", ["tag", `${packageName}@${ctx.newVersion}`])
+    },
+    {
+      title: `Pushing ${packageName} release commit`,
+      task: () => execa("git", ["push"])
+    },
+    {
+      title: `Pushing ${packageName} release tag`,
+      task: () => execa("git", ["push", "--tags"])
+    }
   ]);
-  await execa("git", [
-    "add",
-    `${packageName}/CHANGELOG.md`,
-    `${packageName}/package.json`
-  ]);
-  await execa("git", [
-    "commit",
-    "-m",
-    `chore(${packageName}): Release ${packageName}@${newVersion}`
-  ]);
-  await execa("git", ["tag", `${packageName}@${newVersion}`]);
-  await execa("git", ["push"]);
-  await execa("git", ["push", "--tags"]);
-  await execa("yarn", ["publish", "--new-version", newVersion], options);
+
+  await tasks.run();
 }
