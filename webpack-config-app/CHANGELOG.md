@@ -1,3 +1,7 @@
+## [8.2.1](https://github.com/caplin/caplin-dev-tools/compare/webpack-config-app@8.2.0...webpack-config-app@8.2.1) (2019-07-23)
+
+
+
 <a name="8.2.0"></a>
 # [8.2.0](https://github.com/caplin/caplin-dev-tools/compare/webpack-config-app@8.1.0...webpack-config-app@8.2.0) (2019-07-15)
 
