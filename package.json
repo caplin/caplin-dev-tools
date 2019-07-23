@@ -8,7 +8,8 @@
     "caplin-cli": "./cli/index.js"
   },
   "scripts": {
-    "postinstall": "cd brjs-app-converter && npm i && cd ../cli && npm i"
+    "postinstall": "cd brjs-app-converter && npm i && cd ../cli && npm i",
+    "release": "node release-package.js"
   },
   "repository": {
     "type": "git",
@@ -22,8 +23,11 @@
   },
   "homepage": "https://github.com/caplin/caplin-dev-tools#readme",
   "devDependencies": {
-    "eslint": "^4.0.0",
-    "eslint-config-prettier": "^2.0.0",
-    "eslint-plugin-import": "^2.2.0"
+    "conventional-changelog-cli": "^2.0.21",
+    "enquirer": "^2.3.1",
+    "eslint": "^6.1.0",
+    "eslint-config-prettier": "^6.0.0",
+    "eslint-plugin-import": "^2.2.0",
+    "execa": "^2.0.3"
   }
 }
