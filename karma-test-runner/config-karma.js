@@ -81,23 +81,13 @@ function createKarmaConf(basePath, testEntry, testsType, argv) {
 
   if (coverageReport) {
     const { base } = parse(basePath);
-
     const coverageConfig = {
-      coverageReporter: {
-        type: "in-memory"
-      },
-
       coverageIstanbulReporter: {
-        reports: ["text-summary", "json"],
+        reports: ["json"],
         fixWebpackSourcePaths: true,
         combineBrowserReports: true,
         skipFilesWithNoCoverage: false,
         "report-config": {
-          // all options available at: https://github.com/istanbuljs/istanbuljs/blob/aae256fb8b9a3d19414dcf069c592e88712c32c6/packages/istanbul-reports/lib/html/index.js#L135-L137
-          html: {
-            // outputs the report in ./coverage/html
-            subdir: "html"
-          },
           json: {
             file: `${base}-${testsType}-coverage-report.json`
           }
@@ -105,8 +95,8 @@ function createKarmaConf(basePath, testEntry, testsType, argv) {
       }
     };
 
-    karmaConfig.reporters.push("coverage");
     karmaConfig.reporters.push("coverage-istanbul");
+
     Object.assign(karmaConfig, coverageConfig);
   }
 

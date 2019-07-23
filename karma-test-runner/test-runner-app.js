@@ -42,13 +42,12 @@ function getPkgsWithTests(searchDir, argv) {
 function runAppTests(searchDir, argv) {
   const { pkgsWithATs, pkgsWithUTs } = getPkgsWithTests(searchDir, argv);
   const webpackConfig = createWebpackConfig(searchDir, argv);
-
   const atsKarmaConf = pkgsWithATs
     .map(dir => createATsKarmaConf(dir, argv))
-    .map(karmaConf => addWebpackConf(karmaConf, webpackConfig));
+    .map(karmaConf => addWebpackConf(karmaConf, webpackConfig, argv));
   const utsKarmaConf = pkgsWithUTs
     .map(dir => createUTsKarmaConf(dir, argv))
-    .map(karmaConf => addWebpackConf(karmaConf, webpackConfig));
+    .map(karmaConf => addWebpackConf(karmaConf, webpackConfig, argv));
 
   runPackagesTests(
     utsKarmaConf.concat(atsKarmaConf),

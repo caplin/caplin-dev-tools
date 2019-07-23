@@ -29,9 +29,9 @@ function runSingleTestFile(appDir, argv) {
   const testsType = relativeTestEntry.includes("_test-ut") ? "UTs" : "ATs";
   const karmaConf = createKarmaConf(absBasePath, absTestEntry, testsType, argv);
   const webpackConfig = createWebpackConfig(appDir, argv);
-  const karmaConfWithWebpackConf = addWebpackConf(karmaConf, webpackConfig);
+  const karmaWithWebpackConf = addWebpackConf(karmaConf, webpackConfig, argv);
 
-  runPackagesTests([karmaConfWithWebpackConf], argv.w);
+  runPackagesTests([karmaWithWebpackConf], argv.w);
 }
 
 module.exports.runSingleTestFile = runSingleTestFile;

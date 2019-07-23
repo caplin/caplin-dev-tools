@@ -11,7 +11,7 @@ const { runTests } = require("./test-runner");
 //                    `w` -> watch.
 //                    `h` -> Enable HTML reporting.
 const minimistOpts = {
-  boolean: ["a", "u", "w", "h"],
+  boolean: ["a", "u", "w", "h", "c"],
   default: { b: "chrome" },
   string: ["b", "f"]
 };

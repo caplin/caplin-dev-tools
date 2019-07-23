@@ -56,12 +56,18 @@ function setAliasesPath(basePath, webpackConf) {
   return webpackConf;
 }
 
-function addWebpackConf(karmaConf, webpackConf) {
+function addWebpackConf(karmaConf, webpackConf, argv) {
+  const definitions = {
+    CODE_COVERAGE_REQUESTED: false,
+    PACKAGE_DIRECTORY: `"${karmaConf.basePath}"`
+  };
+
+  if (argv.c) {
+    definitions.CODE_COVERAGE_REQUESTED = true;
+  }
+
   // Add `DefinePlugin` so test entry imports all package tests.
-  const plugins = [
-    ...webpackConf.plugins,
-    new DefinePlugin({ PACKAGE_DIRECTORY: `"${karmaConf.basePath}"` })
-  ];
+  const plugins = [...webpackConf.plugins, new DefinePlugin(definitions)];
 
   // Clone webpack conf to prevent interference between different test runs.
   webpackConf = Object.assign({}, webpackConf, { plugins });
