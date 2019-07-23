@@ -1,22 +1,25 @@
-# Caplin dev tools
-
-## Packages for developing Caplin applications using node.js tooling
+# For developing Caplin applications using node.js tooling
 
 This monorepo contains packages that are designed to be used as part of
 a Caplin development environment. They are not designed for usage in generic web
 applications. The more important packages have their own README.md files.
 
-## caplin-cli
+# Releasing packages
 
-For information on the `caplin-cli` tool
-[read its README.md](https://github.com/caplin/caplin-dev-tools/blob/master/cli/README.md).
+We are using
+[conventional-changelog](https://github.com/conventional-changelog/conventional-changelog)
+to programatically create changelogs.
 
-## Releasing packages
+## Releasing a new version of a package
 
-We are using [conventional-changelog](https://github.com/conventional-changelog/conventional-changelog) to
-programatically create changelogs.
+Verify the package already has a `CHANGELOG.md`, if not see below for steps to
+create one.
 
-### Creation of CHANGELOG.md
+1.  Make changes
+2.  Commit those changes
+3.  `yarn run release`
+
+#### Creation of a CHANGELOG.md
 
 If the package you are modifying has no `CHANGELOG.md` file, then create a
 `CHANGELOG.md`. First `cd` into the package folder and run:
@@ -36,9 +39,3 @@ is the commit where the `package.json` version was changed.
 Push the newly created tag to the server
 
 `git push origin express-dev-server@4.0.1`
-
-### Releasing a new package
-
-1.  Make changes
-2.  Commit those changes
-3.  `yarn run release`
