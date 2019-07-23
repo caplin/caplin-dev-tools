@@ -1,3 +1,12 @@
+# [6.6.0](https://github.com/caplin/caplin-dev-tools/compare/karma-test-runner@6.5.0...karma-test-runner@6.6.0) (2019-07-23)
+
+
+### Features
+
+* **coverage:** Code coverage for modules that lack tests ([ef15adb](https://github.com/caplin/caplin-dev-tools/commit/ef15adb))
+
+
+
 <a name="6.5.0"></a>
 # [6.5.0](https://github.com/caplin/caplin-dev-tools/compare/karma-test-runner@6.4.1...karma-test-runner@6.5.0) (2019-07-04)
 
