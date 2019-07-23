@@ -73,7 +73,7 @@ async function releasePackage({ packageName, version }) {
         execa("yarn", ["publish", "--new-version", ctx.newVersion], options)
     },
     {
-      title: `Adding ${packageName} CHANGELOG.md and package.json`,
+      title: `Adding ${packageName} CHANGELOG.md and package.json to git index`,
       task: () =>
         execa("git", [
           "add",
