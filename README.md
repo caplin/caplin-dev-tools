@@ -16,7 +16,7 @@ Verify the package already has a `CHANGELOG.md`, if not see below for steps to
 create one.
 
 1.  Make changes
-2.  Commit those changes
+2.  Commit those changes following the conventional-changelog commit style
 3.  `yarn run release`
 
 #### Creation of a CHANGELOG.md
