@@ -91,6 +91,10 @@ function createKarmaConf(basePath, testEntry, testsType, argv) {
           json: {
             file: `${base}-${testsType}-coverage-report.json`
           }
+        },
+        instrumentation: {
+          // To include `node_modules` code in the report.
+          "default-excludes": false
         }
       }
     };
