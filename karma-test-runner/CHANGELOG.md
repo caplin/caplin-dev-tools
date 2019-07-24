@@ -1,3 +1,12 @@
+# [6.7.0](https://github.com/caplin/caplin-dev-tools/compare/karma-test-runner@6.6.0...karma-test-runner@6.7.0) (2019-07-24)
+
+
+### Features
+
+* **coverage:** Cover files in `node_modules` ([591256c](https://github.com/caplin/caplin-dev-tools/commit/591256c))
+
+
+
 # [6.6.0](https://github.com/caplin/caplin-dev-tools/compare/karma-test-runner@6.5.0...karma-test-runner@6.6.0) (2019-07-23)
 
 
