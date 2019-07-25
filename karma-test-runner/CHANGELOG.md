@@ -1,3 +1,12 @@
+## [6.7.1](https://github.com/caplin/caplin-dev-tools/compare/karma-test-runner@6.7.0...karma-test-runner@6.7.1) (2019-07-25)
+
+
+### Bug Fixes
+
+* **webpack-config:** Remove extra slashes in Windows which prevented instrumentation ([2678eff](https://github.com/caplin/caplin-dev-tools/commit/2678eff))
+
+
+
 # [6.7.0](https://github.com/caplin/caplin-dev-tools/compare/karma-test-runner@6.6.0...karma-test-runner@6.7.0) (2019-07-24)
 
 
