@@ -22,7 +22,10 @@ function createWebpackConfig(appDir, argv) {
 
     let caplinPackages = [];
     if (argv._.length > 0) {
-      caplinPackages = packages.filter(dir => argv._.includes(basename(dir)));
+      caplinPackages = packages
+        .filter(dir => argv._.includes(basename(dir)))
+        // Cleans up extra path slashes in Windows.
+        .map(packagePath => join(packagePath));
     }
     caplinPackages.push(join(appDir, "./src"));
 
