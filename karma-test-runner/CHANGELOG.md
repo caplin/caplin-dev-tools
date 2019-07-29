@@ -1,3 +1,18 @@
+# [7.0.0](https://github.com/caplin/caplin-dev-tools/compare/karma-test-runner@6.7.1...karma-test-runner@7.0.0) (2019-07-29)
+
+
+### Features
+
+* **polyfills:** Move to core-js polyfills from babel-polyfill ([7ed6f20](https://github.com/caplin/caplin-dev-tools/commit/7ed6f20))
+
+
+### BREAKING CHANGES
+
+* **polyfills:** `core-js` and `regenerator-runtime` are now peer
+dependencies that users of this package must install/provide.
+
+
+
 ## [6.7.1](https://github.com/caplin/caplin-dev-tools/compare/karma-test-runner@6.7.0...karma-test-runner@6.7.1) (2019-07-25)
 
 
