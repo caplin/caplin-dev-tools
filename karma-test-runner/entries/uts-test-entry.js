@@ -1,7 +1,7 @@
-// This require is replaced with individual requires for `@babel/polyfill` based
-// on the babel preset `env` browser settings.
-// https://github.com/babel/babel/tree/master/packages/babel-preset-env#usebuiltins
-require("babel-polyfill");
+// These two imports are replaced with individual imports based on the
+// `@babel/preset-env` `targets` values.
+import "core-js/stable";
+import "regenerator-runtime/runtime";
 
 // When using a reporter that outputs browser logs missing I18n token warnings
 // may overwhelm the other output and make it harder to spot useful logs.
