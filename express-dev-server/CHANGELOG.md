@@ -1,3 +1,12 @@
+# [6.1.0](https://github.com/caplin/caplin-dev-tools/compare/express-dev-server@6.0.2...express-dev-server@6.1.0) (2019-08-05)
+
+
+### Features
+
+* **jndi:** allow lowercase JNDI token values ([5734128](https://github.com/caplin/caplin-dev-tools/commit/5734128))
+
+
+
 <a name="6.0.2"></a>
 ## [6.0.2](https://github.com/caplin/caplin-dev-tools/compare/express-dev-server@6.0.1...express-dev-server@6.0.2) (2019-06-25)
 
