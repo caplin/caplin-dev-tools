@@ -20,5 +20,5 @@ function jndiTokenReplacer(match, jndiToken) {
 }
 
 module.exports = function injectJNDITokens(indexPage) {
-  return indexPage.replace(/@([A-Z|.]+)@/g, jndiTokenReplacer);
+  return indexPage.replace(/@([A-Za-z|.]+)@/g, jndiTokenReplacer);
 };
