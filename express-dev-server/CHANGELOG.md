@@ -1,3 +1,12 @@
+## [6.1.1](https://github.com/caplin/caplin-dev-tools/compare/express-dev-server@6.1.0...express-dev-server@6.1.1) (2019-08-22)
+
+
+### Bug Fixes
+
+* **proxy-factory:** Remove spawned process error handling ([76e7cd1](https://github.com/caplin/caplin-dev-tools/commit/76e7cd1))
+
+
+
 # [6.1.0](https://github.com/caplin/caplin-dev-tools/compare/express-dev-server@6.0.2...express-dev-server@6.1.0) (2019-08-05)
 
 
