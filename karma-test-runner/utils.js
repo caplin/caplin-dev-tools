@@ -104,11 +104,20 @@ function runPackageTests(karmaConfig) {
       testsResult = result;
     });
     server.on("browser_error", (browser, error) => {
-      console.log(`ERROR on browser: ${error}`);
+      testsResult.errorMessage = error;
+      testsResult.error = true;
     });
 
     server.start();
   });
+}
+
+function hasntCompleted(result, ignoreDisconnects){
+  if(ignoreDisconnects){
+    return false;
+  }
+
+  return result.disconnected || result.error
 }
 
 async function runPackagesTests(
@@ -123,6 +132,15 @@ async function runPackagesTests(
   process.on("SIGINT", process.exit);
 
   for (const packageKarmaConfig of packagesKarmaConfigs) {
+    let result = await runPackageTests(packageKarmaConfig);
+    let count = 0;
+    while( hasntCompleted(result, watching) && count < 5){
+      result = await runPackageTests(packageKarmaConfig);
+      count++;
+    }
+    if (result.errorMessage){
+      console.log(`ERROR on browser: ${result.errorMessage}`);
+    }
     results.push(await runPackageTests(packageKarmaConfig));
   }
 
