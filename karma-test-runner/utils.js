@@ -112,12 +112,12 @@ function runPackageTests(karmaConfig) {
   });
 }
 
-function hasntCompleted(result, ignoreDisconnects){
-  if(ignoreDisconnects){
+function browserErrored(result, ignoreDisconnects) {
+  if (ignoreDisconnects) {
     return false;
   }
 
-  return result.disconnected || result.error
+  return result.disconnected || result.error;
 }
 
 async function runPackagesTests(
@@ -134,14 +134,14 @@ async function runPackagesTests(
   for (const packageKarmaConfig of packagesKarmaConfigs) {
     let result = await runPackageTests(packageKarmaConfig);
     let count = 0;
-    while( hasntCompleted(result, watching) && count < 5){
-      result = await runPackageTests(packageKarmaConfig);
+    do {
       count++;
-    }
-    if (result.errorMessage){
+      result = await runPackageTests(packageKarmaConfig);
+    } while (browserErrored(result, watching) && count < 5);
+    if (result.errorMessage) {
       console.log(`ERROR on browser: ${result.errorMessage}`);
     }
-    results.push(await runPackageTests(packageKarmaConfig));
+    results.push(result);
   }
 
   if (coverageOn) {
