@@ -1,6 +1,6 @@
-const {Server} = require("karma");
+const { Server } = require("karma");
 const combineCoverage = require("./coverageCombiner");
-const {basename} = require("path");
+const { basename } = require("path");
 
 function getSelectedBrowser(commandLineArgs) {
   const browser = commandLineArgs.b;
@@ -138,7 +138,7 @@ async function runPackagesTests(
       count++;
       result = await runPackageTests(packageKarmaConfig);
     }
-    
+
     if (result.errorMessage) {
       console.log(`ERROR on browser: ${result.errorMessage}`);
     }
