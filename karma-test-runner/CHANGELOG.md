@@ -1,3 +1,10 @@
+# [7.0.1](https://github.com/caplin/caplin-dev-tools/compare/karma-test-runner@6.7.1...karma-test-runner@7.0.0) (2019-07-29)
+
+
+### Bug Fixes
+
+* **disconnection:** Now reruns packages for which the browser disconnected or errored.
+
 # [7.0.0](https://github.com/caplin/caplin-dev-tools/compare/karma-test-runner@6.7.1...karma-test-runner@7.0.0) (2019-07-29)
 
 
