@@ -1,3 +1,19 @@
+## [7.0.1](https://github.com/caplin/caplin-dev-tools/compare/karma-test-runner@7.0.0...karma-test-runner@7.0.1) (2019-09-04)
+
+
+
+## [7.0.4](https://github.com/caplin/caplin-dev-tools/compare/karma-test-runner@7.0.0...karma-test-runner@7.0.4) (2019-09-04)
+
+
+
+## [7.0.3](https://github.com/caplin/caplin-dev-tools/compare/karma-test-runner@7.0.0...karma-test-runner@7.0.3) (2019-09-04)
+
+
+
+## [7.0.2](https://github.com/caplin/caplin-dev-tools/compare/karma-test-runner@7.0.0...karma-test-runner@7.0.2) (2019-09-04)
+
+
+
 # [7.0.1](https://github.com/caplin/caplin-dev-tools/compare/karma-test-runner@6.7.1...karma-test-runner@7.0.0) (2019-07-29)
 
 
