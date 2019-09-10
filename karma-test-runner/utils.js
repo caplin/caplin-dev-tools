@@ -93,7 +93,7 @@ function runPackageTests(karmaConfig) {
   console.log("Running Tests in " + basename(karmaConfig.basePath));
 
   return new Promise(resolve => {
-    let testsResult;
+    let testsResult = {};
     const server = new Server(karmaConfig, () => {
       // Wait until the server exit code callback is executed to resolve as
       // `run_complete` is called before the logger's `onRunComplete` is.
