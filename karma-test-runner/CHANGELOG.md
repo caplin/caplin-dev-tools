@@ -1,3 +1,12 @@
+## [7.0.2](https://github.com/caplin/caplin-dev-tools/compare/karma-test-runner@7.0.1...karma-test-runner@7.0.2) (2019-09-10)
+
+
+### Bug Fixes
+
+* **utils:** Initialize the test result object ([a0123a0](https://github.com/caplin/caplin-dev-tools/commit/a0123a0))
+
+
+
 ## [7.0.1](https://github.com/caplin/caplin-dev-tools/compare/karma-test-runner@7.0.0...karma-test-runner@7.0.1) (2019-09-04)
 
 
