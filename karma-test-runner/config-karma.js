@@ -77,7 +77,7 @@ function createKarmaConf(basePath, testEntry, testsType, argv) {
     const { base } = parse(basePath);
     const coverageConfig = {
       coverageIstanbulReporter: {
-        reports: ["json"],
+        reports: ["json", "lcov"],
         fixWebpackSourcePaths: true,
         combineBrowserReports: true,
         skipFilesWithNoCoverage: false,
