@@ -1,3 +1,12 @@
+# [7.1.0](https://github.com/caplin/caplin-dev-tools/compare/karma-test-runner@7.0.2...karma-test-runner@7.1.0) (2019-10-24)
+
+
+### Features
+
+* **coverage:** Added LCOV format to reports ([a396ce9](https://github.com/caplin/caplin-dev-tools/commit/a396ce9f7932217322bb78ddad2281da7edd1ea4))
+
+
+
 ## [7.0.2](https://github.com/caplin/caplin-dev-tools/compare/karma-test-runner@7.0.1...karma-test-runner@7.0.2) (2019-09-10)
 
 
