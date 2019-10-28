@@ -1,3 +1,12 @@
+# [7.1.1](https://github.com/caplin/caplin-dev-tools/compare/karma-test-runner@7.1.0...karma-test-runner@7.1.1) (2019-10-28)
+
+
+### Bug Fixes
+
+* **coverage:** Fixed the incorrect line endings committed with the LCOV change
+
+
+
 # [7.1.0](https://github.com/caplin/caplin-dev-tools/compare/karma-test-runner@7.0.2...karma-test-runner@7.1.0) (2019-10-24)
 
 
