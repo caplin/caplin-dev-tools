@@ -1,10 +1,11 @@
 const { basename } = require("path");
 
 const { createATsKarmaConf, createUTsKarmaConf } = require("./config-karma");
-const { addWebpackConf, createWebpackConfig } = require("./config-webpack");
-const { findAppPackages } = require("./search");
+const { addWebpackConf } = require("./config-webpack");
+const { findAppPackages, getDependencies } = require("./search");
 const { doesPkgHaveATs, doesPkgHaveUTs } = require("./test-runner-pkg");
 const { runPackagesTests } = require("./utils");
+const { createBlankCoverage } = require("./coverage/EmptyCoverageCreator");
 
 // `f` are package name RegExps to filter out packages e.g. `^br-` or `^ct-`.
 // `_` are the list of packages specified by the user on the CLI.
@@ -31,30 +32,32 @@ function filterPkgs(appPkgs, { _, f }) {
 }
 
 function getPkgsWithTests(searchDir, argv) {
-  const appPkgs = findAppPackages(searchDir);
+  const appPkgs = findAppPackages(searchDir, !!argv.includePackages);
   const validPks = filterPkgs(appPkgs, argv);
   const pkgsWithATs = argv.u ? [] : validPks.filter(doesPkgHaveATs);
   const pkgsWithUTs = argv.a ? [] : validPks.filter(doesPkgHaveUTs);
 
-  return { pkgsWithATs, pkgsWithUTs };
+  return { pkgsWithATs, pkgsWithUTs, validPks };
 }
 
-function runAppTests(searchDir, argv) {
-  const { pkgsWithATs, pkgsWithUTs } = getPkgsWithTests(searchDir, argv);
-  const webpackConfig = createWebpackConfig(searchDir, argv);
+function runAppTests(appDir, argv) {
+  const { pkgsWithATs, pkgsWithUTs, validPks } = getPkgsWithTests(appDir, argv);
+  if (argv.c) {
+    createBlankCoverage(
+      argv._,
+      validPks,
+      !!argv.includePackages,
+      getDependencies(appDir)
+    );
+  }
   const atsKarmaConf = pkgsWithATs
     .map(dir => createATsKarmaConf(dir, argv))
-    .map(karmaConf => addWebpackConf(karmaConf, webpackConfig, argv));
+    .map(karmaConf => addWebpackConf(karmaConf, appDir, argv));
   const utsKarmaConf = pkgsWithUTs
     .map(dir => createUTsKarmaConf(dir, argv))
-    .map(karmaConf => addWebpackConf(karmaConf, webpackConfig, argv));
+    .map(karmaConf => addWebpackConf(karmaConf, appDir, argv));
 
-  runPackagesTests(
-    utsKarmaConf.concat(atsKarmaConf),
-    argv.w,
-    argv.c,
-    searchDir
-  );
+  runPackagesTests(utsKarmaConf.concat(atsKarmaConf), argv.w, argv.c, appDir);
 }
 
 module.exports.runAppTests = runAppTests;

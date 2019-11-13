@@ -1,11 +1,13 @@
 const { existsSync } = require("fs");
-const { join, parse } = require("path");
+const { join, basename } = require("path");
 
 const { addJSTDFiles } = require("@caplin/karma-jstd");
 const { LOG_ERROR } = require("karma/lib/constants");
 
 const { atsTestEntry, utsTestEntry } = require("./config");
 const { getTestBrowser } = require("./utils");
+
+const { cloneDeep } = require("lodash");
 
 const baseKarmaConfig = {
   logLevel: LOG_ERROR,
@@ -45,7 +47,7 @@ function createKarmaConf(basePath, testEntry, testsType, argv) {
   const htmlReport = argv.h;
   const coverageReport = argv.c;
   // Takes a copy of baseKarmaConfig to prevent subjects from being modified.
-  const baseCopy = JSON.parse(JSON.stringify(baseKarmaConfig));
+  const baseCopy = cloneDeep(baseKarmaConfig);
   const karmaConfig = Object.assign({}, baseCopy, {
     basePath,
     browsers: [browser],
@@ -59,7 +61,7 @@ function createKarmaConf(basePath, testEntry, testsType, argv) {
   });
 
   if (htmlReport) {
-    const { base } = parse(basePath);
+    const base = basename(basePath);
     const htmlFileName = `${testsType}-report-${base}.html`;
     const rootDir = process.cwd();
 
@@ -74,7 +76,7 @@ function createKarmaConf(basePath, testEntry, testsType, argv) {
   }
 
   if (coverageReport) {
-    const { base } = parse(basePath);
+    const base = basename(basePath);
     const coverageConfig = {
       coverageIstanbulReporter: {
         reports: ["json", "lcov"],

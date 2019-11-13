@@ -1,7 +1,7 @@
 const { existsSync } = require("fs");
 const { dirname, join } = require("path");
 
-const { addWebpackConf, createWebpackConfig } = require("./config-webpack");
+const { addWebpackConf } = require("./config-webpack");
 const { createKarmaConf } = require("./config-karma");
 const { runPackagesTests } = require("./utils");
 
@@ -28,8 +28,7 @@ function runSingleTestFile(appDir, argv) {
   const absBasePath = join(appDir, basePath);
   const testsType = relativeTestEntry.includes("_test-ut") ? "UTs" : "ATs";
   const karmaConf = createKarmaConf(absBasePath, absTestEntry, testsType, argv);
-  const webpackConfig = createWebpackConfig(appDir, argv);
-  const karmaWithWebpackConf = addWebpackConf(karmaConf, webpackConfig, argv);
+  const karmaWithWebpackConf = addWebpackConf(karmaConf, appDir, argv);
 
   runPackagesTests([karmaWithWebpackConf], argv.w);
 }
