@@ -1,5 +1,5 @@
 const { Server } = require("karma");
-const combineCoverage = require("./coverageCombiner");
+const combineCoverage = require("./coverage/coverageCombiner");
 const { basename } = require("path");
 
 function getSelectedBrowser(commandLineArgs) {

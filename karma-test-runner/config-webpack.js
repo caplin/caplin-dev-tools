@@ -3,11 +3,20 @@ const { join } = require("path");
 const { basename } = require("path");
 const { findAppPackages } = require("./search");
 const { DefinePlugin } = require("webpack");
+const { cloneDeep } = require("lodash");
+const webPackFiles = {};
 
-function createWebpackConfig(appDir, argv) {
+function createWebpackConfig(appDir, argv, packageName) {
   const aliasesTestPath = join(appDir, "src/config/aliases-test.js");
-  const webpackConfig = require(join(appDir, "webpack.config"))();
+  // Prevents reloading resource for multiple app folders, which would cause crashing
+  if (!webPackFiles[appDir]) {
+    webPackFiles[appDir] = require(join(appDir, "webpack.config"))();
+  }
+  // Deepclone required as otherwise multiple runs will break everything as they modify the original object
+  const webpackConfig = cloneDeep(webPackFiles[appDir]);
   const coverageReport = argv.c;
+  const includePackages = argv.includePackages;
+  const includeCrossPackageCoverage = argv.includeCrossPackageCoverage;
 
   if (existsSync(aliasesTestPath)) {
     webpackConfig.resolve.alias["$aliases-data$"] = aliasesTestPath;
@@ -18,16 +27,22 @@ function createWebpackConfig(appDir, argv) {
   delete webpackConfig.entry;
 
   if (coverageReport) {
-    const packages = findAppPackages(appDir);
+    let packages = findAppPackages(appDir, includePackages);
 
-    let caplinPackages = [];
     if (argv._.length > 0) {
-      caplinPackages = packages
-        .filter(dir => argv._.includes(basename(dir)))
-        // Cleans up extra path slashes in Windows.
-        .map(packagePath => join(packagePath));
+      packages = packages.filter(dir => argv._.includes(basename(dir)));
+
+      // Don't want to include src if packages are specified
+    } else if (existsSync("./src")) {
+      packages.push(join(appDir, "./src"));
     }
-    caplinPackages.push(join(appDir, "./src"));
+
+    if (!includeCrossPackageCoverage) {
+      packages = packages.filter(dir => packageName === dir);
+    }
+
+    // Cleans up extra path slashes in Windows.
+    packages = packages.map(packageName => join(packageName));
 
     webpackConfig.module.rules.push({
       test: /\.js$/,
@@ -35,15 +50,13 @@ function createWebpackConfig(appDir, argv) {
       options: {
         esModules: true
       },
-      include: caplinPackages,
+      include: packages,
       exclude: /(test)/
     });
   }
 
   return webpackConfig;
 }
-
-module.exports.createWebpackConfig = createWebpackConfig;
 
 function setAliasesPath(basePath, webpackConf) {
   // Set aliases-data to local version if one exists.
@@ -59,15 +72,11 @@ function setAliasesPath(basePath, webpackConf) {
   return webpackConf;
 }
 
-function addWebpackConf(karmaConf, webpackConf, argv) {
+function addWebpackConf(karmaConf, appDir, argv) {
+  let webpackConf = createWebpackConfig(appDir, argv, karmaConf.basePath);
   const definitions = {
-    CODE_COVERAGE_REQUESTED: false,
     PACKAGE_DIRECTORY: `"${karmaConf.basePath}"`
   };
-
-  if (argv.c) {
-    definitions.CODE_COVERAGE_REQUESTED = true;
-  }
 
   // Add `DefinePlugin` so test entry imports all package tests.
   const plugins = [...webpackConf.plugins, new DefinePlugin(definitions)];

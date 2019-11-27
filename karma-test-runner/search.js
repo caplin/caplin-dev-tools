@@ -40,7 +40,7 @@ function getDependenciesDirs(dependencies = {}, packageDirectory, appDir) {
 // With npm 5 the copying of relative packages stops and it uses symlinks
 // instead, this should fix these issues as all requires will resolve to the
 // same files.
-function dependencySearch(pkgToSearch, foundPkgs, appDir = pkgToSearch) {
+function dependencySearch(pkgToSearch, foundPkgs = [], appDir = pkgToSearch) {
   const pkgJSON = require(join(pkgToSearch, "package.json"));
   const deps = getDependenciesDirs(pkgJSON.dependencies, pkgToSearch, appDir);
   const newDeps = deps.filter(name => !foundPkgs.includes(name));
@@ -49,6 +49,14 @@ function dependencySearch(pkgToSearch, foundPkgs, appDir = pkgToSearch) {
   newDeps.forEach(name => {
     dependencySearch(name, foundPkgs, appDir);
   });
+
+  return foundPkgs;
+}
+
+function getDependencies(pkgToSearch) {
+  const dirs = dependencySearch(pkgToSearch);
+
+  return dirs.map(escSep);
 }
 
 // Escape backslashes in Win paths.
@@ -69,13 +77,15 @@ function getAppPackages(appDir) {
   return [];
 }
 
-function findAppPackages(appDir) {
+function findAppPackages(appDir, shouldRunPackages) {
   const appPackagesDirs = getAppPackages(appDir);
-  const foundPackages = [];
 
-  dependencySearch(appDir, foundPackages);
+  if (shouldRunPackages) {
+    appPackagesDirs.push(...dependencySearch(appDir));
+  }
 
-  return foundPackages.concat(appPackagesDirs).map(escSep);
+  return appPackagesDirs.map(escSep);
 }
 
 module.exports.findAppPackages = findAppPackages;
+module.exports.getDependencies = getDependencies;

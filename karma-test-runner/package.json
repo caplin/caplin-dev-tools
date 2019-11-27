@@ -21,8 +21,10 @@
     "karma-log-update-reporter": "^1.0.0",
     "karma-sourcemap-loader": "^0.3.7",
     "karma-webpack": "^4.0.0-beta.0",
+    "lodash": "^4.17.15",
     "minimist": "^1.2.0",
-    "webpack": "^4.0.0"
+    "webpack": "^4.0.0",
+    "istanbul-lib-instrument": "^3.3.0"
   },
   "peerDependencies": {
     "core-js": "^3.1.4",

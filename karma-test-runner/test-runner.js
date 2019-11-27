@@ -11,7 +11,7 @@ function runTests(searchDir, argv) {
   const pathParts = searchDir.split(sep);
   const appOrPkgName = pathParts.pop();
   const appOrPkgDir = pathParts.pop();
-  const cleanCoverage = argv.k;
+  const cleanCoverage = !argv.keepCoverage;
 
   if (cleanCoverage) {
     fs.removeSync("./coverage");
