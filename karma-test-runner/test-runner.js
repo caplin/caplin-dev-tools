@@ -11,6 +11,7 @@ function runTests(searchDir, argv) {
   const pathParts = searchDir.split(sep);
   const appOrPkgName = pathParts.pop();
   const appOrPkgDir = pathParts.pop();
+  const nestedAppOrPkgDir = appOrPkgDir.pop(); // Allows for one layer of nested subdirs
   const cleanCoverage = !argv.keepCoverage;
 
   if (cleanCoverage) {
@@ -21,7 +22,7 @@ function runTests(searchDir, argv) {
     console.log(`Running tests in ${argv._[0]}`);
 
     runSingleTestFile(searchDir, argv);
-  } else if (appOrPkgDir === "apps") {
+  } else if (appOrPkgDir === "apps" || nestedAppOrPkgDir === "apps") {
     console.log(`Running tests for ${appOrPkgName} application.`);
 
     runAppTests(searchDir, argv);
