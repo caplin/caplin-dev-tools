@@ -8,11 +8,15 @@ const {
 } = require("./test-runner-single-file");
 
 function runTests(searchDir, argv) {
+  const cleanCoverage = argv.k;
+  const directoryNestLevel = argv.n;
   const pathParts = searchDir.split(sep);
   const appOrPkgName = pathParts.pop();
-  const appOrPkgDir = pathParts.pop();
-  const nestedAppOrPkgDir = pathParts.pop(); // Allows for one layer of nested subdirs
-  const cleanCoverage = !argv.keepCoverage;
+
+  let appOrPkgDir = pathParts.pop();
+  for (i = 0; i < directoryNestLevel; i++) {
+    appOrPkgDir = pathParts.pop();
+  }
 
   if (cleanCoverage) {
     fs.removeSync("./coverage");
@@ -22,7 +26,7 @@ function runTests(searchDir, argv) {
     console.log(`Running tests in ${argv._[0]}`);
 
     runSingleTestFile(searchDir, argv);
-  } else if (appOrPkgDir === "apps" || nestedAppOrPkgDir === "apps") {
+  } else if (appOrPkgDir === "apps") {
     console.log(`Running tests for ${appOrPkgName} application.`);
 
     runAppTests(searchDir, argv);
