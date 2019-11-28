@@ -1,3 +1,12 @@
+# [7.2.0](https://github.com/caplin/caplin-dev-tools/compare/karma-test-runner@7.1.1...karma-test-runner@7.2.0) (2019-11-28)
+
+
+### Features
+
+* **test-runner:** Allow tests to run for apps not in apps dir ([5aa3250](https://github.com/caplin/caplin-dev-tools/commit/5aa3250f3a98e6cb917c6e8a74b91d87429aa2ca))
+
+
+
 # [7.1.1](https://github.com/caplin/caplin-dev-tools/compare/karma-test-runner@7.1.0...karma-test-runner@7.1.1) (2019-10-28)
 
 

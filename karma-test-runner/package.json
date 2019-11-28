@@ -1,6 +1,6 @@
 {
   "name": "@caplin/karma-test-runner",
-  "version": "7.1.1",
+  "version": "7.2.0",
   "bin": "./cli.js",
   "description": "Package that allows running all the UTs and ATs in a package using Karma",
   "main": "test-runner.js",
@@ -12,6 +12,7 @@
     "glob": "^7.1.2",
     "istanbul-combine": "^0.3.0",
     "istanbul-instrumenter-loader": "3.0.1",
+    "istanbul-lib-instrument": "^3.3.0",
     "karma": "^4.1.0",
     "karma-chrome-launcher": "^3.0.0",
     "karma-coverage-istanbul-reporter": "^2.1.0",
@@ -23,8 +24,7 @@
     "karma-webpack": "^4.0.0-beta.0",
     "lodash": "^4.17.15",
     "minimist": "^1.2.0",
-    "webpack": "^4.0.0",
-    "istanbul-lib-instrument": "^3.3.0"
+    "webpack": "^4.0.0"
   },
   "peerDependencies": {
     "core-js": "^3.1.4",
