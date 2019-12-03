@@ -32,7 +32,7 @@ function filterPkgs(appPkgs, { _, f }) {
 }
 
 function getPkgsWithTests(searchDir, argv) {
-  const appPkgs = findAppPackages(searchDir, !!argv.includePackages);
+  const appPkgs = findAppPackages(searchDir, argv);
   const validPks = filterPkgs(appPkgs, argv);
   const pkgsWithATs = argv.u ? [] : validPks.filter(doesPkgHaveATs);
   const pkgsWithUTs = argv.a ? [] : validPks.filter(doesPkgHaveUTs);
@@ -46,7 +46,7 @@ function runAppTests(appDir, argv) {
     createBlankCoverage(
       argv._,
       validPks,
-      !!argv.includePackages,
+      argv.includePackages,
       getDependencies(appDir)
     );
   }
