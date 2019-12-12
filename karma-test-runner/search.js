@@ -77,11 +77,11 @@ function getAppPackages(appDir) {
   return [];
 }
 
-function findAppPackages(appDir, { shouldRunPackages, _ }) {
+function findAppPackages(appDir, { includePackages, _ }) {
   const appPackagesDirs = getAppPackages(appDir);
   const search = dependencySearch(appDir);
 
-  if (shouldRunPackages) {
+  if (includePackages) {
     appPackagesDirs.push(...search);
   } else if (_.length > 0) {
      appPackagesDirs.push(...search.filter(dir => _.includes(basename(dir))));
