@@ -1,3 +1,7 @@
+# [8.0.0](https://github.com/caplin/caplin-dev-tools/compare/karma-test-runner@7.2.0...karma-test-runner@8.0.0) (2019-12-20)
+
+
+
 # [7.2.0](https://github.com/caplin/caplin-dev-tools/compare/karma-test-runner@7.1.1...karma-test-runner@7.2.0) (2019-11-28)
 
 
