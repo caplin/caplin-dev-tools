@@ -1,6 +1,5 @@
 const { existsSync } = require("fs");
-const { join } = require("path");
-const { basename } = require("path");
+const { basename, join } = require("path");
 const { findAppPackages } = require("./search");
 const { DefinePlugin } = require("webpack");
 const { cloneDeep } = require("lodash");
@@ -15,7 +14,6 @@ function createWebpackConfig(appDir, argv, packageName) {
   // Deepclone required as otherwise multiple runs will break everything as they modify the original object
   const webpackConfig = cloneDeep(webPackFiles[appDir]);
   const coverageReport = argv.c;
-  const includePackages = argv.includePackages;
   const includeCrossPackageCoverage = argv.includeCrossPackageCoverage;
 
   if (existsSync(aliasesTestPath)) {
@@ -27,7 +25,7 @@ function createWebpackConfig(appDir, argv, packageName) {
   delete webpackConfig.entry;
 
   if (coverageReport) {
-    let packages = findAppPackages(appDir, includePackages);
+    let packages = findAppPackages(appDir, argv);
 
     if (argv._.length > 0) {
       packages = packages.filter(dir => argv._.includes(basename(dir)));
@@ -51,7 +49,7 @@ function createWebpackConfig(appDir, argv, packageName) {
         esModules: true
       },
       include: packages,
-      exclude: /(test)/
+      exclude: /(test)|node_modules.*node_modules/
     });
   }
 
