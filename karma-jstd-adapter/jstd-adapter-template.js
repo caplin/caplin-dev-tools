@@ -56,6 +56,8 @@
      * @param  {Object} karma Karma runner instance
      */
     function createStartFn(karma) {
+        const jasmineStart = karma.start;
+        
         jstestdriver.console = new jstestdriver.Console();
         jstestdriver.config.createRunner(jstestdriver.config.createStandAloneExecutor,
             jstestdriver.plugins.pausingRunTestLoop);
@@ -66,7 +68,17 @@
                 function(test) {
                     afterTest(karma, test);
                 }, function() {
-                    afterRun(karma);
+                    // If Jasmine is being used for some of the tests run them
+                    // after the JSTestDriver tests and don't notify Karma of
+                    // completion as the Jasmine adapter will do so. Some ATs
+                    // load the Caplin Jasmine via GwtTestRunner so skip them as
+                    // they are registered as JSTestDriver tests and don't use
+                    // the npm Jasmine adapter.
+                    if (window.jasmine !== undefined && window.jasmine.caplinJasmine !== true) {
+                        jasmineStart()
+                    } else {
+                        afterRun(karma);
+                    }
                 }, true );
         };
     }
