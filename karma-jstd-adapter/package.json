@@ -1,6 +1,6 @@
 {
   "name": "@caplin/karma-jstd-adapter",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "An adapter for karma, so you can run your js-test-driver tests.",
   "main": "jstd-adapter.js",
   "scripts": {
