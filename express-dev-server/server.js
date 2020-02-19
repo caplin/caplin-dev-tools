@@ -22,7 +22,7 @@ function printStatus(appRoot, port) {
   logger.info(`Hot module replacement is ${hmrStatus}\n`);
 }
 
-module.exports = ({ appCreated = () => {}, webpackConfig }) => {
+module.exports = ({ appCreated = () => {}, webpackConfig, port }) => {
   const app = express();
   const appRoot = process.cwd();
 
@@ -54,7 +54,7 @@ module.exports = ({ appCreated = () => {}, webpackConfig }) => {
     return app;
   }
 
-  return getPort()
+  return getPort(port)
     .then(listenToPort)
     .catch(error =>
       logger.log({

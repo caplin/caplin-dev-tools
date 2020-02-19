@@ -11,8 +11,8 @@ const portQuestion = (APP_PORT, availablePort) => {
   };
 };
 
-module.exports = () => {
-  const APP_PORT = parseInt(process.env.PORT, 10) || 8080;
+module.exports = port => {
+  const APP_PORT = port || parseInt(process.env.PORT, 10) || 8080;
 
   return new Promise(resolve => {
     findAvailablePort(APP_PORT)
