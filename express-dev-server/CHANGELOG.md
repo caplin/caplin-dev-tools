@@ -1,3 +1,12 @@
+# [6.2.0](https://github.com/caplin/caplin-dev-tools/compare/express-dev-server@6.1.1...express-dev-server@6.2.0) (2020-02-19)
+
+
+### Features
+
+* **server-port:** Allow users to configure the port ([b2f3bee](https://github.com/caplin/caplin-dev-tools/commit/b2f3bee54a1b04297006c67c3dffcbbc821de9be))
+
+
+
 ## [6.1.1](https://github.com/caplin/caplin-dev-tools/compare/express-dev-server@6.1.0...express-dev-server@6.1.1) (2019-08-22)
 
 
