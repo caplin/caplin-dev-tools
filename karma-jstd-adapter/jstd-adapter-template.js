@@ -50,6 +50,34 @@
         });
     }
 
+    const fnNameMatchRegex = /^\s*function(?:\s|\s*\/\*.*\*\/\s*)+([^\(\s\/]*)\s*/;
+
+    function getFunctionName(func) {
+      if (typeof func.name === "string") {
+        return func.name;
+      }
+
+      // You shouldn't reach here as our test entry points import core-js which
+      // polyfills Function.name...but just in case.
+      const match = func.toString().match(fnNameMatchRegex);
+
+      return match && match[1];
+    }
+
+    function canRunJasmineStart(jasmineStart) {
+      if (getFunctionName(jasmineStart) === "UNIMPLEMENTED_START") {
+        return false;
+      }
+
+      const jasmineLoaded = window.jasmine !== undefined;
+
+      if (jasmineLoaded && window.jasmine.caplinJasmine) {
+        return false;
+      }
+
+      return jasmineLoaded;
+    }
+
     /**
      * Returns the function needed to start running the tests.
      *
@@ -74,8 +102,8 @@
                     // load the Caplin Jasmine via GwtTestRunner so skip them as
                     // they are registered as JSTestDriver tests and don't use
                     // the npm Jasmine adapter.
-                    if (window.jasmine !== undefined && window.jasmine.caplinJasmine !== true) {
-                        jasmineStart()
+                    if (canRunJasmineStart(jasmineStart)) {
+                        jasmineStart();
                     } else {
                         afterRun(karma);
                     }
