@@ -1,3 +1,19 @@
+# [9.0.0](https://github.com/caplin/caplin-dev-tools/compare/webpack-config-app@8.2.1...webpack-config-app@9.0.0) (2020-05-15)
+
+
+### Bug Fixes
+
+* **webpack-config:** Remove Uglify from Webpack config ([d712304](https://github.com/caplin/caplin-dev-tools/commit/d712304dbe9b33b9a3f86d3739c14597ed12c631))
+
+
+### BREAKING CHANGES
+
+* **webpack-config:** `uglifyOptions` has now been removed from the
+Webpack options. To configure Terser follow the instructions in:
+https://v4.webpack.js.org/configuration/optimization/#optimizationminimizer
+
+
+
 ## [8.2.1](https://github.com/caplin/caplin-dev-tools/compare/webpack-config-app@8.2.0...webpack-config-app@8.2.1) (2019-07-23)
 
 
