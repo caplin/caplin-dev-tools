@@ -4,13 +4,13 @@ const { expect } = require("chai");
 const { join } = require("path");
 
 describe("Webpack config app entry tests.", () => {
-  it("adds 'entry' property to webpack config when variant is defined.", entryAdded => {
+  it("adds 'entry' property to webpack config when variant is defined.", (entryAdded) => {
     const webpackConfig = Object.assign({}, BASE_WEBPACK_CONFIG);
     const variant = "main";
     const basePath = "./";
 
     const reactErrorOverlay = require.resolve("react-error-overlay");
-    const entryFile = `index-${variant}.js`;
+    const entryFile = `index.js`;
     const appEntryPoint = join(basePath, "src", entryFile);
 
     configureBundleEntryPoint(variant, webpackConfig, basePath);
@@ -22,7 +22,7 @@ describe("Webpack config app entry tests.", () => {
     entryAdded();
   });
 
-  it("adds 'entry' property to webpack config when variant is undefined.", entryAdded => {
+  it("adds 'entry' property to webpack config when variant is undefined.", (entryAdded) => {
     const webpackConfig = Object.assign({}, BASE_WEBPACK_CONFIG);
     const variant = undefined;
     const basePath = "./";

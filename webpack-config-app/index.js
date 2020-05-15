@@ -30,7 +30,6 @@ module.exports.webpackConfigGenerator = function webpackConfigGenerator({
   version = "dev",
   i18nFileName = `i18n-${version}.js`,
   patchesOptions,
-  uglifyOptions
 }) {
   // Object.create won't work as webpack only uses enumerable own properties.
   const webpackConfig = Object.assign({}, BASE_WEBPACK_CONFIG);
@@ -42,7 +41,7 @@ module.exports.webpackConfigGenerator = function webpackConfigGenerator({
   configureI18nLoading(webpackConfig, i18nFileName, isTest);
   configureAliases(webpackConfig, basePath);
   configureDevtool(webpackConfig, sourcemaps);
-  configureBuildDependentConfig(webpackConfig, version, uglifyOptions, isBuild);
+  configureBuildDependentConfig(webpackConfig, version, isBuild);
   configurePatches(webpackConfig, patchesOptions);
 
   // `file:` (npm 5) and `link:` (yarn) dependencies are symlinked to instead
@@ -61,7 +60,7 @@ module.exports.webpackConfigGenerator = function webpackConfigGenerator({
   // `node_modules`, and the application's `node_modules` folder.
   webpackConfig.resolve.modules = [
     "node_modules",
-    resolve(basePath, "node_modules")
+    resolve(basePath, "node_modules"),
   ];
 
   return webpackConfig;

@@ -1,26 +1,23 @@
-const UglifyJSPlugin = require("uglifyjs-webpack-plugin");
 const { DefinePlugin } = require("webpack");
 
-const { STATIC_DIR, UGLIFY_OPTIONS } = require("./config");
+const { STATIC_DIR } = require("./config");
 
 module.exports = function configureBuildDependentConfig(
   webpackConfig,
   version,
-  uglifyOptions = UGLIFY_OPTIONS,
   isBuild
 ) {
   if (isBuild) {
     const definitions = {
       "process.env": {
         VERSION: JSON.stringify(version),
-        NODE_ENV: JSON.stringify("production")
-      }
+        NODE_ENV: JSON.stringify("production"),
+      },
     };
 
     webpackConfig.mode = "production";
     webpackConfig.output.publicPath = `${STATIC_DIR}/`;
     webpackConfig.plugins.push(new DefinePlugin(definitions));
-    webpackConfig.plugins.push(new UglifyJSPlugin(uglifyOptions));
   } else {
     webpackConfig.mode = "development";
   }
