@@ -1,3 +1,5 @@
+# THIS REPO HAS NOW BEEN MERGED INTO THE CAPLIN FRONT END MONOREPO; IT IS NO LONGER BEING ACTIVELY USED
+
 # For developing Caplin applications using node.js tooling
 
 This monorepo contains packages that are designed to be used as part of
