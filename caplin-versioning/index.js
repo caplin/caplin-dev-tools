@@ -14,7 +14,7 @@ function getCommitCount() {
   return execSync("git rev-list --count HEAD", execOptions).trim();
 }
 
-function getBranchDescriptor(defaultBranchName = "master") {
+function getBranchDescriptor(dontAppendBranchName) {
   let stdout;
 
   // This approach to generating a version relies on the project being stored
@@ -38,11 +38,11 @@ function getBranchDescriptor(defaultBranchName = "master") {
   // To prevent a trailing `-` being suffixed to the version if a
   // `branchDescriptor` is available we prefix the descriptor with `-` if it
   // exists else return a blank string.
-  return currentBranch === defaultBranchName ? "" : `-${currentBranch}`;
+  return dontAppendBranchName ? "" : `-${currentBranch}`;
 }
 
-module.exports = (semVer, { hashLength, masterBranchName } = {}) => {
-  const branchDescriptor = getBranchDescriptor(masterBranchName);
+module.exports = (semVer, { hashLength, dontAppendBranchName } = {}) => {
+  const branchDescriptor = getBranchDescriptor(dontAppendBranchName);
   const commitCount = getCommitCount();
   const hash = getHash(hashLength);
 
